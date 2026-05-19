@@ -29,26 +29,28 @@ function HomePage() {
 
       <div className="px-6 pt-12 pb-16">
         <div className="max-w-6xl mx-auto space-y-10">
-          {/* Hero */}
-          <section className="max-w-3xl space-y-5">
-            <div className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground">
-              Free Exam Prep — 2026+
-            </div>
-            <div className="flex items-center gap-5">
+          {/* Hero banner */}
+          <section className="rounded-2xl bg-[#fee2e2] px-8 py-10 sm:px-12 sm:py-14">
+            <div className="flex flex-col md:flex-row md:items-center gap-8">
+              <div className="flex-1 space-y-4 min-w-0">
+                <div className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#b91c1c]">
+                  Free Exam Prep — 2026+
+                </div>
+                <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#7f1d1d] leading-tight">
+                  AP Calculus AB/BC Exam Prep (2026+)
+                </h1>
+                <p className="text-base sm:text-lg text-[#7f1d1d]/80 leading-relaxed max-w-2xl">
+                  Abandon your Princeton Review book. This site is all you need for a 5 on your AP Calc exam this year.
+                </p>
+              </div>
               <img
                 src={logo}
                 alt="APCalcExamPrep logo"
                 width={1024}
                 height={1024}
-                className="w-20 h-20 sm:w-24 sm:h-24 shrink-0 object-contain"
+                className="w-32 h-32 sm:w-40 sm:h-40 shrink-0 object-contain self-center md:self-auto"
               />
-              <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-foreground leading-tight">
-                AP Calculus AB/BC Exam Prep (2026+)
-              </h1>
             </div>
-            <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
-              Abandon your Princeton Review book. This site is all you need for a 5 on your AP Calc exam this year.
-            </p>
           </section>
 
           {/* Feature cards */}
