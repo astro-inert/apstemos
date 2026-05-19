@@ -4,9 +4,6 @@ export function SiteFooter() {
   return (
     <footer className="px-6 py-12 border-t border-border">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-        <Link to="/" className="font-display text-2xl font-extrabold text-primary italic">
-          APCalc<span className="text-secondary">ExamPrep</span>
-        </Link>
         <div className="flex gap-8 text-sm font-semibold text-muted-foreground">
           <a href="#" className="hover:text-primary transition-colors">Privacy Policy</a>
           <a href="#" className="hover:text-primary transition-colors">Terms of Use</a>
