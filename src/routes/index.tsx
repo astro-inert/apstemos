@@ -13,7 +13,7 @@ export const Route = createFileRoute("/")({
 });
 
 const features = [
-  { to: "/self-study-guide", eyebrow: "Guide", title: "Self-Study Guide", color: "#dc2626" },
+  { to: "/self-study-guide", eyebrow: "Guide", title: "Self-Study Guide", color: "#2563eb" },
   { to: "/topic-rundown", eyebrow: "Topics", title: "Topic Rundown", color: "#ca8a04" },
   { to: "/108-points-breakdown", eyebrow: "Scoring", title: "108 Points Breakdown", color: "#16a34a" },
   { to: "/frqs-by-type", eyebrow: "FRQs", title: "FRQs by Type", color: "#7e22ce" },
