@@ -5,37 +5,65 @@ export const Route = createFileRoute("/frqs-by-type")({
   head: () => ({
     meta: [
       { title: "FRQs by Type — APCalcExamPrep" },
-      { name: "description", content: "The six recurring AP Calculus free response question types — and how to attack each." },
-      { property: "og:title", content: "FRQs by Type — APCalcExamPrep" },
-      { property: "og:description", content: "Master the six AP Calculus FRQ archetypes." },
+      { name: "description", content: "A detailed rundown of AP Calculus FRQs #1–6 with past examples from 2010–2026, for both AB and BC." },
     ],
   }),
-  component: Page,
+  component: FRQsByType,
 });
 
-const types = [
-  { name: "Rate-In / Rate-Out", desc: "Tanks filling and draining. Use the FTC to track net accumulation over an interval." },
-  { name: "Particle Motion", desc: "Position, velocity, and acceleration. Watch for direction changes and total distance traveled." },
-  { name: "Area & Volume", desc: "Regions between curves and solids of revolution. Disk, washer, and known cross-section setups." },
-  { name: "Table / Riemann Sums", desc: "Estimate integrals from discrete data using left, right, midpoint, and trapezoidal sums." },
-  { name: "Differential Equations", desc: "Slope fields, separable equations, and Euler's method (BC). State your domain." },
-  { name: "Series (BC)", desc: "Taylor & Maclaurin series, convergence tests, and the Lagrange error bound." },
-];
+const frqs = [1, 2, 3, 4, 5, 6] as const;
 
-function Page() {
+function FRQsByType() {
   return (
     <PageShell
       eyebrow="FRQs by Type"
-      title={<>The <span className="text-primary">six archetypes</span>.</>}
-      description="Every AP Calculus free response question is a remix of one of these six patterns. Learn the moves, and you'll recognize them on test day."
+      title="FRQs by Type"
+      description="Good news: AP Calc FRQs are one of the most predictable. Master FRQs #1–6 by using this detailed rundown of the question types asked for each one, including past examples from 2010–2026, whether you're taking AB or BC."
     >
-      <div className="grid sm:grid-cols-2 gap-5">
-        {types.map((t, i) => (
-          <div key={t.name} className="bg-card p-7 rounded-3xl border border-border hover:border-primary/40 transition-colors space-y-3">
-            <div className="font-display text-5xl font-extrabold text-primary/30">{String(i + 1).padStart(2, "0")}</div>
-            <h2 className="font-display text-xl font-bold">{t.name}</h2>
-            <p className="text-sm text-muted-foreground leading-relaxed">{t.desc}</p>
-          </div>
+      <div className="space-y-5">
+        {frqs.map((n) => (
+          <section
+            key={n}
+            className="p-8 bg-card rounded-lg border border-border"
+          >
+            <h2 className="font-display text-2xl font-bold text-primary mb-4">
+              FRQ #{n}
+            </h2>
+
+            <div className="space-y-4 text-sm">
+              <div>
+                <h3 className="font-semibold text-foreground mb-1">Description</h3>
+                <p className="text-muted-foreground">
+                  [Add a short description of the question types typically asked in FRQ #{n}.]
+                </p>
+              </div>
+
+              <div>
+                <h3 className="font-semibold text-foreground mb-1">AB notes</h3>
+                <p className="text-muted-foreground">
+                  [Add AB-specific notes for FRQ #{n}.]
+                </p>
+              </div>
+
+              <div>
+                <h3 className="font-semibold text-foreground mb-1">BC notes</h3>
+                <p className="text-muted-foreground">
+                  [Add BC-specific notes for FRQ #{n}.]
+                </p>
+              </div>
+
+              <div>
+                <h3 className="font-semibold text-foreground mb-1">
+                  Past examples (2010–2026)
+                </h3>
+                <ul className="text-muted-foreground list-disc pl-5 space-y-1">
+                  <li>[Year] — [topic / brief note]</li>
+                  <li>[Year] — [topic / brief note]</li>
+                  <li>[Year] — [topic / brief note]</li>
+                </ul>
+              </div>
+            </div>
+          </section>
         ))}
       </div>
     </PageShell>
