@@ -14,6 +14,7 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SelfStudyGuideRouteImport } from './routes/self-study-guide'
 import { Route as LatexMasterSheetRouteImport } from './routes/latex-master-sheet'
 import { Route as FrqsByTypeRouteImport } from './routes/frqs-by-type'
+import { Route as ExamStrategyRouteImport } from './routes/exam-strategy'
 import { Route as BcTrackRouteImport } from './routes/bc-track'
 import { Route as AbTrackRouteImport } from './routes/ab-track'
 import { Route as R108PointsBreakdownRouteImport } from './routes/108-points-breakdown'
@@ -44,6 +45,11 @@ const FrqsByTypeRoute = FrqsByTypeRouteImport.update({
   path: '/frqs-by-type',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ExamStrategyRoute = ExamStrategyRouteImport.update({
+  id: '/exam-strategy',
+  path: '/exam-strategy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BcTrackRoute = BcTrackRouteImport.update({
   id: '/bc-track',
   path: '/bc-track',
@@ -70,6 +76,7 @@ export interface FileRoutesByFullPath {
   '/108-points-breakdown': typeof R108PointsBreakdownRoute
   '/ab-track': typeof AbTrackRoute
   '/bc-track': typeof BcTrackRoute
+  '/exam-strategy': typeof ExamStrategyRoute
   '/frqs-by-type': typeof FrqsByTypeRoute
   '/latex-master-sheet': typeof LatexMasterSheetRoute
   '/self-study-guide': typeof SelfStudyGuideRoute
@@ -81,6 +88,7 @@ export interface FileRoutesByTo {
   '/108-points-breakdown': typeof R108PointsBreakdownRoute
   '/ab-track': typeof AbTrackRoute
   '/bc-track': typeof BcTrackRoute
+  '/exam-strategy': typeof ExamStrategyRoute
   '/frqs-by-type': typeof FrqsByTypeRoute
   '/latex-master-sheet': typeof LatexMasterSheetRoute
   '/self-study-guide': typeof SelfStudyGuideRoute
@@ -93,6 +101,7 @@ export interface FileRoutesById {
   '/108-points-breakdown': typeof R108PointsBreakdownRoute
   '/ab-track': typeof AbTrackRoute
   '/bc-track': typeof BcTrackRoute
+  '/exam-strategy': typeof ExamStrategyRoute
   '/frqs-by-type': typeof FrqsByTypeRoute
   '/latex-master-sheet': typeof LatexMasterSheetRoute
   '/self-study-guide': typeof SelfStudyGuideRoute
@@ -106,6 +115,7 @@ export interface FileRouteTypes {
     | '/108-points-breakdown'
     | '/ab-track'
     | '/bc-track'
+    | '/exam-strategy'
     | '/frqs-by-type'
     | '/latex-master-sheet'
     | '/self-study-guide'
@@ -117,6 +127,7 @@ export interface FileRouteTypes {
     | '/108-points-breakdown'
     | '/ab-track'
     | '/bc-track'
+    | '/exam-strategy'
     | '/frqs-by-type'
     | '/latex-master-sheet'
     | '/self-study-guide'
@@ -128,6 +139,7 @@ export interface FileRouteTypes {
     | '/108-points-breakdown'
     | '/ab-track'
     | '/bc-track'
+    | '/exam-strategy'
     | '/frqs-by-type'
     | '/latex-master-sheet'
     | '/self-study-guide'
@@ -140,6 +152,7 @@ export interface RootRouteChildren {
   R108PointsBreakdownRoute: typeof R108PointsBreakdownRoute
   AbTrackRoute: typeof AbTrackRoute
   BcTrackRoute: typeof BcTrackRoute
+  ExamStrategyRoute: typeof ExamStrategyRoute
   FrqsByTypeRoute: typeof FrqsByTypeRoute
   LatexMasterSheetRoute: typeof LatexMasterSheetRoute
   SelfStudyGuideRoute: typeof SelfStudyGuideRoute
@@ -184,6 +197,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FrqsByTypeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/exam-strategy': {
+      id: '/exam-strategy'
+      path: '/exam-strategy'
+      fullPath: '/exam-strategy'
+      preLoaderRoute: typeof ExamStrategyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/bc-track': {
       id: '/bc-track'
       path: '/bc-track'
@@ -220,6 +240,7 @@ const rootRouteChildren: RootRouteChildren = {
   R108PointsBreakdownRoute: R108PointsBreakdownRoute,
   AbTrackRoute: AbTrackRoute,
   BcTrackRoute: BcTrackRoute,
+  ExamStrategyRoute: ExamStrategyRoute,
   FrqsByTypeRoute: FrqsByTypeRoute,
   LatexMasterSheetRoute: LatexMasterSheetRoute,
   SelfStudyGuideRoute: SelfStudyGuideRoute,
