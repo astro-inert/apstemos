@@ -30,16 +30,16 @@ function HomePage() {
       <div className="px-6 pt-12 pb-16">
         <div className="max-w-6xl mx-auto space-y-10">
           {/* Hero banner */}
-          <section className="rounded-2xl bg-[#fee2e2] px-8 py-10 sm:px-12 sm:py-14">
-            <div className="flex flex-col md:flex-row md:items-center gap-8">
-              <div className="flex-1 space-y-4 min-w-0">
-                <div className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#b91c1c]">
+          <section className="rounded-2xl bg-[#dc2626] px-6 py-8 sm:px-10 sm:py-12 overflow-hidden">
+            <div className="flex flex-row items-center gap-5 sm:gap-8">
+              <div className="flex-1 min-w-0 space-y-3 sm:space-y-4">
+                <div className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em] text-white">
                   Free Exam Prep — 2026+
                 </div>
-                <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#7f1d1d] leading-tight">
+                <h1 className="font-display text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
                   AP Calculus AB/BC Exam Prep (2026+)
                 </h1>
-                <p className="text-base sm:text-lg text-[#7f1d1d]/80 leading-relaxed max-w-2xl">
+                <p className="text-sm sm:text-lg text-white/90 leading-relaxed max-w-2xl">
                   Abandon your Princeton Review book. This site is all you need for a 5 on your AP Calc exam this year.
                 </p>
               </div>
@@ -48,7 +48,7 @@ function HomePage() {
                 alt="APCalcExamPrep logo"
                 width={1024}
                 height={1024}
-                className="w-32 h-32 sm:w-40 sm:h-40 shrink-0 object-contain self-center md:self-auto"
+                className="w-24 h-24 sm:w-40 sm:h-40 shrink-0 object-contain rounded-xl"
               />
             </div>
           </section>
