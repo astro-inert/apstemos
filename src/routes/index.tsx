@@ -13,12 +13,12 @@ export const Route = createFileRoute("/")({
 });
 
 const features = [
-  { to: "/self-study-guide", eyebrow: "Guide", title: "Self-Study Guide", color: "#2563eb", bg: "#eff6ff", border: "#bfdbfe" },
-  { to: "/topic-rundown", eyebrow: "Topics", title: "Topic Rundown", color: "#ca8a04", bg: "#fefce8", border: "#fde68a" },
-  { to: "/108-points-breakdown", eyebrow: "Scoring", title: "108 Points Breakdown", color: "#16a34a", bg: "#f0fdf4", border: "#bbf7d0" },
-  { to: "/frqs-by-type", eyebrow: "FRQs", title: "FRQs by Type", color: "#7e22ce", bg: "#faf5ff", border: "#e9d5ff" },
-  { to: "/latex-master-sheet", eyebrow: "Cram", title: "LaTeX 10-Page Master Sheet", color: "#ea580c", bg: "#fff7ed", border: "#fed7aa" },
-  { to: "/exam-strategy", eyebrow: "Strategy", title: "Exam Strategy", color: "#dc2626", bg: "#fef2f2", border: "#fecaca" },
+  { to: "/self-study-guide", eyebrow: "Guide", title: "Self-Study Guide", desc: "Just because you're not in a class doesn't mean you have to do it all by yourself — here's a full guide so you can get started and keep that momentum till May", color: "#2563eb", bg: "#eff6ff", border: "#bfdbfe" },
+  { to: "/topic-rundown", eyebrow: "Topics", title: "Topic Rundown", desc: "Need a quick refresher on sum to integral notation? This topic rundown will succinctly breakdown essential concepts and topics — from derivatives to integrals to series", color: "#ca8a04", bg: "#fefce8", border: "#fde68a" },
+  { to: "/108-points-breakdown", eyebrow: "Scoring", title: "108 Points Breakdown", desc: "Maximize your score by leveraging exam focus and scoring guidelines", color: "#16a34a", bg: "#f0fdf4", border: "#bbf7d0" },
+  { to: "/frqs-by-type", eyebrow: "FRQs", title: "FRQs by Type", desc: "Know exactly what you'll see in May, including possibilities for each question type, whether AB or BC", color: "#7e22ce", bg: "#faf5ff", border: "#e9d5ff" },
+  { to: "/latex-master-sheet", eyebrow: "Cram", title: "Master Sheet", desc: "Save this 10-page LaTeX-formatted comprehensive, topic-organized to review all the important formulas you need a week before your exam", color: "#ea580c", bg: "#fff7ed", border: "#fed7aa" },
+  { to: "/exam-strategy", eyebrow: "Strategy", title: "Exam Strategy", desc: "You don't need to be 100% on all the concepts — know exactly how to optimize your execution on exam day", color: "#dc2626", bg: "#fef2f2", border: "#fecaca" },
 ] as const;
 
 function HomePage() {
