@@ -9,8 +9,50 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TopicRundownRouteImport } from './routes/topic-rundown'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as SelfStudyGuideRouteImport } from './routes/self-study-guide'
+import { Route as FrqsByTypeRouteImport } from './routes/frqs-by-type'
+import { Route as BcTrackRouteImport } from './routes/bc-track'
+import { Route as AbTrackRouteImport } from './routes/ab-track'
+import { Route as R108PointsBreakdownRouteImport } from './routes/108-points-breakdown'
 import { Route as IndexRouteImport } from './routes/index'
 
+const TopicRundownRoute = TopicRundownRouteImport.update({
+  id: '/topic-rundown',
+  path: '/topic-rundown',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SelfStudyGuideRoute = SelfStudyGuideRouteImport.update({
+  id: '/self-study-guide',
+  path: '/self-study-guide',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FrqsByTypeRoute = FrqsByTypeRouteImport.update({
+  id: '/frqs-by-type',
+  path: '/frqs-by-type',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BcTrackRoute = BcTrackRouteImport.update({
+  id: '/bc-track',
+  path: '/bc-track',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AbTrackRoute = AbTrackRouteImport.update({
+  id: '/ab-track',
+  path: '/ab-track',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const R108PointsBreakdownRoute = R108PointsBreakdownRouteImport.update({
+  id: '/108-points-breakdown',
+  path: '/108-points-breakdown',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +61,130 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/108-points-breakdown': typeof R108PointsBreakdownRoute
+  '/ab-track': typeof AbTrackRoute
+  '/bc-track': typeof BcTrackRoute
+  '/frqs-by-type': typeof FrqsByTypeRoute
+  '/self-study-guide': typeof SelfStudyGuideRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/topic-rundown': typeof TopicRundownRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/108-points-breakdown': typeof R108PointsBreakdownRoute
+  '/ab-track': typeof AbTrackRoute
+  '/bc-track': typeof BcTrackRoute
+  '/frqs-by-type': typeof FrqsByTypeRoute
+  '/self-study-guide': typeof SelfStudyGuideRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/topic-rundown': typeof TopicRundownRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/108-points-breakdown': typeof R108PointsBreakdownRoute
+  '/ab-track': typeof AbTrackRoute
+  '/bc-track': typeof BcTrackRoute
+  '/frqs-by-type': typeof FrqsByTypeRoute
+  '/self-study-guide': typeof SelfStudyGuideRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/topic-rundown': typeof TopicRundownRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/108-points-breakdown'
+    | '/ab-track'
+    | '/bc-track'
+    | '/frqs-by-type'
+    | '/self-study-guide'
+    | '/sitemap.xml'
+    | '/topic-rundown'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/108-points-breakdown'
+    | '/ab-track'
+    | '/bc-track'
+    | '/frqs-by-type'
+    | '/self-study-guide'
+    | '/sitemap.xml'
+    | '/topic-rundown'
+  id:
+    | '__root__'
+    | '/'
+    | '/108-points-breakdown'
+    | '/ab-track'
+    | '/bc-track'
+    | '/frqs-by-type'
+    | '/self-study-guide'
+    | '/sitemap.xml'
+    | '/topic-rundown'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  R108PointsBreakdownRoute: typeof R108PointsBreakdownRoute
+  AbTrackRoute: typeof AbTrackRoute
+  BcTrackRoute: typeof BcTrackRoute
+  FrqsByTypeRoute: typeof FrqsByTypeRoute
+  SelfStudyGuideRoute: typeof SelfStudyGuideRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  TopicRundownRoute: typeof TopicRundownRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/topic-rundown': {
+      id: '/topic-rundown'
+      path: '/topic-rundown'
+      fullPath: '/topic-rundown'
+      preLoaderRoute: typeof TopicRundownRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/self-study-guide': {
+      id: '/self-study-guide'
+      path: '/self-study-guide'
+      fullPath: '/self-study-guide'
+      preLoaderRoute: typeof SelfStudyGuideRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/frqs-by-type': {
+      id: '/frqs-by-type'
+      path: '/frqs-by-type'
+      fullPath: '/frqs-by-type'
+      preLoaderRoute: typeof FrqsByTypeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bc-track': {
+      id: '/bc-track'
+      path: '/bc-track'
+      fullPath: '/bc-track'
+      preLoaderRoute: typeof BcTrackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ab-track': {
+      id: '/ab-track'
+      path: '/ab-track'
+      fullPath: '/ab-track'
+      preLoaderRoute: typeof AbTrackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/108-points-breakdown': {
+      id: '/108-points-breakdown'
+      path: '/108-points-breakdown'
+      fullPath: '/108-points-breakdown'
+      preLoaderRoute: typeof R108PointsBreakdownRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,17 +197,14 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  R108PointsBreakdownRoute: R108PointsBreakdownRoute,
+  AbTrackRoute: AbTrackRoute,
+  BcTrackRoute: BcTrackRoute,
+  FrqsByTypeRoute: FrqsByTypeRoute,
+  SelfStudyGuideRoute: SelfStudyGuideRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
+  TopicRundownRoute: TopicRundownRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
