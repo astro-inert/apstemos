@@ -13,10 +13,12 @@ export const Route = createFileRoute("/")({
 });
 
 const features = [
-  { to: "/self-study-guide", eyebrow: "Guide", title: "Self-Study Guide", color: "#2563eb" },
-  { to: "/topic-rundown", eyebrow: "Topics", title: "Topic Rundown", color: "#ca8a04" },
-  { to: "/108-points-breakdown", eyebrow: "Scoring", title: "108 Points Breakdown", color: "#16a34a" },
-  { to: "/frqs-by-type", eyebrow: "FRQs", title: "FRQs by Type", color: "#7e22ce" },
+  { to: "/self-study-guide", eyebrow: "Guide", title: "Self-Study Guide", color: "#2563eb", bg: "#eff6ff", border: "#bfdbfe" },
+  { to: "/topic-rundown", eyebrow: "Topics", title: "Topic Rundown", color: "#ca8a04", bg: "#fefce8", border: "#fde68a" },
+  { to: "/108-points-breakdown", eyebrow: "Scoring", title: "108 Points Breakdown", color: "#16a34a", bg: "#f0fdf4", border: "#bbf7d0" },
+  { to: "/frqs-by-type", eyebrow: "FRQs", title: "FRQs by Type", color: "#7e22ce", bg: "#faf5ff", border: "#e9d5ff" },
+  { to: "/latex-master-sheet", eyebrow: "Cram", title: "LaTeX 10-Page Master Sheet", color: "#ea580c", bg: "#fff7ed", border: "#fed7aa" },
+  { to: "/exam-strategy", eyebrow: "Strategy", title: "Exam Strategy", color: "#0d9488", bg: "#f0fdfa", border: "#99f6e4" },
 ] as const;
 
 function HomePage() {
@@ -40,12 +42,13 @@ function HomePage() {
           </section>
 
           {/* Feature cards */}
-          <section className="grid sm:grid-cols-2 gap-4">
+          <section className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {features.map((f) => (
               <Link
                 key={f.to}
                 to={f.to}
-                className="block p-6 bg-card rounded-lg border border-border hover:border-primary transition-colors"
+                className="block p-6 rounded-lg border transition-transform hover:-translate-y-0.5"
+                style={{ backgroundColor: f.bg, borderColor: f.border }}
               >
                 <div
                   className="text-[11px] font-bold uppercase tracking-[0.18em] mb-2"
@@ -53,7 +56,7 @@ function HomePage() {
                 >
                   {f.eyebrow}
                 </div>
-                <h2 className="font-display text-lg font-semibold text-foreground">
+                <h2 className="font-display text-lg font-semibold" style={{ color: f.color }}>
                   {f.title}
                 </h2>
               </Link>
