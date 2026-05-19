@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as TopicRundownRouteImport } from './routes/topic-rundown'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SelfStudyGuideRouteImport } from './routes/self-study-guide'
+import { Route as LatexMasterSheetRouteImport } from './routes/latex-master-sheet'
 import { Route as FrqsByTypeRouteImport } from './routes/frqs-by-type'
 import { Route as BcTrackRouteImport } from './routes/bc-track'
 import { Route as AbTrackRouteImport } from './routes/ab-track'
@@ -31,6 +32,11 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
 const SelfStudyGuideRoute = SelfStudyGuideRouteImport.update({
   id: '/self-study-guide',
   path: '/self-study-guide',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LatexMasterSheetRoute = LatexMasterSheetRouteImport.update({
+  id: '/latex-master-sheet',
+  path: '/latex-master-sheet',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FrqsByTypeRoute = FrqsByTypeRouteImport.update({
@@ -65,6 +71,7 @@ export interface FileRoutesByFullPath {
   '/ab-track': typeof AbTrackRoute
   '/bc-track': typeof BcTrackRoute
   '/frqs-by-type': typeof FrqsByTypeRoute
+  '/latex-master-sheet': typeof LatexMasterSheetRoute
   '/self-study-guide': typeof SelfStudyGuideRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/topic-rundown': typeof TopicRundownRoute
@@ -75,6 +82,7 @@ export interface FileRoutesByTo {
   '/ab-track': typeof AbTrackRoute
   '/bc-track': typeof BcTrackRoute
   '/frqs-by-type': typeof FrqsByTypeRoute
+  '/latex-master-sheet': typeof LatexMasterSheetRoute
   '/self-study-guide': typeof SelfStudyGuideRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/topic-rundown': typeof TopicRundownRoute
@@ -86,6 +94,7 @@ export interface FileRoutesById {
   '/ab-track': typeof AbTrackRoute
   '/bc-track': typeof BcTrackRoute
   '/frqs-by-type': typeof FrqsByTypeRoute
+  '/latex-master-sheet': typeof LatexMasterSheetRoute
   '/self-study-guide': typeof SelfStudyGuideRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/topic-rundown': typeof TopicRundownRoute
@@ -98,6 +107,7 @@ export interface FileRouteTypes {
     | '/ab-track'
     | '/bc-track'
     | '/frqs-by-type'
+    | '/latex-master-sheet'
     | '/self-study-guide'
     | '/sitemap.xml'
     | '/topic-rundown'
@@ -108,6 +118,7 @@ export interface FileRouteTypes {
     | '/ab-track'
     | '/bc-track'
     | '/frqs-by-type'
+    | '/latex-master-sheet'
     | '/self-study-guide'
     | '/sitemap.xml'
     | '/topic-rundown'
@@ -118,6 +129,7 @@ export interface FileRouteTypes {
     | '/ab-track'
     | '/bc-track'
     | '/frqs-by-type'
+    | '/latex-master-sheet'
     | '/self-study-guide'
     | '/sitemap.xml'
     | '/topic-rundown'
@@ -129,6 +141,7 @@ export interface RootRouteChildren {
   AbTrackRoute: typeof AbTrackRoute
   BcTrackRoute: typeof BcTrackRoute
   FrqsByTypeRoute: typeof FrqsByTypeRoute
+  LatexMasterSheetRoute: typeof LatexMasterSheetRoute
   SelfStudyGuideRoute: typeof SelfStudyGuideRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TopicRundownRoute: typeof TopicRundownRoute
@@ -155,6 +168,13 @@ declare module '@tanstack/react-router' {
       path: '/self-study-guide'
       fullPath: '/self-study-guide'
       preLoaderRoute: typeof SelfStudyGuideRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/latex-master-sheet': {
+      id: '/latex-master-sheet'
+      path: '/latex-master-sheet'
+      fullPath: '/latex-master-sheet'
+      preLoaderRoute: typeof LatexMasterSheetRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/frqs-by-type': {
@@ -201,6 +221,7 @@ const rootRouteChildren: RootRouteChildren = {
   AbTrackRoute: AbTrackRoute,
   BcTrackRoute: BcTrackRoute,
   FrqsByTypeRoute: FrqsByTypeRoute,
+  LatexMasterSheetRoute: LatexMasterSheetRoute,
   SelfStudyGuideRoute: SelfStudyGuideRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TopicRundownRoute: TopicRundownRoute,
@@ -208,3 +229,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
