@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
+import logo from "@/assets/logo.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -33,9 +34,18 @@ function HomePage() {
             <div className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground">
               Free Exam Prep — 2026+
             </div>
-            <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-foreground leading-tight">
-              AP Calculus AB/BC Exam Prep (2026+)
-            </h1>
+            <div className="flex items-center gap-5">
+              <img
+                src={logo}
+                alt="APCalcExamPrep logo"
+                width={1024}
+                height={1024}
+                className="w-20 h-20 sm:w-24 sm:h-24 shrink-0 object-contain"
+              />
+              <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-foreground leading-tight">
+                AP Calculus AB/BC Exam Prep (2026+)
+              </h1>
+            </div>
             <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
               Abandon your Princeton Review book. This site is all you need for a 5 on your AP Calc exam this year.
             </p>
