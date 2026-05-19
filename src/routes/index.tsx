@@ -59,6 +59,7 @@ function HomePage() {
                 <h2 className="font-display text-lg font-semibold" style={{ color: f.color }}>
                   {f.title}
                 </h2>
+                <p className="text-sm text-muted-foreground mt-1 leading-relaxed">{f.desc}</p>
               </Link>
             ))}
           </section>
