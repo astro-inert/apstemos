@@ -18,7 +18,7 @@ const features = [
   { to: "/108-points-breakdown", eyebrow: "Scoring", title: "108 Points Breakdown", color: "#16a34a", bg: "#f0fdf4", border: "#bbf7d0" },
   { to: "/frqs-by-type", eyebrow: "FRQs", title: "FRQs by Type", color: "#7e22ce", bg: "#faf5ff", border: "#e9d5ff" },
   { to: "/latex-master-sheet", eyebrow: "Cram", title: "LaTeX 10-Page Master Sheet", color: "#ea580c", bg: "#fff7ed", border: "#fed7aa" },
-  { to: "/exam-strategy", eyebrow: "Strategy", title: "Exam Strategy", color: "#0d9488", bg: "#f0fdfa", border: "#99f6e4" },
+  { to: "/exam-strategy", eyebrow: "Strategy", title: "Exam Strategy", color: "#dc2626", bg: "#fef2f2", border: "#fecaca" },
 ] as const;
 
 function HomePage() {
