@@ -57,25 +57,36 @@ function HomePage() {
 
           {/* Feature cards */}
           <section className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {features.map((f) => (
-              <Link
-                key={f.to}
-                to={f.to}
-                className="block p-6 rounded-lg border transition-transform hover:-translate-y-0.5"
-                style={{ backgroundColor: f.bg, borderColor: f.border }}
-              >
-                <div
-                  className="text-[11px] font-bold uppercase tracking-[0.18em] mb-2"
-                  style={{ color: f.color }}
-                >
-                  {f.eyebrow}
-                </div>
-                <h2 className="font-display text-lg font-semibold" style={{ color: f.color }}>
-                  {f.title}
-                </h2>
-                <p className="text-sm text-muted-foreground mt-1 leading-relaxed">{f.desc}</p>
-              </Link>
-            ))}
+            {features.map((f) => {
+              const inner = (
+                <>
+                  <div
+                    className="text-[11px] font-bold uppercase tracking-[0.18em] mb-2"
+                    style={{ color: f.color }}
+                  >
+                    {f.eyebrow}
+                  </div>
+                  <h2 className="font-display text-lg font-semibold" style={{ color: f.color }}>
+                    {f.title}
+                  </h2>
+                  <p className="text-sm text-muted-foreground mt-1 leading-relaxed">{f.desc}</p>
+                </>
+              );
+              const cls = "block p-6 rounded-lg border transition-transform hover:-translate-y-0.5";
+              const style = { backgroundColor: f.bg, borderColor: f.border };
+              if ("href" in f) {
+                return (
+                  <a key={f.href} href={f.href} target="_blank" rel="noopener noreferrer" download className={cls} style={style}>
+                    {inner}
+                  </a>
+                );
+              }
+              return (
+                <Link key={f.to} to={f.to} className={cls} style={style}>
+                  {inner}
+                </Link>
+              );
+            })}
           </section>
         </div>
       </div>
