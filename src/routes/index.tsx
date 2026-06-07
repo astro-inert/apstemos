@@ -32,28 +32,20 @@ function HomePage() {
       <div className="px-6 pt-12 pb-16">
         <div className="max-w-6xl mx-auto space-y-10">
           {/* Hero banner */}
-          <section className="rounded-2xl bg-[#dc2626] px-6 py-8 overflow-hidden sm:px-0 sm:py-0">
-            <div className="flex flex-row items-center gap-5 sm:gap-8">
-              <div className="flex-1 min-w-0 space-y-3 sm:space-y-4">
-                <div className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em] text-white">
-                  Free Exam Prep — 2026+
-                </div>
-                <h1 className="font-display text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
-                  AP Calculus AB/BC Exam Prep (2026+)
-                </h1>
-                <p className="text-sm sm:text-lg text-white/90 leading-relaxed max-w-2xl">
-                  Abandon your Princeton Review book. This site is all you need for a 5 on your AP Calc exam this year.
-                </p>
+          <section className="rounded-2xl overflow-hidden bg-gradient-to-b from-[#1a2a5e] via-[#142048] to-[#0f1a3a] px-6 py-16 sm:py-20 text-center">
+            <div className="max-w-3xl mx-auto space-y-5">
+              <div className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em] text-white/70">
+                Free Exam Prep — 2026+
               </div>
-              <img
-                src={logo}
-                alt="APCalcExamPrep logo"
-                width={1024}
-                height={1024}
-                className="w-24 h-24 sm:w-40 sm:h-40 shrink-0 object-contain rounded-xl"
-              />
+              <h1 className="font-display text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight">
+                AP Calculus AB/BC Exam Prep
+              </h1>
+              <p className="text-sm sm:text-lg text-white/80 leading-relaxed max-w-2xl mx-auto">
+                Abandon your Princeton Review book. This site is all you need for a 5 on your AP Calc exam this year.
+              </p>
             </div>
           </section>
+
 
           {/* Feature cards */}
           <section className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
