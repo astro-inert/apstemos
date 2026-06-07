@@ -32,7 +32,7 @@ function HomePage() {
       <div className="px-6 pt-12 pb-16">
         <div className="max-w-6xl mx-auto space-y-10">
           {/* Hero banner */}
-          <section className="rounded-2xl bg-[#dc2626] px-6 py-8 sm:px-10 sm:py-12 overflow-hidden">
+          <section className="rounded-2xl bg-[#dc2626] px-6 py-8 overflow-hidden sm:px-0 sm:py-0">
             <div className="flex flex-row items-center gap-5 sm:gap-8">
               <div className="flex-1 min-w-0 space-y-3 sm:space-y-4">
                 <div className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em] text-white">

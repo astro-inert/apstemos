@@ -13,7 +13,7 @@ export function SiteNav() {
     <nav className="sticky top-0 z-50 bg-primary text-primary-foreground px-6 py-4">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center gap-8">
-          <Link to="/" className="font-display text-xl font-bold tracking-tight text-primary-foreground">
+          <Link to="/" className="font-display text-xl font-bold tracking-tight text-primary-foreground active text-left font-mono">
             AP<span style={{ color: "var(--primary-light)" }}>Calc</span>ExamPrep
           </Link>
           <div className="hidden md:flex items-center gap-6 text-sm font-medium">
