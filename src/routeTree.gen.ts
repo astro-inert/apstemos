@@ -15,10 +15,14 @@ import { Route as SelfStudyGuideRouteImport } from './routes/self-study-guide'
 import { Route as LatexMasterSheetRouteImport } from './routes/latex-master-sheet'
 import { Route as FrqsByTypeRouteImport } from './routes/frqs-by-type'
 import { Route as ExamStrategyRouteImport } from './routes/exam-strategy'
+import { Route as CommonMistakesRouteImport } from './routes/common-mistakes'
 import { Route as BcTrackRouteImport } from './routes/bc-track'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AbTrackRouteImport } from './routes/ab-track'
 import { Route as R108PointsBreakdownRouteImport } from './routes/108-points-breakdown'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedCommandCenterRouteImport } from './routes/_authenticated/command-center'
 
 const TopicRundownRoute = TopicRundownRouteImport.update({
   id: '/topic-rundown',
@@ -50,9 +54,19 @@ const ExamStrategyRoute = ExamStrategyRouteImport.update({
   path: '/exam-strategy',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CommonMistakesRoute = CommonMistakesRouteImport.update({
+  id: '/common-mistakes',
+  path: '/common-mistakes',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BcTrackRoute = BcTrackRouteImport.update({
   id: '/bc-track',
   path: '/bc-track',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AbTrackRoute = AbTrackRouteImport.update({
@@ -65,48 +79,68 @@ const R108PointsBreakdownRoute = R108PointsBreakdownRouteImport.update({
   path: '/108-points-breakdown',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedCommandCenterRoute =
+  AuthenticatedCommandCenterRouteImport.update({
+    id: '/command-center',
+    path: '/command-center',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/108-points-breakdown': typeof R108PointsBreakdownRoute
   '/ab-track': typeof AbTrackRoute
+  '/auth': typeof AuthRoute
   '/bc-track': typeof BcTrackRoute
+  '/common-mistakes': typeof CommonMistakesRoute
   '/exam-strategy': typeof ExamStrategyRoute
   '/frqs-by-type': typeof FrqsByTypeRoute
   '/latex-master-sheet': typeof LatexMasterSheetRoute
   '/self-study-guide': typeof SelfStudyGuideRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/topic-rundown': typeof TopicRundownRoute
+  '/command-center': typeof AuthenticatedCommandCenterRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/108-points-breakdown': typeof R108PointsBreakdownRoute
   '/ab-track': typeof AbTrackRoute
+  '/auth': typeof AuthRoute
   '/bc-track': typeof BcTrackRoute
+  '/common-mistakes': typeof CommonMistakesRoute
   '/exam-strategy': typeof ExamStrategyRoute
   '/frqs-by-type': typeof FrqsByTypeRoute
   '/latex-master-sheet': typeof LatexMasterSheetRoute
   '/self-study-guide': typeof SelfStudyGuideRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/topic-rundown': typeof TopicRundownRoute
+  '/command-center': typeof AuthenticatedCommandCenterRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/108-points-breakdown': typeof R108PointsBreakdownRoute
   '/ab-track': typeof AbTrackRoute
+  '/auth': typeof AuthRoute
   '/bc-track': typeof BcTrackRoute
+  '/common-mistakes': typeof CommonMistakesRoute
   '/exam-strategy': typeof ExamStrategyRoute
   '/frqs-by-type': typeof FrqsByTypeRoute
   '/latex-master-sheet': typeof LatexMasterSheetRoute
   '/self-study-guide': typeof SelfStudyGuideRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/topic-rundown': typeof TopicRundownRoute
+  '/_authenticated/command-center': typeof AuthenticatedCommandCenterRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -114,44 +148,57 @@ export interface FileRouteTypes {
     | '/'
     | '/108-points-breakdown'
     | '/ab-track'
+    | '/auth'
     | '/bc-track'
+    | '/common-mistakes'
     | '/exam-strategy'
     | '/frqs-by-type'
     | '/latex-master-sheet'
     | '/self-study-guide'
     | '/sitemap.xml'
     | '/topic-rundown'
+    | '/command-center'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/108-points-breakdown'
     | '/ab-track'
+    | '/auth'
     | '/bc-track'
+    | '/common-mistakes'
     | '/exam-strategy'
     | '/frqs-by-type'
     | '/latex-master-sheet'
     | '/self-study-guide'
     | '/sitemap.xml'
     | '/topic-rundown'
+    | '/command-center'
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
     | '/108-points-breakdown'
     | '/ab-track'
+    | '/auth'
     | '/bc-track'
+    | '/common-mistakes'
     | '/exam-strategy'
     | '/frqs-by-type'
     | '/latex-master-sheet'
     | '/self-study-guide'
     | '/sitemap.xml'
     | '/topic-rundown'
+    | '/_authenticated/command-center'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   R108PointsBreakdownRoute: typeof R108PointsBreakdownRoute
   AbTrackRoute: typeof AbTrackRoute
+  AuthRoute: typeof AuthRoute
   BcTrackRoute: typeof BcTrackRoute
+  CommonMistakesRoute: typeof CommonMistakesRoute
   ExamStrategyRoute: typeof ExamStrategyRoute
   FrqsByTypeRoute: typeof FrqsByTypeRoute
   LatexMasterSheetRoute: typeof LatexMasterSheetRoute
@@ -204,11 +251,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ExamStrategyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/common-mistakes': {
+      id: '/common-mistakes'
+      path: '/common-mistakes'
+      fullPath: '/common-mistakes'
+      preLoaderRoute: typeof CommonMistakesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/bc-track': {
       id: '/bc-track'
       path: '/bc-track'
       fullPath: '/bc-track'
       preLoaderRoute: typeof BcTrackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/ab-track': {
@@ -225,6 +286,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof R108PointsBreakdownRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -232,14 +300,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/command-center': {
+      id: '/_authenticated/command-center'
+      path: '/command-center'
+      fullPath: '/command-center'
+      preLoaderRoute: typeof AuthenticatedCommandCenterRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedCommandCenterRoute: typeof AuthenticatedCommandCenterRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedCommandCenterRoute: AuthenticatedCommandCenterRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   R108PointsBreakdownRoute: R108PointsBreakdownRoute,
   AbTrackRoute: AbTrackRoute,
+  AuthRoute: AuthRoute,
   BcTrackRoute: BcTrackRoute,
+  CommonMistakesRoute: CommonMistakesRoute,
   ExamStrategyRoute: ExamStrategyRoute,
   FrqsByTypeRoute: FrqsByTypeRoute,
   LatexMasterSheetRoute: LatexMasterSheetRoute,
