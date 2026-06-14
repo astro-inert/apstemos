@@ -1,24 +1,23 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import {
+  Activity,
+  AlertTriangle,
   ArrowRight,
-  BookOpen,
-  Brain,
+  ArrowUpRight,
   Calculator,
-  CheckCircle2,
   ChevronRight,
-  Clock,
   Compass,
-  Flame,
-  GraduationCap,
-  LineChart,
+  FileText,
+  Gauge,
+  LineChart as LineChartIcon,
   ListChecks,
+  Map as MapIcon,
   Sigma,
   Sparkles,
   Target,
   Timer,
   TrendingUp,
-  Trophy,
   Zap,
 } from "lucide-react";
 import { SiteNav } from "@/components/SiteNav";
@@ -27,79 +26,16 @@ import { SiteFooter } from "@/components/SiteFooter";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "APCalcExamPrep — Everything you need for a 5 on AP Calc AB/BC" },
-      {
-        name: "description",
-        content:
-          "The AP Calculus operating system. Topic rundowns, FRQs by type, timed practice, formula sheet, and exam strategy — built by students who scored 5s.",
-      },
+      { title: "AP Calc Performance OS — Everything you need for a 5" },
+      { name: "description", content: "Diagnose weaknesses, drill what matters, and watch your predicted AP score climb. The performance OS for AP Calculus BC and AB." },
+      { property: "og:title", content: "AP Calc Performance OS — Everything you need for a 5" },
+      { property: "og:description", content: "Predicted AP score, 108-point optimization engine, common-mistake tracking, and adaptive practice." },
     ],
   }),
   component: HomePage,
 });
 
-const LATEX_PDF_URL =
-  "https://drive.google.com/file/d/1O6iD6MP3R_p4NZzZ4vt-7kVAHrUBYtdJ/view?usp=drivesdk";
-
-// AP Calculus 2026 exam — May 12, 2026, 8:00 AM local
 const EXAM_DATE = new Date("2026-05-12T08:00:00");
-
-type Tone = "blue" | "violet" | "emerald" | "amber" | "rose" | "cyan";
-const toneStyles: Record<Tone, { icon: string; ring: string; chip: string }> = {
-  blue:    { icon: "text-sky-400 bg-sky-500/10",       ring: "ring-sky-500/20",      chip: "text-sky-400" },
-  violet:  { icon: "text-violet-400 bg-violet-500/10", ring: "ring-violet-500/20",   chip: "text-violet-400" },
-  emerald: { icon: "text-emerald-400 bg-emerald-500/10", ring: "ring-emerald-500/20", chip: "text-emerald-400" },
-  amber:   { icon: "text-amber-400 bg-amber-500/10",   ring: "ring-amber-500/20",    chip: "text-amber-400" },
-  rose:    { icon: "text-rose-400 bg-rose-500/10",     ring: "ring-rose-500/20",     chip: "text-rose-400" },
-  cyan:    { icon: "text-cyan-400 bg-cyan-500/10",     ring: "ring-cyan-500/20",     chip: "text-cyan-400" },
-};
-
-interface CardItem {
-  to?: string;
-  href?: string;
-  icon: typeof BookOpen;
-  title: string;
-  desc: string;
-  time: string;
-  difficulty: "Foundational" | "Core" | "Advanced";
-  tone: Tone;
-}
-
-const categories: { name: string; eyebrow: string; items: CardItem[] }[] = [
-  {
-    eyebrow: "01",
-    name: "Learn",
-    items: [
-      { to: "/topic-rundown", icon: BookOpen, title: "Topic Rundown", desc: "All 10 units distilled — limits to series.", time: "4–6 hrs", difficulty: "Foundational", tone: "blue" },
-      { to: "/self-study-guide", icon: Compass, title: "Study Guide", desc: "Week-by-week roadmap from January to May.", time: "Ongoing", difficulty: "Core", tone: "violet" },
-    ],
-  },
-  {
-    eyebrow: "02",
-    name: "Practice",
-    items: [
-      { to: "/frqs-by-type", icon: ListChecks, title: "FRQs by Type", desc: "Every FRQ 2000–2026, organized by topic.", time: "2 hr / set", difficulty: "Core", tone: "emerald" },
-      { to: "/frqs-by-type", icon: Brain, title: "MCQ Sets", desc: "Targeted multiple choice by unit.", time: "30 min", difficulty: "Core", tone: "cyan" },
-      { to: "/frqs-by-type", icon: Timer, title: "Timed Practice", desc: "Full 3hr 15min mock exams with scoring.", time: "3h 15m", difficulty: "Advanced", tone: "amber" },
-    ],
-  },
-  {
-    eyebrow: "03",
-    name: "Review",
-    items: [
-      { href: LATEX_PDF_URL, icon: Calculator, title: "Formula Sheet", desc: "10-page LaTeX master sheet. Print it.", time: "Cram", difficulty: "Foundational", tone: "blue" },
-      { to: "/108-points-breakdown", icon: Target, title: "Common Mistakes", desc: "108-point breakdown — where you lose points.", time: "1 hr", difficulty: "Core", tone: "rose" },
-    ],
-  },
-  {
-    eyebrow: "04",
-    name: "Strategy",
-    items: [
-      { to: "/exam-strategy", icon: Trophy, title: "Exam Strategy", desc: "Section pacing, calculator tricks, time triage.", time: "45 min", difficulty: "Advanced", tone: "violet" },
-      { to: "/108-points-breakdown", icon: LineChart, title: "Score Breakdown", desc: "Reverse-engineered: what a 5 actually requires.", time: "30 min", difficulty: "Core", tone: "emerald" },
-    ],
-  },
-];
 
 function useCountdown(target: Date) {
   const [now, setNow] = useState(() => Date.now());
@@ -109,299 +45,309 @@ function useCountdown(target: Date) {
   }, []);
   return useMemo(() => {
     const diff = Math.max(0, target.getTime() - now);
-    const d = Math.floor(diff / 86400000);
-    const h = Math.floor((diff / 3600000) % 24);
-    const m = Math.floor((diff / 60000) % 60);
-    const s = Math.floor((diff / 1000) % 60);
-    return { d, h, m, s };
+    return {
+      d: Math.floor(diff / 86400000),
+      h: Math.floor((diff / 3600000) % 24),
+      m: Math.floor((diff / 60000) % 60),
+      s: Math.floor((diff / 1000) % 60),
+    };
   }, [now, target]);
 }
 
 function HomePage() {
   return (
     <div className="min-h-screen bg-background text-foreground relative overflow-hidden">
-      {/* Ambient background */}
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute inset-0 bg-grid opacity-40" />
-        <div className="absolute -top-40 left-1/2 -translate-x-1/2 h-[600px] w-[1100px] rounded-full blur-3xl opacity-30 bg-[radial-gradient(ellipse_at_center,var(--color-primary),transparent_60%)]" />
+        <div className="absolute -top-40 left-1/2 -translate-x-1/2 h-[600px] w-[1100px] rounded-full blur-3xl opacity-25 bg-[radial-gradient(ellipse_at_center,var(--color-primary),transparent_60%)]" />
       </div>
-
       <SiteNav />
       <Hero />
-      <Stats />
-      <Dashboard />
-      <SocialProof />
+      <ScoreCommandPreview />
+      <PointsEngine />
+      <MistakesPreview />
+      <SystemMap />
+      <FinalCTA />
       <SiteFooter />
     </div>
   );
 }
 
 function Hero() {
+  const { d } = useCountdown(EXAM_DATE);
   return (
-    <section className="px-6 pt-20 pb-16 relative">
-      <div className="max-w-5xl mx-auto text-center animate-bounce-in">
+    <section className="px-6 pt-16 pb-12 relative">
+      <div className="max-w-5xl mx-auto text-center">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full glass text-xs font-medium text-muted-foreground mb-6">
           <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-          Built for the 2026 exam · AB + BC
+          {d} days to the 2026 AP Calculus exam · AB + BC
         </div>
         <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.05] gradient-text">
-          Everything you need<br />for a 5 on AP Calculus
+          Everything you need<br />for a 5 in AP Calculus
         </h1>
         <p className="mt-6 text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-          Not another textbook. A focused operating system for the exam — topic rundowns, every FRQ since 2000 organized by type, timed mocks, and a strategy that actually scales to a 5.
+          Master every unit, drill categorized FRQs and MCQs, eliminate score-killing mistakes, and watch your predicted AP score climb in real time.
         </p>
         <div className="mt-9 flex flex-col sm:flex-row items-center justify-center gap-3">
-          <Link
-            to="/self-study-guide"
-            className="group inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-primary text-primary-foreground text-sm font-semibold shadow-glow hover:opacity-95 transition"
-          >
-            Start studying
+          <Link to="/auth" className="group inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-primary text-primary-foreground text-sm font-semibold shadow-glow hover:opacity-95 transition">
+            Start optimizing my score
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
           </Link>
-          <a
-            href={LATEX_PDF_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-border bg-card/50 text-sm font-semibold hover:bg-elevated transition"
-          >
-            <Calculator className="h-4 w-4" />
-            View formula sheet
-          </a>
+          <Link to="/common-mistakes" className="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-border bg-card/50 text-sm font-semibold hover:bg-elevated transition">
+            Explore free resources
+          </Link>
+        </div>
+        <div className="mt-10 grid grid-cols-3 max-w-2xl mx-auto rounded-xl overflow-hidden border border-border bg-card/40">
+          {[
+            { v: "108", l: "exam points modeled" },
+            { v: "10/10", l: "BC units covered" },
+            { v: "22+", l: "tracked mistakes" },
+          ].map((s, i) => (
+            <div key={s.l} className={`px-4 py-4 text-center ${i < 2 ? "border-r border-border" : ""}`}>
+              <div className="font-display text-xl sm:text-2xl font-bold tabular-nums">{s.v}</div>
+              <div className="text-[10px] uppercase tracking-wider text-muted-foreground mt-1">{s.l}</div>
+            </div>
+          ))}
         </div>
       </div>
     </section>
   );
 }
 
-function Stats() {
-  const stats = [
-    { label: "Topics covered", value: "20+" },
-    { label: "Practice problems", value: "100+" },
-    { label: "FRQs (2000–2026)", value: "150+" },
-    { label: "Coverage", value: "AB + BC" },
-  ];
+function ScoreCommandPreview() {
   return (
     <section className="px-6 pb-16">
-      <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-px bg-border rounded-2xl overflow-hidden border border-border">
-        {stats.map((s) => (
-          <div key={s.label} className="bg-card px-5 py-6 text-center">
-            <div className="font-display text-2xl sm:text-3xl font-bold tracking-tight">{s.value}</div>
-            <div className="text-xs uppercase tracking-wider text-muted-foreground mt-1">{s.label}</div>
+      <div className="max-w-6xl mx-auto">
+        <SectionHeader eyebrow="01 · the dashboard" title="The Score Command Center" sub="Predicted AP score, point gap, and ranked recommendations — updated every time you practice." />
+        <div className="grid lg:grid-cols-3 gap-4 mt-8">
+          {/* Predicted */}
+          <div className="rounded-xl border border-border bg-card p-5 relative overflow-hidden">
+            <div className="absolute -top-20 -right-20 h-48 w-48 rounded-full blur-3xl opacity-30 bg-primary" />
+            <div className="relative">
+              <div className="text-xs uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5"><TrendingUp className="h-3.5 w-3.5" /> Predicted AP score</div>
+              <div className="mt-4 flex items-baseline gap-3">
+                <span className="font-display text-6xl font-bold tabular-nums">4</span>
+                <span className="text-sm text-muted-foreground">/ 5</span>
+                <span className="ml-auto text-[10px] px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 font-medium">medium conf.</span>
+              </div>
+              <div className="mt-3 flex gap-1">
+                {[1,2,3,4,5].map(i => <div key={i} className={`h-1.5 flex-1 rounded-full ${i<=4 ? "bg-primary" : "bg-elevated"}`} />)}
+              </div>
+              <div className="mt-4 pt-4 border-t border-border text-xs text-muted-foreground">
+                Raw estimate: <span className="text-foreground font-medium tabular-nums">62 / 108</span>
+              </div>
+            </div>
           </div>
-        ))}
+          {/* Gap */}
+          <div className="rounded-xl border border-border bg-card p-5">
+            <div className="text-xs uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5"><Target className="h-3.5 w-3.5" /> 108-point engine</div>
+            <div className="mt-4 flex items-baseline gap-2">
+              <span className="font-display text-4xl font-bold tabular-nums">62</span>
+              <span className="text-muted-foreground text-sm">/ 108</span>
+              <span className="ml-auto text-xs text-muted-foreground">target 75</span>
+            </div>
+            <div className="mt-4 relative h-2.5 rounded-full bg-elevated overflow-hidden">
+              <div className="absolute inset-y-0 left-0 bg-gradient-to-r from-primary to-emerald-400 rounded-full" style={{ width: "57%" }} />
+              <div className="absolute inset-y-0 w-0.5 bg-foreground/70" style={{ left: "69%" }} />
+            </div>
+            <div className="mt-3 text-xs text-amber-400 font-medium">13-point gap to a 5</div>
+          </div>
+          {/* Path */}
+          <div className="rounded-xl border border-border bg-card p-5">
+            <div className="text-xs uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5"><Zap className="h-3.5 w-3.5 text-amber-400" /> Fastest path to your target</div>
+            <ol className="mt-4 space-y-2.5 text-sm">
+              {[
+                { t: "Master Polar FRQs", g: 3 },
+                { t: "Drill Series convergence", g: 3 },
+                { t: "Fix unit-context mistakes", g: 2 },
+                { t: "Review differential equations", g: 1 },
+              ].map((a, i) => (
+                <li key={a.t} className="flex items-center gap-3">
+                  <span className="font-mono text-xs text-muted-foreground w-4">{i + 1}</span>
+                  <span className="flex-1 truncate">{a.t}</span>
+                  <span className="font-mono text-xs text-emerald-400">+{a.g}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </div>
+
+        {/* Heatmap preview */}
+        <div className="mt-4 rounded-xl border border-border bg-card p-5">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <div className="text-xs uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5"><Activity className="h-3.5 w-3.5" /> Unit mastery heatmap</div>
+              <h3 className="font-display font-semibold mt-1">All 10 BC units · scaled by exam weight</h3>
+            </div>
+            <div className="hidden sm:flex items-center gap-2 text-[10px] text-muted-foreground">
+              <span>0%</span>
+              <div className="h-1.5 w-24 rounded-full bg-gradient-to-r from-rose-500 via-amber-400 to-emerald-400" />
+              <span>100%</span>
+            </div>
+          </div>
+          <div className="grid grid-cols-5 sm:grid-cols-10 gap-2">
+            {[78, 84, 71, 56, 49, 73, 62, 58, 41, 39].map((v, i) => {
+              const cls = v >= 80 ? "bg-emerald-500/15 text-emerald-300 border-emerald-500/30" : v >= 60 ? "bg-amber-500/15 text-amber-300 border-amber-500/30" : v >= 40 ? "bg-orange-500/15 text-orange-300 border-orange-500/30" : "bg-rose-500/15 text-rose-300 border-rose-500/30";
+              return (
+                <div key={i} className={`rounded-lg border p-2 ${cls}`}>
+                  <div className="text-[9px] font-mono uppercase opacity-80">U{i + 1}</div>
+                  <div className="font-display text-base font-bold tabular-nums mt-0.5">{v}%</div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
     </section>
   );
 }
 
-function Dashboard() {
+function PointsEngine() {
   return (
-    <section className="px-6 pb-20">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex items-end justify-between flex-wrap gap-4 mb-8">
-          <div>
-            <div className="text-xs font-mono uppercase tracking-[0.2em] text-muted-foreground mb-2">// dashboard</div>
-            <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight">Your exam prep, in one surface</h2>
+    <section className="px-6 py-16 border-t border-border">
+      <div className="max-w-6xl mx-auto">
+        <SectionHeader eyebrow="02 · the engine" title="The 108-Point Optimization Engine" sub="Every point on the AP exam is mapped. We tell you which ones to chase first." />
+        <div className="grid md:grid-cols-2 gap-4 mt-8">
+          <div className="rounded-xl border border-border bg-card p-6">
+            <div className="text-xs uppercase tracking-wider text-muted-foreground">Section I · MCQ</div>
+            <div className="mt-2 flex items-baseline gap-2">
+              <span className="font-display text-3xl font-bold">45 questions</span>
+              <span className="text-muted-foreground">= 54 raw pts</span>
+            </div>
+            <div className="mt-4 space-y-2">
+              {[
+                { l: "Part A · No calc · 30Q", w: "60min", pts: 36 },
+                { l: "Part B · Calc · 15Q", w: "45min", pts: 18 },
+              ].map(r => (
+                <div key={r.l} className="flex items-center justify-between text-sm py-2 border-t border-border">
+                  <span>{r.l}</span>
+                  <span className="text-muted-foreground text-xs">{r.w} · {r.pts}p</span>
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="text-sm text-muted-foreground">Pick a track and start the next session.</div>
+          <div className="rounded-xl border border-border bg-card p-6">
+            <div className="text-xs uppercase tracking-wider text-muted-foreground">Section II · FRQ</div>
+            <div className="mt-2 flex items-baseline gap-2">
+              <span className="font-display text-3xl font-bold">6 questions</span>
+              <span className="text-muted-foreground">= 54 raw pts</span>
+            </div>
+            <div className="mt-4 space-y-2">
+              {[
+                { l: "Part A · Calc · 2Q", w: "30min", pts: 18 },
+                { l: "Part B · No calc · 4Q", w: "60min", pts: 36 },
+              ].map(r => (
+                <div key={r.l} className="flex items-center justify-between text-sm py-2 border-t border-border">
+                  <span>{r.l}</span>
+                  <span className="text-muted-foreground text-xs">{r.w} · {r.pts}p</span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
+        <Link to="/108-points-breakdown" className="mt-6 inline-flex items-center gap-2 text-sm text-primary hover:underline">
+          See the full 108-point map <ArrowUpRight className="h-4 w-4" />
+        </Link>
+      </div>
+    </section>
+  );
+}
 
-        {/* Bento grid: top row = progress + countdown + daily */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-          <ProgressCard />
-          <CountdownCard />
-          <DailyQuestionCard />
-        </div>
-
-        {/* Category sections */}
-        <div className="space-y-10 mt-12">
-          {categories.map((cat) => (
-            <div key={cat.name}>
-              <div className="flex items-center gap-3 mb-4">
-                <span className="font-mono text-xs text-muted-foreground">{cat.eyebrow}</span>
-                <h3 className="font-display text-xl font-semibold">{cat.name}</h3>
-                <div className="flex-1 h-px bg-border" />
+function MistakesPreview() {
+  const items = [
+    { t: "Calculator in degree mode", c: "Calculator", p: 4 },
+    { t: "Missing units in context", c: "Context", p: 1 },
+    { t: "Wrong polar area formula", c: "Polar", p: 2 },
+    { t: "Sign error in derivative", c: "Algebra", p: 1.5 },
+  ];
+  return (
+    <section className="px-6 py-16 border-t border-border">
+      <div className="max-w-6xl mx-auto">
+        <SectionHeader eyebrow="03 · the database" title="The Common Mistakes Database" sub="22+ ways AP Calc students lose points — described, exampled, and fixed." />
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-8">
+          {items.map((m) => (
+            <div key={m.t} className="rounded-xl border border-border bg-card p-4">
+              <div className="grid place-items-center h-8 w-8 rounded-md bg-rose-500/10 text-rose-400 ring-1 ring-rose-500/20">
+                <AlertTriangle className="h-4 w-4" />
               </div>
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {cat.items.map((item) => (
-                  <FeatureCard key={item.title} item={item} />
-                ))}
+              <div className="mt-3 font-display font-semibold text-sm leading-tight">{m.t}</div>
+              <div className="text-[10px] uppercase tracking-wider text-muted-foreground mt-1">{m.c}</div>
+              <div className="mt-3 pt-3 border-t border-border flex items-center justify-between">
+                <span className="text-[10px] text-muted-foreground">avg. lost</span>
+                <span className="font-mono text-sm font-bold text-rose-400">−{m.p}</span>
               </div>
             </div>
           ))}
+        </div>
+        <Link to="/common-mistakes" className="mt-6 inline-flex items-center gap-2 text-sm text-primary hover:underline">
+          Browse the full mistake database <ArrowUpRight className="h-4 w-4" />
+        </Link>
+      </div>
+    </section>
+  );
+}
+
+function SystemMap() {
+  const items = [
+    { to: "/topic-rundown", icon: MapIcon, t: "Topic Rundowns", d: "All 10 units distilled — limits through series." },
+    { to: "/frqs-by-type", icon: ListChecks, t: "FRQ Library", d: "Every FRQ since 2000, organized by topic and year." },
+    { to: "/exam-strategy", icon: Gauge, t: "Exam Strategy", d: "Pacing, calculator tricks, time triage." },
+    { to: "/self-study-guide", icon: Compass, t: "Self-Study Roadmap", d: "1-, 3-, 6-, and 9-month plans to exam day." },
+    { to: "/latex-master-sheet", icon: Calculator, t: "Formula Sheet", d: "10-page LaTeX master sheet. Print it." },
+    { to: "/108-points-breakdown", icon: Target, t: "108-Point Map", d: "Reverse-engineered: what a 5 actually requires." },
+  ];
+  return (
+    <section className="px-6 py-16 border-t border-border">
+      <div className="max-w-6xl mx-auto">
+        <SectionHeader eyebrow="04 · the platform" title="Every tool, one system" sub="From first principles to exam morning. Everything you need is here." />
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-8">
+          {items.map((i) => {
+            const Icon = i.icon;
+            return (
+              <Link key={i.t} to={i.to} className="group rounded-xl border border-border bg-card p-5 hover-lift">
+                <div className="flex items-start justify-between">
+                  <div className="grid place-items-center h-10 w-10 rounded-lg bg-primary/10 text-primary ring-1 ring-primary/20">
+                    <Icon className="h-5 w-5" />
+                  </div>
+                  <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-foreground group-hover:translate-x-0.5 transition" />
+                </div>
+                <div className="font-display font-semibold mt-4">{i.t}</div>
+                <div className="text-sm text-muted-foreground mt-1">{i.d}</div>
+              </Link>
+            );
+          })}
         </div>
       </div>
     </section>
   );
 }
 
-function FeatureCard({ item }: { item: CardItem }) {
-  const tone = toneStyles[item.tone];
-  const Icon = item.icon;
-  const inner = (
-    <div className="group relative h-full rounded-xl border border-border bg-card p-5 hover-lift shadow-card overflow-hidden">
-      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity bg-[radial-gradient(circle_at_top_right,var(--color-primary),transparent_60%)] pointer-events-none" style={{ opacity: 0 }} />
-      <div className="flex items-start justify-between gap-3">
-        <div className={`grid place-items-center h-10 w-10 rounded-lg ${tone.icon} ring-1 ${tone.ring}`}>
-          <Icon className="h-5 w-5" />
-        </div>
-        <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-foreground group-hover:translate-x-0.5 transition" />
-      </div>
-      <h4 className="font-display text-base font-semibold mt-4">{item.title}</h4>
-      <p className="text-sm text-muted-foreground mt-1 leading-relaxed">{item.desc}</p>
-      <div className="flex items-center gap-3 mt-4 pt-4 border-t border-border text-xs text-muted-foreground">
-        <span className="inline-flex items-center gap-1.5"><Clock className="h-3.5 w-3.5" />{item.time}</span>
-        <span className="h-1 w-1 rounded-full bg-border" />
-        <span className={tone.chip}>{item.difficulty}</span>
-      </div>
-    </div>
-  );
-  if (item.href) {
-    return <a href={item.href} target="_blank" rel="noopener noreferrer">{inner}</a>;
-  }
-  return <Link to={item.to!}>{inner}</Link>;
-}
-
-function ProgressCard() {
-  const topics = 12;
-  const total = 20;
-  const pct = Math.round((topics / total) * 100);
-  return (
-    <div className="rounded-xl border border-border bg-card p-5 shadow-card">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-muted-foreground">
-          <TrendingUp className="h-3.5 w-3.5" /> Exam readiness
-        </div>
-        <span className="text-xs text-emerald-400 font-medium">On track</span>
-      </div>
-      <div className="mt-4 flex items-baseline gap-2">
-        <span className="font-display text-4xl font-bold tracking-tight">{pct}%</span>
-        <span className="text-sm text-muted-foreground">ready</span>
-      </div>
-      <div className="mt-3 h-2 rounded-full bg-elevated overflow-hidden">
-        <div className="h-full rounded-full bg-gradient-to-r from-primary to-emerald-400" style={{ width: `${pct}%` }} />
-      </div>
-      <div className="grid grid-cols-2 gap-3 mt-5 pt-4 border-t border-border">
-        <div>
-          <div className="text-xs text-muted-foreground">Topics</div>
-          <div className="font-display font-semibold mt-0.5">{topics}/{total}</div>
-        </div>
-        <div>
-          <div className="text-xs text-muted-foreground inline-flex items-center gap-1"><Flame className="h-3 w-3 text-amber-400" /> Streak</div>
-          <div className="font-display font-semibold mt-0.5">7 days</div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function CountdownCard() {
-  const { d, h, m, s } = useCountdown(EXAM_DATE);
-  const blocks = [
-    { v: d, l: "days" },
-    { v: h, l: "hrs" },
-    { v: m, l: "min" },
-    { v: s, l: "sec" },
-  ];
-  return (
-    <div className="relative rounded-xl border border-border p-5 shadow-card overflow-hidden bg-gradient-to-br from-card via-card to-accent">
-      <div className="absolute inset-0 bg-grid-animated opacity-30 pointer-events-none" />
-      <div className="relative">
-        <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-muted-foreground">
-          <Timer className="h-3.5 w-3.5" /> Exam countdown
-        </div>
-        <div className="text-xs text-muted-foreground mt-1">May 12, 2026 · 8:00 AM</div>
-        <div className="mt-4 grid grid-cols-4 gap-2">
-          {blocks.map((b) => (
-            <div key={b.l} className="rounded-lg bg-background/60 backdrop-blur border border-border py-2 text-center">
-              <div className="font-mono font-bold text-lg tabular-nums">{String(b.v).padStart(2, "0")}</div>
-              <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{b.l}</div>
-            </div>
-          ))}
-        </div>
-        <p className="text-xs text-muted-foreground mt-4">Don't panic. You have a plan.</p>
-      </div>
-    </div>
-  );
-}
-
-function DailyQuestionCard() {
-  return (
-    <div className="rounded-xl border border-border bg-card p-5 shadow-card flex flex-col">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-muted-foreground">
-          <Sparkles className="h-3.5 w-3.5 text-violet-400" /> Daily question
-        </div>
-        <span className="text-[10px] font-mono text-muted-foreground">FRQ · BC</span>
-      </div>
-      <div className="mt-4 rounded-lg bg-elevated/60 border border-border p-3 font-mono text-sm leading-relaxed">
-        Evaluate <span className="text-foreground font-semibold">∫₀^π/4 sec²(x) tan(x) dx</span>
-      </div>
-      <p className="text-xs text-muted-foreground mt-3 flex-1">
-        u-substitution territory. Try it without the formula sheet first.
-      </p>
-      <button className="mt-4 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-md bg-foreground text-background text-xs font-semibold hover:opacity-90 transition">
-        <Zap className="h-3.5 w-3.5" /> Try it now
-      </button>
-    </div>
-  );
-}
-
-function SocialProof() {
-  const testimonials = [
-    { name: "Maya R.", score: "5", track: "BC", quote: "FRQs by type was the unlock. I stopped re-doing 2018 #6 and actually drilled series." },
-    { name: "Jordan T.", score: "5", track: "AB", quote: "The formula sheet alone saved my exam morning. Cleaner than anything my teacher gave us." },
-    { name: "Priya S.", score: "5", track: "BC", quote: "Built like a real product, not a PDF dump. The strategy section is genuinely different." },
-  ];
+function FinalCTA() {
   return (
     <section className="px-6 py-20 border-t border-border">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex items-end justify-between flex-wrap gap-4 mb-10">
-          <div>
-            <div className="text-xs font-mono uppercase tracking-[0.2em] text-muted-foreground mb-2">// outcomes</div>
-            <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight">Built by students who scored 5s</h2>
-            <p className="text-muted-foreground mt-2 max-w-xl">Real results, not stock photos. Here's what the people who shipped this site say worked.</p>
-          </div>
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full glass text-xs">
-            <GraduationCap className="h-3.5 w-3.5 text-emerald-400" />
-            <span className="font-medium">5/5</span>
-            <span className="text-muted-foreground">average from beta cohort</span>
-          </div>
-        </div>
-        <div className="grid md:grid-cols-3 gap-4">
-          {testimonials.map((t) => (
-            <div key={t.name} className="rounded-xl border border-border bg-card p-5 hover-lift">
-              <div className="flex items-center gap-3">
-                <div className="h-9 w-9 rounded-full bg-gradient-to-br from-primary to-violet-400 grid place-items-center text-primary-foreground font-display font-bold text-sm">
-                  {t.name[0]}
-                </div>
-                <div>
-                  <div className="text-sm font-semibold">{t.name}</div>
-                  <div className="text-xs text-muted-foreground">Scored {t.score} · Calc {t.track}</div>
-                </div>
-                <CheckCircle2 className="h-4 w-4 text-emerald-400 ml-auto" />
-              </div>
-              <p className="text-sm text-muted-foreground mt-4 leading-relaxed">"{t.quote}"</p>
-            </div>
-          ))}
-        </div>
-
-        {/* Final CTA */}
-        <div className="mt-12 relative rounded-2xl border border-border overflow-hidden bg-gradient-to-br from-card via-card to-accent p-8 sm:p-12 text-center">
-          <div className="absolute inset-0 bg-grid-animated opacity-20 pointer-events-none" />
-          <div className="relative">
-            <Sigma className="h-8 w-8 mx-auto text-primary" />
-            <h3 className="font-display text-2xl sm:text-3xl font-bold tracking-tight mt-4">Stop reading. Start scoring.</h3>
-            <p className="text-muted-foreground mt-2 max-w-lg mx-auto">One focused session beats a week of passive review. Pick a topic and go.</p>
-            <Link
-              to="/self-study-guide"
-              className="inline-flex items-center gap-2 mt-6 px-5 py-3 rounded-lg bg-primary text-primary-foreground text-sm font-semibold shadow-glow hover:opacity-95 transition"
-            >
-              Open the study guide <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
+      <div className="max-w-4xl mx-auto relative rounded-2xl border border-border overflow-hidden bg-gradient-to-br from-card via-card to-accent p-8 sm:p-12 text-center">
+        <div className="absolute inset-0 bg-grid-animated opacity-20 pointer-events-none" />
+        <div className="relative">
+          <Sigma className="h-8 w-8 mx-auto text-primary" />
+          <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight mt-4">Stop studying. Start optimizing.</h2>
+          <p className="text-muted-foreground mt-3 max-w-lg mx-auto">
+            Free to start. No credit card. Your predicted AP score updates with every question you answer.
+          </p>
+          <Link to="/auth" className="mt-6 inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-primary text-primary-foreground text-sm font-semibold shadow-glow hover:opacity-95 transition">
+            Create my account <ArrowRight className="h-4 w-4" />
+          </Link>
         </div>
       </div>
     </section>
+  );
+}
+
+function SectionHeader({ eyebrow, title, sub }: { eyebrow: string; title: string; sub: string }) {
+  return (
+    <div className="text-center max-w-2xl mx-auto">
+      <div className="text-xs font-mono uppercase tracking-[0.2em] text-muted-foreground mb-3">{`// ${eyebrow}`}</div>
+      <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight">{title}</h2>
+      <p className="text-muted-foreground mt-3">{sub}</p>
+    </div>
   );
 }
