@@ -39,7 +39,7 @@ export const Route = createFileRoute("/")({
 });
 
 const LATEX_PDF_URL =
-  "https://www.overleaf.com/download/project/69da90d931d1b909a9d09491/build/19ea2640ea6-92bb352f97e666fa/output/output.pdf?compileGroup=standard&clsiserverid=clsi-pre-emp-c3d-b-f-15kq&enable_pdf_caching=true&popupDownload=true&editorId=9fff4a11-61ca-4aef-a499-3d3445bc08f6";
+  "https://drive.google.com/file/d/1O6iD6MP3R_p4NZzZ4vt-7kVAHrUBYtdJ/view?usp=drivesdk";
 
 // AP Calculus 2026 exam — May 12, 2026, 8:00 AM local
 const EXAM_DATE = new Date("2026-05-12T08:00:00");
