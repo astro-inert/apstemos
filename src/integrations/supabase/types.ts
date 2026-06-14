@@ -14,16 +14,335 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      attempts: {
+        Row: {
+          correct: boolean
+          created_at: string
+          id: string
+          mistake_codes: string[]
+          points_earned: number
+          points_possible: number
+          question_id: string
+          time_spent_seconds: number | null
+          topic_id: string | null
+          unit_id: string | null
+          user_id: string
+        }
+        Insert: {
+          correct: boolean
+          created_at?: string
+          id?: string
+          mistake_codes?: string[]
+          points_earned?: number
+          points_possible?: number
+          question_id: string
+          time_spent_seconds?: number | null
+          topic_id?: string | null
+          unit_id?: string | null
+          user_id: string
+        }
+        Update: {
+          correct?: boolean
+          created_at?: string
+          id?: string
+          mistake_codes?: string[]
+          points_earned?: number
+          points_possible?: number
+          question_id?: string
+          time_spent_seconds?: number | null
+          topic_id?: string | null
+          unit_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "attempts_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "questions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attempts_topic_id_fkey"
+            columns: ["topic_id"]
+            isOneToOne: false
+            referencedRelation: "topics"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attempts_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "units"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      common_mistakes: {
+        Row: {
+          ap_consequence: string | null
+          category: string
+          code: string
+          description: string
+          est_point_loss: number
+          example: string | null
+          how_to_avoid: string
+          title: string
+        }
+        Insert: {
+          ap_consequence?: string | null
+          category: string
+          code: string
+          description: string
+          est_point_loss?: number
+          example?: string | null
+          how_to_avoid: string
+          title: string
+        }
+        Update: {
+          ap_consequence?: string | null
+          category?: string
+          code?: string
+          description?: string
+          est_point_loss?: number
+          example?: string | null
+          how_to_avoid?: string
+          title?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          display_name: string | null
+          exam_date: string
+          id: string
+          target_score: number
+          track: Database["public"]["Enums"]["ap_track"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string | null
+          exam_date?: string
+          id: string
+          target_score?: number
+          track?: Database["public"]["Enums"]["ap_track"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string | null
+          exam_date?: string
+          id?: string
+          target_score?: number
+          track?: Database["public"]["Enums"]["ap_track"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      questions: {
+        Row: {
+          answer: string | null
+          ap_value: number
+          calculator: boolean
+          common_mistake_codes: string[]
+          created_at: string
+          difficulty: Database["public"]["Enums"]["difficulty"]
+          explanation: string | null
+          id: string
+          is_published: boolean
+          prompt: string
+          skills: string[]
+          source: string | null
+          topic_id: string | null
+          type: Database["public"]["Enums"]["question_type"]
+          unit_id: string | null
+          year: number | null
+        }
+        Insert: {
+          answer?: string | null
+          ap_value?: number
+          calculator?: boolean
+          common_mistake_codes?: string[]
+          created_at?: string
+          difficulty?: Database["public"]["Enums"]["difficulty"]
+          explanation?: string | null
+          id?: string
+          is_published?: boolean
+          prompt: string
+          skills?: string[]
+          source?: string | null
+          topic_id?: string | null
+          type: Database["public"]["Enums"]["question_type"]
+          unit_id?: string | null
+          year?: number | null
+        }
+        Update: {
+          answer?: string | null
+          ap_value?: number
+          calculator?: boolean
+          common_mistake_codes?: string[]
+          created_at?: string
+          difficulty?: Database["public"]["Enums"]["difficulty"]
+          explanation?: string | null
+          id?: string
+          is_published?: boolean
+          prompt?: string
+          skills?: string[]
+          source?: string | null
+          topic_id?: string | null
+          type?: Database["public"]["Enums"]["question_type"]
+          unit_id?: string | null
+          year?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "questions_topic_id_fkey"
+            columns: ["topic_id"]
+            isOneToOne: false
+            referencedRelation: "topics"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "questions_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "units"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      subjects: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          total_points: number
+        }
+        Insert: {
+          created_at?: string
+          id: string
+          name: string
+          total_points: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          total_points?: number
+        }
+        Relationships: []
+      }
+      topics: {
+        Row: {
+          code: string
+          description: string | null
+          id: string
+          name: string
+          unit_id: string
+        }
+        Insert: {
+          code: string
+          description?: string | null
+          id?: string
+          name: string
+          unit_id: string
+        }
+        Update: {
+          code?: string
+          description?: string | null
+          id?: string
+          name?: string
+          unit_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "topics_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "units"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      units: {
+        Row: {
+          ap_points: number
+          ap_weight_pct: number
+          description: string | null
+          id: string
+          name: string
+          number: number
+          subject_id: string
+          track: Database["public"]["Enums"]["ap_track"]
+        }
+        Insert: {
+          ap_points: number
+          ap_weight_pct: number
+          description?: string | null
+          id?: string
+          name: string
+          number: number
+          subject_id: string
+          track?: Database["public"]["Enums"]["ap_track"]
+        }
+        Update: {
+          ap_points?: number
+          ap_weight_pct?: number
+          description?: string | null
+          id?: string
+          name?: string
+          number?: number
+          subject_id?: string
+          track?: Database["public"]["Enums"]["ap_track"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "units_subject_id_fkey"
+            columns: ["subject_id"]
+            isOneToOne: false
+            referencedRelation: "subjects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      ap_track: "AB" | "BC"
+      app_role: "admin" | "user"
+      difficulty: "easy" | "medium" | "hard"
+      question_type: "MCQ" | "FRQ"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +469,11 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      ap_track: ["AB", "BC"],
+      app_role: ["admin", "user"],
+      difficulty: ["easy", "medium", "hard"],
+      question_type: ["MCQ", "FRQ"],
+    },
   },
 } as const
