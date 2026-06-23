@@ -26,7 +26,7 @@ export const Route = createFileRoute("/question-navigator/$unitId")({
 });
 
 function Page() {
-  const { unit } = Route.useLoaderData();
+  const { unit } = Route.useLoaderData() as { unit: UnitEntry };
 
   return (
     <PageShell
