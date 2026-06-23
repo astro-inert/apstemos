@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { AlertTriangle, Search } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
+import { LaTeX } from "@/components/LaTeX";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/common-mistakes")({
