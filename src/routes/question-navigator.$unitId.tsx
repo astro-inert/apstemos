@@ -1,6 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { PageShell } from "@/components/PageShell";
-import { findUnit } from "@/lib/question-navigator-data";
+import { findUnit, type UnitEntry } from "@/lib/question-navigator-data";
 import { ArrowLeft, ChevronRight, FileText } from "lucide-react";
 
 export const Route = createFileRoute("/question-navigator/$unitId")({

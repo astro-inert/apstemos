@@ -23,6 +23,7 @@ import { Route as R108PointsBreakdownRouteImport } from './routes/108-points-bre
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as QuestionNavigatorIndexRouteImport } from './routes/question-navigator.index'
+import { Route as QuestionNavigatorUnitIdRouteImport } from './routes/question-navigator.$unitId'
 import { Route as AuthenticatedCommandCenterRouteImport } from './routes/_authenticated/command-center'
 
 const TopicRundownRoute = TopicRundownRouteImport.update({
@@ -94,6 +95,11 @@ const QuestionNavigatorIndexRoute = QuestionNavigatorIndexRouteImport.update({
   path: '/question-navigator/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const QuestionNavigatorUnitIdRoute = QuestionNavigatorUnitIdRouteImport.update({
+  id: '/question-navigator/$unitId',
+  path: '/question-navigator/$unitId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedCommandCenterRoute =
   AuthenticatedCommandCenterRouteImport.update({
     id: '/command-center',
@@ -115,6 +121,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/topic-rundown': typeof TopicRundownRoute
   '/command-center': typeof AuthenticatedCommandCenterRoute
+  '/question-navigator/$unitId': typeof QuestionNavigatorUnitIdRoute
   '/question-navigator/': typeof QuestionNavigatorIndexRoute
 }
 export interface FileRoutesByTo {
@@ -131,6 +138,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/topic-rundown': typeof TopicRundownRoute
   '/command-center': typeof AuthenticatedCommandCenterRoute
+  '/question-navigator/$unitId': typeof QuestionNavigatorUnitIdRoute
   '/question-navigator': typeof QuestionNavigatorIndexRoute
 }
 export interface FileRoutesById {
@@ -149,6 +157,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/topic-rundown': typeof TopicRundownRoute
   '/_authenticated/command-center': typeof AuthenticatedCommandCenterRoute
+  '/question-navigator/$unitId': typeof QuestionNavigatorUnitIdRoute
   '/question-navigator/': typeof QuestionNavigatorIndexRoute
 }
 export interface FileRouteTypes {
@@ -167,6 +176,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/topic-rundown'
     | '/command-center'
+    | '/question-navigator/$unitId'
     | '/question-navigator/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -183,6 +193,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/topic-rundown'
     | '/command-center'
+    | '/question-navigator/$unitId'
     | '/question-navigator'
   id:
     | '__root__'
@@ -200,6 +211,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/topic-rundown'
     | '/_authenticated/command-center'
+    | '/question-navigator/$unitId'
     | '/question-navigator/'
   fileRoutesById: FileRoutesById
 }
@@ -217,6 +229,7 @@ export interface RootRouteChildren {
   SelfStudyGuideRoute: typeof SelfStudyGuideRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TopicRundownRoute: typeof TopicRundownRoute
+  QuestionNavigatorUnitIdRoute: typeof QuestionNavigatorUnitIdRoute
   QuestionNavigatorIndexRoute: typeof QuestionNavigatorIndexRoute
 }
 
@@ -320,6 +333,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof QuestionNavigatorIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/question-navigator/$unitId': {
+      id: '/question-navigator/$unitId'
+      path: '/question-navigator/$unitId'
+      fullPath: '/question-navigator/$unitId'
+      preLoaderRoute: typeof QuestionNavigatorUnitIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/command-center': {
       id: '/_authenticated/command-center'
       path: '/command-center'
@@ -355,6 +375,7 @@ const rootRouteChildren: RootRouteChildren = {
   SelfStudyGuideRoute: SelfStudyGuideRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TopicRundownRoute: TopicRundownRoute,
+  QuestionNavigatorUnitIdRoute: QuestionNavigatorUnitIdRoute,
   QuestionNavigatorIndexRoute: QuestionNavigatorIndexRoute,
 }
 export const routeTree = rootRouteImport
