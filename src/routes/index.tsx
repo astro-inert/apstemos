@@ -8,15 +8,11 @@ import {
   Calculator,
   ChevronRight,
   Compass,
-  FileText,
   Gauge,
-  LineChart as LineChartIcon,
   ListChecks,
   Map as MapIcon,
   Sigma,
-  Sparkles,
   Target,
-  Timer,
   TrendingUp,
   Zap,
 } from "lucide-react";
@@ -35,7 +31,8 @@ export const Route = createFileRoute("/")({
   component: HomePage,
 });
 
-const EXAM_DATE = new Date("2026-05-12T08:00:00");
+const EXAM_DATE = new Date("2027-05-11T08:00:00");
+const FORMULA_SHEET_URL = "https://drive.google.com/file/d/1O6iD6MP3R_p4NZzZ4vt-7kVAHrUBYtdJ/view?usp=drive_open";
 
 function useCountdown(target: Date) {
   const [now, setNow] = useState(() => Date.now());
@@ -64,9 +61,9 @@ function HomePage() {
       <SiteNav />
       <Hero />
       <ScoreCommandPreview />
-      <PointsEngine />
-      <MistakesPreview />
       <SystemMap />
+      <MistakesPreview />
+      <ResourcesGrid />
       <FinalCTA />
       <SiteFooter />
     </div>
@@ -80,7 +77,7 @@ function Hero() {
       <div className="max-w-5xl mx-auto text-center">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full glass text-xs font-medium text-muted-foreground mb-6">
           <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-          {d} days to the 2026 AP Calculus exam · AB + BC
+          {d} days until the 2027 AP Calculus BC exam
         </div>
         <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.05] gradient-text">
           Everything you need<br />for a 5 in AP Calculus
@@ -120,7 +117,6 @@ function ScoreCommandPreview() {
       <div className="max-w-6xl mx-auto">
         <SectionHeader eyebrow="01 · the dashboard" title="The Score Command Center" sub="Predicted AP score, point gap, and ranked recommendations — updated every time you practice." />
         <div className="grid lg:grid-cols-3 gap-4 mt-8">
-          {/* Predicted */}
           <div className="rounded-xl border border-border bg-card p-5 relative overflow-hidden">
             <div className="absolute -top-20 -right-20 h-48 w-48 rounded-full blur-3xl opacity-30 bg-primary" />
             <div className="relative">
@@ -138,7 +134,6 @@ function ScoreCommandPreview() {
               </div>
             </div>
           </div>
-          {/* Gap */}
           <div className="rounded-xl border border-border bg-card p-5">
             <div className="text-xs uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5"><Target className="h-3.5 w-3.5" /> 108-point engine</div>
             <div className="mt-4 flex items-baseline gap-2">
@@ -152,7 +147,6 @@ function ScoreCommandPreview() {
             </div>
             <div className="mt-3 text-xs text-amber-400 font-medium">13-point gap to a 5</div>
           </div>
-          {/* Path */}
           <div className="rounded-xl border border-border bg-card p-5">
             <div className="text-xs uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5"><Zap className="h-3.5 w-3.5 text-amber-400" /> Fastest path to your target</div>
             <ol className="mt-4 space-y-2.5 text-sm">
@@ -171,83 +165,67 @@ function ScoreCommandPreview() {
             </ol>
           </div>
         </div>
-
-        {/* Heatmap preview */}
-        <div className="mt-4 rounded-xl border border-border bg-card p-5">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <div className="text-xs uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5"><Activity className="h-3.5 w-3.5" /> Unit mastery heatmap</div>
-              <h3 className="font-display font-semibold mt-1">All 10 BC units · scaled by exam weight</h3>
-            </div>
-            <div className="hidden sm:flex items-center gap-2 text-[10px] text-muted-foreground">
-              <span>0%</span>
-              <div className="h-1.5 w-24 rounded-full bg-gradient-to-r from-rose-500 via-amber-400 to-emerald-400" />
-              <span>100%</span>
-            </div>
-          </div>
-          <div className="grid grid-cols-5 sm:grid-cols-10 gap-2">
-            {[78, 84, 71, 56, 49, 73, 62, 58, 41, 39].map((v, i) => {
-              const cls = v >= 80 ? "bg-emerald-500/15 text-emerald-300 border-emerald-500/30" : v >= 60 ? "bg-amber-500/15 text-amber-300 border-amber-500/30" : v >= 40 ? "bg-orange-500/15 text-orange-300 border-orange-500/30" : "bg-rose-500/15 text-rose-300 border-rose-500/30";
-              return (
-                <div key={i} className={`rounded-lg border p-2 ${cls}`}>
-                  <div className="text-[9px] font-mono uppercase opacity-80">U{i + 1}</div>
-                  <div className="font-display text-base font-bold tabular-nums mt-0.5">{v}%</div>
-                </div>
-              );
-            })}
-          </div>
+        <div className="mt-4">
+          <Link to="/command-center" className="inline-flex items-center gap-2 text-sm text-primary hover:underline">
+            Open my Command Center <ArrowUpRight className="h-4 w-4" />
+          </Link>
         </div>
       </div>
     </section>
   );
 }
 
-function PointsEngine() {
+type Accent = "primary" | "emerald" | "amber" | "rose" | "violet" | "sky";
+const accentMap: Record<Accent, { icon: string; ring: string; glow: string; hover: string }> = {
+  primary: { icon: "bg-primary/10 text-primary",       ring: "ring-primary/20",       glow: "from-primary/20",        hover: "hover:border-primary/40" },
+  emerald: { icon: "bg-emerald-500/10 text-emerald-400", ring: "ring-emerald-500/20",  glow: "from-emerald-500/20",     hover: "hover:border-emerald-500/40" },
+  amber:   { icon: "bg-amber-500/10 text-amber-400",   ring: "ring-amber-500/20",     glow: "from-amber-500/20",       hover: "hover:border-amber-500/40" },
+  rose:    { icon: "bg-rose-500/10 text-rose-400",     ring: "ring-rose-500/20",      glow: "from-rose-500/20",        hover: "hover:border-rose-500/40" },
+  violet:  { icon: "bg-violet-500/10 text-violet-400", ring: "ring-violet-500/20",    glow: "from-violet-500/20",      hover: "hover:border-violet-500/40" },
+  sky:     { icon: "bg-sky-500/10 text-sky-400",       ring: "ring-sky-500/20",       glow: "from-sky-500/20",         hover: "hover:border-sky-500/40" },
+};
+
+function SystemMap() {
+  const items: { to: string; href?: string; icon: typeof MapIcon; t: string; d: string; accent: Accent; external?: boolean }[] = [
+    { to: "/command-center", icon: Activity, t: "Score Command Center", d: "Your predicted AP score, point gap, and ranked next moves.", accent: "primary" },
+    { to: "/topic-rundown",  icon: MapIcon,   t: "Topic Rundowns",      d: "All 10 units distilled — limits through series.",              accent: "sky" },
+    { to: "/frqs-by-type",   icon: ListChecks,t: "FRQ Library",         d: "Every FRQ since 2000, organized by topic and year.",           accent: "emerald" },
+    { to: "/exam-strategy",  icon: Gauge,     t: "Exam Strategy",       d: "Pacing, calculator tricks, time triage.",                      accent: "amber" },
+    { to: "/self-study-guide", icon: Compass, t: "Self-Study Roadmap",  d: "1-, 3-, 6-, and 9-month plans to exam day.",                    accent: "violet" },
+    { href: FORMULA_SHEET_URL, external: true, to: "/", icon: Calculator, t: "Formula Sheet", d: "10-page LaTeX master sheet — one click to PDF.", accent: "rose" },
+  ];
   return (
     <section className="px-6 py-16 border-t border-border">
       <div className="max-w-6xl mx-auto">
-        <SectionHeader eyebrow="02 · the engine" title="The 108-Point Optimization Engine" sub="Every point on the AP exam is mapped. We tell you which ones to chase first." />
-        <div className="grid md:grid-cols-2 gap-4 mt-8">
-          <div className="rounded-xl border border-border bg-card p-6">
-            <div className="text-xs uppercase tracking-wider text-muted-foreground">Section I · MCQ</div>
-            <div className="mt-2 flex items-baseline gap-2">
-              <span className="font-display text-3xl font-bold">45 questions</span>
-              <span className="text-muted-foreground">= 54 raw pts</span>
-            </div>
-            <div className="mt-4 space-y-2">
-              {[
-                { l: "Part A · No calc · 30Q", w: "60min", pts: 36 },
-                { l: "Part B · Calc · 15Q", w: "45min", pts: 18 },
-              ].map(r => (
-                <div key={r.l} className="flex items-center justify-between text-sm py-2 border-t border-border">
-                  <span>{r.l}</span>
-                  <span className="text-muted-foreground text-xs">{r.w} · {r.pts}p</span>
+        <SectionHeader eyebrow="02 · the platform" title="Every tool, one system" sub="From first principles to exam morning. Everything you need is here." />
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-8">
+          {items.map((i) => {
+            const Icon = i.icon;
+            const a = accentMap[i.accent];
+            const inner = (
+              <>
+                <div className={`pointer-events-none absolute -top-16 -right-16 h-40 w-40 rounded-full blur-3xl opacity-60 bg-gradient-to-br ${a.glow} to-transparent`} />
+                <div className="relative flex items-start justify-between">
+                  <div className={`grid place-items-center h-10 w-10 rounded-lg ring-1 ${a.icon} ${a.ring}`}>
+                    <Icon className="h-5 w-5" />
+                  </div>
+                  <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-foreground group-hover:translate-x-0.5 transition" />
                 </div>
-              ))}
-            </div>
-          </div>
-          <div className="rounded-xl border border-border bg-card p-6">
-            <div className="text-xs uppercase tracking-wider text-muted-foreground">Section II · FRQ</div>
-            <div className="mt-2 flex items-baseline gap-2">
-              <span className="font-display text-3xl font-bold">6 questions</span>
-              <span className="text-muted-foreground">= 54 raw pts</span>
-            </div>
-            <div className="mt-4 space-y-2">
-              {[
-                { l: "Part A · Calc · 2Q", w: "30min", pts: 18 },
-                { l: "Part B · No calc · 4Q", w: "60min", pts: 36 },
-              ].map(r => (
-                <div key={r.l} className="flex items-center justify-between text-sm py-2 border-t border-border">
-                  <span>{r.l}</span>
-                  <span className="text-muted-foreground text-xs">{r.w} · {r.pts}p</span>
-                </div>
-              ))}
-            </div>
-          </div>
+                <div className="relative font-display font-semibold mt-4">{i.t}</div>
+                <div className="relative text-sm text-muted-foreground mt-1">{i.d}</div>
+              </>
+            );
+            const cls = `group relative overflow-hidden rounded-xl border border-border bg-card p-5 hover-lift transition ${a.hover}`;
+            if (i.external && i.href) {
+              return (
+                <a key={i.t} href={i.href} target="_blank" rel="noopener noreferrer" className={cls}>{inner}</a>
+              );
+            }
+            return (
+              <Link key={i.t} to={i.to} className={cls}>{inner}</Link>
+            );
+          })}
         </div>
-        <Link to="/108-points-breakdown" className="mt-6 inline-flex items-center gap-2 text-sm text-primary hover:underline">
-          See the full 108-point map <ArrowUpRight className="h-4 w-4" />
-        </Link>
       </div>
     </section>
   );
@@ -287,35 +265,40 @@ function MistakesPreview() {
   );
 }
 
-function SystemMap() {
-  const items = [
-    { to: "/topic-rundown", icon: MapIcon, t: "Topic Rundowns", d: "All 10 units distilled — limits through series." },
-    { to: "/frqs-by-type", icon: ListChecks, t: "FRQ Library", d: "Every FRQ since 2000, organized by topic and year." },
-    { to: "/exam-strategy", icon: Gauge, t: "Exam Strategy", d: "Pacing, calculator tricks, time triage." },
-    { to: "/self-study-guide", icon: Compass, t: "Self-Study Roadmap", d: "1-, 3-, 6-, and 9-month plans to exam day." },
-    { to: "/latex-master-sheet", icon: Calculator, t: "Formula Sheet", d: "10-page LaTeX master sheet. Print it." },
-    { to: "/108-points-breakdown", icon: Target, t: "108-Point Map", d: "Reverse-engineered: what a 5 actually requires." },
+function ResourcesGrid() {
+  const items: { to: string; icon: typeof MapIcon; t: string; d: string; accent: Accent }[] = [
+    { to: "/topic-rundown",    icon: MapIcon,    t: "Topic Rundowns",     d: "Unit-by-unit cheat sheets across the CED.",       accent: "sky" },
+    { to: "/frqs-by-type",     icon: ListChecks, t: "FRQs by Type",       d: "Browse FRQs by topic, year, and calc / no-calc.", accent: "emerald" },
+    { to: "/exam-strategy",    icon: Gauge,      t: "Exam Strategy",      d: "Pacing, partial credit, and triage frameworks.",  accent: "amber" },
+    { to: "/self-study-guide", icon: Compass,    t: "Self-Study Roadmap", d: "1-, 3-, 6-, 9-month study plans to exam day.",    accent: "violet" },
   ];
   return (
     <section className="px-6 py-16 border-t border-border">
       <div className="max-w-6xl mx-auto">
-        <SectionHeader eyebrow="04 · the platform" title="Every tool, one system" sub="From first principles to exam morning. Everything you need is here." />
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-8">
+        <SectionHeader eyebrow="04 · the resources" title="Free resources, always" sub="Curated, structured, kept up to date with the CED." />
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-8">
           {items.map((i) => {
             const Icon = i.icon;
+            const a = accentMap[i.accent];
             return (
-              <Link key={i.t} to={i.to} className="group rounded-xl border border-border bg-card p-5 hover-lift">
-                <div className="flex items-start justify-between">
-                  <div className="grid place-items-center h-10 w-10 rounded-lg bg-primary/10 text-primary ring-1 ring-primary/20">
-                    <Icon className="h-5 w-5" />
-                  </div>
-                  <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-foreground group-hover:translate-x-0.5 transition" />
+              <Link key={i.t} to={i.to} className={`group relative overflow-hidden rounded-xl border border-border bg-card p-5 hover-lift transition ${a.hover}`}>
+                <div className={`pointer-events-none absolute -top-12 -right-12 h-32 w-32 rounded-full blur-3xl opacity-60 bg-gradient-to-br ${a.glow} to-transparent`} />
+                <div className={`relative grid place-items-center h-9 w-9 rounded-lg ring-1 ${a.icon} ${a.ring}`}>
+                  <Icon className="h-4.5 w-4.5" />
                 </div>
-                <div className="font-display font-semibold mt-4">{i.t}</div>
-                <div className="text-sm text-muted-foreground mt-1">{i.d}</div>
+                <div className="relative font-display font-semibold mt-3 text-sm">{i.t}</div>
+                <div className="relative text-xs text-muted-foreground mt-1">{i.d}</div>
               </Link>
             );
           })}
+          <a href={FORMULA_SHEET_URL} target="_blank" rel="noopener noreferrer" className={`group relative overflow-hidden rounded-xl border border-border bg-card p-5 hover-lift transition ${accentMap.rose.hover}`}>
+            <div className={`pointer-events-none absolute -top-12 -right-12 h-32 w-32 rounded-full blur-3xl opacity-60 bg-gradient-to-br ${accentMap.rose.glow} to-transparent`} />
+            <div className={`relative grid place-items-center h-9 w-9 rounded-lg ring-1 ${accentMap.rose.icon} ${accentMap.rose.ring}`}>
+              <Calculator className="h-4.5 w-4.5" />
+            </div>
+            <div className="relative font-display font-semibold mt-3 text-sm">Formula Sheet (PDF)</div>
+            <div className="relative text-xs text-muted-foreground mt-1">10-page LaTeX master sheet — opens instantly.</div>
+          </a>
         </div>
       </div>
     </section>

@@ -94,8 +94,8 @@ function Inner() {
         <FastestPathCard actions={data.recommended_actions} />
       </div>
 
-      {/* Unit mastery heatmap */}
-      <UnitMasteryHeatmap units={data.unit_mastery} />
+      {/* Performance Diagnostics — strengths/weaknesses/topic-level */}
+      <PerformanceDiagnostics units={data.unit_mastery} />
 
       {/* Bottom row: Top mistakes + Confidence/insights */}
       <div className="grid lg:grid-cols-3 gap-4">
@@ -197,42 +197,145 @@ function FastestPathCard({ actions }: { actions: { title: string; detail: string
   );
 }
 
-function UnitMasteryHeatmap({ units }: { units: Array<{ unit_id: string; number: number; name: string; ap_points: number; ap_weight_pct: number; mastery: number; attempts: number }> }) {
+type UnitRow = { unit_id: string; number: number; name: string; ap_points: number; ap_weight_pct: number; mastery: number; attempts: number };
+
+function PerformanceDiagnostics({ units }: { units: UnitRow[] }) {
+  const touched = units.filter((u) => u.mastery >= 0);
+  const strengths = [...touched].filter((u) => u.mastery >= 75).sort((a, b) => b.mastery - a.mastery).slice(0, 4);
+  const weaknesses = [...touched].filter((u) => u.mastery < 60).sort((a, b) => a.mastery - b.mastery).slice(0, 4);
+  const untouched = units.filter((u) => u.mastery < 0);
+
+  return (
+    <div className="grid lg:grid-cols-3 gap-4">
+      {/* Strengths */}
+      <DiagnosticColumn
+        title="Strengths"
+        sub="Units at 75% mastery or above."
+        accent="emerald"
+        empty="Log more attempts to surface what you're strongest at."
+        rows={strengths.map((u) => ({ id: u.unit_id, label: `Unit ${u.number} · ${u.name}`, value: `${u.mastery}%`, meta: `${u.attempts} attempts`, pct: u.mastery }))}
+      />
+      {/* Needs improvement */}
+      <DiagnosticColumn
+        title="Needs improvement"
+        sub="Below 60% mastery — biggest score leaks."
+        accent="rose"
+        empty="No weak units yet. Keep drilling to push everything above 80%."
+        rows={weaknesses.map((u) => ({ id: u.unit_id, label: `Unit ${u.number} · ${u.name}`, value: `${u.mastery}%`, meta: `${u.attempts} attempts · worth ${u.ap_points}p`, pct: u.mastery }))}
+      />
+      {/* Untouched / projected lift */}
+      <div className="rounded-xl border border-border bg-card p-5">
+        <div className="text-xs uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5">
+          <Sparkles className="h-3.5 w-3.5 text-violet-400" /> Untouched units
+        </div>
+        <h3 className="font-display font-semibold mt-1">Highest ROI to start</h3>
+        {untouched.length === 0 ? (
+          <div className="mt-4 text-sm text-muted-foreground">Every unit has data — focus on the weaknesses column.</div>
+        ) : (
+          <ul className="mt-4 space-y-2">
+            {untouched.slice(0, 5).map((u) => (
+              <li key={u.unit_id} className="flex items-center justify-between gap-3 p-2 rounded-md bg-elevated/40 border border-dashed border-border">
+                <div className="min-w-0">
+                  <div className="text-sm font-medium truncate">Unit {u.number} · {u.name}</div>
+                  <div className="text-[10px] text-muted-foreground">{u.ap_weight_pct}% of exam</div>
+                </div>
+                <span className="font-mono text-xs text-violet-300 shrink-0">+{u.ap_points}p</span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      {/* Full unit performance table — topic-level placeholder */}
+      <div className="lg:col-span-3 rounded-xl border border-border bg-card overflow-hidden">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-border">
+          <div>
+            <div className="text-xs uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5">
+              <Activity className="h-3.5 w-3.5" /> Unit performance
+            </div>
+            <h3 className="font-display font-semibold mt-1">All 10 units · ranked by mastery</h3>
+          </div>
+          <div className="text-[10px] text-muted-foreground hidden sm:block">Topic-level breakdown unlocks after your first 10 attempts per unit.</div>
+        </div>
+        <div className="divide-y divide-border">
+          {[...units].sort((a, b) => (b.mastery < 0 ? -1 : a.mastery < 0 ? 1 : b.mastery - a.mastery)).map((u) => {
+            const m = u.mastery;
+            const bar = m < 0 ? 0 : m;
+            const color =
+              m < 0 ? "bg-muted" :
+              m >= 80 ? "bg-emerald-500" :
+              m >= 60 ? "bg-amber-500" :
+              m >= 40 ? "bg-orange-500" : "bg-rose-500";
+            const label =
+              m < 0 ? "Untouched" :
+              m >= 80 ? "Strong" :
+              m >= 60 ? "Steady" :
+              m >= 40 ? "Shaky" : "Weak";
+            return (
+              <div key={u.unit_id} className="grid grid-cols-12 items-center gap-3 px-5 py-3 text-sm">
+                <div className="col-span-5 sm:col-span-4 min-w-0">
+                  <div className="font-medium truncate">Unit {u.number} · {u.name}</div>
+                  <div className="text-[10px] text-muted-foreground">{u.ap_points}p · {u.ap_weight_pct}% of exam</div>
+                </div>
+                <div className="col-span-4 sm:col-span-5">
+                  <div className="h-2 rounded-full bg-elevated overflow-hidden">
+                    <div className={`h-full ${color} transition-all`} style={{ width: `${bar}%` }} />
+                  </div>
+                </div>
+                <div className="col-span-2 sm:col-span-2 text-right tabular-nums font-mono text-xs">
+                  {m < 0 ? "—" : `${m}%`}
+                </div>
+                <div className="col-span-1 sm:col-span-1 text-right">
+                  <span className={`text-[10px] uppercase tracking-wider ${
+                    m < 0 ? "text-muted-foreground" :
+                    m >= 80 ? "text-emerald-400" :
+                    m >= 60 ? "text-amber-400" :
+                    m >= 40 ? "text-orange-400" : "text-rose-400"
+                  }`}>{label}</span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function DiagnosticColumn({
+  title, sub, accent, rows, empty,
+}: {
+  title: string; sub: string; accent: "emerald" | "rose";
+  rows: { id: string; label: string; value: string; meta: string; pct: number }[];
+  empty: string;
+}) {
+  const tone = accent === "emerald"
+    ? { dot: "bg-emerald-400", value: "text-emerald-300", bar: "bg-emerald-500" }
+    : { dot: "bg-rose-400",    value: "text-rose-300",    bar: "bg-rose-500" };
   return (
     <div className="rounded-xl border border-border bg-card p-5">
-      <div className="flex items-center justify-between mb-4">
-        <div>
-          <div className="text-xs uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5"><Activity className="h-3.5 w-3.5" /> Unit mastery</div>
-          <h3 className="font-display font-semibold mt-1">10 units · scaled by AP weight</h3>
-        </div>
-        <div className="hidden sm:flex items-center gap-2 text-[10px] text-muted-foreground">
-          <span>0%</span>
-          <div className="h-1.5 w-24 rounded-full bg-gradient-to-r from-rose-500 via-amber-400 to-emerald-400" />
-          <span>100%</span>
-        </div>
+      <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-muted-foreground">
+        <span className={`h-1.5 w-1.5 rounded-full ${tone.dot}`} /> {title}
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
-        {units.map((u) => {
-          const colorClass =
-            u.mastery < 0 ? "bg-elevated text-muted-foreground border-dashed" :
-            u.mastery >= 80 ? "bg-emerald-500/15 text-emerald-300 border-emerald-500/30" :
-            u.mastery >= 60 ? "bg-amber-500/15 text-amber-300 border-amber-500/30" :
-            u.mastery >= 40 ? "bg-orange-500/15 text-orange-300 border-orange-500/30" :
-            "bg-rose-500/15 text-rose-300 border-rose-500/30";
-          return (
-            <div key={u.unit_id} className={`rounded-lg border p-3 ${colorClass}`}>
-              <div className="flex items-center justify-between text-[10px] font-mono uppercase tracking-wider opacity-80">
-                <span>U{u.number}</span>
-                <span>{u.ap_points}p</span>
+      <div className="text-xs text-muted-foreground mt-1">{sub}</div>
+      {rows.length === 0 ? (
+        <div className="mt-4 text-sm text-muted-foreground">{empty}</div>
+      ) : (
+        <ul className="mt-4 space-y-3">
+          {rows.map((r) => (
+            <li key={r.id}>
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-sm font-medium truncate">{r.label}</span>
+                <span className={`text-xs font-mono tabular-nums ${tone.value}`}>{r.value}</span>
               </div>
-              <div className="font-display text-lg font-bold tabular-nums mt-1">
-                {u.mastery < 0 ? "—" : `${u.mastery}%`}
+              <div className="mt-1 h-1.5 rounded-full bg-elevated overflow-hidden">
+                <div className={`h-full ${tone.bar}`} style={{ width: `${Math.max(4, r.pct)}%` }} />
               </div>
-              <div className="text-[10px] leading-tight mt-0.5 line-clamp-2 opacity-80">{u.name}</div>
-            </div>
-          );
-        })}
-      </div>
+              <div className="text-[10px] text-muted-foreground mt-1">{r.meta}</div>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
