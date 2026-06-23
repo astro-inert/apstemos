@@ -96,22 +96,24 @@ function CommonMistakes() {
                   <div className="text-[10px] text-muted-foreground">avg pts</div>
                 </div>
               </div>
-              <p className="text-sm text-muted-foreground mt-3">{m.description}</p>
+              <p className="text-sm text-muted-foreground mt-3 leading-relaxed">
+                <LaTeX>{m.description}</LaTeX>
+              </p>
               {m.example && (
-                <div className="mt-3 rounded-md bg-elevated/60 border border-border p-2.5 font-mono text-xs leading-relaxed">
+                <div className="mt-3 rounded-md bg-elevated/60 border border-border p-2.5 text-xs leading-relaxed">
                   <div className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">Example</div>
-                  {m.example}
+                  <LaTeX>{m.example}</LaTeX>
                 </div>
               )}
               {m.ap_consequence && (
                 <div className="mt-3 text-xs">
                   <div className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">AP consequence</div>
-                  <div className="text-foreground/90">{m.ap_consequence}</div>
+                  <div className="text-foreground/90"><LaTeX>{m.ap_consequence}</LaTeX></div>
                 </div>
               )}
               <div className="mt-3 pt-3 border-t border-border">
                 <div className="text-[10px] uppercase tracking-wider text-emerald-400 mb-1">How to avoid</div>
-                <div className="text-sm text-foreground/90">{m.how_to_avoid}</div>
+                <div className="text-sm text-foreground/90"><LaTeX>{m.how_to_avoid}</LaTeX></div>
               </div>
             </article>
           ))}
