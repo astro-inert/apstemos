@@ -11,7 +11,7 @@ interface PageHeroProps {
 export function PageShell({ eyebrow, title, description, children }: PageHeroProps) {
   return (
     <AppShell>
-      <div className="p-4 lg:p-8 max-w-6xl mx-auto">
+      <div className="px-4 py-6 sm:px-6 lg:px-10 lg:py-10 max-w-6xl">
         <div className="mb-8">
           <div className="text-xs font-mono uppercase tracking-[0.2em] text-muted-foreground mb-2">// {eyebrow}</div>
           <h1 className="font-display text-3xl lg:text-4xl font-bold tracking-tight leading-tight">{title}</h1>
