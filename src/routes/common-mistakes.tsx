@@ -45,7 +45,7 @@ function CommonMistakes() {
 
   return (
     <AppShell>
-      <div className="p-4 lg:p-8 max-w-6xl mx-auto">
+      <div className="px-4 py-6 sm:px-6 lg:px-10 lg:py-10 max-w-6xl">
         <div className="mb-6">
           <div className="text-xs font-mono uppercase tracking-[0.2em] text-muted-foreground mb-1">// common point losses</div>
           <h1 className="font-display text-2xl lg:text-3xl font-bold tracking-tight">Where AP Calc points die</h1>
