@@ -11,7 +11,6 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TopicRundownRouteImport } from './routes/topic-rundown'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
-import { Route as SelfStudyGuideRouteImport } from './routes/self-study-guide'
 import { Route as LatexMasterSheetRouteImport } from './routes/latex-master-sheet'
 import { Route as FrqsByTypeRouteImport } from './routes/frqs-by-type'
 import { Route as ExamStrategyRouteImport } from './routes/exam-strategy'
@@ -35,11 +34,6 @@ const TopicRundownRoute = TopicRundownRouteImport.update({
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SelfStudyGuideRoute = SelfStudyGuideRouteImport.update({
-  id: '/self-study-guide',
-  path: '/self-study-guide',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LatexMasterSheetRoute = LatexMasterSheetRouteImport.update({
@@ -124,7 +118,6 @@ export interface FileRoutesByFullPath {
   '/exam-strategy': typeof ExamStrategyRoute
   '/frqs-by-type': typeof FrqsByTypeRoute
   '/latex-master-sheet': typeof LatexMasterSheetRoute
-  '/self-study-guide': typeof SelfStudyGuideRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/topic-rundown': typeof TopicRundownRoute
   '/command-center': typeof AuthenticatedCommandCenterRoute
@@ -142,7 +135,6 @@ export interface FileRoutesByTo {
   '/exam-strategy': typeof ExamStrategyRoute
   '/frqs-by-type': typeof FrqsByTypeRoute
   '/latex-master-sheet': typeof LatexMasterSheetRoute
-  '/self-study-guide': typeof SelfStudyGuideRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/topic-rundown': typeof TopicRundownRoute
   '/command-center': typeof AuthenticatedCommandCenterRoute
@@ -162,7 +154,6 @@ export interface FileRoutesById {
   '/exam-strategy': typeof ExamStrategyRoute
   '/frqs-by-type': typeof FrqsByTypeRoute
   '/latex-master-sheet': typeof LatexMasterSheetRoute
-  '/self-study-guide': typeof SelfStudyGuideRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/topic-rundown': typeof TopicRundownRoute
   '/_authenticated/command-center': typeof AuthenticatedCommandCenterRoute
@@ -182,7 +173,6 @@ export interface FileRouteTypes {
     | '/exam-strategy'
     | '/frqs-by-type'
     | '/latex-master-sheet'
-    | '/self-study-guide'
     | '/sitemap.xml'
     | '/topic-rundown'
     | '/command-center'
@@ -200,7 +190,6 @@ export interface FileRouteTypes {
     | '/exam-strategy'
     | '/frqs-by-type'
     | '/latex-master-sheet'
-    | '/self-study-guide'
     | '/sitemap.xml'
     | '/topic-rundown'
     | '/command-center'
@@ -219,7 +208,6 @@ export interface FileRouteTypes {
     | '/exam-strategy'
     | '/frqs-by-type'
     | '/latex-master-sheet'
-    | '/self-study-guide'
     | '/sitemap.xml'
     | '/topic-rundown'
     | '/_authenticated/command-center'
@@ -239,7 +227,6 @@ export interface RootRouteChildren {
   ExamStrategyRoute: typeof ExamStrategyRoute
   FrqsByTypeRoute: typeof FrqsByTypeRoute
   LatexMasterSheetRoute: typeof LatexMasterSheetRoute
-  SelfStudyGuideRoute: typeof SelfStudyGuideRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TopicRundownRoute: typeof TopicRundownRoute
   QuestionNavigatorUnitIdRoute: typeof QuestionNavigatorUnitIdRouteWithChildren
@@ -260,13 +247,6 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/self-study-guide': {
-      id: '/self-study-guide'
-      path: '/self-study-guide'
-      fullPath: '/self-study-guide'
-      preLoaderRoute: typeof SelfStudyGuideRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/latex-master-sheet': {
@@ -406,7 +386,6 @@ const rootRouteChildren: RootRouteChildren = {
   ExamStrategyRoute: ExamStrategyRoute,
   FrqsByTypeRoute: FrqsByTypeRoute,
   LatexMasterSheetRoute: LatexMasterSheetRoute,
-  SelfStudyGuideRoute: SelfStudyGuideRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TopicRundownRoute: TopicRundownRoute,
   QuestionNavigatorUnitIdRoute: QuestionNavigatorUnitIdRouteWithChildren,
