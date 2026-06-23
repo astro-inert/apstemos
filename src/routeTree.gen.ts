@@ -22,6 +22,7 @@ import { Route as AbTrackRouteImport } from './routes/ab-track'
 import { Route as R108PointsBreakdownRouteImport } from './routes/108-points-breakdown'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as QuestionNavigatorIndexRouteImport } from './routes/question-navigator.index'
 import { Route as AuthenticatedCommandCenterRouteImport } from './routes/_authenticated/command-center'
 
 const TopicRundownRoute = TopicRundownRouteImport.update({
@@ -88,6 +89,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const QuestionNavigatorIndexRoute = QuestionNavigatorIndexRouteImport.update({
+  id: '/question-navigator/',
+  path: '/question-navigator/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedCommandCenterRoute =
   AuthenticatedCommandCenterRouteImport.update({
     id: '/command-center',
@@ -109,6 +115,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/topic-rundown': typeof TopicRundownRoute
   '/command-center': typeof AuthenticatedCommandCenterRoute
+  '/question-navigator/': typeof QuestionNavigatorIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -124,6 +131,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/topic-rundown': typeof TopicRundownRoute
   '/command-center': typeof AuthenticatedCommandCenterRoute
+  '/question-navigator': typeof QuestionNavigatorIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -141,6 +149,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/topic-rundown': typeof TopicRundownRoute
   '/_authenticated/command-center': typeof AuthenticatedCommandCenterRoute
+  '/question-navigator/': typeof QuestionNavigatorIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -158,6 +167,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/topic-rundown'
     | '/command-center'
+    | '/question-navigator/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -173,6 +183,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/topic-rundown'
     | '/command-center'
+    | '/question-navigator'
   id:
     | '__root__'
     | '/'
@@ -189,6 +200,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/topic-rundown'
     | '/_authenticated/command-center'
+    | '/question-navigator/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -205,6 +217,7 @@ export interface RootRouteChildren {
   SelfStudyGuideRoute: typeof SelfStudyGuideRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TopicRundownRoute: typeof TopicRundownRoute
+  QuestionNavigatorIndexRoute: typeof QuestionNavigatorIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -300,6 +313,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/question-navigator/': {
+      id: '/question-navigator/'
+      path: '/question-navigator'
+      fullPath: '/question-navigator/'
+      preLoaderRoute: typeof QuestionNavigatorIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/command-center': {
       id: '/_authenticated/command-center'
       path: '/command-center'
@@ -335,6 +355,7 @@ const rootRouteChildren: RootRouteChildren = {
   SelfStudyGuideRoute: SelfStudyGuideRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TopicRundownRoute: TopicRundownRoute,
+  QuestionNavigatorIndexRoute: QuestionNavigatorIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
