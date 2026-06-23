@@ -63,7 +63,6 @@ function HomePage() {
       <ScoreCommandPreview />
       <SystemMap />
       <MistakesPreview />
-      <ResourcesGrid />
       <FinalCTA />
       <SiteFooter />
     </div>
