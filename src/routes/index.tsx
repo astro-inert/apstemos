@@ -270,7 +270,7 @@ function ResourcesGrid() {
     { to: "/topic-rundown",    icon: MapIcon,    t: "Topic Rundowns",     d: "Unit-by-unit cheat sheets across the CED.",       accent: "sky" },
     { to: "/frqs-by-type",     icon: ListChecks, t: "FRQs by Type",       d: "Browse FRQs by topic, year, and calc / no-calc.", accent: "emerald" },
     { to: "/exam-strategy",    icon: Gauge,      t: "Exam Strategy",      d: "Pacing, partial credit, and triage frameworks.",  accent: "amber" },
-    { to: "/self-study-guide", icon: Compass,    t: "Self-Study Roadmap", d: "1-, 3-, 6-, 9-month study plans to exam day.",    accent: "violet" },
+    { to: "/question-navigator", icon: Compass,    t: "Question Type Navigator", d: "Unit → topic → exact MCQ & FRQ patterns from the exam.", accent: "violet" },
   ];
   return (
     <section className="px-6 py-16 border-t border-border">
