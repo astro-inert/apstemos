@@ -264,45 +264,6 @@ function MistakesPreview() {
   );
 }
 
-function ResourcesGrid() {
-  const items: { to: string; icon: typeof MapIcon; t: string; d: string; accent: Accent }[] = [
-    { to: "/topic-rundown",    icon: MapIcon,    t: "Topic Rundowns",     d: "Unit-by-unit cheat sheets across the CED.",       accent: "sky" },
-    { to: "/frqs-by-type",     icon: ListChecks, t: "FRQs by Type",       d: "Browse FRQs by topic, year, and calc / no-calc.", accent: "emerald" },
-    { to: "/exam-strategy",    icon: Gauge,      t: "Exam Strategy",      d: "Pacing, partial credit, and triage frameworks.",  accent: "amber" },
-    { to: "/question-navigator", icon: Compass,    t: "Question Type Navigator", d: "Unit → topic → exact MCQ & FRQ patterns from the exam.", accent: "violet" },
-  ];
-  return (
-    <section className="px-6 py-16 border-t border-border">
-      <div className="max-w-6xl mx-auto">
-        <SectionHeader eyebrow="04 · the resources" title="Free resources, always" sub="Curated, structured, kept up to date with the CED." />
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-8">
-          {items.map((i) => {
-            const Icon = i.icon;
-            const a = accentMap[i.accent];
-            return (
-              <Link key={i.t} to={i.to} className={`group relative overflow-hidden rounded-xl border border-border bg-card p-5 hover-lift transition ${a.hover}`}>
-                <div className={`pointer-events-none absolute -top-12 -right-12 h-32 w-32 rounded-full blur-3xl opacity-60 bg-gradient-to-br ${a.glow} to-transparent`} />
-                <div className={`relative grid place-items-center h-9 w-9 rounded-lg ring-1 ${a.icon} ${a.ring}`}>
-                  <Icon className="h-4.5 w-4.5" />
-                </div>
-                <div className="relative font-display font-semibold mt-3 text-sm">{i.t}</div>
-                <div className="relative text-xs text-muted-foreground mt-1">{i.d}</div>
-              </Link>
-            );
-          })}
-          <a href={FORMULA_SHEET_URL} target="_blank" rel="noopener noreferrer" className={`group relative overflow-hidden rounded-xl border border-border bg-card p-5 hover-lift transition ${accentMap.rose.hover}`}>
-            <div className={`pointer-events-none absolute -top-12 -right-12 h-32 w-32 rounded-full blur-3xl opacity-60 bg-gradient-to-br ${accentMap.rose.glow} to-transparent`} />
-            <div className={`relative grid place-items-center h-9 w-9 rounded-lg ring-1 ${accentMap.rose.icon} ${accentMap.rose.ring}`}>
-              <Calculator className="h-4.5 w-4.5" />
-            </div>
-            <div className="relative font-display font-semibold mt-3 text-sm">Formula Sheet (PDF)</div>
-            <div className="relative text-xs text-muted-foreground mt-1">10-page LaTeX master sheet — opens instantly.</div>
-          </a>
-        </div>
-      </div>
-    </section>
-  );
-}
 
 function FinalCTA() {
   return (
