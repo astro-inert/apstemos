@@ -4,7 +4,7 @@ import { findUnit, type UnitEntry } from "@/lib/question-navigator-data";
 import { ArrowLeft, ChevronRight, FileText } from "lucide-react";
 
 export const Route = createFileRoute("/question-navigator/$unitId")({
-  loader: ({ params }) => {
+  loader: ({ params }): { unit: UnitEntry } => {
     const unit = findUnit(params.unitId);
     if (!unit) throw notFound();
     return { unit };
