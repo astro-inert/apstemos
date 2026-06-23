@@ -34,7 +34,7 @@ const sections = [
 ] as const;
 
 function Page() {
-  const { unit, topic } = Route.useLoaderData();
+  const { unit, topic } = Route.useLoaderData() as { unit: UnitEntry; topic: TopicEntry };
 
   return (
     <PageShell
