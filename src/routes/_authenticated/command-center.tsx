@@ -94,8 +94,8 @@ function Inner() {
         <FastestPathCard actions={data.recommended_actions} />
       </div>
 
-      {/* Unit mastery heatmap */}
-      <UnitMasteryHeatmap units={data.unit_mastery} />
+      {/* Performance Diagnostics — strengths/weaknesses/topic-level */}
+      <PerformanceDiagnostics units={data.unit_mastery} />
 
       {/* Bottom row: Top mistakes + Confidence/insights */}
       <div className="grid lg:grid-cols-3 gap-4">
