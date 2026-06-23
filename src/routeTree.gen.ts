@@ -11,7 +11,6 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TopicRundownRouteImport } from './routes/topic-rundown'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
-import { Route as SelfStudyGuideRouteImport } from './routes/self-study-guide'
 import { Route as LatexMasterSheetRouteImport } from './routes/latex-master-sheet'
 import { Route as FrqsByTypeRouteImport } from './routes/frqs-by-type'
 import { Route as ExamStrategyRouteImport } from './routes/exam-strategy'
@@ -22,7 +21,10 @@ import { Route as AbTrackRouteImport } from './routes/ab-track'
 import { Route as R108PointsBreakdownRouteImport } from './routes/108-points-breakdown'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as QuestionNavigatorIndexRouteImport } from './routes/question-navigator.index'
+import { Route as QuestionNavigatorUnitIdRouteImport } from './routes/question-navigator.$unitId'
 import { Route as AuthenticatedCommandCenterRouteImport } from './routes/_authenticated/command-center'
+import { Route as QuestionNavigatorUnitIdTopicIdRouteImport } from './routes/question-navigator.$unitId.$topicId'
 
 const TopicRundownRoute = TopicRundownRouteImport.update({
   id: '/topic-rundown',
@@ -32,11 +34,6 @@ const TopicRundownRoute = TopicRundownRouteImport.update({
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SelfStudyGuideRoute = SelfStudyGuideRouteImport.update({
-  id: '/self-study-guide',
-  path: '/self-study-guide',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LatexMasterSheetRoute = LatexMasterSheetRouteImport.update({
@@ -88,11 +85,27 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const QuestionNavigatorIndexRoute = QuestionNavigatorIndexRouteImport.update({
+  id: '/question-navigator/',
+  path: '/question-navigator/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuestionNavigatorUnitIdRoute = QuestionNavigatorUnitIdRouteImport.update({
+  id: '/question-navigator/$unitId',
+  path: '/question-navigator/$unitId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedCommandCenterRoute =
   AuthenticatedCommandCenterRouteImport.update({
     id: '/command-center',
     path: '/command-center',
     getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const QuestionNavigatorUnitIdTopicIdRoute =
+  QuestionNavigatorUnitIdTopicIdRouteImport.update({
+    id: '/$topicId',
+    path: '/$topicId',
+    getParentRoute: () => QuestionNavigatorUnitIdRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -105,10 +118,12 @@ export interface FileRoutesByFullPath {
   '/exam-strategy': typeof ExamStrategyRoute
   '/frqs-by-type': typeof FrqsByTypeRoute
   '/latex-master-sheet': typeof LatexMasterSheetRoute
-  '/self-study-guide': typeof SelfStudyGuideRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/topic-rundown': typeof TopicRundownRoute
   '/command-center': typeof AuthenticatedCommandCenterRoute
+  '/question-navigator/$unitId': typeof QuestionNavigatorUnitIdRouteWithChildren
+  '/question-navigator/': typeof QuestionNavigatorIndexRoute
+  '/question-navigator/$unitId/$topicId': typeof QuestionNavigatorUnitIdTopicIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -120,10 +135,12 @@ export interface FileRoutesByTo {
   '/exam-strategy': typeof ExamStrategyRoute
   '/frqs-by-type': typeof FrqsByTypeRoute
   '/latex-master-sheet': typeof LatexMasterSheetRoute
-  '/self-study-guide': typeof SelfStudyGuideRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/topic-rundown': typeof TopicRundownRoute
   '/command-center': typeof AuthenticatedCommandCenterRoute
+  '/question-navigator/$unitId': typeof QuestionNavigatorUnitIdRouteWithChildren
+  '/question-navigator': typeof QuestionNavigatorIndexRoute
+  '/question-navigator/$unitId/$topicId': typeof QuestionNavigatorUnitIdTopicIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -137,10 +154,12 @@ export interface FileRoutesById {
   '/exam-strategy': typeof ExamStrategyRoute
   '/frqs-by-type': typeof FrqsByTypeRoute
   '/latex-master-sheet': typeof LatexMasterSheetRoute
-  '/self-study-guide': typeof SelfStudyGuideRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/topic-rundown': typeof TopicRundownRoute
   '/_authenticated/command-center': typeof AuthenticatedCommandCenterRoute
+  '/question-navigator/$unitId': typeof QuestionNavigatorUnitIdRouteWithChildren
+  '/question-navigator/': typeof QuestionNavigatorIndexRoute
+  '/question-navigator/$unitId/$topicId': typeof QuestionNavigatorUnitIdTopicIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -154,10 +173,12 @@ export interface FileRouteTypes {
     | '/exam-strategy'
     | '/frqs-by-type'
     | '/latex-master-sheet'
-    | '/self-study-guide'
     | '/sitemap.xml'
     | '/topic-rundown'
     | '/command-center'
+    | '/question-navigator/$unitId'
+    | '/question-navigator/'
+    | '/question-navigator/$unitId/$topicId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -169,10 +190,12 @@ export interface FileRouteTypes {
     | '/exam-strategy'
     | '/frqs-by-type'
     | '/latex-master-sheet'
-    | '/self-study-guide'
     | '/sitemap.xml'
     | '/topic-rundown'
     | '/command-center'
+    | '/question-navigator/$unitId'
+    | '/question-navigator'
+    | '/question-navigator/$unitId/$topicId'
   id:
     | '__root__'
     | '/'
@@ -185,10 +208,12 @@ export interface FileRouteTypes {
     | '/exam-strategy'
     | '/frqs-by-type'
     | '/latex-master-sheet'
-    | '/self-study-guide'
     | '/sitemap.xml'
     | '/topic-rundown'
     | '/_authenticated/command-center'
+    | '/question-navigator/$unitId'
+    | '/question-navigator/'
+    | '/question-navigator/$unitId/$topicId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -202,9 +227,10 @@ export interface RootRouteChildren {
   ExamStrategyRoute: typeof ExamStrategyRoute
   FrqsByTypeRoute: typeof FrqsByTypeRoute
   LatexMasterSheetRoute: typeof LatexMasterSheetRoute
-  SelfStudyGuideRoute: typeof SelfStudyGuideRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TopicRundownRoute: typeof TopicRundownRoute
+  QuestionNavigatorUnitIdRoute: typeof QuestionNavigatorUnitIdRouteWithChildren
+  QuestionNavigatorIndexRoute: typeof QuestionNavigatorIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -221,13 +247,6 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/self-study-guide': {
-      id: '/self-study-guide'
-      path: '/self-study-guide'
-      fullPath: '/self-study-guide'
-      preLoaderRoute: typeof SelfStudyGuideRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/latex-master-sheet': {
@@ -300,12 +319,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/question-navigator/': {
+      id: '/question-navigator/'
+      path: '/question-navigator'
+      fullPath: '/question-navigator/'
+      preLoaderRoute: typeof QuestionNavigatorIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/question-navigator/$unitId': {
+      id: '/question-navigator/$unitId'
+      path: '/question-navigator/$unitId'
+      fullPath: '/question-navigator/$unitId'
+      preLoaderRoute: typeof QuestionNavigatorUnitIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/command-center': {
       id: '/_authenticated/command-center'
       path: '/command-center'
       fullPath: '/command-center'
       preLoaderRoute: typeof AuthenticatedCommandCenterRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/question-navigator/$unitId/$topicId': {
+      id: '/question-navigator/$unitId/$topicId'
+      path: '/$topicId'
+      fullPath: '/question-navigator/$unitId/$topicId'
+      preLoaderRoute: typeof QuestionNavigatorUnitIdTopicIdRouteImport
+      parentRoute: typeof QuestionNavigatorUnitIdRoute
     }
   }
 }
@@ -321,6 +361,20 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
+interface QuestionNavigatorUnitIdRouteChildren {
+  QuestionNavigatorUnitIdTopicIdRoute: typeof QuestionNavigatorUnitIdTopicIdRoute
+}
+
+const QuestionNavigatorUnitIdRouteChildren: QuestionNavigatorUnitIdRouteChildren =
+  {
+    QuestionNavigatorUnitIdTopicIdRoute: QuestionNavigatorUnitIdTopicIdRoute,
+  }
+
+const QuestionNavigatorUnitIdRouteWithChildren =
+  QuestionNavigatorUnitIdRoute._addFileChildren(
+    QuestionNavigatorUnitIdRouteChildren,
+  )
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
@@ -332,9 +386,10 @@ const rootRouteChildren: RootRouteChildren = {
   ExamStrategyRoute: ExamStrategyRoute,
   FrqsByTypeRoute: FrqsByTypeRoute,
   LatexMasterSheetRoute: LatexMasterSheetRoute,
-  SelfStudyGuideRoute: SelfStudyGuideRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TopicRundownRoute: TopicRundownRoute,
+  QuestionNavigatorUnitIdRoute: QuestionNavigatorUnitIdRouteWithChildren,
+  QuestionNavigatorIndexRoute: QuestionNavigatorIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

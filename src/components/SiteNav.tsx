@@ -10,7 +10,7 @@ const resources = [
   { to: "/topic-rundown", label: "Topic Rundowns" },
   { to: "/frqs-by-type", label: "FRQ Library" },
   { to: "/exam-strategy", label: "Exam Strategy" },
-  { to: "/self-study-guide", label: "Self-Study Guide" },
+  { to: "/question-navigator", label: "Question Navigator" },
   { to: "/latex-master-sheet", label: "Formula Sheet" },
 ] as const;
 

@@ -21,7 +21,7 @@ const nav = [
   { to: "/common-mistakes", icon: AlertTriangle, label: "Common Mistakes" },
   { to: "/frqs-by-type", icon: ListChecks, label: "FRQ Library" },
   { to: "/topic-rundown", icon: LayoutGrid, label: "Topic Rundowns" },
-  { to: "/self-study-guide", icon: Compass, label: "Roadmap" },
+  { to: "/question-navigator", icon: Compass, label: "Question Navigator" },
   { to: "/exam-strategy", icon: FileText, label: "Exam Strategy" },
   { to: "/latex-master-sheet", icon: Calculator, label: "Formula Sheet" },
 ] as const;
