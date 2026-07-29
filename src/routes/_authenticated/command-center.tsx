@@ -271,7 +271,7 @@ function PerformanceDiagnostics({ units }: { units: UnitRow[] }) {
       {/* Untouched / projected lift */}
       <div className="rounded-xl border border-border bg-card p-5">
         <div className="text-xs uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5">
-          <Sparkles className="h-3.5 w-3.5 text-violet-400" /> Untouched units
+          <Sparkles className="h-3.5 w-3.5 text-pink-400" /> Untouched units
         </div>
         <h3 className="font-display font-semibold mt-1">Highest ROI to start</h3>
         {untouched.length === 0 ? (
@@ -284,7 +284,7 @@ function PerformanceDiagnostics({ units }: { units: UnitRow[] }) {
                   <div className="text-sm font-medium truncate">Unit {u.number} · {u.name}</div>
                   <div className="text-[10px] text-muted-foreground">{u.ap_weight_pct}% of exam</div>
                 </div>
-                <span className="font-mono text-xs text-violet-300 shrink-0">+{u.ap_points}p</span>
+                <span className="font-mono text-xs text-pink-300 shrink-0">+{u.ap_points}p</span>
               </li>
             ))}
           </ul>
@@ -437,7 +437,7 @@ function InsightsPanel({ data }: { data: Awaited<ReturnType<typeof getPerformanc
   const weak = data.unit_mastery.filter((u) => u.mastery >= 0 && u.mastery < 60).length;
   return (
     <div className="rounded-xl border border-border bg-card p-5 h-full">
-      <div className="text-xs uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5"><Sparkles className="h-3.5 w-3.5 text-violet-400" /> Insights</div>
+      <div className="text-xs uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5"><Sparkles className="h-3.5 w-3.5 text-pink-400" /> Insights</div>
       <ul className="mt-4 space-y-3 text-sm">
         <li className="flex items-start gap-2">
           <span className="h-1.5 w-1.5 rounded-full bg-primary mt-1.5 shrink-0" />

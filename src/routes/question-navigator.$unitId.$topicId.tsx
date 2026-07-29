@@ -39,7 +39,7 @@ function Page() {
   return (
     <PageShell
       eyebrow={`Unit ${unit.number} · ${topic.title}`}
-      title={<>How College Board tests <span className="text-violet-400">{topic.title}</span></>}
+      title={<>How College Board tests <span className="text-pink-400">{topic.title}</span></>}
       description={topic.blurb}
     >
       <div className="mb-6 flex flex-wrap items-center gap-4">
@@ -59,8 +59,8 @@ function Page() {
         </Link>
       </div>
 
-      <div className="rounded-2xl border border-dashed border-violet-500/30 bg-violet-500/5 p-5 mb-8 flex items-start gap-4">
-        <div className="grid place-items-center h-10 w-10 rounded-lg bg-violet-500/10 text-violet-400 ring-1 ring-violet-500/20 shrink-0">
+      <div className="rounded-2xl border border-dashed border-pink-500/30 bg-pink-500/5 p-5 mb-8 flex items-start gap-4">
+        <div className="grid place-items-center h-10 w-10 rounded-lg bg-pink-500/10 text-pink-400 ring-1 ring-pink-500/20 shrink-0">
           <Download className="h-5 w-5" />
         </div>
         <div className="min-w-0">
@@ -79,7 +79,7 @@ function Page() {
           const Icon = s.icon;
           return (
             <div key={s.title} className="rounded-xl border border-border bg-card p-5">
-              <div className="grid place-items-center h-9 w-9 rounded-lg bg-violet-500/10 text-violet-400 ring-1 ring-violet-500/20">
+              <div className="grid place-items-center h-9 w-9 rounded-lg bg-pink-500/10 text-pink-400 ring-1 ring-pink-500/20">
                 <Icon className="h-4.5 w-4.5" />
               </div>
               <div className="font-display font-semibold mt-3">{s.title}</div>

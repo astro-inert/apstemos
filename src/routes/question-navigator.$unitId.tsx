@@ -31,7 +31,7 @@ function Page() {
   return (
     <PageShell
       eyebrow={`Unit ${unit.number} · ${unit.weight} of the exam`}
-      title={<><span className="text-violet-400">{unit.title}</span></>}
+      title={<><span className="text-pink-400">{unit.title}</span></>}
       description={unit.blurb}
     >
       <div className="mb-6">
@@ -54,11 +54,11 @@ function Page() {
             key={t.slug}
             to="/question-navigator/$unitId/$topicId"
             params={{ unitId: unit.slug, topicId: t.slug }}
-            className="group relative overflow-hidden rounded-xl border border-border bg-card p-5 hover-lift transition hover:border-violet-500/40"
+            className="group relative overflow-hidden rounded-xl border border-border bg-card p-5 hover-lift transition hover:border-pink-500/40"
           >
-            <div className="pointer-events-none absolute -top-16 -right-16 h-40 w-40 rounded-full blur-3xl opacity-60 bg-gradient-to-br from-violet-500/20 to-transparent" />
+            <div className="pointer-events-none absolute -top-16 -right-16 h-40 w-40 rounded-full blur-3xl opacity-60 bg-gradient-to-br from-pink-500/20 to-transparent" />
             <div className="relative flex items-start justify-between">
-              <div className="grid place-items-center h-10 w-10 rounded-lg bg-violet-500/10 text-violet-400 ring-1 ring-violet-500/20">
+              <div className="grid place-items-center h-10 w-10 rounded-lg bg-pink-500/10 text-pink-400 ring-1 ring-pink-500/20">
                 <FileText className="h-5 w-5" />
               </div>
               <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-foreground group-hover:translate-x-0.5 transition" />

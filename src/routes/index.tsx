@@ -180,8 +180,8 @@ const accentMap: Record<Accent, { icon: string; ring: string; glow: string; hove
   emerald: { icon: "bg-emerald-500/10 text-emerald-400", ring: "ring-emerald-500/20",  glow: "from-emerald-500/20",     hover: "hover:border-emerald-500/40" },
   amber:   { icon: "bg-amber-500/10 text-amber-400",   ring: "ring-amber-500/20",     glow: "from-amber-500/20",       hover: "hover:border-amber-500/40" },
   rose:    { icon: "bg-rose-500/10 text-rose-400",     ring: "ring-rose-500/20",      glow: "from-rose-500/20",        hover: "hover:border-rose-500/40" },
-  violet:  { icon: "bg-violet-500/10 text-violet-400", ring: "ring-violet-500/20",    glow: "from-violet-500/20",      hover: "hover:border-violet-500/40" },
-  sky:     { icon: "bg-sky-500/10 text-sky-400",       ring: "ring-sky-500/20",       glow: "from-sky-500/20",         hover: "hover:border-sky-500/40" },
+  violet:  { icon: "bg-pink-500/10 text-pink-400", ring: "ring-pink-500/20",    glow: "from-pink-500/20",      hover: "hover:border-pink-500/40" },
+  sky:     { icon: "bg-fuchsia-500/10 text-fuchsia-400",       ring: "ring-fuchsia-500/20",       glow: "from-fuchsia-500/20",         hover: "hover:border-fuchsia-500/40" },
 };
 
 function SystemMap() {

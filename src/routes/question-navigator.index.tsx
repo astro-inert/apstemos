@@ -19,7 +19,7 @@ function Page() {
   return (
     <PageShell
       eyebrow="Question Type Navigator"
-      title={<>How the exam is <span className="text-violet-400">actually tested</span>.</>}
+      title={<>How the exam is <span className="text-pink-400">actually tested</span>.</>}
       description="Pick the unit you're studying. Drill into topics, then into the exact MCQ and FRQ patterns College Board uses — including typical wording and common mistakes."
     >
       <div className="mb-6 flex items-center gap-2 text-xs font-mono uppercase tracking-[0.2em] text-muted-foreground">
@@ -35,7 +35,7 @@ function Page() {
               params={{ unitId: u.slug }}
               className="group flex items-center gap-5 p-5 hover:bg-muted/40 transition"
             >
-              <div className="shrink-0 grid place-items-center h-12 w-12 rounded-xl bg-violet-500/10 text-violet-400 ring-1 ring-violet-500/20 font-display font-bold">
+              <div className="shrink-0 grid place-items-center h-12 w-12 rounded-xl bg-pink-500/10 text-pink-400 ring-1 ring-pink-500/20 font-display font-bold">
                 {u.number}
               </div>
               <div className="min-w-0 flex-1">

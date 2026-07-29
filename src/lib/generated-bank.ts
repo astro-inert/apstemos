@@ -1,7 +1,7 @@
-import { TEMPLATES, makeRng, shuffle, type Difficulty } from "./question-templates";
+import { TEMPLATES, makeRng, shuffle, tidyTex, type Difficulty } from "./question-templates";
 
 /** Variants generated per template. 60 templates × 30 variants = 1,800 original questions. */
-export const VARIANTS_PER_TEMPLATE = 40;
+export const VARIANTS_PER_TEMPLATE = 27;
 
 export type GeneratedChoice = { label: string; text: string };
 
@@ -25,6 +25,12 @@ export type GeneratedQuestion = {
 };
 
 const LABELS = ["A", "B", "C", "D"];
+
+/** Choice bodies are raw LaTeX; wrap them so the renderer treats them as math. */
+function asMath(text: string): string {
+  const t = text.trim();
+  return t.includes("$") ? t : `$${t}$`;
+}
 
 const FALLBACK_DISTRACTORS = ["0", "1", "-1", "\\text{None of these}", "2", "\\text{The limit does not exist.}"];
 
@@ -58,7 +64,13 @@ export function buildQuestion(key: string): GeneratedQuestion | null {
   if (!tpl || !Number.isInteger(variant) || variant < 0 || variant >= 240) return null;
 
   const r = makeRng(`${templateId}::${variant}`);
-  const built = tpl.build(r);
+  const raw = tpl.build(r);
+  const built = {
+    prompt: tidyTex(raw.prompt),
+    correct: tidyTex(raw.correct),
+    distractors: raw.distractors.map(tidyTex),
+    explanation: tidyTex(raw.explanation),
+  };
 
   const seen = new Set([built.correct]);
   const options: string[] = [built.correct];
@@ -69,7 +81,7 @@ export function buildQuestion(key: string): GeneratedQuestion | null {
     options.push(d);
   }
   const ordered = shuffle(makeRng(`${key}::order`), options);
-  const choices = ordered.map((text, i) => ({ label: LABELS[i], text }));
+  const choices = ordered.map((text, i) => ({ label: LABELS[i], text, tex: asMath(text) }));
   const answer = choices.find((c) => c.text === built.correct)!;
 
   return {
@@ -84,9 +96,9 @@ export function buildQuestion(key: string): GeneratedQuestion | null {
     calculator: tpl.calculator ?? false,
     ap_value: 1,
     prompt: built.prompt,
-    choices,
+    choices: choices.map((c) => ({ label: c.label, text: c.tex })),
     answer_label: answer.label,
-    answer_text: answer.text,
+    answer_text: answer.tex,
     explanation: built.explanation,
     common_mistake_codes: tpl.mistakes ?? [],
   };
