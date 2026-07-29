@@ -1237,4 +1237,276 @@ export const TEMPLATES: QuestionTemplate[] = [
       };
     },
   },
+
+  /* ---------------- Coverage fill: one template per remaining subtopic ---------------- */
+  {
+    id: "u1-table-limit",
+    unit: U1,
+    topic: "limits-from-graphs-and-tables",
+    difficulty: "easy",
+    build: (r) => {
+      const c = ri(r, 1, 6);
+      const L = ri(r, 2, 12);
+      const fc = L + ri(r, 2, 7);
+      return {
+        prompt: `The table below gives values of $f$ near $x=${c}$.\n\n| $x$ | ${c - 0.1} | ${c - 0.01} | ${c} | ${c + 0.01} | ${c + 0.1} |\n|---|---|---|---|---|---|\n| $f(x)$ | ${dec(L - 0.1)} | ${dec(L - 0.01)} | ${fc} | ${dec(L + 0.01)} | ${dec(L + 0.1)} |\n\nWhat does the table suggest about $\\displaystyle\\lim_{x\\to ${c}}f(x)$?`,
+        correct: `${L}`,
+        distractors: [`${fc}`, `${c}`, `\\text{The limit does not exist.}`],
+        explanation: `The two-sided values close in on $${L}$. The value $f(${c})=${fc}$ is irrelevant — a limit ignores the value at the point.`,
+      };
+    },
+  },
+  {
+    id: "u3-higher-order",
+    unit: U3,
+    topic: "higher-order-derivatives",
+    difficulty: "medium",
+    build: (r) => {
+      const a = ri(r, 2, 6);
+      const b = ri(r, 2, 8);
+      const c = ri(r, -8, 8);
+      const t = ri(r, 1, 4);
+      const val = 12 * a * t * t + 6 * b * t;
+      return {
+        prompt: `If $f(x)=${a}x^{4} ${term(b, "x^{3}")} ${term(c, "x")}$, find $f''(${t})$.`,
+        correct: `${val}`,
+        distractors: [`${4 * a * t ** 3 + 3 * b * t * t + c}`, `${24 * a * t + 6 * b}`, `${val + c}`],
+        explanation: `$f'(x)=${4 * a}x^{3} ${term(3 * b, "x^{2}")} ${term(c, "")}$ and $f''(x)=${12 * a}x^{2} ${term(6 * b, "x")}$, so $f''(${t}) = ${val}$.`,
+      };
+    },
+  },
+  {
+    id: "u5-optimization-box",
+    unit: U5,
+    topic: "optimization",
+    difficulty: "hard",
+    mistakes: ["units-missing"],
+    build: (r) => {
+      const P = 4 * ri(r, 5, 30);
+      const half = P / 2;
+      const area = (half / 2) ** 2;
+      return {
+        prompt: `A rectangle has perimeter $${P}$. What is the largest possible area?`,
+        correct: `${area}`,
+        distractors: [`${P * P}`, `${half}`, `${(half / 2) * 2}`],
+        explanation: `With $2x+2y=${P}$, $y = ${half}-x$ and $A(x)=x(${half}-x)$. Then $A'(x)=${half}-2x=0$ gives $x=${half / 2}$, so the maximum area is $${area}$ (a square).`,
+      };
+    },
+  },
+  {
+    id: "u6-parts-xexp",
+    unit: U6,
+    topic: "integration-by-parts",
+    difficulty: "medium",
+    build: (r) => {
+      const a = ri(r, 2, 7);
+      return {
+        prompt: `Find $\\displaystyle\\int x e^{${a}x}\\,dx$.`,
+        correct: `\\frac{x e^{${a}x}}{${a}} - \\frac{e^{${a}x}}{${a * a}} + C`,
+        distractors: [
+          `\\frac{x e^{${a}x}}{${a}} + \\frac{e^{${a}x}}{${a * a}} + C`,
+          `\\frac{x^{2} e^{${a}x}}{${2 * a}} + C`,
+          `${a} x e^{${a}x} - e^{${a}x} + C`,
+        ],
+        explanation: `Let $u=x$, $dv=e^{${a}x}dx$, so $du=dx$ and $v=\\frac{e^{${a}x}}{${a}}$. Then $\\int x e^{${a}x}dx = \\frac{x e^{${a}x}}{${a}} - \\frac{1}{${a}}\\int e^{${a}x}dx = \\frac{x e^{${a}x}}{${a}} - \\frac{e^{${a}x}}{${a * a}} + C$.`,
+      };
+    },
+  },
+  {
+    id: "u6-partial-fractions",
+    unit: U6,
+    topic: "partial-fractions",
+    difficulty: "hard",
+    build: (r) => {
+      const a = ri(r, 1, 6);
+      let b = ri(r, 1, 8);
+      if (b === a) b = a + 1;
+      const d = b - a;
+      return {
+        prompt: `Rewrite $\\dfrac{1}{(x-${a})(x-${b})}$ as a sum of partial fractions.`,
+        correct: `\\frac{${frac(1, d)}}{x-${b}} - \\frac{${frac(1, d)}}{x-${a}}`,
+        distractors: [
+          `\\frac{${frac(1, d)}}{x-${a}} - \\frac{${frac(1, d)}}{x-${b}}`,
+          `\\frac{${frac(1, d)}}{x-${a}} + \\frac{${frac(1, d)}}{x-${b}}`,
+          `\\frac{1}{x-${a}} - \\frac{1}{x-${b}}$`,
+        ],
+        explanation: `Write $\\frac{1}{(x-${a})(x-${b})} = \\frac{A}{x-${a}} + \\frac{B}{x-${b}}$. Substituting $x=${a}$ gives $A = ${frac(1, a - b)}$ and $x=${b}$ gives $B = ${frac(1, d)}$.`,
+      };
+    },
+  },
+  {
+    id: "u6-improper",
+    unit: U6,
+    topic: "improper-integrals",
+    difficulty: "medium",
+    build: (r) => {
+      const p = ri(r, 2, 6);
+      const a = ri(r, 1, 6);
+      return {
+        prompt: `Evaluate $\\displaystyle\\int_{${a}}^{\\infty}\\frac{dx}{x^{${p}}}$.`,
+        correct: frac(1, (p - 1) * a ** (p - 1)),
+        distractors: [
+          frac(1, a ** (p - 1)),
+          frac(1, (p - 1) * a ** p),
+          `\\text{The integral diverges.}`,
+        ],
+        explanation: `$\\int_{${a}}^{b} x^{-${p}}dx = \\left[\\frac{x^{${1 - p}}}{${1 - p}}\\right]_{${a}}^{b}$. As $b\\to\\infty$ the upper term vanishes because $${p}>1$, leaving $\\frac{1}{${p - 1}\\cdot ${a}^{${p - 1}}} = ${frac(1, (p - 1) * a ** (p - 1))}$.`,
+      };
+    },
+  },
+  {
+    id: "u7-slope-field",
+    unit: U7,
+    topic: "slope-fields",
+    difficulty: "medium",
+    build: (r) => {
+      const a = ri(r, 1, 5);
+      const b = ri(r, 1, 5);
+      const x0 = ri(r, 1, 4);
+      const y0 = ri(r, 1, 4);
+      const slope = a * x0 + b * y0;
+      return {
+        prompt: `A slope field is drawn for $\\dfrac{dy}{dx} = ${a}x ${term(b, "y")}$. What is the slope of the segment drawn at the point $(${x0},${y0})$?`,
+        correct: `${slope}`,
+        distractors: [`${a * x0}`, `${b * y0}`, `${a * y0 + b * x0}`],
+        explanation: `Substitute the point into the differential equation: $${a}(${x0}) ${term(b, `(${y0})`)} = ${slope}$.`,
+      };
+    },
+  },
+  {
+    id: "u8-average-value",
+    unit: U8,
+    topic: "average-value",
+    difficulty: "medium",
+    mistakes: ["average-value-formula"],
+    build: (r) => {
+      const a = ri(r, 2, 6);
+      const b = ri(r, 2, 5);
+      const num = (a * b ** 3) / 3;
+      return {
+        prompt: `Find the average value of $f(x)=${a}x^{2}$ on the interval $[0,${b}]$.`,
+        correct: frac(a * b * b, 3),
+        distractors: [frac(a * b ** 3, 3), `${a * b * b}`, frac(a * b, 3)],
+        explanation: `Average value $=\\frac{1}{${b}}\\int_{0}^{${b}} ${a}x^{2}dx = \\frac{1}{${b}}\\cdot ${dec(num)} = ${frac(a * b * b, 3)}$.`,
+      };
+    },
+  },
+  {
+    id: "u9-parametric-arc-length",
+    unit: U9,
+    topic: "parametric-arc-length",
+    difficulty: "hard",
+    build: (r) => {
+      const [m, n, h] = pick(r, TRIPLES);
+      const T = ri(r, 2, 8);
+      return {
+        prompt: `A particle moves with $x(t)=${m}t$ and $y(t)=${n}t$ for $0\\le t\\le ${T}$. Find the length of the path traveled.`,
+        correct: `${h * T}`,
+        distractors: [`${(m + n) * T}`, `${h}`, `${m * n * T}`],
+        explanation: `$\\frac{dx}{dt}=${m}$ and $\\frac{dy}{dt}=${n}$, so the speed is $\\sqrt{${m * m}+${n * n}} = ${h}$. Arc length $=\\int_{0}^{${T}} ${h}\\,dt = ${h * T}$.`,
+      };
+    },
+  },
+  {
+    id: "u9-polar-derivative",
+    unit: U9,
+    topic: "polar-derivatives",
+    difficulty: "hard",
+    build: (r) => {
+      const a = ri(r, 2, 9);
+      const k = ri(r, 2, 5);
+      return {
+        prompt: `For the polar curve $r=${a}\\cos(${k}\\theta)$, find $\\dfrac{dr}{d\\theta}$.`,
+        correct: `-${a * k}\\sin(${k}\\theta)`,
+        distractors: [`${a * k}\\sin(${k}\\theta)`, `-${a}\\sin(${k}\\theta)`, `-${a * k}\\cos(${k}\\theta)`],
+        explanation: `Differentiate with the chain rule: $\\frac{dr}{d\\theta} = -${a}\\sin(${k}\\theta)\\cdot ${k} = -${a * k}\\sin(${k}\\theta)$.`,
+      };
+    },
+  },
+  {
+    id: "u10-nth-term-test",
+    unit: U10,
+    topic: "nth-term-test",
+    difficulty: "easy",
+    mistakes: ["series-test-misuse"],
+    build: (r) => {
+      const a = ri(r, 2, 9);
+      const b = ri(r, 2, 9);
+      const c = ri(r, 1, 9);
+      return {
+        prompt: `What does the $n$th-term test say about $\\displaystyle\\sum_{n=1}^{\\infty}\\frac{${a}n ${term(c, "")}}{${b}n ${term(-c, "")}}$?`,
+        correct: `\\text{The series diverges.}`,
+        distractors: [
+          `\\text{The series converges to } ${frac(a, b)}.`,
+          `\\text{The series converges, but the sum cannot be found.}`,
+          `\\text{The test is inconclusive.}`,
+        ],
+        explanation: `The terms approach $${frac(a, b)}\\ne 0$, so by the $n$th-term test the series diverges. (A nonzero limit always forces divergence; only a limit of $0$ makes the test inconclusive.)`,
+      };
+    },
+  },
+  {
+    id: "u10-comparison",
+    unit: U10,
+    topic: "comparison-tests",
+    difficulty: "medium",
+    mistakes: ["series-test-misuse"],
+    build: (r) => {
+      const p = ri(r, 2, 6);
+      const c = ri(r, 1, 9);
+      return {
+        prompt: `Use a comparison test on $\\displaystyle\\sum_{n=1}^{\\infty}\\frac{1}{n^{${p}} ${term(c, "")}}$. Which conclusion is correct?`,
+        correct: `\\text{It converges by comparison with the } p\\text{-series } \\sum n^{-${p}}.`,
+        distractors: [
+          `\\text{It diverges by comparison with the harmonic series.}`,
+          `\\text{It diverges because the terms are positive.}`,
+          `\\text{Comparison gives no information here.}`,
+        ],
+        explanation: `For $n\\ge 1$, $\\frac{1}{n^{${p}}+${c}} < \\frac{1}{n^{${p}}}$, and $\\sum n^{-${p}}$ converges because $${p}>1$. A smaller positive series under a convergent one converges.`,
+      };
+    },
+  },
+  {
+    id: "u10-lagrange-error",
+    unit: U10,
+    topic: "lagrange-error-bound",
+    difficulty: "hard",
+    build: (r) => {
+      const n = ri(r, 2, 5);
+      const M = ri(r, 2, 9);
+      const d = ri(r, 1, 4);
+      const fact = Array.from({ length: n + 1 }, (_, i) => i + 1).reduce((a, b) => a * b, 1);
+      return {
+        prompt: `A function $f$ has $|f^{(${n + 1})}(x)|\\le ${M}$ on an interval containing $x=0$. Bound the error of the degree-$${n}$ Taylor polynomial about $0$ at $x=${d}$.`,
+        correct: frac(M * d ** (n + 1), fact),
+        distractors: [frac(M * d ** n, fact), frac(M * d ** (n + 1), fact / (n + 1)), `${M * d ** (n + 1)}`],
+        explanation: `Lagrange: $|R_{${n}}(${d})| \\le \\frac{${M}}{${n + 1}!}|${d}|^{${n + 1}} = \\frac{${M}\\cdot ${d ** (n + 1)}}{${fact}} = ${frac(M * d ** (n + 1), fact)}$.`,
+      };
+    },
+  },
 ];
+
+/* ------------------------------------------------------------------ */
+/* Output hygiene                                                      */
+/* ------------------------------------------------------------------ */
+
+const ALLOW_STRIP_MACRO = /^\\(sin|cos|tan|sec|csc|cot|ln|log|sqrt|pi|theta|left|e)\b/;
+
+/**
+ * Removes mathematically redundant `1`s that generators can emit —
+ * `1x`, `1\sin x`, `x^{1}`, `1(x+2)` — without touching real numbers
+ * such as `10`, `21x`, or `\frac{1}{2}`.
+ */
+export function tidyTex(input: string): string {
+  let s = input;
+  s = s.replace(/\^\{1\}/g, "");
+  s = s.replace(/(^|[^\d.\w\\])1(?=[a-zA-Z(\\])/g, (m, pre: string, idx: number) => {
+    const rest = s.slice(idx + m.length);
+    if (rest.startsWith("\\") && !ALLOW_STRIP_MACRO.test(rest)) return m;
+    return pre;
+  });
+  s = s.replace(/(^|[^\d.\w\\])1\\cdot\s*/g, "$1");
+  s = s.replace(/\\cdot\s*1(?![\d.])/g, "");
+  return s;
+}
+
