@@ -191,7 +191,7 @@ function SystemMap() {
     { to: "/topic-rundown",  icon: MapIcon,   t: "Topic Rundowns",      d: "All 10 units distilled — limits through series.",              accent: "sky" },
     { to: "/frqs-by-type",   icon: ListChecks,t: "FRQ Library",         d: "Every FRQ since 2000, organized by topic and year.",           accent: "emerald" },
     { to: "/exam-strategy",  icon: Gauge,     t: "Exam Strategy",       d: "Pacing, calculator tricks, time triage.",                      accent: "amber" },
-    { to: "/question-navigator", icon: Compass, t: "Question Type Navigator", d: "Unit → topic → the exact MCQ & FRQ patterns College Board asks.", accent: "violet" },
+    { to: "/question-navigator", icon: Compass, t: "Question Type Navigator", d: "Unit → topic → the exact MCQ & FRQ patterns College Board asks.", accent: "blue" },
     { href: FORMULA_SHEET_URL, external: true, to: "/", icon: Calculator, t: "Formula Sheet", d: "10-page LaTeX master sheet — one click to PDF.", accent: "rose" },
   ];
   return (
