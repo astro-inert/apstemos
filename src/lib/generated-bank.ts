@@ -92,19 +92,44 @@ export function buildQuestion(key: string): GeneratedQuestion | null {
   };
 }
 
-/** Cheap index of every generated question key without building the math. */
-export function bankKeys(filter?: { unit_slug?: string; topic_slug?: string }): string[] {
+/** Widest variant index scanned when collecting distinct questions per template. */
+const VARIANT_SCAN = 240;
+
+let KEY_CACHE: string[] | null = null;
+
+/** Distinct generated question keys — duplicates from RNG collisions are dropped. */
+function allKeys(): string[] {
+  if (KEY_CACHE) return KEY_CACHE;
   const keys: string[] = [];
   for (const t of TEMPLATES) {
-    if (filter?.unit_slug && t.unit !== filter.unit_slug) continue;
-    if (filter?.topic_slug && t.topic !== filter.topic_slug) continue;
-    for (let v = 0; v < VARIANTS_PER_TEMPLATE; v++) keys.push(`${t.id}::${v}`);
+    const seen = new Set<string>();
+    for (let v = 0; v < VARIANT_SCAN && seen.size < VARIANTS_PER_TEMPLATE; v++) {
+      const key = `${t.id}::${v}`;
+      const q = buildQuestion(key);
+      if (!q) continue;
+      const sig = q.prompt;
+      if (seen.has(sig)) continue;
+      seen.add(sig);
+      keys.push(key);
+    }
   }
+  KEY_CACHE = keys;
   return keys;
 }
 
-export const BANK_SIZE = TEMPLATES.length * VARIANTS_PER_TEMPLATE;
+/** Index of every generated question key, optionally filtered by unit/subtopic. */
+export function bankKeys(filter?: { unit_slug?: string; topic_slug?: string }): string[] {
+  const templateById = new Map(TEMPLATES.map((t) => [t.id, t]));
+  return allKeys().filter((k) => {
+    const t = templateById.get(k.slice(0, k.lastIndexOf("::")));
+    if (!t) return false;
+    if (filter?.unit_slug && t.unit !== filter.unit_slug) return false;
+    if (filter?.topic_slug && t.topic !== filter.topic_slug) return false;
+    return true;
+  });
+}
 
 export function bankCount(filter?: { unit_slug?: string; topic_slug?: string }): number {
   return bankKeys(filter).length;
 }
+
