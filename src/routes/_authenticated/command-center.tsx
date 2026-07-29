@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
-import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
+import { useSuspenseQuery, useQuery, queryOptions } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 import {
   Activity,
   AlertTriangle,
@@ -14,7 +14,11 @@ import {
   Zap,
 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
+import { AnswerLogPanel } from "@/components/command/AnswerLogPanel";
+import { QuestionBankPanel } from "@/components/command/QuestionBankPanel";
+import { SubtopicPanel } from "@/components/command/SubtopicPanel";
 import { getPerformanceSnapshot } from "@/lib/performance.functions";
+import { getBankAccess } from "@/lib/question-bank.functions";
 
 export const Route = createFileRoute("/_authenticated/command-center")({
   head: () => ({ meta: [{ title: "Score Command Center — AP Calc OS" }] }),

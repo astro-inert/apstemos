@@ -8,6 +8,7 @@ import {
   LayoutGrid,
   ListChecks,
   LogOut,
+  PenLine,
   Sigma,
   Target,
 } from "lucide-react";
@@ -17,6 +18,7 @@ import { ThemeToggle } from "./ThemeToggle";
 
 const nav = [
   { to: "/command-center", icon: Activity, label: "Command Center" },
+  { to: "/practice", icon: PenLine, label: "Practice" },
   { to: "/108-points-breakdown", icon: Target, label: "108-Point Map" },
   { to: "/common-mistakes", icon: AlertTriangle, label: "Common Mistakes" },
   { to: "/frqs-by-type", icon: ListChecks, label: "FRQ Library" },
