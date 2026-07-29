@@ -92,7 +92,7 @@ function PracticePage() {
   }
 
   function setFilter(patch: Search) {
-    navigate({ search: (prev) => ({ ...prev, ...patch }), replace: true });
+    navigate({ search: (prev: Search) => ({ ...prev, ...patch }), replace: true });
   }
 
   return (
