@@ -23,6 +23,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as QuestionNavigatorIndexRouteImport } from './routes/question-navigator.index'
 import { Route as QuestionNavigatorUnitIdRouteImport } from './routes/question-navigator.$unitId'
+import { Route as AuthenticatedPracticeRouteImport } from './routes/_authenticated/practice'
 import { Route as AuthenticatedCommandCenterRouteImport } from './routes/_authenticated/command-center'
 import { Route as QuestionNavigatorUnitIdTopicIdRouteImport } from './routes/question-navigator.$unitId.$topicId'
 
@@ -95,6 +96,11 @@ const QuestionNavigatorUnitIdRoute = QuestionNavigatorUnitIdRouteImport.update({
   path: '/question-navigator/$unitId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedPracticeRoute = AuthenticatedPracticeRouteImport.update({
+  id: '/practice',
+  path: '/practice',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedCommandCenterRoute =
   AuthenticatedCommandCenterRouteImport.update({
     id: '/command-center',
@@ -121,6 +127,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/topic-rundown': typeof TopicRundownRoute
   '/command-center': typeof AuthenticatedCommandCenterRoute
+  '/practice': typeof AuthenticatedPracticeRoute
   '/question-navigator/$unitId': typeof QuestionNavigatorUnitIdRouteWithChildren
   '/question-navigator/': typeof QuestionNavigatorIndexRoute
   '/question-navigator/$unitId/$topicId': typeof QuestionNavigatorUnitIdTopicIdRoute
@@ -138,6 +145,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/topic-rundown': typeof TopicRundownRoute
   '/command-center': typeof AuthenticatedCommandCenterRoute
+  '/practice': typeof AuthenticatedPracticeRoute
   '/question-navigator/$unitId': typeof QuestionNavigatorUnitIdRouteWithChildren
   '/question-navigator': typeof QuestionNavigatorIndexRoute
   '/question-navigator/$unitId/$topicId': typeof QuestionNavigatorUnitIdTopicIdRoute
@@ -157,6 +165,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/topic-rundown': typeof TopicRundownRoute
   '/_authenticated/command-center': typeof AuthenticatedCommandCenterRoute
+  '/_authenticated/practice': typeof AuthenticatedPracticeRoute
   '/question-navigator/$unitId': typeof QuestionNavigatorUnitIdRouteWithChildren
   '/question-navigator/': typeof QuestionNavigatorIndexRoute
   '/question-navigator/$unitId/$topicId': typeof QuestionNavigatorUnitIdTopicIdRoute
@@ -176,6 +185,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/topic-rundown'
     | '/command-center'
+    | '/practice'
     | '/question-navigator/$unitId'
     | '/question-navigator/'
     | '/question-navigator/$unitId/$topicId'
@@ -193,6 +203,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/topic-rundown'
     | '/command-center'
+    | '/practice'
     | '/question-navigator/$unitId'
     | '/question-navigator'
     | '/question-navigator/$unitId/$topicId'
@@ -211,6 +222,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/topic-rundown'
     | '/_authenticated/command-center'
+    | '/_authenticated/practice'
     | '/question-navigator/$unitId'
     | '/question-navigator/'
     | '/question-navigator/$unitId/$topicId'
@@ -333,6 +345,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof QuestionNavigatorUnitIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/practice': {
+      id: '/_authenticated/practice'
+      path: '/practice'
+      fullPath: '/practice'
+      preLoaderRoute: typeof AuthenticatedPracticeRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/command-center': {
       id: '/_authenticated/command-center'
       path: '/command-center'
@@ -352,10 +371,12 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedCommandCenterRoute: typeof AuthenticatedCommandCenterRoute
+  AuthenticatedPracticeRoute: typeof AuthenticatedPracticeRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedCommandCenterRoute: AuthenticatedCommandCenterRoute,
+  AuthenticatedPracticeRoute: AuthenticatedPracticeRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

@@ -52,9 +52,13 @@ const snapshotKey = ["performance-snapshot"] as const;
 
 function Inner() {
   const fn = useServerFn(getPerformanceSnapshot);
+  const accessFn = useServerFn(getBankAccess);
+  const [tab, setTab] = useState<"overview" | "log" | "bank">("overview");
   const { data } = useSuspenseQuery(
     queryOptions({ queryKey: snapshotKey, queryFn: () => fn() })
   );
+  const access = useQuery({ queryKey: ["bank-access"], queryFn: () => accessFn() });
+  const isAdmin = access.data?.is_admin === true;
 
   const targetRaw =
     data.profile?.target_score === 5 ? 75 :
@@ -64,6 +68,12 @@ function Inner() {
   const daysToExam = Math.max(0, Math.ceil(
     (new Date(data.profile?.exam_date ?? "2026-05-12").getTime() - Date.now()) / 86400000
   ));
+
+  const tabs = [
+    { id: "overview" as const, label: "Overview" },
+    { id: "log" as const, label: "Answer Log" },
+    ...(isAdmin ? [{ id: "bank" as const, label: "Question Bank" }] : []),
+  ];
 
   return (
     <div className="p-4 lg:p-8 max-w-7xl mx-auto space-y-6">
@@ -81,29 +91,59 @@ function Inner() {
           </p>
         </div>
         <div className="flex items-center gap-2 text-xs">
+          <Link to="/practice" className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary text-primary-foreground font-medium">
+            Practice <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full glass">
             <Calendar className="h-3.5 w-3.5" /> {daysToExam} days to exam
           </span>
         </div>
       </div>
 
-      {/* Top row: Predicted score + 108-pt + Path */}
-      <div className="grid lg:grid-cols-3 gap-4">
-        <PredictedScoreCard data={data} />
-        <PointsCard current={data.predicted_raw_score} target={targetRaw} gap={gap} />
-        <FastestPathCard actions={data.recommended_actions} />
+      {/* Tabs */}
+      <div className="flex items-center gap-1 border-b border-border">
+        {tabs.map((t) => (
+          <button
+            key={t.id}
+            onClick={() => setTab(t.id)}
+            className={`px-3 py-2 text-sm -mb-px border-b-2 transition ${
+              tab === t.id
+                ? "border-primary text-foreground font-medium"
+                : "border-transparent text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            {t.label}
+          </button>
+        ))}
       </div>
 
-      {/* Performance Diagnostics — strengths/weaknesses/topic-level */}
-      <PerformanceDiagnostics units={data.unit_mastery} />
+      {tab === "overview" && (
+        <div className="space-y-6">
+          {/* Top row: Predicted score + 108-pt + Path */}
+          <div className="grid lg:grid-cols-3 gap-4">
+            <PredictedScoreCard data={data} />
+            <PointsCard current={data.predicted_raw_score} target={targetRaw} gap={gap} />
+            <FastestPathCard actions={data.recommended_actions} />
+          </div>
 
-      {/* Bottom row: Top mistakes + Confidence/insights */}
-      <div className="grid lg:grid-cols-3 gap-4">
-        <div className="lg:col-span-2">
-          <TopMistakesPanel mistakes={data.top_mistakes} />
+          {/* Subtopic diagnostics (3-question threshold) */}
+          <SubtopicPanel subtopics={data.subtopics} />
+
+          {/* Performance Diagnostics — strengths/weaknesses/topic-level */}
+          <PerformanceDiagnostics units={data.unit_mastery} />
+
+          {/* Bottom row: Top mistakes + Confidence/insights */}
+          <div className="grid lg:grid-cols-3 gap-4">
+            <div className="lg:col-span-2">
+              <TopMistakesPanel mistakes={data.top_mistakes} />
+            </div>
+            <InsightsPanel data={data} />
+          </div>
         </div>
-        <InsightsPanel data={data} />
-      </div>
+      )}
+
+      {tab === "log" && <AnswerLogPanel />}
+      {tab === "bank" && isAdmin && <QuestionBankPanel />}
     </div>
   );
 }
