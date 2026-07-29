@@ -19,6 +19,7 @@ import { QuestionBankPanel } from "@/components/command/QuestionBankPanel";
 import { SubtopicPanel } from "@/components/command/SubtopicPanel";
 import { getPerformanceSnapshot } from "@/lib/performance.functions";
 import { getBankAccess } from "@/lib/question-bank.functions";
+import { QN_UNITS } from "@/lib/question-navigator-data";
 
 export const Route = createFileRoute("/_authenticated/command-center")({
   head: () => ({ meta: [{ title: "Score Command Center — AP Calc OS" }] }),
