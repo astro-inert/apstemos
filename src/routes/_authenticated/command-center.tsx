@@ -351,7 +351,6 @@ function PerformanceDiagnostics({ units }: { units: UnitRow[] }) {
                   ) : null}
                 </div>
               </div>
-              </div>
             );
           })}
         </div>
