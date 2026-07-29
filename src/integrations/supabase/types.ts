@@ -23,9 +23,12 @@ export type Database = {
           points_earned: number
           points_possible: number
           question_id: string
+          selected_answer: string | null
           time_spent_seconds: number | null
           topic_id: string | null
+          topic_slug: string | null
           unit_id: string | null
+          unit_slug: string | null
           user_id: string
         }
         Insert: {
@@ -36,9 +39,12 @@ export type Database = {
           points_earned?: number
           points_possible?: number
           question_id: string
+          selected_answer?: string | null
           time_spent_seconds?: number | null
           topic_id?: string | null
+          topic_slug?: string | null
           unit_id?: string | null
+          unit_slug?: string | null
           user_id: string
         }
         Update: {
@@ -49,9 +55,12 @@ export type Database = {
           points_earned?: number
           points_possible?: number
           question_id?: string
+          selected_answer?: string | null
           time_spent_seconds?: number | null
           topic_id?: string | null
+          topic_slug?: string | null
           unit_id?: string | null
+          unit_slug?: string | null
           user_id?: string
         }
         Relationships: [
@@ -141,59 +150,137 @@ export type Database = {
         }
         Relationships: []
       }
+      question_uploads: {
+        Row: {
+          created_at: string
+          error: string | null
+          extracted_count: number
+          filename: string
+          id: string
+          page_count: number | null
+          status: string
+          storage_path: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          error?: string | null
+          extracted_count?: number
+          filename: string
+          id?: string
+          page_count?: number | null
+          status?: string
+          storage_path: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          error?: string | null
+          extracted_count?: number
+          filename?: string
+          id?: string
+          page_count?: number | null
+          status?: string
+          storage_path?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       questions: {
         Row: {
           answer: string | null
           ap_value: number
           calculator: boolean
+          choices: Json
           common_mistake_codes: string[]
           created_at: string
+          created_by: string | null
           difficulty: Database["public"]["Enums"]["difficulty"]
           explanation: string | null
           id: string
           is_published: boolean
+          page_end: number | null
+          page_image_url: string | null
+          page_start: number | null
+          part: string | null
           prompt: string
+          question_number: number | null
+          review_status: string
+          rubric: Json
           skills: string[]
           source: string | null
           topic_id: string | null
+          topic_slug: string | null
           type: Database["public"]["Enums"]["question_type"]
           unit_id: string | null
+          unit_slug: string | null
+          updated_at: string
+          upload_id: string | null
           year: number | null
         }
         Insert: {
           answer?: string | null
           ap_value?: number
           calculator?: boolean
+          choices?: Json
           common_mistake_codes?: string[]
           created_at?: string
+          created_by?: string | null
           difficulty?: Database["public"]["Enums"]["difficulty"]
           explanation?: string | null
           id?: string
           is_published?: boolean
+          page_end?: number | null
+          page_image_url?: string | null
+          page_start?: number | null
+          part?: string | null
           prompt: string
+          question_number?: number | null
+          review_status?: string
+          rubric?: Json
           skills?: string[]
           source?: string | null
           topic_id?: string | null
+          topic_slug?: string | null
           type: Database["public"]["Enums"]["question_type"]
           unit_id?: string | null
+          unit_slug?: string | null
+          updated_at?: string
+          upload_id?: string | null
           year?: number | null
         }
         Update: {
           answer?: string | null
           ap_value?: number
           calculator?: boolean
+          choices?: Json
           common_mistake_codes?: string[]
           created_at?: string
+          created_by?: string | null
           difficulty?: Database["public"]["Enums"]["difficulty"]
           explanation?: string | null
           id?: string
           is_published?: boolean
+          page_end?: number | null
+          page_image_url?: string | null
+          page_start?: number | null
+          part?: string | null
           prompt?: string
+          question_number?: number | null
+          review_status?: string
+          rubric?: Json
           skills?: string[]
           source?: string | null
           topic_id?: string | null
+          topic_slug?: string | null
           type?: Database["public"]["Enums"]["question_type"]
           unit_id?: string | null
+          unit_slug?: string | null
+          updated_at?: string
+          upload_id?: string | null
           year?: number | null
         }
         Relationships: [
@@ -210,6 +297,42 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "units"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "questions_upload_id_fkey"
+            columns: ["upload_id"]
+            isOneToOne: false
+            referencedRelation: "question_uploads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      starred_mistakes: {
+        Row: {
+          code: string
+          created_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "starred_mistakes_code_fkey"
+            columns: ["code"]
+            isOneToOne: false
+            referencedRelation: "common_mistakes"
+            referencedColumns: ["code"]
           },
         ]
       }

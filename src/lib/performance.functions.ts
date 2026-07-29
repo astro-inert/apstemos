@@ -1,5 +1,11 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { QN_UNITS } from "./question-navigator-data";
+
+/** A unit needs this many logged questions before mastery % is trusted. */
+export const UNIT_MASTERY_THRESHOLD = 10;
+/** A subtopic needs this many logged questions before it counts as a strength/weakness. */
+export const SUBTOPIC_THRESHOLD = 3;
 
 export type PerformanceSnapshot = {
   profile: {
@@ -23,7 +29,20 @@ export type PerformanceSnapshot = {
     ap_points: number;
     mastery: number; // 0-100, or -1 if no data
     attempts: number;
+    /** true once attempts >= UNIT_MASTERY_THRESHOLD */
+    mastery_unlocked: boolean;
   }>;
+  subtopics: Array<{
+    unit_slug: string;
+    unit_number: number;
+    topic_slug: string;
+    topic_title: string;
+    accuracy: number; // 0-100
+    attempts: number;
+    /** true once attempts >= SUBTOPIC_THRESHOLD */
+    unlocked: boolean;
+  }>;
+  untouched_units: Array<{ unit_id: string; number: number; name: string; ap_points: number; ap_weight_pct: number }>;
   top_mistakes: Array<{
     code: string;
     title: string;
@@ -56,7 +75,10 @@ export const getPerformanceSnapshot = createServerFn({ method: "GET" })
     const [profileRes, unitsRes, attemptsRes, mistakesCatRes] = await Promise.all([
       supabase.from("profiles").select("display_name, track, target_score, exam_date").eq("id", userId).maybeSingle(),
       supabase.from("units").select("id, number, name, ap_weight_pct, ap_points").eq("subject_id", "ap-calc-bc").order("number"),
-      supabase.from("attempts").select("unit_id, correct, points_earned, points_possible, mistake_codes").eq("user_id", userId),
+      supabase
+        .from("attempts")
+        .select("unit_id, unit_slug, topic_slug, correct, points_earned, points_possible, mistake_codes")
+        .eq("user_id", userId),
       supabase.from("common_mistakes").select("code, title, category, est_point_loss"),
     ]);
 
@@ -91,8 +113,47 @@ export const getPerformanceSnapshot = createServerFn({ method: "GET" })
         ap_points: u.ap_points,
         mastery,
         attempts: m?.n ?? 0,
+        mastery_unlocked: (m?.n ?? 0) >= UNIT_MASTERY_THRESHOLD,
       };
     });
+
+    const untouched_units = unit_mastery
+      .filter((u) => u.attempts === 0)
+      .map((u) => ({
+        unit_id: u.unit_id,
+        number: u.number,
+        name: u.name,
+        ap_points: u.ap_points,
+        ap_weight_pct: u.ap_weight_pct,
+      }));
+
+    // Subtopic accuracy (needs SUBTOPIC_THRESHOLD attempts to be trusted)
+    const byTopic = new Map<string, { e: number; p: number; n: number }>();
+    for (const a of attempts) {
+      const slug = a.topic_slug;
+      if (!slug) continue;
+      const cur = byTopic.get(slug) ?? { e: 0, p: 0, n: 0 };
+      cur.e += Number(a.points_earned ?? 0);
+      cur.p += Number(a.points_possible ?? 0);
+      cur.n += 1;
+      byTopic.set(slug, cur);
+    }
+    const subtopics = QN_UNITS.flatMap((u) =>
+      u.topics
+        .filter((t) => byTopic.has(t.slug))
+        .map((t) => {
+          const s = byTopic.get(t.slug)!;
+          return {
+            unit_slug: u.slug,
+            unit_number: u.number,
+            topic_slug: t.slug,
+            topic_title: t.title,
+            accuracy: s.p > 0 ? Math.round((s.e / s.p) * 100) : 0,
+            attempts: s.n,
+            unlocked: s.n >= SUBTOPIC_THRESHOLD,
+          };
+        }),
+    );
 
     // Predicted score: weighted accuracy across units, defaulting untouched to 50%
     const weightedAcc = unit_mastery.reduce((s, u) => {
@@ -154,6 +215,8 @@ export const getPerformanceSnapshot = createServerFn({ method: "GET" })
       predicted_ap_score,
       confidence,
       unit_mastery,
+      subtopics,
+      untouched_units,
       top_mistakes,
       recommended_actions,
     };

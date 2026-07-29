@@ -80,7 +80,7 @@ function CommonMistakes() {
         {/* List */}
         <div className="grid md:grid-cols-2 gap-3">
           {filtered.map((m) => (
-            <article key={m.code} className="rounded-xl border border-border bg-card p-5 hover-lift">
+            <article key={m.code} id={m.code} className="rounded-xl border border-border bg-card p-5 hover-lift scroll-mt-24">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-start gap-2.5">
                   <div className="grid place-items-center h-8 w-8 rounded-md bg-rose-500/10 text-rose-400 ring-1 ring-rose-500/20 shrink-0">
