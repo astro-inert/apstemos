@@ -174,7 +174,7 @@ function ScoreCommandPreview() {
   );
 }
 
-type Accent = "primary" | "emerald" | "amber" | "rose" | "violet" | "sky";
+type Accent = "primary" | "emerald" | "amber" | "rose" | "violet" | "sky" | "blue";
 const accentMap: Record<Accent, { icon: string; ring: string; glow: string; hover: string }> = {
   primary: { icon: "bg-primary/10 text-primary",       ring: "ring-primary/20",       glow: "from-primary/20",        hover: "hover:border-primary/40" },
   emerald: { icon: "bg-emerald-500/10 text-emerald-400", ring: "ring-emerald-500/20",  glow: "from-emerald-500/20",     hover: "hover:border-emerald-500/40" },
