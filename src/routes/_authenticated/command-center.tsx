@@ -19,6 +19,7 @@ import { QuestionBankPanel } from "@/components/command/QuestionBankPanel";
 import { SubtopicPanel } from "@/components/command/SubtopicPanel";
 import { getPerformanceSnapshot } from "@/lib/performance.functions";
 import { getBankAccess } from "@/lib/question-bank.functions";
+import { QN_UNITS } from "@/lib/question-navigator-data";
 
 export const Route = createFileRoute("/_authenticated/command-center")({
   head: () => ({ meta: [{ title: "Score Command Center — AP Calc OS" }] }),
@@ -321,7 +322,7 @@ function PerformanceDiagnostics({ units }: { units: UnitRow[] }) {
                   <div className="font-medium truncate">Unit {u.number} · {u.name}</div>
                   <div className="text-[10px] text-muted-foreground">{u.ap_points}p · {u.ap_weight_pct}% of exam</div>
                 </div>
-                <div className="col-span-4 sm:col-span-5">
+                <div className="col-span-3 sm:col-span-4">
                   <div className="h-2 rounded-full bg-elevated overflow-hidden">
                     <div className={`h-full ${color} transition-all`} style={{ width: `${bar}%` }} />
                   </div>
@@ -336,6 +337,19 @@ function PerformanceDiagnostics({ units }: { units: UnitRow[] }) {
                     m >= 60 ? "text-amber-400" :
                     m >= 40 ? "text-orange-400" : "text-rose-400"
                   }`}>{label}</span>
+                </div>
+                <div className="col-span-1 text-right">
+                  {QN_UNITS.find((qu) => qu.number === u.number) ? (
+                    <Link
+                      to="/practice"
+                      search={{ unit: QN_UNITS.find((qu) => qu.number === u.number)!.slug }}
+                      title={`Practice only Unit ${u.number} questions`}
+                      aria-label={`Practice only Unit ${u.number} questions`}
+                      className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-border text-muted-foreground hover:bg-elevated hover:text-foreground"
+                    >
+                      <ArrowRight className="h-3.5 w-3.5" />
+                    </Link>
+                  ) : null}
                 </div>
               </div>
             );
