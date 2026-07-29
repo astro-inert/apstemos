@@ -1507,6 +1507,7 @@ export function tidyTex(input: string): string {
   });
   s = s.replace(/(^|[^\d.\w\\])1\\cdot\s*/g, "$1");
   s = s.replace(/\\cdot\s*1(?![\d.])/g, "");
+  s = s.replace(/ {2,}/g, " ");
   return s;
 }
 
