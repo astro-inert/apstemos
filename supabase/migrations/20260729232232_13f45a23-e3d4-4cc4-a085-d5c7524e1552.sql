@@ -1,0 +1,1 @@
+ALTER TABLE public.attempts DROP CONSTRAINT IF EXISTS attempts_question_id_fkey;
