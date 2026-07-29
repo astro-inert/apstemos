@@ -139,14 +139,39 @@ export const getAnswerLog = createServerFn({ method: "POST" })
     const { data: rows, error } = await context.supabase
       .from("attempts")
       .select(
-        "id, created_at, correct, points_earned, points_possible, selected_answer, topic_slug, unit_slug, mistake_codes, questions(prompt, type, source)",
+        "id, created_at, correct, points_earned, points_possible, selected_answer, topic_slug, unit_slug, mistake_codes, question_id",
       )
       .eq("user_id", context.userId)
       .order("created_at", { ascending: false })
       .limit(data.limit);
     if (error) throw new Error(error.message);
+
+    const ids = Array.from(new Set((rows ?? []).map((r) => r.question_id).filter(Boolean)));
+    const byId = new Map<string, { prompt: string; type: "MCQ" | "FRQ"; source: string | null }>();
+    if (ids.length > 0) {
+      const { data: qs } = await context.supabase
+        .from("questions")
+        .select("id, prompt, type, source")
+        .in("id", ids);
+      for (const q of qs ?? []) byId.set(q.id, { prompt: q.prompt, type: q.type as "MCQ" | "FRQ", source: q.source });
+    }
+
+    const missing = ids.filter((id) => !byId.has(id));
+    if (missing.length > 0) {
+      const { bankKeys, buildQuestion, uuidFromKey } = await import("@/lib/generated-bank");
+      const missingSet = new Set(missing);
+      for (const key of bankKeys()) {
+        const id = uuidFromKey(key);
+        if (!missingSet.has(id)) continue;
+        const gq = buildQuestion(key);
+        if (gq) byId.set(id, { prompt: gq.prompt, type: "MCQ", source: "Generated" });
+        missingSet.delete(id);
+        if (missingSet.size === 0) break;
+      }
+    }
+
     return (rows ?? []).map((r) => {
-      const q = (r as unknown as { questions: { prompt: string; type: "MCQ" | "FRQ"; source: string | null } | null }).questions;
+      const q = byId.get(r.question_id) ?? null;
       return {
         id: r.id,
         created_at: r.created_at,
