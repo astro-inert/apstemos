@@ -182,6 +182,7 @@ const accentMap: Record<Accent, { icon: string; ring: string; glow: string; hove
   rose:    { icon: "bg-rose-500/10 text-rose-400",     ring: "ring-rose-500/20",      glow: "from-rose-500/20",        hover: "hover:border-rose-500/40" },
   violet:  { icon: "bg-pink-500/10 text-pink-400", ring: "ring-pink-500/20",    glow: "from-pink-500/20",      hover: "hover:border-pink-500/40" },
   sky:     { icon: "bg-fuchsia-500/10 text-fuchsia-400",       ring: "ring-fuchsia-500/20",       glow: "from-fuchsia-500/20",         hover: "hover:border-fuchsia-500/40" },
+  blue:    { icon: "bg-blue-500/10 text-blue-400",     ring: "ring-blue-500/20",      glow: "from-blue-500/20",        hover: "hover:border-blue-500/40" },
 };
 
 function SystemMap() {
