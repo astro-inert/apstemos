@@ -1,7 +1,7 @@
 import { TEMPLATES, makeRng, shuffle, tidyTex, type Difficulty } from "./question-templates";
 
 /** Variants generated per template. 60 templates × 30 variants = 1,800 original questions. */
-export const VARIANTS_PER_TEMPLATE = 40;
+export const VARIANTS_PER_TEMPLATE = 27;
 
 export type GeneratedChoice = { label: string; text: string };
 
