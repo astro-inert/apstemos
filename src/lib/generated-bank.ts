@@ -55,7 +55,7 @@ export function buildQuestion(key: string): GeneratedQuestion | null {
   const templateId = key.slice(0, sep);
   const variant = Number(key.slice(sep + 2));
   const tpl = TEMPLATES.find((t) => t.id === templateId);
-  if (!tpl || !Number.isInteger(variant) || variant < 0 || variant >= VARIANTS_PER_TEMPLATE) return null;
+  if (!tpl || !Number.isInteger(variant) || variant < 0 || variant >= 240) return null;
 
   const r = makeRng(`${templateId}::${variant}`);
   const built = tpl.build(r);
