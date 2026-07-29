@@ -1328,7 +1328,7 @@ export const TEMPLATES: QuestionTemplate[] = [
         distractors: [
           `\\frac{${frac(1, d)}}{x-${a}} - \\frac{${frac(1, d)}}{x-${b}}`,
           `\\frac{${frac(1, d)}}{x-${a}} + \\frac{${frac(1, d)}}{x-${b}}`,
-          `\\frac{1}{x-${a}} - \\frac{1}{x-${b}}$`,
+          `\\frac{1}{x-${a}} - \\frac{1}{x-${b}}`,
         ],
         explanation: `Write $\\frac{1}{(x-${a})(x-${b})} = \\frac{A}{x-${a}} + \\frac{B}{x-${b}}$. Substituting $x=${a}$ gives $A = ${frac(1, a - b)}$ and $x=${b}$ gives $B = ${frac(1, d)}$.`,
       };
