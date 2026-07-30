@@ -83,8 +83,16 @@ function Hero({ subject }: { subject: SubjectConfig }) {
         <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.05] gradient-text">
           {subject.heroTitle[0]}<br />{subject.heroTitle[1]}
         </h1>
-        <p className="mt-6 text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">{subject.heroSub}</p>
+        <p className="mt-6 font-display text-lg sm:text-2xl font-semibold tracking-tight text-foreground">
+          Every answer makes the platform smarter.
+        </p>
+        <p className="mt-3 text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">{subject.heroSub}</p>
+        <p className="mt-3 text-sm text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+          Answer original AP-style questions and every response updates your predicted score, subtopic mastery, mistake
+          profile, and next recommendation.
+        </p>
         <div className="mt-9 flex flex-col sm:flex-row items-center justify-center gap-3">
+
           <Link to="/auth" className="group inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-primary text-primary-foreground text-sm font-semibold shadow-glow hover:opacity-95 transition">
             Start optimizing my score
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
