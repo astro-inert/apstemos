@@ -4,6 +4,7 @@ import { AlertTriangle, ArrowRight, ArrowUpRight, ChevronRight, Sigma, Target, T
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import type { SubjectConfig, SubjectTool } from "@/lib/subjects";
+import { persistCurrentSubject } from "@/lib/use-subject";
 
 function useCountdown(target: Date) {
   const [now, setNow] = useState(() => Date.now());
@@ -29,6 +30,9 @@ const accentMap: Record<Accent, { icon: string; ring: string; glow: string; hove
 };
 
 export function SubjectHome({ subject }: { subject: SubjectConfig }) {
+  useEffect(() => {
+    persistCurrentSubject(subject.id);
+  }, [subject.id]);
   return (
     <div
       data-subject={subject.id}

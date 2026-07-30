@@ -7,6 +7,7 @@ import {
   SUBJECT_MENU,
   type SubjectId,
 } from "@/lib/subjects";
+import { persistCurrentSubject } from "@/lib/use-subject";
 
 interface Props {
   current: SubjectId;
@@ -31,6 +32,7 @@ export function SubjectSwitcher({ current }: Props) {
       setLastPhysics(current);
       window.localStorage.setItem(PHYSICS_STORAGE_KEY, current);
     }
+    persistCurrentSubject(current);
   }, [current]);
 
   useEffect(() => {

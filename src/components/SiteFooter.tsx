@@ -8,8 +8,8 @@ export function SiteFooter() {
           <span className="grid place-items-center h-6 w-6 rounded-md bg-primary text-primary-foreground">
             <Sigma className="h-3.5 w-3.5" strokeWidth={2.5} />
           </span>
-          <span className="font-display font-bold">APCalcExamPrep</span>
-          <span className="text-muted-foreground/70">— built by students who scored 5s.</span>
+          <span className="font-display font-bold">AP STEM PerformanceOS</span>
+          <span className="text-muted-foreground/70">— the performance OS for every AP STEM exam.</span>
         </div>
         <div className="flex gap-6 text-sm text-muted-foreground">
           <a href="#" className="hover:text-foreground transition-colors">Privacy</a>

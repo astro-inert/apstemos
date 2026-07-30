@@ -15,6 +15,8 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { ThemeToggle } from "./ThemeToggle";
+import { useCurrentSubject } from "@/lib/use-subject";
+import type { SubjectId } from "@/lib/subjects";
 
 const nav = [
   { to: "/command-center", icon: Activity, label: "Command Center" },
@@ -28,8 +30,19 @@ const nav = [
   { to: "/latex-master-sheet", icon: Calculator, label: "Formula Sheet" },
 ] as const;
 
+const BRAND_LABELS: Record<SubjectId, string> = {
+  "calc-bc": "AP Calc",
+  "physics-1": "AP Physics",
+  "physics-2": "AP Physics",
+  "physics-c-mech": "AP Physics",
+  "physics-c-em": "AP Physics",
+  stats: "AP Stats",
+};
+
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const subjectId = useCurrentSubject();
+  const brand = BRAND_LABELS[subjectId];
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -50,7 +63,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <span className="grid place-items-center h-7 w-7 rounded-md bg-primary text-primary-foreground">
                 <Sigma className="h-4 w-4" strokeWidth={2.5} />
               </span>
-              <span>APCalc<span className="text-muted-foreground font-medium">/OS</span></span>
+              <span>{brand}<span className="text-muted-foreground font-medium">/OS</span></span>
             </Link>
           </div>
           <nav className="flex-1 p-2 space-y-0.5 overflow-y-auto">
@@ -89,7 +102,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <span className="grid place-items-center h-6 w-6 rounded-md bg-primary text-primary-foreground">
               <Sigma className="h-3.5 w-3.5" strokeWidth={2.5} />
             </span>
-            APCalc/OS
+            {brand}<span className="text-muted-foreground font-medium">/OS</span>
           </Link>
           <div className="flex items-center gap-2">
             <ThemeToggle />

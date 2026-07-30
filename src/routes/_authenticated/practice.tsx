@@ -165,6 +165,9 @@ function PracticePage() {
               <LaTeX>{q.prompt}</LaTeX>
             </div>
 
+            {q.figure ? <SlopeField figure={q.figure} /> : null}
+
+
             <div className="space-y-2">
               {q.choices.map((c) => {
                 const isAnswer = feedback && feedback.answer_label === c.label;
