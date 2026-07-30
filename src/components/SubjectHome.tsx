@@ -246,7 +246,7 @@ function SystemMap({ subject }: { subject: SubjectConfig }) {
   return (
     <section className="px-6 py-16 border-t border-border">
       <div className="max-w-6xl mx-auto">
-        <SectionHeader eyebrow="02 · the platform" title={subject.toolsHeading} sub="From first principles to exam morning. Everything you need is here." />
+        <SectionHeader eyebrow="02 · the system" title={subject.toolsHeading} sub="Six connected surfaces, one engine — every tool writes into the same performance model and hands off to the next." />
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-8">
           {subject.tools.map((i) => {
             const Icon = i.icon;
