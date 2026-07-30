@@ -139,7 +139,6 @@ export const getPerformanceSnapshot = createServerFn({ method: "GET" })
           subtopics_covered >= subtopics_total * UNIT_SUBTOPIC_MIN,
       };
 
-      };
     });
 
     const untouched_units = unit_mastery
