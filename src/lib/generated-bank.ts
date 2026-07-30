@@ -1,4 +1,4 @@
-import { TEMPLATES, makeRng, shuffle, tidyTex, type Difficulty } from "./question-templates";
+import { TEMPLATES, makeRng, shuffle, tidyTex, type Difficulty, type Figure } from "./question-templates";
 
 /** Variants generated per template. 60 templates × 30 variants = 1,800 original questions. */
 export const VARIANTS_PER_TEMPLATE = 27;
@@ -17,12 +17,14 @@ export type GeneratedQuestion = {
   calculator: boolean;
   ap_value: number;
   prompt: string;
+  figure?: Figure;
   choices: GeneratedChoice[];
   answer_label: string;
   answer_text: string;
   explanation: string;
   common_mistake_codes: string[];
 };
+
 
 const LABELS = ["A", "B", "C", "D"];
 
