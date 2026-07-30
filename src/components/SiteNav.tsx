@@ -1,8 +1,10 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ChevronDown, Sigma } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
+import { SubjectSwitcher } from "./SubjectSwitcher";
 import { supabase } from "@/integrations/supabase/client";
+import type { SubjectId } from "@/lib/subjects";
 
 const resources = [
   { to: "/108-points-breakdown", label: "108-Point Map" },
@@ -14,7 +16,7 @@ const resources = [
   { to: "/latex-master-sheet", label: "Formula Sheet" },
 ] as const;
 
-export function SiteNav() {
+export function SiteNav({ subject = "calc-bc" }: { subject?: SubjectId }) {
   const [signedIn, setSignedIn] = useState(false);
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => setSignedIn(!!data.user));
@@ -26,12 +28,7 @@ export function SiteNav() {
     <nav className="sticky top-0 z-50 glass px-6 py-3 border-b">
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
         <div className="flex items-center gap-8 min-w-0">
-          <Link to="/" className="flex items-center gap-2 font-display text-base font-bold tracking-tight shrink-0">
-            <span className="grid place-items-center h-7 w-7 rounded-md bg-primary text-primary-foreground">
-              <Sigma className="h-4 w-4" strokeWidth={2.5} />
-            </span>
-            <span>APCalc<span className="text-muted-foreground font-medium">/PerformanceOS</span></span>
-          </Link>
+          <SubjectSwitcher current={subject} />
           <div className="hidden md:flex items-center gap-1 text-sm">
             <div className="group relative">
               <button className="flex items-center gap-1 px-3 py-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-elevated transition-colors">
