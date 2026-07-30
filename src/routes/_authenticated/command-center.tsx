@@ -20,6 +20,8 @@ import { SubtopicPanel } from "@/components/command/SubtopicPanel";
 import { getPerformanceSnapshot } from "@/lib/performance.functions";
 import { getBankAccess } from "@/lib/question-bank.functions";
 import { QN_UNITS } from "@/lib/question-navigator-data";
+import { useCurrentSubject } from "@/lib/use-subject";
+import { SUBJECTS } from "@/lib/subjects";
 
 export const Route = createFileRoute("/_authenticated/command-center")({
   head: () => ({ meta: [{ title: "Score Command Center — AP Calc OS" }] }),
@@ -56,6 +58,14 @@ function CommandCenter() {
 const snapshotKey = ["performance-snapshot"] as const;
 
 function Inner() {
+  const subjectId = useCurrentSubject();
+  if (subjectId !== "calc-bc") {
+    return <OtherSubjectCommandCenter subjectId={subjectId} />;
+  }
+  return <CalcCommandCenter />;
+}
+
+function CalcCommandCenter() {
   const fn = useServerFn(getPerformanceSnapshot);
   const accessFn = useServerFn(getBankAccess);
   const [tab, setTab] = useState<"overview" | "log" | "bank">("overview");
@@ -149,6 +159,124 @@ function Inner() {
 
       {tab === "log" && <AnswerLogPanel />}
       {tab === "bank" && isAdmin && <QuestionBankPanel />}
+    </div>
+  );
+}
+
+function OtherSubjectCommandCenter({ subjectId }: { subjectId: Exclude<Parameters<typeof useCurrentSubject>[0], never> extends never ? never : ReturnType<typeof useCurrentSubject> }) {
+  const subject = SUBJECTS[subjectId];
+  const daysToExam = Math.max(0, Math.ceil((new Date(subject.examDate).getTime() - Date.now()) / 86400000));
+  const { raw, total, target, engineLabel } = subject.score;
+  const gap = Math.max(0, target - raw);
+  const pct = Math.min(100, (raw / total) * 100);
+  const targetPct = Math.min(100, (target / total) * 100);
+
+  return (
+    <div className="p-4 lg:p-8 max-w-7xl mx-auto space-y-6">
+      {/* Header */}
+      <div className="flex items-end justify-between flex-wrap gap-3">
+        <div>
+          <div className="text-xs font-mono uppercase tracking-[0.2em] text-muted-foreground mb-1">// score command center</div>
+          <h1 className="font-display text-2xl lg:text-3xl font-bold tracking-tight">{subject.navLabel} Command Center</h1>
+          <p className="text-sm text-muted-foreground mt-1">
+            The {subject.navLabel} question bank is coming soon — this dashboard will populate with your real attempts once it launches.
+          </p>
+        </div>
+        <div className="flex items-center gap-2 text-xs">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full glass">
+            <Calendar className="h-3.5 w-3.5" /> {daysToExam} days to exam
+          </span>
+        </div>
+      </div>
+
+      <div className="rounded-xl border border-dashed border-border bg-card/50 p-4 text-sm text-muted-foreground flex items-start gap-2">
+        <Sparkles className="h-4 w-4 text-pink-400 shrink-0 mt-0.5" />
+        <span>
+          No attempt data yet for {subject.navLabel}. The unit-mastery table below shows the real exam units so you can see what's ahead —
+          practice questions for this subject aren't live yet, so nothing here is estimated or invented.
+        </span>
+      </div>
+
+      <div className="grid lg:grid-cols-3 gap-4">
+        <div className="rounded-xl border border-border bg-card p-5">
+          <div className="text-xs uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5"><Target className="h-3.5 w-3.5" /> {engineLabel}</div>
+          <div className="mt-4 flex items-baseline gap-2">
+            <span className="font-display text-4xl font-bold tabular-nums">{raw}</span>
+            <span className="text-muted-foreground text-sm">/ {total}</span>
+            <span className="ml-auto text-xs text-muted-foreground">target {target}</span>
+          </div>
+          <div className="mt-4 relative h-2.5 rounded-full bg-elevated overflow-hidden">
+            <div className="absolute inset-y-0 left-0 bg-gradient-to-r from-primary to-emerald-400 rounded-full" style={{ width: `${pct}%` }} />
+            <div className="absolute inset-y-0 w-0.5 bg-foreground/70" style={{ left: `${targetPct}%` }} />
+          </div>
+          <div className="mt-3 text-xs text-muted-foreground">Illustrative target based on the {subject.navLabel} exam structure — {gap}-point gap to target.</div>
+        </div>
+        <div className="lg:col-span-2 rounded-xl border border-border bg-card p-5">
+          <div className="text-xs uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5"><Zap className="h-3.5 w-3.5 text-amber-400" /> Recommendations</div>
+          <ol className="mt-4 space-y-2.5 text-sm">
+            {subject.recommendations.map((a, i) => (
+              <li key={a.t} className="flex items-center gap-3">
+                <span className="font-mono text-xs text-muted-foreground w-4">{i + 1}</span>
+                <span className="flex-1 truncate">{a.t}</span>
+                <span className="font-mono text-xs text-emerald-400">+{a.g}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </div>
+
+      {/* Unit mastery — untouched state */}
+      <div className="rounded-xl border border-border bg-card overflow-hidden">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-border">
+          <div>
+            <div className="text-xs uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5">
+              <Activity className="h-3.5 w-3.5" /> Unit performance
+            </div>
+            <h3 className="font-display font-semibold mt-1">All {subject.units.length} units · no data yet</h3>
+          </div>
+          <div className="text-[10px] text-muted-foreground hidden sm:block">Question bank for {subject.navLabel} is coming soon.</div>
+        </div>
+        <div className="divide-y divide-border">
+          {subject.units.map((u) => (
+            <div key={u.number} className="grid grid-cols-12 items-center gap-3 px-5 py-3 text-sm">
+              <div className="col-span-7 sm:col-span-6 min-w-0">
+                <div className="font-medium truncate">Unit {u.number} · {u.name}</div>
+                <div className="text-[10px] text-muted-foreground">{u.points}p · {u.weightPct}% of exam</div>
+              </div>
+              <div className="col-span-3 sm:col-span-4">
+                <div className="h-2 rounded-full bg-elevated overflow-hidden">
+                  <div className="h-full bg-muted" style={{ width: "0%" }} />
+                </div>
+              </div>
+              <div className="col-span-2 text-right">
+                <span className="text-[10px] uppercase tracking-wider text-muted-foreground">Untouched</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Common mistakes for this subject */}
+      <div className="rounded-xl border border-border bg-card p-5">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <div className="text-xs uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5"><AlertTriangle className="h-3.5 w-3.5 text-rose-400" /> Common mistakes to watch for</div>
+            <h3 className="font-display font-semibold mt-1">{subject.mistakesHeading}</h3>
+          </div>
+          <Link to="/common-mistakes" className="text-xs text-primary hover:underline inline-flex items-center gap-1">All mistakes <ArrowRight className="h-3 w-3" /></Link>
+        </div>
+        <div className="grid sm:grid-cols-2 gap-2">
+          {subject.mistakes.map((m) => (
+            <div key={m.title} className="flex items-center gap-3 p-3 rounded-lg bg-elevated/50 border border-border">
+              <div className="flex-1 min-w-0">
+                <div className="text-sm font-medium truncate">{m.title}</div>
+                <div className="text-xs text-muted-foreground">{m.category}</div>
+              </div>
+              <div className="text-rose-400 font-mono text-sm font-semibold shrink-0">−{m.points}</div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

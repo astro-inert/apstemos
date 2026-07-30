@@ -34,9 +34,13 @@ export type PerformanceSnapshot = {
     ap_points: number;
     mastery: number; // 0-100, or -1 if no data
     attempts: number;
-    /** true once attempts >= UNIT_MASTERY_THRESHOLD */
+    /** how many of the unit's subtopics have at least one logged question */
+    subtopics_covered: number;
+    subtopics_total: number;
+    /** true once attempts >= UNIT_MASTERY_THRESHOLD AND every subtopic has been touched */
     mastery_unlocked: boolean;
   }>;
+
   subtopics: Array<{
     unit_slug: string;
     unit_number: number;
