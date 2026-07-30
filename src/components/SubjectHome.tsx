@@ -1,10 +1,25 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { AlertTriangle, ArrowRight, ArrowUpRight, ChevronRight, Sigma, Target, TrendingUp, Zap } from "lucide-react";
+import {
+  AlertTriangle,
+  ArrowRight,
+  ArrowUpRight,
+  ChevronRight,
+  Compass,
+  Gauge,
+  PencilLine,
+  RefreshCw,
+  ScanSearch,
+  Sigma,
+  Target,
+  TrendingUp,
+  Zap,
+} from "lucide-react";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import type { SubjectConfig, SubjectTool } from "@/lib/subjects";
 import { persistCurrentSubject } from "@/lib/use-subject";
+
 
 function useCountdown(target: Date) {
   const [now, setNow] = useState(() => Date.now());
@@ -44,8 +59,10 @@ export function SubjectHome({ subject }: { subject: SubjectConfig }) {
       </div>
       <SiteNav subject={subject.id} />
       <Hero subject={subject} />
+      <HowItWorks subject={subject} />
       <ScoreCommandPreview subject={subject} />
       <SystemMap subject={subject} />
+
       <MistakesPreview subject={subject} />
       <FinalCTA subject={subject} />
       <SiteFooter />
@@ -66,8 +83,16 @@ function Hero({ subject }: { subject: SubjectConfig }) {
         <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.05] gradient-text">
           {subject.heroTitle[0]}<br />{subject.heroTitle[1]}
         </h1>
-        <p className="mt-6 text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">{subject.heroSub}</p>
+        <p className="mt-6 font-display text-lg sm:text-2xl font-semibold tracking-tight text-foreground">
+          Every answer makes the platform smarter.
+        </p>
+        <p className="mt-3 text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">{subject.heroSub}</p>
+        <p className="mt-3 text-sm text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+          Answer original AP-style questions and every response updates your predicted score, subtopic mastery, mistake
+          profile, and next recommendation.
+        </p>
         <div className="mt-9 flex flex-col sm:flex-row items-center justify-center gap-3">
+
           <Link to="/auth" className="group inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-primary text-primary-foreground text-sm font-semibold shadow-glow hover:opacity-95 transition">
             Start optimizing my score
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
@@ -88,6 +113,72 @@ function Hero({ subject }: { subject: SubjectConfig }) {
     </section>
   );
 }
+
+const flowSteps = [
+  { icon: PencilLine, title: "Practice", copy: "Answer original AP-style questions built from real exam patterns." },
+  { icon: Gauge, title: "Score Command Center", copy: "Receive a live AP score prediction after every response." },
+  { icon: ScanSearch, title: "Weak subtopics", copy: "Discover exactly which subtopics are holding your score down." },
+  { icon: AlertTriangle, title: "Common mistakes", copy: "Identify the recurring AP mistakes costing you points." },
+  { icon: Compass, title: "Question Type Navigator", copy: "Learn the exact College Board question patterns behind them." },
+  { icon: RefreshCw, title: "Targeted practice", copy: "Return to practice that is rebuilt around your weakest points." },
+] as const;
+
+function HowItWorks({ subject }: { subject: SubjectConfig }) {
+  return (
+    <section className="px-6 pb-16 pt-4">
+      <div className="max-w-6xl mx-auto">
+        <SectionHeader
+          eyebrow="00 · the loop"
+          title="How it works"
+          sub={`One closed loop, not six separate tools. Each step in ${subject.label} feeds the next.`}
+        />
+        <div className="relative mt-10">
+          <div className="pointer-events-none absolute left-0 right-0 top-11 hidden lg:block">
+            <div className="h-px w-full bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+          </div>
+          <ol className="relative grid gap-3 sm:grid-cols-2 lg:grid-cols-6">
+            {flowSteps.map((s, i) => {
+              const Icon = s.icon;
+              return (
+                <li
+                  key={s.title}
+                  style={{ animationDelay: `${i * 70}ms` }}
+                  className="group relative rounded-2xl border border-border bg-card/70 backdrop-blur-sm p-4 hover-lift transition hover:border-primary/40"
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="grid h-9 w-9 place-items-center rounded-xl bg-primary/10 text-primary ring-1 ring-primary/20">
+                      <Icon className="h-4.5 w-4.5" />
+                    </span>
+                    <span className="font-mono text-[10px] text-muted-foreground">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    {i < flowSteps.length - 1 && (
+                      <ChevronRight className="ml-auto h-4 w-4 text-muted-foreground/60 transition-transform group-hover:translate-x-0.5 lg:text-primary/50" />
+                    )}
+                    {i === flowSteps.length - 1 && (
+                      <RefreshCw className="ml-auto h-4 w-4 text-primary/50 transition-transform group-hover:rotate-90" />
+                    )}
+                  </div>
+                  <div className="mt-3 font-display text-sm font-semibold leading-tight">{s.title}</div>
+                  <p className="mt-1 text-xs text-muted-foreground leading-relaxed">{s.copy}</p>
+                </li>
+              );
+            })}
+          </ol>
+          <div className="mt-6 flex flex-col items-center gap-2 text-center">
+            <p className="text-xs text-muted-foreground">
+              The loop never resets — each pass sharpens the prediction, the diagnosis, and the next question you see.
+            </p>
+            <Link to="/practice" className="inline-flex items-center gap-2 text-sm text-primary hover:underline">
+              Start the loop <ArrowUpRight className="h-4 w-4" />
+            </Link>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 
 function ScoreCommandPreview({ subject }: { subject: SubjectConfig }) {
   const { predicted, confidence, raw, total, target, engineLabel } = subject.score;
@@ -155,7 +246,7 @@ function SystemMap({ subject }: { subject: SubjectConfig }) {
   return (
     <section className="px-6 py-16 border-t border-border">
       <div className="max-w-6xl mx-auto">
-        <SectionHeader eyebrow="02 · the platform" title={subject.toolsHeading} sub="From first principles to exam morning. Everything you need is here." />
+        <SectionHeader eyebrow="02 · the system" title={subject.toolsHeading} sub="Six connected surfaces, one engine — every tool writes into the same performance model and hands off to the next." />
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-8">
           {subject.tools.map((i) => {
             const Icon = i.icon;
