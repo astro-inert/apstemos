@@ -143,6 +143,8 @@ export function buildQuestion(key: string): GeneratedQuestion | null {
     calculator: tpl.calculator ?? false,
     ap_value: 1,
     prompt: built.prompt,
+    figure: raw.figure,
+
     choices: choices.map((c) => ({ label: c.label, text: c.tex })),
     answer_label: answer.label,
     answer_text: answer.tex,

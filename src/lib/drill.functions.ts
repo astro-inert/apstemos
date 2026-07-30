@@ -2,7 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { z } from "zod";
 import { bankCount, bankKeys, buildQuestion, uuidFromKey } from "./generated-bank";
-import { makeRng, shuffle } from "./question-templates";
+import { makeRng, shuffle, type Figure } from "./question-templates";
 
 export type DrillQuestion = {
   key: string;
@@ -12,8 +12,10 @@ export type DrillQuestion = {
   calculator: boolean;
   ap_value: number;
   prompt: string;
+  figure?: Figure;
   choices: Array<{ label: string; text: string }>;
 };
+
 
 export const getDrillSet = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
