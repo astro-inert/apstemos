@@ -10,7 +10,12 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TopicRundownRouteImport } from './routes/topic-rundown'
+import { Route as StatisticsRouteImport } from './routes/statistics'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as PhysicsCMechanicsRouteImport } from './routes/physics-c-mechanics'
+import { Route as PhysicsCElectricityMagnetismRouteImport } from './routes/physics-c-electricity-magnetism'
+import { Route as Physics2RouteImport } from './routes/physics-2'
+import { Route as Physics1RouteImport } from './routes/physics-1'
 import { Route as LatexMasterSheetRouteImport } from './routes/latex-master-sheet'
 import { Route as FrqsByTypeRouteImport } from './routes/frqs-by-type'
 import { Route as ExamStrategyRouteImport } from './routes/exam-strategy'
@@ -32,9 +37,35 @@ const TopicRundownRoute = TopicRundownRouteImport.update({
   path: '/topic-rundown',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StatisticsRoute = StatisticsRouteImport.update({
+  id: '/statistics',
+  path: '/statistics',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PhysicsCMechanicsRoute = PhysicsCMechanicsRouteImport.update({
+  id: '/physics-c-mechanics',
+  path: '/physics-c-mechanics',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PhysicsCElectricityMagnetismRoute =
+  PhysicsCElectricityMagnetismRouteImport.update({
+    id: '/physics-c-electricity-magnetism',
+    path: '/physics-c-electricity-magnetism',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const Physics2Route = Physics2RouteImport.update({
+  id: '/physics-2',
+  path: '/physics-2',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Physics1Route = Physics1RouteImport.update({
+  id: '/physics-1',
+  path: '/physics-1',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LatexMasterSheetRoute = LatexMasterSheetRouteImport.update({
@@ -124,7 +155,12 @@ export interface FileRoutesByFullPath {
   '/exam-strategy': typeof ExamStrategyRoute
   '/frqs-by-type': typeof FrqsByTypeRoute
   '/latex-master-sheet': typeof LatexMasterSheetRoute
+  '/physics-1': typeof Physics1Route
+  '/physics-2': typeof Physics2Route
+  '/physics-c-electricity-magnetism': typeof PhysicsCElectricityMagnetismRoute
+  '/physics-c-mechanics': typeof PhysicsCMechanicsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/statistics': typeof StatisticsRoute
   '/topic-rundown': typeof TopicRundownRoute
   '/command-center': typeof AuthenticatedCommandCenterRoute
   '/practice': typeof AuthenticatedPracticeRoute
@@ -142,7 +178,12 @@ export interface FileRoutesByTo {
   '/exam-strategy': typeof ExamStrategyRoute
   '/frqs-by-type': typeof FrqsByTypeRoute
   '/latex-master-sheet': typeof LatexMasterSheetRoute
+  '/physics-1': typeof Physics1Route
+  '/physics-2': typeof Physics2Route
+  '/physics-c-electricity-magnetism': typeof PhysicsCElectricityMagnetismRoute
+  '/physics-c-mechanics': typeof PhysicsCMechanicsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/statistics': typeof StatisticsRoute
   '/topic-rundown': typeof TopicRundownRoute
   '/command-center': typeof AuthenticatedCommandCenterRoute
   '/practice': typeof AuthenticatedPracticeRoute
@@ -162,7 +203,12 @@ export interface FileRoutesById {
   '/exam-strategy': typeof ExamStrategyRoute
   '/frqs-by-type': typeof FrqsByTypeRoute
   '/latex-master-sheet': typeof LatexMasterSheetRoute
+  '/physics-1': typeof Physics1Route
+  '/physics-2': typeof Physics2Route
+  '/physics-c-electricity-magnetism': typeof PhysicsCElectricityMagnetismRoute
+  '/physics-c-mechanics': typeof PhysicsCMechanicsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/statistics': typeof StatisticsRoute
   '/topic-rundown': typeof TopicRundownRoute
   '/_authenticated/command-center': typeof AuthenticatedCommandCenterRoute
   '/_authenticated/practice': typeof AuthenticatedPracticeRoute
@@ -182,7 +228,12 @@ export interface FileRouteTypes {
     | '/exam-strategy'
     | '/frqs-by-type'
     | '/latex-master-sheet'
+    | '/physics-1'
+    | '/physics-2'
+    | '/physics-c-electricity-magnetism'
+    | '/physics-c-mechanics'
     | '/sitemap.xml'
+    | '/statistics'
     | '/topic-rundown'
     | '/command-center'
     | '/practice'
@@ -200,7 +251,12 @@ export interface FileRouteTypes {
     | '/exam-strategy'
     | '/frqs-by-type'
     | '/latex-master-sheet'
+    | '/physics-1'
+    | '/physics-2'
+    | '/physics-c-electricity-magnetism'
+    | '/physics-c-mechanics'
     | '/sitemap.xml'
+    | '/statistics'
     | '/topic-rundown'
     | '/command-center'
     | '/practice'
@@ -219,7 +275,12 @@ export interface FileRouteTypes {
     | '/exam-strategy'
     | '/frqs-by-type'
     | '/latex-master-sheet'
+    | '/physics-1'
+    | '/physics-2'
+    | '/physics-c-electricity-magnetism'
+    | '/physics-c-mechanics'
     | '/sitemap.xml'
+    | '/statistics'
     | '/topic-rundown'
     | '/_authenticated/command-center'
     | '/_authenticated/practice'
@@ -239,7 +300,12 @@ export interface RootRouteChildren {
   ExamStrategyRoute: typeof ExamStrategyRoute
   FrqsByTypeRoute: typeof FrqsByTypeRoute
   LatexMasterSheetRoute: typeof LatexMasterSheetRoute
+  Physics1Route: typeof Physics1Route
+  Physics2Route: typeof Physics2Route
+  PhysicsCElectricityMagnetismRoute: typeof PhysicsCElectricityMagnetismRoute
+  PhysicsCMechanicsRoute: typeof PhysicsCMechanicsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  StatisticsRoute: typeof StatisticsRoute
   TopicRundownRoute: typeof TopicRundownRoute
   QuestionNavigatorUnitIdRoute: typeof QuestionNavigatorUnitIdRouteWithChildren
   QuestionNavigatorIndexRoute: typeof QuestionNavigatorIndexRoute
@@ -254,11 +320,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TopicRundownRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/statistics': {
+      id: '/statistics'
+      path: '/statistics'
+      fullPath: '/statistics'
+      preLoaderRoute: typeof StatisticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sitemap.xml': {
       id: '/sitemap.xml'
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/physics-c-mechanics': {
+      id: '/physics-c-mechanics'
+      path: '/physics-c-mechanics'
+      fullPath: '/physics-c-mechanics'
+      preLoaderRoute: typeof PhysicsCMechanicsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/physics-c-electricity-magnetism': {
+      id: '/physics-c-electricity-magnetism'
+      path: '/physics-c-electricity-magnetism'
+      fullPath: '/physics-c-electricity-magnetism'
+      preLoaderRoute: typeof PhysicsCElectricityMagnetismRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/physics-2': {
+      id: '/physics-2'
+      path: '/physics-2'
+      fullPath: '/physics-2'
+      preLoaderRoute: typeof Physics2RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/physics-1': {
+      id: '/physics-1'
+      path: '/physics-1'
+      fullPath: '/physics-1'
+      preLoaderRoute: typeof Physics1RouteImport
       parentRoute: typeof rootRouteImport
     }
     '/latex-master-sheet': {
@@ -407,7 +508,12 @@ const rootRouteChildren: RootRouteChildren = {
   ExamStrategyRoute: ExamStrategyRoute,
   FrqsByTypeRoute: FrqsByTypeRoute,
   LatexMasterSheetRoute: LatexMasterSheetRoute,
+  Physics1Route: Physics1Route,
+  Physics2Route: Physics2Route,
+  PhysicsCElectricityMagnetismRoute: PhysicsCElectricityMagnetismRoute,
+  PhysicsCMechanicsRoute: PhysicsCMechanicsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  StatisticsRoute: StatisticsRoute,
   TopicRundownRoute: TopicRundownRoute,
   QuestionNavigatorUnitIdRoute: QuestionNavigatorUnitIdRouteWithChildren,
   QuestionNavigatorIndexRoute: QuestionNavigatorIndexRoute,
