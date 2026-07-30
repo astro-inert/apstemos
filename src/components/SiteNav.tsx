@@ -43,9 +43,6 @@ export function SiteNav({ subject = "calc-bc" }: { subject?: SubjectId }) {
                 ))}
               </div>
             </div>
-            <Link to="/common-mistakes" className="px-3 py-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-elevated transition-colors">
-              Common Mistakes
-            </Link>
             <Link to="/108-points-breakdown" className="px-3 py-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-elevated transition-colors">
               108-Point Map
             </Link>
