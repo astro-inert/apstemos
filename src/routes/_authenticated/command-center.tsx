@@ -21,7 +21,7 @@ import { getPerformanceSnapshot } from "@/lib/performance.functions";
 import { getBankAccess } from "@/lib/question-bank.functions";
 import { QN_UNITS } from "@/lib/question-navigator-data";
 import { useCurrentSubject } from "@/lib/use-subject";
-import { SUBJECTS } from "@/lib/subjects";
+import { SUBJECTS, type SubjectId } from "@/lib/subjects";
 
 export const Route = createFileRoute("/_authenticated/command-center")({
   head: () => ({ meta: [{ title: "Score Command Center — AP Calc OS" }] }),
