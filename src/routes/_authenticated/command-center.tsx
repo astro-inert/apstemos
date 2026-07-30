@@ -21,6 +21,7 @@ import { getPerformanceSnapshot, UNIT_MASTERY_THRESHOLD, type PerformanceSnapsho
 import { getBankAccess } from "@/lib/question-bank.functions";
 import { QN_UNITS } from "@/lib/question-navigator-data";
 import { useCurrentSubject } from "@/lib/use-subject";
+import { LaTeX } from "@/components/LaTeX";
 import { SUBJECTS, type SubjectId } from "@/lib/subjects";
 
 export const Route = createFileRoute("/_authenticated/command-center")({
