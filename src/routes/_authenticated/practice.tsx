@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { ArrowRight, CheckCircle2, RefreshCw, XCircle } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { LaTeX } from "@/components/LaTeX";
+import { SlopeField } from "@/components/SlopeField";
+
 import { QN_UNITS } from "@/lib/question-navigator-data";
 import { getDrillSet, submitDrillAttempt, type DrillQuestion } from "@/lib/drill.functions";
 
