@@ -206,3 +206,77 @@
     letter-spacing: -0.02em;
   }
 }
+
+/* ── Subject accent theming ─────────────────────────────────────────────
+   Each subject overrides the primary/accent tokens on its page wrapper so
+   the whole design system re-tints without any hard visual reset. */
+.subject-theme,
+.subject-theme * {
+  transition: color 0.4s var(--ease-out-expo), background-color 0.4s var(--ease-out-expo),
+    border-color 0.4s var(--ease-out-expo);
+}
+
+[data-subject="physics-1"] {            /* Electric Blue */
+  --primary: oklch(0.58 0.2 258);
+  --ring: oklch(0.58 0.2 258);
+  --accent: oklch(0.95 0.04 258);
+  --accent-foreground: oklch(0.36 0.14 258);
+}
+.dark [data-subject="physics-1"] {
+  --primary: oklch(0.72 0.16 258);
+  --ring: oklch(0.72 0.16 258);
+  --accent: oklch(0.32 0.08 258);
+  --accent-foreground: oklch(0.9 0.08 258);
+}
+
+[data-subject="physics-2"] {            /* Cyan */
+  --primary: oklch(0.62 0.14 208);
+  --ring: oklch(0.62 0.14 208);
+  --accent: oklch(0.95 0.04 208);
+  --accent-foreground: oklch(0.38 0.1 208);
+}
+.dark [data-subject="physics-2"] {
+  --primary: oklch(0.78 0.13 208);
+  --ring: oklch(0.78 0.13 208);
+  --accent: oklch(0.32 0.07 208);
+  --accent-foreground: oklch(0.9 0.08 208);
+}
+
+[data-subject="physics-c-mech"] {       /* Navy */
+  --primary: oklch(0.42 0.15 265);
+  --ring: oklch(0.42 0.15 265);
+  --accent: oklch(0.94 0.03 265);
+  --accent-foreground: oklch(0.3 0.12 265);
+}
+.dark [data-subject="physics-c-mech"] {
+  --primary: oklch(0.62 0.15 265);
+  --ring: oklch(0.62 0.15 265);
+  --accent: oklch(0.3 0.08 265);
+  --accent-foreground: oklch(0.88 0.08 265);
+}
+
+[data-subject="physics-c-em"] {         /* Indigo */
+  --primary: oklch(0.55 0.19 283);
+  --ring: oklch(0.55 0.19 283);
+  --accent: oklch(0.95 0.04 283);
+  --accent-foreground: oklch(0.36 0.14 283);
+}
+.dark [data-subject="physics-c-em"] {
+  --primary: oklch(0.7 0.16 283);
+  --ring: oklch(0.7 0.16 283);
+  --accent: oklch(0.32 0.08 283);
+  --accent-foreground: oklch(0.9 0.08 283);
+}
+
+[data-subject="stats"] {                /* Emerald / Teal */
+  --primary: oklch(0.6 0.13 172);
+  --ring: oklch(0.6 0.13 172);
+  --accent: oklch(0.94 0.04 172);
+  --accent-foreground: oklch(0.36 0.1 172);
+}
+.dark [data-subject="stats"] {
+  --primary: oklch(0.75 0.13 172);
+  --ring: oklch(0.75 0.13 172);
+  --accent: oklch(0.3 0.07 172);
+  --accent-foreground: oklch(0.9 0.08 172);
+}

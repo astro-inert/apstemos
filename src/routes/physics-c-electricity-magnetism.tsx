@@ -2,9 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SubjectHome } from "@/components/SubjectHome";
 import { SUBJECTS } from "@/lib/subjects";
 
-const subject = SUBJECTS["calc-bc"];
+const subject = SUBJECTS["physics-c-em"];
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/physics-c-electricity-magnetism")({
   head: () => ({
     meta: [
       { title: subject.meta.title },
