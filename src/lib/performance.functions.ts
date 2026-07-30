@@ -111,9 +111,18 @@ export const getPerformanceSnapshot = createServerFn({ method: "GET" })
       byUnit.set(a.unit_id, cur);
     }
 
+    // Which subtopics has the user actually touched? Mastery only unlocks with
+    // full subtopic coverage, so a unit can't look "mastered" off one topic.
+    const touchedTopics = new Set(attempts.map((a) => a.topic_slug).filter(Boolean) as string[]);
+
     const unit_mastery = units.map((u) => {
       const m = byUnit.get(u.id);
       const mastery = m && m.p > 0 ? Math.round((m.e / m.p) * 100) : -1;
+      const qnUnit = QN_UNITS.find((q) => q.number === u.number);
+      const topics = qnUnit?.topics ?? [];
+      const subtopics_total = topics.length;
+      const subtopics_covered = topics.filter((t) => touchedTopics.has(t.slug)).length;
+      const attemptsN = m?.n ?? 0;
       return {
         unit_id: u.id,
         number: u.number,
@@ -121,8 +130,15 @@ export const getPerformanceSnapshot = createServerFn({ method: "GET" })
         ap_weight_pct: Number(u.ap_weight_pct),
         ap_points: u.ap_points,
         mastery,
-        attempts: m?.n ?? 0,
-        mastery_unlocked: (m?.n ?? 0) >= UNIT_MASTERY_THRESHOLD,
+        attempts: attemptsN,
+        subtopics_covered,
+        subtopics_total,
+        mastery_unlocked:
+          attemptsN >= UNIT_MASTERY_THRESHOLD &&
+          subtopics_total > 0 &&
+          subtopics_covered >= subtopics_total * UNIT_SUBTOPIC_MIN,
+      };
+
       };
     });
 

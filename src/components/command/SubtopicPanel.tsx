@@ -1,32 +1,40 @@
 import { Link } from "@tanstack/react-router";
 import { Lock } from "lucide-react";
 import type { PerformanceSnapshot } from "@/lib/performance.functions";
-import { SUBTOPIC_THRESHOLD } from "@/lib/performance.functions";
+import { STRENGTH_CUTOFF, SUBTOPIC_THRESHOLD } from "@/lib/performance.functions";
 
 type Sub = PerformanceSnapshot["subtopics"][number];
 
 export function SubtopicPanel({ subtopics }: { subtopics: Sub[] }) {
   const unlocked = subtopics.filter((s) => s.unlocked);
   const building = subtopics.filter((s) => !s.unlocked);
-  const strengths = [...unlocked].sort((a, b) => b.accuracy - a.accuracy).slice(0, 6);
-  const weaknesses = [...unlocked].sort((a, b) => a.accuracy - b.accuracy).slice(0, 6);
+  // A subtopic is either a strength or a weakness — never both.
+  const strengths = unlocked
+    .filter((s) => s.accuracy >= STRENGTH_CUTOFF)
+    .sort((a, b) => b.accuracy - a.accuracy)
+    .slice(0, 6);
+  const weaknesses = unlocked
+    .filter((s) => s.accuracy < STRENGTH_CUTOFF)
+    .sort((a, b) => a.accuracy - b.accuracy)
+    .slice(0, 6);
 
   return (
     <div className="grid lg:grid-cols-3 gap-4">
       <Column
         title="Subtopic strengths"
-        sub={`Accuracy by subtopic, unlocked at ${SUBTOPIC_THRESHOLD}+ questions.`}
+        sub={`At or above ${STRENGTH_CUTOFF}% accuracy, unlocked at ${SUBTOPIC_THRESHOLD}+ questions.`}
         rows={strengths}
         tone="emerald"
-        empty={`Answer ${SUBTOPIC_THRESHOLD}+ questions in a subtopic to rank it.`}
+        empty={`No subtopic is at ${STRENGTH_CUTOFF}%+ yet with ${SUBTOPIC_THRESHOLD}+ questions logged.`}
       />
       <Column
         title="Subtopic weaknesses"
-        sub="Your lowest-accuracy subtopics — drill these first."
+        sub={`Below ${STRENGTH_CUTOFF}% accuracy — drill these first.`}
         rows={weaknesses}
         tone="rose"
-        empty={`Answer ${SUBTOPIC_THRESHOLD}+ questions in a subtopic to rank it.`}
+        empty={`Nothing below ${STRENGTH_CUTOFF}% with ${SUBTOPIC_THRESHOLD}+ questions logged.`}
       />
+
       <div className="rounded-xl border border-border bg-card p-5">
         <div className="text-xs uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5">
           <Lock className="h-3.5 w-3.5" /> Building data
