@@ -291,6 +291,7 @@ function SystemMap({ subject }: { subject: SubjectConfig }) {
     },
   ];
 
+  const stepAccents: Accent[] = ["primary", "violet", "rose", "blue"];
   const primaryTitles = new Set(primary.map((p) => p.tool.title));
   const secondary = subject.tools.filter((t) => !primaryTitles.has(t.title));
 
@@ -319,7 +320,7 @@ function SystemMap({ subject }: { subject: SubjectConfig }) {
             <ol className="relative grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {primary.map(({ tool, caption }, idx) => {
                 const Icon = tool.icon;
-                const a = accentMap[tool.accent];
+                const a = accentMap[stepAccents[idx] ?? tool.accent];
                 const inner = (
                   <>
                     <div className={`pointer-events-none absolute -top-16 -right-16 h-40 w-40 rounded-full blur-3xl opacity-60 bg-gradient-to-br ${a.glow} to-transparent`} />
