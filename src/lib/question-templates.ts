@@ -9,11 +9,22 @@
 
 export type Difficulty = "easy" | "medium" | "hard";
 
+/** An optional diagram rendered alongside the prompt. */
+export type Figure = {
+  kind: "slope-field";
+  /** dy/dx = a·x + b·y */
+  a: number;
+  b: number;
+  /** grid half-width, e.g. 3 → x,y ∈ [-3, 3] */
+  extent: number;
+};
+
 export type BuiltQuestion = {
   prompt: string;
   correct: string;
   distractors: string[];
   explanation: string;
+  figure?: Figure;
 };
 
 export type QuestionTemplate = {
@@ -25,6 +36,7 @@ export type QuestionTemplate = {
   mistakes?: string[];
   build: (r: RNG) => BuiltQuestion;
 };
+
 
 /* ------------------------------------------------------------------ */
 /* Deterministic RNG                                                   */
@@ -1360,19 +1372,116 @@ export const TEMPLATES: QuestionTemplate[] = [
     topic: "slope-fields",
     difficulty: "medium",
     build: (r) => {
-      const a = ri(r, 1, 5);
-      const b = ri(r, 1, 5);
-      const x0 = ri(r, 1, 4);
-      const y0 = ri(r, 1, 4);
+      const a = ri(r, 1, 3);
+      const b = pick(r, [-2, -1, 1, 2] as const);
+      const x0 = ri(r, 1, 3);
+      const y0 = ri(r, 1, 3);
       const slope = a * x0 + b * y0;
       return {
-        prompt: `A slope field is drawn for $\\dfrac{dy}{dx} = ${a}x ${term(b, "y")}$. What is the slope of the segment drawn at the point $(${x0},${y0})$?`,
+        prompt: `The slope field below is drawn for $\\dfrac{dy}{dx} = ${a}x ${term(b, "y")}$. What is the slope of the segment at the point $(${x0},${y0})$?`,
         correct: `${slope}`,
         distractors: [`${a * x0}`, `${b * y0}`, `${a * y0 + b * x0}`],
         explanation: `Substitute the point into the differential equation: $${a}(${x0}) ${term(b, `(${y0})`)} = ${slope}$.`,
+        figure: { kind: "slope-field", a, b, extent: 3 },
       };
     },
   },
+  {
+    id: "u7-slope-field-identify",
+    unit: U7,
+    topic: "slope-fields",
+    difficulty: "medium",
+    build: (r) => {
+      const a = pick(r, [-2, -1, 0, 1, 2] as const);
+      const b = pick(r, [-2, -1, 1, 2] as const);
+      const de = (p: number, q: number) => `\\dfrac{dy}{dx} = ${poly([[p, "x"], [q, "y"]]) || "0"}`;
+      return {
+        prompt: `Which differential equation produced the slope field shown below?`,
+        correct: de(a, b),
+        distractors: [de(b, a), de(-a, b), de(a, -b)],
+        explanation: `Along the line where the segments are horizontal the slope is $0$, which happens when $${poly([[a, "x"], [b, "y"]])} = 0$. Checking one more point, such as $(1,1)$, gives slope $${a + b}$ — only $${de(a, b)}$ matches both.`,
+        figure: { kind: "slope-field", a, b, extent: 3 },
+      };
+    },
+  },
+  {
+    id: "u1-horizontal-asymptote-rational",
+    unit: U1,
+    topic: "limits-at-infinity",
+    difficulty: "easy",
+    build: (r) => {
+      const p = ri(r, 2, 9);
+      const q = ri(r, 2, 9);
+      const c = ri(r, 1, 9);
+      const kind = pick(r, ["equal", "smaller", "larger"] as const);
+      if (kind === "equal") {
+        return {
+          prompt: `Identify the horizontal asymptote of $f(x)=\\dfrac{${p}x^{2} ${term(c, "x")}}{${q}x^{2} ${term(-c, "")}}$.`,
+          correct: `y = ${frac(p, q)}`,
+          distractors: [`y = ${frac(q, p)}`, `y = 0`, `\\text{There is no horizontal asymptote.}`],
+          explanation: `Numerator and denominator have the same degree, so the horizontal asymptote is the ratio of the leading coefficients: $y = ${frac(p, q)}$.`,
+        };
+      }
+      if (kind === "smaller") {
+        return {
+          prompt: `Identify the horizontal asymptote of $f(x)=\\dfrac{${p}x ${term(c, "")}}{${q}x^{2} ${term(-c, "")}}$.`,
+          correct: `y = 0`,
+          distractors: [`y = ${frac(p, q)}`, `y = ${p}`, `\\text{There is no horizontal asymptote.}`],
+          explanation: `The denominator grows faster (degree $2$ versus degree $1$), so $f(x)\\to 0$ in both directions and the asymptote is $y = 0$.`,
+        };
+      }
+      return {
+        prompt: `Identify the horizontal asymptote of $f(x)=\\dfrac{${p}x^{2} ${term(c, "")}}{${q}x ${term(-c, "")}}$.`,
+        correct: `\\text{There is no horizontal asymptote.}`,
+        distractors: [`y = ${frac(p, q)}`, `y = 0`, `y = ${p}`],
+        explanation: `The numerator has the larger degree, so $|f(x)|\\to\\infty$ as $x\\to\\pm\\infty$. There is no horizontal asymptote (the graph has a slant asymptote instead).`,
+      };
+    },
+  },
+  {
+    id: "u1-horizontal-asymptote-exponential",
+    unit: U1,
+    topic: "limits-at-infinity",
+    difficulty: "medium",
+    build: (r) => {
+      const a = ri(r, 2, 9);
+      const b = ri(r, 2, 9);
+      const c = ri(r, 2, 6);
+      return {
+        prompt: `The function $f(x)=\\dfrac{${a}e^{x} ${term(b, "")}}{e^{x} ${term(c, "")}}$ has how many horizontal asymptotes, and where?`,
+        correct: `\\text{Two: } y = ${a} \\text{ and } y = ${frac(b, c)}.`,
+        distractors: [
+          `\\text{One: } y = ${a}.`,
+          `\\text{One: } y = ${frac(b, c)}.`,
+          `\\text{Two: } y = ${a} \\text{ and } y = 0.`,
+        ],
+        explanation: `As $x\\to\\infty$, $e^{x}$ dominates and $f(x)\\to ${a}$. As $x\\to-\\infty$, $e^{x}\\to 0$, leaving $\\dfrac{${b}}{${c}} = ${frac(b, c)}$. So the graph has two horizontal asymptotes.`,
+      };
+    },
+  },
+  {
+    id: "u1-horizontal-asymptote-radical",
+    unit: U1,
+    topic: "limits-at-infinity",
+    difficulty: "hard",
+    mistakes: ["sign-error"],
+    build: (r) => {
+      const a = pick(r, [4, 9, 16, 25, 36] as const);
+      const k = Math.sqrt(a);
+      const b = ri(r, 2, 7);
+      return {
+        prompt: `Find every horizontal asymptote of $f(x)=\\dfrac{\\sqrt{${a}x^{2} ${term(b, "")}}}{${b}x ${term(-1, "")}}$.`,
+        correct: `y = ${frac(k, b)} \\text{ and } y = ${frac(-k, b)}`,
+        distractors: [
+          `y = ${frac(k, b)} \\text{ only}`,
+          `y = ${frac(a, b)} \\text{ and } y = ${frac(-a, b)}`,
+          `y = 0`,
+        ],
+        explanation: `For large $|x|$, $\\sqrt{${a}x^{2} ${term(b, "")}}\\approx ${k}|x|$. As $x\\to\\infty$ this is $${k}x$, giving $y = ${frac(k, b)}$; as $x\\to-\\infty$ it is $-${k}x$, giving $y = ${frac(-k, b)}$. Forgetting the absolute value is the classic sign error here.`,
+      };
+    },
+  },
+
   {
     id: "u8-average-value",
     unit: U8,

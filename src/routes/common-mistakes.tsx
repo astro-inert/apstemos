@@ -87,7 +87,10 @@ function CommonMistakes() {
                     <AlertTriangle className="h-4 w-4" />
                   </div>
                   <div>
-                    <h3 className="font-display font-semibold leading-tight">{m.title}</h3>
+                    <h3 className="font-display font-semibold leading-tight">
+                      <LaTeX>{m.title}</LaTeX>
+                    </h3>
+
                     <div className="text-[10px] uppercase tracking-wider text-muted-foreground mt-0.5">{m.category}</div>
                   </div>
                 </div>

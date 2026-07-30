@@ -24,12 +24,15 @@ const sections = [
   ]},
 ];
 
+/** Heatmap: 5 = deep green, 4 = green, 3 = amber, 2 = orange, 1 = red. */
 const cutoffs = [
-  { score: "5", min: 72, color: "primary" },
-  { score: "4", min: 58, color: "secondary" },
-  { score: "3", min: 46, color: "accent" },
-  { score: "2", min: 32, color: "muted" },
+  { score: "5", range: "72+ raw points", tone: "bg-emerald-500/15 text-emerald-500 border-emerald-500/40" },
+  { score: "4", range: "58 – 71 raw points", tone: "bg-lime-500/15 text-lime-600 border-lime-500/40" },
+  { score: "3", range: "46 – 57 raw points", tone: "bg-amber-500/15 text-amber-600 border-amber-500/40" },
+  { score: "2", range: "32 – 45 raw points", tone: "bg-orange-500/15 text-orange-600 border-orange-500/40" },
+  { score: "1", range: "0 – 31 raw points", tone: "bg-red-500/15 text-red-600 border-red-500/40" },
 ] as const;
+
 
 function Page() {
   return (
@@ -59,25 +62,21 @@ function Page() {
       </div>
 
       <div className="mt-12">
-        <h2 className="font-display text-3xl font-extrabold mb-6">Approximate score cutoffs</h2>
-        <div className="grid sm:grid-cols-4 gap-4">
-          {cutoffs.map((c) => {
-            const map: Record<string, string> = {
-              primary: "bg-primary/10 text-primary",
-              secondary: "bg-secondary/10 text-secondary",
-              accent: "bg-accent/20 text-foreground",
-              muted: "bg-muted text-muted-foreground",
-            };
-            return (
-              <div key={c.score} className={`p-6 rounded-2xl text-center ${map[c.color]}`}>
-                <div className="text-xs font-bold uppercase tracking-widest opacity-70">AP Score</div>
-                <div className="font-display text-5xl font-extrabold my-2">{c.score}</div>
-                <div className="text-sm font-semibold">{c.min}+ raw points</div>
-              </div>
-            );
-          })}
+        <h2 className="font-display text-3xl font-extrabold mb-2">Approximate score cutoffs</h2>
+        <p className="text-sm text-muted-foreground mb-6">
+          Read it like a heatmap — red is danger, green is a 5.
+        </p>
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+          {cutoffs.map((c) => (
+            <div key={c.score} className={`p-6 rounded-2xl text-center border ${c.tone}`}>
+              <div className="text-xs font-bold uppercase tracking-widest opacity-70">AP Score</div>
+              <div className="font-display text-5xl font-extrabold my-2">{c.score}</div>
+              <div className="text-sm font-semibold">{c.range}</div>
+            </div>
+          ))}
         </div>
       </div>
+
     </PageShell>
   );
 }

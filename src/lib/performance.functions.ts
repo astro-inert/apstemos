@@ -2,10 +2,15 @@ import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { QN_UNITS } from "./question-navigator-data";
 
-/** A unit needs this many logged questions before mastery % is trusted. */
+/** A unit needs this many logged questions before mastery % is trusted… */
 export const UNIT_MASTERY_THRESHOLD = 10;
+/** …and every subtopic in the unit must have at least this many logged questions. */
+export const UNIT_SUBTOPIC_MIN = 1;
 /** A subtopic needs this many logged questions before it counts as a strength/weakness. */
 export const SUBTOPIC_THRESHOLD = 3;
+/** Accuracy at or above this counts as a strength; below it, a weakness. Never both. */
+export const STRENGTH_CUTOFF = 70;
+
 
 export type PerformanceSnapshot = {
   profile: {
@@ -29,9 +34,13 @@ export type PerformanceSnapshot = {
     ap_points: number;
     mastery: number; // 0-100, or -1 if no data
     attempts: number;
-    /** true once attempts >= UNIT_MASTERY_THRESHOLD */
+    /** how many of the unit's subtopics have at least one logged question */
+    subtopics_covered: number;
+    subtopics_total: number;
+    /** true once attempts >= UNIT_MASTERY_THRESHOLD AND every subtopic has been touched */
     mastery_unlocked: boolean;
   }>;
+
   subtopics: Array<{
     unit_slug: string;
     unit_number: number;
@@ -102,9 +111,18 @@ export const getPerformanceSnapshot = createServerFn({ method: "GET" })
       byUnit.set(a.unit_id, cur);
     }
 
+    // Which subtopics has the user actually touched? Mastery only unlocks with
+    // full subtopic coverage, so a unit can't look "mastered" off one topic.
+    const touchedTopics = new Set(attempts.map((a) => a.topic_slug).filter(Boolean) as string[]);
+
     const unit_mastery = units.map((u) => {
       const m = byUnit.get(u.id);
       const mastery = m && m.p > 0 ? Math.round((m.e / m.p) * 100) : -1;
+      const qnUnit = QN_UNITS.find((q) => q.number === u.number);
+      const topics = qnUnit?.topics ?? [];
+      const subtopics_total = topics.length;
+      const subtopics_covered = topics.filter((t) => touchedTopics.has(t.slug)).length;
+      const attemptsN = m?.n ?? 0;
       return {
         unit_id: u.id,
         number: u.number,
@@ -112,9 +130,15 @@ export const getPerformanceSnapshot = createServerFn({ method: "GET" })
         ap_weight_pct: Number(u.ap_weight_pct),
         ap_points: u.ap_points,
         mastery,
-        attempts: m?.n ?? 0,
-        mastery_unlocked: (m?.n ?? 0) >= UNIT_MASTERY_THRESHOLD,
+        attempts: attemptsN,
+        subtopics_covered,
+        subtopics_total,
+        mastery_unlocked:
+          attemptsN >= UNIT_MASTERY_THRESHOLD &&
+          subtopics_total > 0 &&
+          subtopics_covered >= subtopics_total * UNIT_SUBTOPIC_MIN,
       };
+
     });
 
     const untouched_units = unit_mastery
