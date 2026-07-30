@@ -553,7 +553,8 @@ function TopMistakesPanel({ mistakes }: { mistakes: Array<{ code: string; title:
           {mistakes.map((m) => (
             <div key={m.code} className="flex items-center gap-3 p-3 rounded-lg bg-elevated/50 border border-border">
               <div className="flex-1 min-w-0">
-                <div className="text-sm font-medium truncate">{m.title}</div>
+                <div className="text-sm font-medium truncate"><LaTeX>{m.title}</LaTeX></div>
+
                 <div className="text-xs text-muted-foreground">{m.category} · {m.occurrences}× occurrences</div>
               </div>
               <div className="text-right shrink-0">
