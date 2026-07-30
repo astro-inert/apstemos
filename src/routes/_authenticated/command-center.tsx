@@ -17,7 +17,7 @@ import { AppShell } from "@/components/AppShell";
 import { AnswerLogPanel } from "@/components/command/AnswerLogPanel";
 import { QuestionBankPanel } from "@/components/command/QuestionBankPanel";
 import { SubtopicPanel } from "@/components/command/SubtopicPanel";
-import { getPerformanceSnapshot } from "@/lib/performance.functions";
+import { getPerformanceSnapshot, UNIT_MASTERY_THRESHOLD, type PerformanceSnapshot } from "@/lib/performance.functions";
 import { getBankAccess } from "@/lib/question-bank.functions";
 import { QN_UNITS } from "@/lib/question-navigator-data";
 import { useCurrentSubject } from "@/lib/use-subject";
@@ -370,7 +370,7 @@ function FastestPathCard({ actions }: { actions: { title: string; detail: string
   );
 }
 
-type UnitRow = { unit_id: string; number: number; name: string; ap_points: number; ap_weight_pct: number; mastery: number; attempts: number };
+type UnitRow = PerformanceSnapshot["unit_mastery"][number];
 
 function PerformanceDiagnostics({ units }: { units: UnitRow[] }) {
   const touched = units.filter((u) => u.mastery >= 0);
