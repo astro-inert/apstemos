@@ -9,11 +9,22 @@
 
 export type Difficulty = "easy" | "medium" | "hard";
 
+/** An optional diagram rendered alongside the prompt. */
+export type Figure = {
+  kind: "slope-field";
+  /** dy/dx = a·x + b·y */
+  a: number;
+  b: number;
+  /** grid half-width, e.g. 3 → x,y ∈ [-3, 3] */
+  extent: number;
+};
+
 export type BuiltQuestion = {
   prompt: string;
   correct: string;
   distractors: string[];
   explanation: string;
+  figure?: Figure;
 };
 
 export type QuestionTemplate = {
@@ -25,6 +36,7 @@ export type QuestionTemplate = {
   mistakes?: string[];
   build: (r: RNG) => BuiltQuestion;
 };
+
 
 /* ------------------------------------------------------------------ */
 /* Deterministic RNG                                                   */
