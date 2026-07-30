@@ -47,8 +47,10 @@ export const getDrillSet = createServerFn({ method: "POST" })
         calculator: q.calculator,
         ap_value: q.ap_value,
         prompt: q.prompt,
+        figure: q.figure,
         choices: q.choices,
       }));
+
     return { total: bankCount(filter), questions };
   });
 
