@@ -163,7 +163,7 @@ function CalcCommandCenter() {
   );
 }
 
-function OtherSubjectCommandCenter({ subjectId }: { subjectId: Exclude<Parameters<typeof useCurrentSubject>[0], never> extends never ? never : ReturnType<typeof useCurrentSubject> }) {
+function OtherSubjectCommandCenter({ subjectId }: { subjectId: SubjectId }) {
   const subject = SUBJECTS[subjectId];
   const daysToExam = Math.max(0, Math.ceil((new Date(subject.examDate).getTime() - Date.now()) / 86400000));
   const { raw, total, target, engineLabel } = subject.score;

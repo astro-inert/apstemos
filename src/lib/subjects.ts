@@ -467,8 +467,20 @@ export const SUBJECTS: Record<SubjectId, SubjectConfig> = {
       { title: "Confusing causation and association", category: "Design", points: 2 },
       { title: "Interpreting the p-value as P(H₀)", category: "Testing", points: 2 },
     ],
+    units: [
+      { number: 1, name: "Exploring One-Variable Data", weightPct: 20, points: 20 },
+      { number: 2, name: "Exploring Two-Variable Data", weightPct: 6, points: 6 },
+      { number: 3, name: "Collecting Data", weightPct: 14, points: 14 },
+      { number: 4, name: "Probability, Random Variables, and Probability Distributions", weightPct: 15, points: 15 },
+      { number: 5, name: "Sampling Distributions", weightPct: 9, points: 9 },
+      { number: 6, name: "Inference for Categorical Data: Proportions", weightPct: 13, points: 13 },
+      { number: 7, name: "Inference for Quantitative Data: Means", weightPct: 14, points: 14 },
+      { number: 8, name: "Inference for Categorical Data: Chi-Square", weightPct: 4, points: 4 },
+      { number: 9, name: "Inference for Quantitative Data: Slopes", weightPct: 5, points: 5 },
+    ],
     ctaTitle: "Stop guessing. Start justifying.",
     ctaSub: "Free to start. No credit card. Your predicted AP score updates with every question you answer.",
+
     meta: {
       title: "AP Statistics Performance OS — Everything you need for a 5",
       description:
