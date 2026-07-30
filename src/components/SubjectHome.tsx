@@ -243,41 +243,169 @@ function ScoreCommandPreview({ subject }: { subject: SubjectConfig }) {
 }
 
 function SystemMap({ subject }: { subject: SubjectConfig }) {
+  const byTitle = (t: string) => subject.tools.find((x) => x.title === t);
+  const commandCenter = byTitle("Score Command Center");
+  const navigator = byTitle("Question Type Navigator");
+
+  const primary: { tool: SubjectTool; caption: string }[] = [
+    {
+      tool: {
+        icon: PencilLine,
+        title: "Practice",
+        description: "Original AP-style questions generated from real exam patterns.",
+        accent: "primary",
+        to: "/practice",
+      },
+      caption: "Every answer is written into your performance model →",
+    },
+    {
+      tool:
+        commandCenter ?? {
+          icon: Gauge,
+          title: "Score Command Center",
+          description: "Predicted score, point gap, and ranked next moves.",
+          accent: "primary",
+          to: "/command-center",
+        },
+      caption: "Your weakest subtopics surface the mistakes behind them →",
+    },
+    {
+      tool: {
+        icon: AlertTriangle,
+        title: "Mistake Database",
+        description: "The recurring errors costing you points, diagnosed and fixed.",
+        accent: "rose",
+        to: "/common-mistakes",
+      },
+      caption: "Each mistake maps to the question patterns that trigger it →",
+    },
+    {
+      tool:
+        navigator ?? {
+          icon: Compass,
+          title: "Question Type Navigator",
+          description: "Unit → topic → the exact patterns College Board asks.",
+          accent: "blue",
+          to: "/question-navigator",
+        },
+      caption: "Sends you back into targeted practice ↻",
+    },
+  ];
+
+  const primaryTitles = new Set(primary.map((p) => p.tool.title));
+  const secondary = subject.tools.filter((t) => !primaryTitles.has(t.title));
+
   return (
     <section className="px-6 py-16 border-t border-border">
       <div className="max-w-6xl mx-auto">
-        <SectionHeader eyebrow="02 · the system" title={subject.toolsHeading} sub="Six connected surfaces, one engine — every tool writes into the same performance model and hands off to the next." />
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-8">
-          {subject.tools.map((i) => {
-            const Icon = i.icon;
-            const a = accentMap[i.accent];
-            const inner = (
-              <>
-                <div className={`pointer-events-none absolute -top-16 -right-16 h-40 w-40 rounded-full blur-3xl opacity-60 bg-gradient-to-br ${a.glow} to-transparent`} />
-                <div className="relative flex items-start justify-between">
-                  <div className={`grid place-items-center h-10 w-10 rounded-lg ring-1 ${a.icon} ${a.ring}`}>
-                    <Icon className="h-5 w-5" />
+        <SectionHeader
+          eyebrow="02 · the system"
+          title={subject.toolsHeading}
+          sub="Not six independent tools — one adaptive loop with supporting reference layers underneath."
+        />
+
+        <div className="mt-10">
+          <div className="flex items-center gap-3 justify-center mb-6">
+            <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+              the adaptive loop
+            </span>
+            <span className="h-px w-16 bg-gradient-to-r from-primary/50 to-transparent" />
+          </div>
+
+          <div className="relative">
+            <div className="pointer-events-none absolute left-0 right-0 top-20 hidden lg:block">
+              <div className="h-px w-full bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+            </div>
+            <ol className="relative grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {primary.map(({ tool, caption }, idx) => {
+                const Icon = tool.icon;
+                const a = accentMap[tool.accent];
+                const inner = (
+                  <>
+                    <div className={`pointer-events-none absolute -top-16 -right-16 h-40 w-40 rounded-full blur-3xl opacity-60 bg-gradient-to-br ${a.glow} to-transparent`} />
+                    <div className="relative flex items-start justify-between">
+                      <div className={`grid place-items-center h-12 w-12 rounded-xl ring-1 ${a.icon} ${a.ring}`}>
+                        <Icon className="h-6 w-6" />
+                      </div>
+                      <span className="font-mono text-[10px] text-muted-foreground">
+                        step {String(idx + 1).padStart(2, "0")}
+                      </span>
+                    </div>
+                    <div className="relative font-display text-lg font-semibold mt-5">{tool.title}</div>
+                    <div className="relative text-sm text-muted-foreground mt-1.5 leading-relaxed">{tool.description}</div>
+                    <div className="relative mt-5 pt-4 border-t border-border text-[11px] leading-relaxed text-primary/80">
+                      {caption}
+                    </div>
+                  </>
+                );
+                const cls = `group relative overflow-hidden rounded-2xl border border-border bg-card p-6 min-h-[15rem] hover-lift transition ${a.hover}`;
+                return (
+                  <li key={tool.title} className="relative">
+                    {tool.to ? (
+                      <Link to={tool.to} className={cls}>{inner}</Link>
+                    ) : (
+                      <div className={cls}>{inner}</div>
+                    )}
+                    {idx < primary.length - 1 ? (
+                      <span className="pointer-events-none absolute top-1/2 -right-3.5 z-10 hidden lg:grid h-7 w-7 -translate-y-1/2 place-items-center rounded-full border border-border bg-background text-primary">
+                        <ArrowRight className="h-3.5 w-3.5" />
+                      </span>
+                    ) : (
+                      <span className="pointer-events-none absolute top-1/2 -right-3.5 z-10 hidden lg:grid h-7 w-7 -translate-y-1/2 place-items-center rounded-full border border-border bg-background text-primary">
+                        <RefreshCw className="h-3.5 w-3.5" />
+                      </span>
+                    )}
+                  </li>
+                );
+              })}
+            </ol>
+            <div className="mt-4 hidden lg:flex items-center gap-3 justify-center text-[11px] text-muted-foreground">
+              <RefreshCw className="h-3.5 w-3.5 text-primary/70" />
+              The Navigator feeds straight back into Practice — the loop closes and tightens on every pass.
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3 justify-center mt-14 mb-6">
+            <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground" />
+            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+              supporting resources
+            </span>
+            <span className="h-px w-16 bg-gradient-to-r from-border to-transparent" />
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            {secondary.map((i) => {
+              const Icon = i.icon;
+              const a = accentMap[i.accent];
+              const inner = (
+                <>
+                  <div className="relative flex items-start justify-between">
+                    <div className={`grid place-items-center h-9 w-9 rounded-lg ring-1 ${a.icon} ${a.ring}`}>
+                      <Icon className="h-4.5 w-4.5" />
+                    </div>
+                    <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-foreground group-hover:translate-x-0.5 transition" />
                   </div>
-                  <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-foreground group-hover:translate-x-0.5 transition" />
-                </div>
-                <div className="relative font-display font-semibold mt-4">{i.title}</div>
-                <div className="relative text-sm text-muted-foreground mt-1">{i.description}</div>
-              </>
-            );
-            const cls = `group relative overflow-hidden rounded-xl border border-border bg-card p-5 hover-lift transition ${a.hover}`;
-            if (i.href) {
-              return <a key={i.title} href={i.href} target="_blank" rel="noopener noreferrer" className={cls}>{inner}</a>;
-            }
-            if (i.to) {
-              return <Link key={i.title} to={i.to} className={cls}>{inner}</Link>;
-            }
-            return <div key={i.title} className={cls}>{inner}</div>;
-          })}
+                  <div className="relative font-display font-semibold text-sm mt-3">{i.title}</div>
+                  <div className="relative text-xs text-muted-foreground mt-1 leading-relaxed">{i.description}</div>
+                </>
+              );
+              const cls = `group relative overflow-hidden rounded-xl border border-border bg-card/60 p-4 hover-lift transition ${a.hover}`;
+              if (i.href) {
+                return <a key={i.title} href={i.href} target="_blank" rel="noopener noreferrer" className={cls}>{inner}</a>;
+              }
+              if (i.to) {
+                return <Link key={i.title} to={i.to} className={cls}>{inner}</Link>;
+              }
+              return <div key={i.title} className={cls}>{inner}</div>;
+            })}
+          </div>
         </div>
       </div>
     </section>
   );
 }
+
 
 function MistakesPreview({ subject }: { subject: SubjectConfig }) {
   return (
