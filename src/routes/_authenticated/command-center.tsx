@@ -432,7 +432,8 @@ function PerformanceDiagnostics({ units }: { units: UnitRow[] }) {
         </div>
         <div className="divide-y divide-border">
           {[...units].sort((a, b) => (b.mastery < 0 ? -1 : a.mastery < 0 ? 1 : b.mastery - a.mastery)).map((u) => {
-            const m = u.mastery;
+            // Mastery % only shows with 10+ questions AND every subtopic touched.
+            const m = u.mastery_unlocked ? u.mastery : -1;
             const bar = m < 0 ? 0 : m;
             const color =
               m < 0 ? "bg-muted" :
@@ -440,7 +441,8 @@ function PerformanceDiagnostics({ units }: { units: UnitRow[] }) {
               m >= 60 ? "bg-amber-500" :
               m >= 40 ? "bg-orange-500" : "bg-rose-500";
             const label =
-              m < 0 ? "Untouched" :
+              u.attempts === 0 ? "Untouched" :
+              m < 0 ? "Building" :
               m >= 80 ? "Strong" :
               m >= 60 ? "Steady" :
               m >= 40 ? "Shaky" : "Weak";
@@ -448,7 +450,12 @@ function PerformanceDiagnostics({ units }: { units: UnitRow[] }) {
               <div key={u.unit_id} className="grid grid-cols-12 items-center gap-3 px-5 py-3 text-sm">
                 <div className="col-span-5 sm:col-span-4 min-w-0">
                   <div className="font-medium truncate">Unit {u.number} · {u.name}</div>
-                  <div className="text-[10px] text-muted-foreground">{u.ap_points}p · {u.ap_weight_pct}% of exam</div>
+                  <div className="text-[10px] text-muted-foreground">
+                    {u.ap_points}p · {u.ap_weight_pct}% of exam
+                    {!u.mastery_unlocked && u.attempts > 0 && u.subtopics_total > 0 ? (
+                      <> · {Math.min(u.attempts, UNIT_MASTERY_THRESHOLD)}/{UNIT_MASTERY_THRESHOLD} questions · {u.subtopics_covered}/{u.subtopics_total} subtopics</>
+                    ) : null}
+                  </div>
                 </div>
                 <div className="col-span-3 sm:col-span-4">
                   <div className="h-2 rounded-full bg-elevated overflow-hidden">
@@ -466,6 +473,7 @@ function PerformanceDiagnostics({ units }: { units: UnitRow[] }) {
                     m >= 40 ? "text-orange-400" : "text-rose-400"
                   }`}>{label}</span>
                 </div>
+
                 <div className="col-span-1 text-right">
                   {QN_UNITS.find((qu) => qu.number === u.number) ? (
                     <Link
