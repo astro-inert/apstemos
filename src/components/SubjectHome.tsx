@@ -1,10 +1,25 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { AlertTriangle, ArrowRight, ArrowUpRight, ChevronRight, Sigma, Target, TrendingUp, Zap } from "lucide-react";
+import {
+  AlertTriangle,
+  ArrowRight,
+  ArrowUpRight,
+  ChevronRight,
+  Compass,
+  Gauge,
+  PencilLine,
+  RefreshCw,
+  ScanSearch,
+  Sigma,
+  Target,
+  TrendingUp,
+  Zap,
+} from "lucide-react";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import type { SubjectConfig, SubjectTool } from "@/lib/subjects";
 import { persistCurrentSubject } from "@/lib/use-subject";
+
 
 function useCountdown(target: Date) {
   const [now, setNow] = useState(() => Date.now());
