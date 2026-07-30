@@ -2,10 +2,15 @@ import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { QN_UNITS } from "./question-navigator-data";
 
-/** A unit needs this many logged questions before mastery % is trusted. */
+/** A unit needs this many logged questions before mastery % is trusted… */
 export const UNIT_MASTERY_THRESHOLD = 10;
+/** …and every subtopic in the unit must have at least this many logged questions. */
+export const UNIT_SUBTOPIC_MIN = 1;
 /** A subtopic needs this many logged questions before it counts as a strength/weakness. */
 export const SUBTOPIC_THRESHOLD = 3;
+/** Accuracy at or above this counts as a strength; below it, a weakness. Never both. */
+export const STRENGTH_CUTOFF = 70;
+
 
 export type PerformanceSnapshot = {
   profile: {
