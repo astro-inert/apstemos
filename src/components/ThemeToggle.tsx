@@ -2,14 +2,14 @@ import { useEffect, useState } from "react";
 import { Moon, Sun } from "lucide-react";
 
 function getInitial(): "dark" | "light" {
-  if (typeof window === "undefined") return "dark";
+  if (typeof window === "undefined") return "light";
   const stored = localStorage.getItem("theme");
   if (stored === "light" || stored === "dark") return stored;
-  return "dark";
+  return "light";
 }
 
 export function ThemeToggle() {
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const [theme, setTheme] = useState<"dark" | "light">("light");
 
   useEffect(() => {
     const t = getInitial();

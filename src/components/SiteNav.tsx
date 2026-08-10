@@ -1,71 +1,140 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Menu, X } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 import { SubjectSwitcher } from "./SubjectSwitcher";
-import { supabase } from "@/integrations/supabase/client";
 import type { SubjectId } from "@/lib/subjects";
 
 const resources = [
-  { to: "/108-points-breakdown", label: "108-Point Map" },
-  { to: "/common-mistakes", label: "Common Mistakes" },
-  { to: "/topic-rundown", label: "Topic Rundowns" },
   { to: "/frqs-by-type", label: "FRQ Library" },
+  { to: "/topic-rundown", label: "Topic Rundowns" },
+  { to: "/question-navigator", label: "Question Type Navigator" },
+  { to: "/common-mistakes", label: "Common Mistakes" },
+  { to: "/latex-master-sheet", label: "Formula & Strategy Guide" },
   { to: "/exam-strategy", label: "Exam Strategy" },
-  { to: "/question-navigator", label: "Question Navigator" },
-  { to: "/latex-master-sheet", label: "Formula and Strategy Guide" },
+  { to: "/108-points-breakdown", label: "108-Point Map" },
 ] as const;
 
 export function SiteNav({ subject = "calc-bc" }: { subject?: SubjectId }) {
-  const [signedIn, setSignedIn] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [open, setOpen] = useState(false);
+
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => setSignedIn(!!data.user));
-    const { data: sub } = supabase.auth.onAuthStateChange((_, session) => setSignedIn(!!session?.user));
-    return () => sub.subscription.unsubscribe();
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
-    <nav className="sticky top-0 z-50 glass px-6 py-3 border-b">
-      <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
-        <div className="flex items-center gap-8 min-w-0">
-          <SubjectSwitcher current={subject} />
-          <div className="hidden md:flex items-center gap-1 text-sm">
-            <div className="group relative">
-              <button className="flex items-center gap-1 px-3 py-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-elevated transition-colors">
-                Resources
-                <ChevronDown className="w-3.5 h-3.5 transition-transform group-hover:rotate-180" />
-              </button>
-              <div className="absolute top-full left-0 mt-1 w-60 glass rounded-lg shadow-elevated opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all p-1.5 flex flex-col">
-                {resources.map((r) => (
-                  <Link key={r.to} to={r.to} className="px-3 py-2 rounded-md text-sm text-muted-foreground hover:text-foreground hover:bg-elevated transition-colors">
-                    {r.label}
-                  </Link>
-                ))}
-              </div>
-            </div>
-            <Link to="/108-points-breakdown" className="px-3 py-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-elevated transition-colors">
-              108-Point Map
-            </Link>
+    <header
+      className={`sticky top-0 z-50 transition-colors duration-300 ${
+        scrolled ? "glass border-b border-border" : "border-b border-transparent bg-transparent"
+      }`}
+    >
+      <nav className="mx-auto flex max-w-6xl items-center gap-4 px-5 py-3.5 sm:px-8">
+        <div className="flex min-w-0 items-center gap-4">
+          <Link to="/" className="shrink-0 font-display text-[15px] font-semibold tracking-[-0.03em]">
+            AP STEM OS
+          </Link>
+          <span className="hidden h-4 w-px bg-border sm:block" />
+          <div className="hidden min-w-0 sm:block">
+            <SubjectSwitcher current={subject} />
           </div>
         </div>
-        <div className="flex items-center gap-2 shrink-0">
-          <ThemeToggle />
-          {signedIn ? (
-            <Link to="/command-center" className="inline-flex items-center px-3.5 py-1.5 rounded-md text-sm font-medium bg-primary text-primary-foreground hover:opacity-90 transition-opacity">
-              Open dashboard
-            </Link>
-          ) : (
-            <>
-              <Link to="/auth" className="hidden sm:inline-flex items-center px-3 py-1.5 rounded-md text-sm font-medium text-muted-foreground hover:text-foreground">
-                Sign in
-              </Link>
-              <Link to="/auth" className="inline-flex items-center px-3.5 py-1.5 rounded-md text-sm font-medium bg-primary text-primary-foreground hover:opacity-90 transition-opacity">
-                Start free
-              </Link>
-            </>
-          )}
+
+        <div className="ml-auto hidden items-center gap-1 md:flex">
+          <NavLink to="/practice">Practice</NavLink>
+          <NavLink to="/command-center">Score Command Center</NavLink>
+          <div className="group relative">
+            <button className="inline-flex items-center gap-1 rounded-full px-3.5 py-1.5 text-[13px] text-muted-foreground transition-colors hover:text-foreground">
+              Resources
+              <ChevronDown className="h-3.5 w-3.5 transition-transform group-hover:rotate-180" />
+            </button>
+            <div className="invisible absolute right-0 top-full mt-1 w-64 rounded-2xl border border-border bg-popover p-1.5 opacity-0 shadow-elevated transition-all group-hover:visible group-hover:opacity-100">
+              {resources.map((r) => (
+                <Link
+                  key={r.to}
+                  to={r.to}
+                  className="block rounded-xl px-3 py-2 text-[13px] text-muted-foreground transition-colors hover:bg-elevated hover:text-foreground"
+                >
+                  {r.label}
+                </Link>
+              ))}
+            </div>
+          </div>
         </div>
-      </div>
-    </nav>
+
+        <div className="ml-auto flex shrink-0 items-center gap-2 md:ml-0">
+          <ThemeToggle />
+          <Link
+            to="/practice"
+            className="hidden items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-[13px] font-semibold text-primary-foreground transition-shadow hover:shadow-glow sm:inline-flex"
+          >
+            Start practicing →
+          </Link>
+          <button
+            onClick={() => setOpen((v) => !v)}
+            aria-label="Menu"
+            className="grid h-9 w-9 place-items-center rounded-lg border border-border bg-card md:hidden"
+          >
+            {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+          </button>
+        </div>
+      </nav>
+
+      {open ? (
+        <div className="border-t border-border bg-background px-5 pb-6 pt-4 md:hidden">
+          <div className="sm:hidden">
+            <SubjectSwitcher current={subject} />
+          </div>
+          <div className="mt-4 flex flex-col gap-1">
+            <MobileLink to="/practice" onClick={() => setOpen(false)}>
+              Practice
+            </MobileLink>
+            <MobileLink to="/command-center" onClick={() => setOpen(false)}>
+              Score Command Center
+            </MobileLink>
+            <div className="micro-label mt-4 mb-1 px-3">resources</div>
+            {resources.map((r) => (
+              <MobileLink key={r.to} to={r.to} onClick={() => setOpen(false)}>
+                {r.label}
+              </MobileLink>
+            ))}
+          </div>
+          <Link
+            to="/practice"
+            onClick={() => setOpen(false)}
+            className="mt-5 flex items-center justify-center rounded-full bg-primary px-4 py-2.5 text-[13px] font-semibold text-primary-foreground"
+          >
+            Start practicing →
+          </Link>
+        </div>
+      ) : null}
+    </header>
+  );
+}
+
+function NavLink({ to, children }: { to: string; children: React.ReactNode }) {
+  return (
+    <Link
+      to={to}
+      className="rounded-full px-3.5 py-1.5 text-[13px] text-muted-foreground transition-colors hover:text-foreground"
+      activeProps={{ className: "rounded-full px-3.5 py-1.5 text-[13px] text-foreground" }}
+    >
+      {children}
+    </Link>
+  );
+}
+
+function MobileLink({ to, children, onClick }: { to: string; children: React.ReactNode; onClick: () => void }) {
+  return (
+    <Link
+      to={to}
+      onClick={onClick}
+      className="rounded-xl px-3 py-2.5 text-[14px] text-muted-foreground transition-colors hover:bg-elevated hover:text-foreground"
+    >
+      {children}
+    </Link>
   );
 }
