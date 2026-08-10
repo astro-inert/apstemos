@@ -1,30 +1,67 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { Download, FileText } from "lucide-react";
+import { PageShell } from "@/components/PageShell";
 
 const PDF_URL = "https://drive.google.com/file/d/1O6iD6MP3R_p4NZzZ4vt-7kVAHrUBYtdJ/view?usp=drive_open";
 
 export const Route = createFileRoute("/latex-master-sheet")({
   head: () => ({
     meta: [
-      { title: "Master Sheet — APCalcExamPrep" },
-      { name: "description", content: "Condensed 10-page LaTeX master sheet for AP Calculus AB/BC." },
+      { title: "Formula and Strategy Guide — AP STEM OS" },
+      {
+        name: "description",
+        content:
+          "A printable 10-page LaTeX-rendered summary of every AP Calculus formula plus the strategies to apply them correctly on the exam.",
+      },
+      { property: "og:title", content: "Formula and Strategy Guide — AP STEM OS" },
+      { property: "og:description", content: "10 printable pages: every formula, and how to use it on the AP exam." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: LatexMasterSheet,
+  component: FormulaGuide,
 });
 
-function LatexMasterSheet() {
-  useEffect(() => {
-    window.location.replace(PDF_URL);
-  }, []);
+function FormulaGuide() {
   return (
-    <div className="min-h-screen grid place-items-center bg-background text-foreground p-6 text-center">
-      <div>
-        <p className="text-sm text-muted-foreground">Opening Formula Sheet…</p>
-        <a href={PDF_URL} className="mt-3 inline-block text-sm text-primary underline">
-          Click here if it doesn't open automatically
-        </a>
-      </div>
-    </div>
+    <PageShell
+      eyebrow="Cram"
+      title="Formula and Strategy Guide"
+      description="Ten LaTeX-rendered pages covering every formula the AP exam expects, plus the strategies to apply them correctly. Built as a last-minute review tool you can print and keep."
+    >
+      <a
+        href={PDF_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="group flex items-start gap-4 rounded-2xl border border-primary/30 bg-primary/5 p-6 hover:border-primary/60 transition"
+      >
+        <div className="grid place-items-center h-11 w-11 shrink-0 rounded-lg bg-primary/15 text-primary ring-1 ring-primary/25">
+          <Download className="h-5 w-5" />
+        </div>
+        <div className="min-w-0">
+          <div className="font-display font-semibold">Open the printable PDF</div>
+          <p className="text-sm text-muted-foreground mt-1">
+            The full 10-page guide, typeset in LaTeX. Print it and keep it in your inventory for the week before the exam.
+          </p>
+        </div>
+      </a>
+
+      <section className="mt-4 rounded-2xl border border-border bg-card p-6">
+        <div className="flex items-start gap-4">
+          <div className="grid place-items-center h-11 w-11 shrink-0 rounded-lg bg-elevated text-muted-foreground ring-1 ring-white/10">
+            <FileText className="h-5 w-5" />
+          </div>
+          <div className="min-w-0">
+            <div className="font-display font-semibold">Read it in the app</div>
+            <p className="text-sm text-muted-foreground mt-1">
+              The same ten pages, rendered in-app so you can use the guide without downloading anything.
+            </p>
+            <div className="mt-4 rounded-lg border border-dashed border-border bg-elevated/40 px-4 py-5 text-sm text-muted-foreground">
+              Content coming soon.
+            </div>
+          </div>
+        </div>
+      </section>
+    </PageShell>
   );
 }

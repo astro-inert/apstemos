@@ -59,6 +59,7 @@ export function SubjectHome({ subject }: { subject: SubjectConfig }) {
       </div>
       <SiteNav subject={subject.id} />
       <Hero subject={subject} />
+      <PositioningBand />
       <HowItWorks subject={subject} />
       <ScoreCommandPreview subject={subject} />
       <SystemMap subject={subject} />
@@ -112,6 +113,34 @@ function Hero({ subject }: { subject: SubjectConfig }) {
     </section>
   );
 }
+
+function PositioningBand() {
+  const items = [
+    { k: "Open source", v: "Every question, template, and page is public. Fork it, audit it, improve it." },
+    { k: "Forever free", v: "No paywall, no trial, no credit card — now or later." },
+    { k: "Built for a 5", v: "Not for learning everything deeply. For the express purpose of scoring a 5." },
+  ];
+  return (
+    <section className="px-6 pb-4">
+      <div className="max-w-5xl mx-auto rounded-2xl border border-white/10 bg-card/50 p-6 sm:p-7">
+        <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-subtle">// what this is</div>
+        <p className="mt-3 text-sm sm:text-base text-muted-foreground leading-relaxed">
+          <span className="text-foreground font-semibold">AP STEM OS</span> covers AP Calculus AB/BC, AP Physics 1, 2,
+          C: Mechanics and C: E&amp;M, and AP Statistics.
+        </p>
+        <div className="mt-5 grid gap-4 sm:grid-cols-3">
+          {items.map((i) => (
+            <div key={i.k}>
+              <div className="font-display text-sm font-semibold">{i.k}</div>
+              <div className="mt-1 text-sm text-muted-foreground leading-relaxed">{i.v}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 
 const flowSteps = [
   { icon: PencilLine, title: "Practice", copy: "Answer original AP-style questions built from real exam patterns." },

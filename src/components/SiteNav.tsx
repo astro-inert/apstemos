@@ -13,7 +13,7 @@ const resources = [
   { to: "/frqs-by-type", label: "FRQ Library" },
   { to: "/exam-strategy", label: "Exam Strategy" },
   { to: "/question-navigator", label: "Question Navigator" },
-  { to: "/latex-master-sheet", label: "Formula Sheet" },
+  { to: "/latex-master-sheet", label: "Formula and Strategy Guide" },
 ] as const;
 
 export function SiteNav({ subject = "calc-bc" }: { subject?: SubjectId }) {

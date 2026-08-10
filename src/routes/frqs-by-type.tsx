@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 export const Route = createFileRoute("/frqs-by-type")({
   head: () => ({
     meta: [
-      { title: "FRQs by Type — APCalcExamPrep" },
+      { title: "FRQ Library — AP STEM OS" },
       {
         name: "description",
         content:

@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { PageShell } from "@/components/PageShell";
 import { findTopic, type UnitEntry, type TopicEntry } from "@/lib/question-navigator-data";
-import { ArrowLeft, FileText, ListChecks, MessageSquareQuote, AlertTriangle, Sparkles, Download } from "lucide-react";
+import { ArrowLeft, FileText, ListChecks, MessageSquareQuote, AlertTriangle, Sparkles} from "lucide-react";
 
 export const Route = createFileRoute("/question-navigator/$unitId/$topicId")({
   loader: ({ params }): { unit: UnitEntry; topic: TopicEntry } => {
@@ -26,8 +26,8 @@ export const Route = createFileRoute("/question-navigator/$unitId/$topicId")({
 });
 
 const sections = [
-  { icon: ListChecks, title: "Common MCQ Patterns", desc: "The recurring multiple-choice setups College Board reuses on this topic — calc and no-calc." },
-  { icon: FileText, title: "Common FRQ Patterns", desc: "Free-response prompts and sub-part chains that show up year after year." },
+  { icon: ListChecks, title: "How to answer MCQs on this topic", desc: "The recurring multiple-choice setups College Board reuses on this topic — calc and no-calc." },
+  { icon: FileText, title: "How to answer FRQs on this topic", desc: "Free-response prompts and sub-part chains that show up year after year." },
   { icon: MessageSquareQuote, title: "Typical College Board Wording", desc: "Stem phrasing and verb choices (justify, explain, interpret) used in released exams." },
   { icon: AlertTriangle, title: "Common Mistakes", desc: "Where students lose points — unit slips, sign errors, missing justifications." },
   { icon: Sparkles, title: "Representative Examples", desc: "Worked exemplars that capture the canonical version of this question type." },
@@ -59,32 +59,27 @@ function Page() {
         </Link>
       </div>
 
-      <div className="rounded-2xl border border-dashed border-pink-500/30 bg-pink-500/5 p-5 mb-8 flex items-start gap-4">
-        <div className="grid place-items-center h-10 w-10 rounded-lg bg-pink-500/10 text-pink-400 ring-1 ring-pink-500/20 shrink-0">
-          <Download className="h-5 w-5" />
-        </div>
-        <div className="min-w-0">
-          <div className="font-display font-semibold">Question-type PDF · coming soon</div>
-          <div className="text-sm text-muted-foreground mt-1">
-            A dedicated PDF for <span className="text-foreground font-medium">{topic.title}</span> — MCQ patterns, FRQ patterns, typical wording, common mistakes, and representative examples — will live here. The navigation is ready; the resource is being authored.
-          </div>
-        </div>
-      </div>
-
       <div className="mb-3 text-xs font-mono uppercase tracking-[0.2em] text-muted-foreground">
-        // what the PDF will cover
+        // how to answer this topic
       </div>
-      <div className="grid sm:grid-cols-2 gap-3">
+      <div className="grid gap-3">
         {sections.map((s) => {
           const Icon = s.icon;
           return (
-            <div key={s.title} className="rounded-xl border border-border bg-card p-5">
-              <div className="grid place-items-center h-9 w-9 rounded-lg bg-pink-500/10 text-pink-400 ring-1 ring-pink-500/20">
-                <Icon className="h-4.5 w-4.5" />
+            <section key={s.title} className="rounded-xl border border-border bg-card p-5">
+              <div className="flex items-start gap-4">
+                <div className="grid place-items-center h-9 w-9 shrink-0 rounded-lg bg-pink-500/10 text-pink-400 ring-1 ring-pink-500/20">
+                  <Icon className="h-4 w-4" />
+                </div>
+                <div className="min-w-0">
+                  <div className="font-display font-semibold">{s.title}</div>
+                  <div className="text-sm text-muted-foreground mt-1">{s.desc}</div>
+                  <div className="mt-4 rounded-lg border border-dashed border-border bg-elevated/40 px-4 py-5 text-sm text-muted-foreground">
+                    Content coming soon.
+                  </div>
+                </div>
               </div>
-              <div className="font-display font-semibold mt-3">{s.title}</div>
-              <div className="text-sm text-muted-foreground mt-1">{s.desc}</div>
-            </div>
+            </section>
           );
         })}
       </div>

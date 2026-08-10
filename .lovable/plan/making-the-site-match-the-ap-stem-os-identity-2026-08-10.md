@@ -17,7 +17,7 @@ Three passes, in order. Pass 1 is the identity/landing work; passes 2 and 3 fill
 ## Pass 1 — Identity and landing
 
 - Rename the product to **AP STEM OS** everywhere: footer, page titles, meta/OG tags, sidebar wordmark (keep the per-subject short forms AP Calc/OS, AP Physics/OS, AP Stats/OS).
-- Rewrite the landing hero and add a short positioning band stating: open-source, forever free, covers AP Calculus AB/BC, Physics 1, 2, C Mechanics, C E&M, and Statistics, and built for one outcome — a 5. Keep the existing dark palette, cards, and animations.
+- Rewrite the landing hero and add a short positioning band stating: open-source, forever free, covers AP Calculus AB/BC, Physics 1, 2, C Mechanics, C E&M, and Statistics, and built for one outcome — a 5. Change the feature cards into a loop that emphasizes the workflow more clearly. 
 - Retitle the supporting-resources group to the real names: **FRQ Library**, **Topic Rundowns**, **Formula and Strategy Guide**, **Exam Strategy**. Update the nav dropdown to match.
 - Describe each resource with the user's own one-liners (what it is and when to use it) instead of generic copy.
 - Add a short "why this exists / open source" block near the footer with a repo link placeholder.

@@ -4,9 +4,9 @@ import { PageShell } from "@/components/PageShell";
 export const Route = createFileRoute("/108-points-breakdown")({
   head: () => ({
     meta: [
-      { title: "108 Points Breakdown — APCalcExamPrep" },
+      { title: "108 Points Breakdown — AP STEM OS" },
       { name: "description", content: "How the 108 raw points on the AP Calculus exam are distributed — and where to aim for a 5." },
-      { property: "og:title", content: "108 Points Breakdown — APCalcExamPrep" },
+      { property: "og:title", content: "108 Points Breakdown — AP STEM OS" },
       { property: "og:description", content: "The full scoring map of the AP Calculus exam." },
     ],
   }),

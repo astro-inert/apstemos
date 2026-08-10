@@ -4,9 +4,9 @@ import { PageShell } from "@/components/PageShell";
 export const Route = createFileRoute("/bc-track")({
   head: () => ({
     meta: [
-      { title: "BC Track — APCalcExamPrep" },
+      { title: "BC Track — AP STEM OS" },
       { name: "description", content: "The AP Calculus BC track: everything in AB plus series, parametric, polar, and vector functions." },
-      { property: "og:title", content: "BC Track — APCalcExamPrep" },
+      { property: "og:title", content: "BC Track — AP STEM OS" },
       { property: "og:description", content: "AP Calculus BC curriculum overview." },
     ],
   }),

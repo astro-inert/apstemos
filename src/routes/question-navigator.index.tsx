@@ -6,9 +6,9 @@ import { ChevronRight, Compass } from "lucide-react";
 export const Route = createFileRoute("/question-navigator/")({
   head: () => ({
     meta: [
-      { title: "Question Type Navigator — APCalcExamPrep" },
+      { title: "Question Type Navigator — AP STEM OS" },
       { name: "description", content: "Browse AP Calculus BC by unit, topic, and exactly the question types College Board asks." },
-      { property: "og:title", content: "Question Type Navigator — APCalcExamPrep" },
+      { property: "og:title", content: "Question Type Navigator — AP STEM OS" },
       { property: "og:description", content: "Unit → Topic → Question Type. How the exam is actually tested." },
     ],
   }),
