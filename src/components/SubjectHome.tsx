@@ -59,6 +59,7 @@ export function SubjectHome({ subject }: { subject: SubjectConfig }) {
       </div>
       <SiteNav subject={subject.id} />
       <Hero subject={subject} />
+      <PositioningBand />
       <HowItWorks subject={subject} />
       <ScoreCommandPreview subject={subject} />
       <SystemMap subject={subject} />
