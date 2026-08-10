@@ -28,9 +28,9 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as TopicRundownIndexRouteImport } from './routes/topic-rundown.index'
 import { Route as QuestionNavigatorIndexRouteImport } from './routes/question-navigator.index'
 import { Route as TopicRundownUnitIdRouteImport } from './routes/topic-rundown.$unitId'
-import { Route as QuestionNavigatorUnitIdRouteImport } from './routes/question-navigator.$unitId'
 import { Route as AuthenticatedPracticeRouteImport } from './routes/_authenticated/practice'
 import { Route as AuthenticatedCommandCenterRouteImport } from './routes/_authenticated/command-center'
+import { Route as QuestionNavigatorUnitIdIndexRouteImport } from './routes/question-navigator.$unitId.index'
 import { Route as QuestionNavigatorUnitIdTopicIdRouteImport } from './routes/question-navigator.$unitId.$topicId'
 
 const StatisticsRoute = StatisticsRouteImport.update({
@@ -128,11 +128,6 @@ const TopicRundownUnitIdRoute = TopicRundownUnitIdRouteImport.update({
   path: '/topic-rundown/$unitId',
   getParentRoute: () => rootRouteImport,
 } as any)
-const QuestionNavigatorUnitIdRoute = QuestionNavigatorUnitIdRouteImport.update({
-  id: '/question-navigator/$unitId',
-  path: '/question-navigator/$unitId',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AuthenticatedPracticeRoute = AuthenticatedPracticeRouteImport.update({
   id: '/practice',
   path: '/practice',
@@ -144,11 +139,17 @@ const AuthenticatedCommandCenterRoute =
     path: '/command-center',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const QuestionNavigatorUnitIdIndexRoute =
+  QuestionNavigatorUnitIdIndexRouteImport.update({
+    id: '/question-navigator/$unitId/',
+    path: '/question-navigator/$unitId/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const QuestionNavigatorUnitIdTopicIdRoute =
   QuestionNavigatorUnitIdTopicIdRouteImport.update({
-    id: '/$topicId',
-    path: '/$topicId',
-    getParentRoute: () => QuestionNavigatorUnitIdRoute,
+    id: '/question-navigator/$unitId/$topicId',
+    path: '/question-navigator/$unitId/$topicId',
+    getParentRoute: () => rootRouteImport,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -169,11 +170,11 @@ export interface FileRoutesByFullPath {
   '/statistics': typeof StatisticsRoute
   '/command-center': typeof AuthenticatedCommandCenterRoute
   '/practice': typeof AuthenticatedPracticeRoute
-  '/question-navigator/$unitId': typeof QuestionNavigatorUnitIdRouteWithChildren
   '/topic-rundown/$unitId': typeof TopicRundownUnitIdRoute
   '/question-navigator/': typeof QuestionNavigatorIndexRoute
   '/topic-rundown/': typeof TopicRundownIndexRoute
   '/question-navigator/$unitId/$topicId': typeof QuestionNavigatorUnitIdTopicIdRoute
+  '/question-navigator/$unitId/': typeof QuestionNavigatorUnitIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -193,11 +194,11 @@ export interface FileRoutesByTo {
   '/statistics': typeof StatisticsRoute
   '/command-center': typeof AuthenticatedCommandCenterRoute
   '/practice': typeof AuthenticatedPracticeRoute
-  '/question-navigator/$unitId': typeof QuestionNavigatorUnitIdRouteWithChildren
   '/topic-rundown/$unitId': typeof TopicRundownUnitIdRoute
   '/question-navigator': typeof QuestionNavigatorIndexRoute
   '/topic-rundown': typeof TopicRundownIndexRoute
   '/question-navigator/$unitId/$topicId': typeof QuestionNavigatorUnitIdTopicIdRoute
+  '/question-navigator/$unitId': typeof QuestionNavigatorUnitIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -219,11 +220,11 @@ export interface FileRoutesById {
   '/statistics': typeof StatisticsRoute
   '/_authenticated/command-center': typeof AuthenticatedCommandCenterRoute
   '/_authenticated/practice': typeof AuthenticatedPracticeRoute
-  '/question-navigator/$unitId': typeof QuestionNavigatorUnitIdRouteWithChildren
   '/topic-rundown/$unitId': typeof TopicRundownUnitIdRoute
   '/question-navigator/': typeof QuestionNavigatorIndexRoute
   '/topic-rundown/': typeof TopicRundownIndexRoute
   '/question-navigator/$unitId/$topicId': typeof QuestionNavigatorUnitIdTopicIdRoute
+  '/question-navigator/$unitId/': typeof QuestionNavigatorUnitIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -245,11 +246,11 @@ export interface FileRouteTypes {
     | '/statistics'
     | '/command-center'
     | '/practice'
-    | '/question-navigator/$unitId'
     | '/topic-rundown/$unitId'
     | '/question-navigator/'
     | '/topic-rundown/'
     | '/question-navigator/$unitId/$topicId'
+    | '/question-navigator/$unitId/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -269,11 +270,11 @@ export interface FileRouteTypes {
     | '/statistics'
     | '/command-center'
     | '/practice'
-    | '/question-navigator/$unitId'
     | '/topic-rundown/$unitId'
     | '/question-navigator'
     | '/topic-rundown'
     | '/question-navigator/$unitId/$topicId'
+    | '/question-navigator/$unitId'
   id:
     | '__root__'
     | '/'
@@ -294,11 +295,11 @@ export interface FileRouteTypes {
     | '/statistics'
     | '/_authenticated/command-center'
     | '/_authenticated/practice'
-    | '/question-navigator/$unitId'
     | '/topic-rundown/$unitId'
     | '/question-navigator/'
     | '/topic-rundown/'
     | '/question-navigator/$unitId/$topicId'
+    | '/question-navigator/$unitId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -318,10 +319,11 @@ export interface RootRouteChildren {
   PhysicsCMechanicsRoute: typeof PhysicsCMechanicsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   StatisticsRoute: typeof StatisticsRoute
-  QuestionNavigatorUnitIdRoute: typeof QuestionNavigatorUnitIdRouteWithChildren
   TopicRundownUnitIdRoute: typeof TopicRundownUnitIdRoute
   QuestionNavigatorIndexRoute: typeof QuestionNavigatorIndexRoute
   TopicRundownIndexRoute: typeof TopicRundownIndexRoute
+  QuestionNavigatorUnitIdTopicIdRoute: typeof QuestionNavigatorUnitIdTopicIdRoute
+  QuestionNavigatorUnitIdIndexRoute: typeof QuestionNavigatorUnitIdIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -459,13 +461,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TopicRundownUnitIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/question-navigator/$unitId': {
-      id: '/question-navigator/$unitId'
-      path: '/question-navigator/$unitId'
-      fullPath: '/question-navigator/$unitId'
-      preLoaderRoute: typeof QuestionNavigatorUnitIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/_authenticated/practice': {
       id: '/_authenticated/practice'
       path: '/practice'
@@ -480,12 +475,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCommandCenterRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/question-navigator/$unitId/': {
+      id: '/question-navigator/$unitId/'
+      path: '/question-navigator/$unitId'
+      fullPath: '/question-navigator/$unitId/'
+      preLoaderRoute: typeof QuestionNavigatorUnitIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/question-navigator/$unitId/$topicId': {
       id: '/question-navigator/$unitId/$topicId'
-      path: '/$topicId'
+      path: '/question-navigator/$unitId/$topicId'
       fullPath: '/question-navigator/$unitId/$topicId'
       preLoaderRoute: typeof QuestionNavigatorUnitIdTopicIdRouteImport
-      parentRoute: typeof QuestionNavigatorUnitIdRoute
+      parentRoute: typeof rootRouteImport
     }
   }
 }
@@ -502,20 +504,6 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
-
-interface QuestionNavigatorUnitIdRouteChildren {
-  QuestionNavigatorUnitIdTopicIdRoute: typeof QuestionNavigatorUnitIdTopicIdRoute
-}
-
-const QuestionNavigatorUnitIdRouteChildren: QuestionNavigatorUnitIdRouteChildren =
-  {
-    QuestionNavigatorUnitIdTopicIdRoute: QuestionNavigatorUnitIdTopicIdRoute,
-  }
-
-const QuestionNavigatorUnitIdRouteWithChildren =
-  QuestionNavigatorUnitIdRoute._addFileChildren(
-    QuestionNavigatorUnitIdRouteChildren,
-  )
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -534,21 +522,12 @@ const rootRouteChildren: RootRouteChildren = {
   PhysicsCMechanicsRoute: PhysicsCMechanicsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   StatisticsRoute: StatisticsRoute,
-  QuestionNavigatorUnitIdRoute: QuestionNavigatorUnitIdRouteWithChildren,
   TopicRundownUnitIdRoute: TopicRundownUnitIdRoute,
   QuestionNavigatorIndexRoute: QuestionNavigatorIndexRoute,
   TopicRundownIndexRoute: TopicRundownIndexRoute,
+  QuestionNavigatorUnitIdTopicIdRoute: QuestionNavigatorUnitIdTopicIdRoute,
+  QuestionNavigatorUnitIdIndexRoute: QuestionNavigatorUnitIdIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

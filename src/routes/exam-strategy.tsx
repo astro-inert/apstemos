@@ -44,24 +44,24 @@ const sections: { icon: LucideIcon; eyebrow: string; title: string; sub: string 
 function ExamStrategy() {
   return (
     <PageShell
-      eyebrow="Strategy"
-      title="Exam Strategy"
+      eyebrow="strategy"
+      title={<>Convert what you know into <span className="text-primary">points</span>.</>}
       description="Calculator usage, timing, and efficient approaches to recurring question types — how to convert what you know into the maximum number of points."
     >
       <div className="grid gap-4">
         {sections.map((s) => {
           const Icon = s.icon;
           return (
-            <section key={s.title} className="rounded-2xl border border-border bg-card p-6">
+            <section key={s.title} className="rounded-3xl border border-border bg-card p-6 shadow-card sm:p-7">
               <div className="flex items-start gap-4">
-                <div className="grid place-items-center h-10 w-10 shrink-0 rounded-lg bg-primary/10 text-primary ring-1 ring-primary/20">
-                  <Icon className="h-5 w-5" />
+                <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary ring-1 ring-primary/20">
+                  <Icon className="h-4 w-4" />
                 </div>
                 <div className="min-w-0">
-                  <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-subtle">{s.eyebrow}</div>
-                  <h2 className="font-display text-lg font-bold mt-1">{s.title}</h2>
-                  <p className="text-sm text-muted-foreground mt-1">{s.sub}</p>
-                  <div className="mt-4 rounded-xl border border-dashed border-border bg-elevated/40 px-4 py-6 text-sm text-muted-foreground">
+                  <div className="micro-label">{s.eyebrow}</div>
+                  <h2 className="mt-2 font-display text-[16px] font-semibold leading-tight">{s.title}</h2>
+                  <p className="mt-2 text-[14px] leading-relaxed text-muted-foreground">{s.sub}</p>
+                  <div className="mt-5 rounded-2xl border border-dashed border-border bg-elevated/40 px-4 py-5 text-[13px] text-muted-foreground">
                     Content coming soon.
                   </div>
                 </div>

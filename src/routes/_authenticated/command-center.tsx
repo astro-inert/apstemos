@@ -25,11 +25,28 @@ import { LaTeX } from "@/components/LaTeX";
 import { SUBJECTS, type SubjectId } from "@/lib/subjects";
 
 export const Route = createFileRoute("/_authenticated/command-center")({
-  head: () => ({ meta: [{ title: "Score Command Center — AP Calc OS" }] }),
+  head: () => ({
+    meta: [
+      { title: "Score Command Center — AP STEM OS" },
+      {
+        name: "description",
+        content:
+          "Your predicted score, unit mastery, subtopic diagnostics, and the highest-priority moves to reach a 5.",
+      },
+      { property: "og:title", content: "Score Command Center — AP STEM OS" },
+      { property: "og:description", content: "Predicted score, mastery diagnostics, and your next best moves." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+    ],
+  }),
   component: CommandCenter,
   errorComponent: ErrorView,
   pendingComponent: () => (
-    <AppShell><div className="p-6 text-sm text-muted-foreground">Loading your performance data…</div></AppShell>
+    <AppShell>
+      <div className="mx-auto max-w-6xl px-5 py-16 text-[14px] text-muted-foreground sm:px-8">
+        Loading your performance data…
+      </div>
+    </AppShell>
   ),
 });
 
@@ -37,10 +54,15 @@ function ErrorView({ error }: { error: Error }) {
   const router = useRouter();
   return (
     <AppShell>
-      <div className="p-6 max-w-md">
-        <h2 className="font-display text-xl font-bold">Couldn't load your data</h2>
-        <p className="text-sm text-muted-foreground mt-2">{error.message}</p>
-        <button onClick={() => router.invalidate()} className="mt-4 px-3 py-1.5 rounded bg-primary text-primary-foreground text-sm">Try again</button>
+      <div className="mx-auto max-w-md px-5 py-20 sm:px-8">
+        <h2 className="font-display text-xl font-semibold tracking-[-0.02em]">Couldn't load your data</h2>
+        <p className="mt-2 text-[14px] text-muted-foreground">{error.message}</p>
+        <button
+          onClick={() => router.invalidate()}
+          className="mt-6 rounded-full bg-primary px-5 py-2.5 text-[14px] font-semibold text-primary-foreground"
+        >
+          Try again
+        </button>
       </div>
     </AppShell>
   );
@@ -92,39 +114,42 @@ function CalcCommandCenter() {
   ];
 
   return (
-    <div className="p-4 lg:p-8 max-w-7xl mx-auto space-y-6">
+    <div className="mx-auto max-w-6xl space-y-6 px-5 pb-24 pt-12 sm:px-8 sm:pt-16">
       {/* Header */}
-      <div className="flex items-end justify-between flex-wrap gap-3">
-        <div>
-          <div className="text-xs font-mono uppercase tracking-[0.2em] text-muted-foreground mb-1">// score command center</div>
-          <h1 className="font-display text-2xl lg:text-3xl font-bold tracking-tight">
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div className="min-w-0">
+          <div className="micro-label">score command center</div>
+          <h1 className="mt-4 font-display text-3xl font-semibold leading-[1.06] tracking-[-0.035em] sm:text-4xl">
             {data.profile?.display_name ? `Welcome back, ${data.profile.display_name}.` : "Welcome back."}
           </h1>
-          <p className="text-sm text-muted-foreground mt-1">
+          <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">
             {data.attempts_count === 0
               ? "No attempts yet — your dashboard updates as you practice."
               : `${data.attempts_count} questions logged · ${Math.round(data.accuracy * 100)}% overall accuracy`}
           </p>
         </div>
-        <div className="flex items-center gap-2 text-xs">
-          <Link to="/practice" className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary text-primary-foreground font-medium">
+        <div className="flex shrink-0 items-center gap-2">
+          <Link
+            to="/practice"
+            className="inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-[13px] font-semibold text-primary-foreground"
+          >
             Practice <ArrowRight className="h-3.5 w-3.5" />
           </Link>
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full glass">
+          <span className="num inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-2 text-[12px] text-muted-foreground">
             <Calendar className="h-3.5 w-3.5" /> {daysToExam} days to exam
           </span>
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="flex items-center gap-1 border-b border-border">
+      <div className="flex items-center gap-1 overflow-x-auto border-b border-border">
         {tabs.map((t) => (
           <button
             key={t.id}
             onClick={() => setTab(t.id)}
-            className={`px-3 py-2 text-sm -mb-px border-b-2 transition ${
+            className={`-mb-px shrink-0 border-b-2 px-3.5 py-2.5 text-[13px] transition-colors ${
               tab === t.id
-                ? "border-primary text-foreground font-medium"
+                ? "border-primary font-semibold text-foreground"
                 : "border-transparent text-muted-foreground hover:text-foreground"
             }`}
           >
@@ -173,25 +198,25 @@ function OtherSubjectCommandCenter({ subjectId }: { subjectId: SubjectId }) {
   const targetPct = Math.min(100, (target / total) * 100);
 
   return (
-    <div className="p-4 lg:p-8 max-w-7xl mx-auto space-y-6">
+    <div className="mx-auto max-w-6xl space-y-6 px-5 pb-24 pt-12 sm:px-8 sm:pt-16">
       {/* Header */}
-      <div className="flex items-end justify-between flex-wrap gap-3">
-        <div>
-          <div className="text-xs font-mono uppercase tracking-[0.2em] text-muted-foreground mb-1">// score command center</div>
-          <h1 className="font-display text-2xl lg:text-3xl font-bold tracking-tight">{subject.navLabel} Command Center</h1>
-          <p className="text-sm text-muted-foreground mt-1">
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div className="min-w-0">
+          <div className="micro-label">score command center</div>
+          <h1 className="mt-4 font-display text-3xl font-semibold leading-[1.06] tracking-[-0.035em] sm:text-4xl">{subject.navLabel} Command Center</h1>
+          <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">
             The {subject.navLabel} question bank is coming soon — this dashboard will populate with your real attempts once it launches.
           </p>
         </div>
-        <div className="flex items-center gap-2 text-xs">
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full glass">
+        <div className="flex shrink-0 items-center gap-2">
+          <span className="num inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-2 text-[12px] text-muted-foreground">
             <Calendar className="h-3.5 w-3.5" /> {daysToExam} days to exam
           </span>
         </div>
       </div>
 
-      <div className="rounded-xl border border-dashed border-border bg-card/50 p-4 text-sm text-muted-foreground flex items-start gap-2">
-        <Sparkles className="h-4 w-4 text-pink-400 shrink-0 mt-0.5" />
+      <div className="flex items-start gap-3 rounded-3xl border border-dashed border-border bg-card/60 p-5 text-[14px] leading-relaxed text-muted-foreground">
+        <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
         <span>
           No attempt data yet for {subject.navLabel}. The unit-mastery table below shows the real exam units so you can see what's ahead —
           practice questions for this subject aren't live yet, so nothing here is estimated or invented.
@@ -199,7 +224,7 @@ function OtherSubjectCommandCenter({ subjectId }: { subjectId: SubjectId }) {
       </div>
 
       <div className="grid lg:grid-cols-3 gap-4">
-        <div className="rounded-xl border border-border bg-card p-5">
+        <div className="rounded-3xl border border-border bg-card p-6 shadow-card">
           <div className="text-xs uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5"><Target className="h-3.5 w-3.5" /> {engineLabel}</div>
           <div className="mt-4 flex items-baseline gap-2">
             <span className="font-display text-4xl font-bold tabular-nums">{raw}</span>
@@ -212,7 +237,7 @@ function OtherSubjectCommandCenter({ subjectId }: { subjectId: SubjectId }) {
           </div>
           <div className="mt-3 text-xs text-muted-foreground">Illustrative target based on the {subject.navLabel} exam structure — {gap}-point gap to target.</div>
         </div>
-        <div className="lg:col-span-2 rounded-xl border border-border bg-card p-5">
+        <div className="lg:col-span-2 rounded-3xl border border-border bg-card p-6 shadow-card">
           <div className="text-xs uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5"><Zap className="h-3.5 w-3.5 text-amber-400" /> Recommendations</div>
           <ol className="mt-4 space-y-2.5 text-sm">
             {subject.recommendations.map((a, i) => (
@@ -227,7 +252,7 @@ function OtherSubjectCommandCenter({ subjectId }: { subjectId: SubjectId }) {
       </div>
 
       {/* Unit mastery — untouched state */}
-      <div className="rounded-xl border border-border bg-card overflow-hidden">
+      <div className="rounded-3xl border border-border bg-card overflow-hidden">
         <div className="flex items-center justify-between px-5 py-4 border-b border-border">
           <div>
             <div className="text-xs uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5">
@@ -258,7 +283,7 @@ function OtherSubjectCommandCenter({ subjectId }: { subjectId: SubjectId }) {
       </div>
 
       {/* Common mistakes for this subject */}
-      <div className="rounded-xl border border-border bg-card p-5">
+      <div className="rounded-3xl border border-border bg-card p-6 shadow-card">
         <div className="flex items-center justify-between mb-4">
           <div>
             <div className="text-xs uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5"><AlertTriangle className="h-3.5 w-3.5 text-rose-400" /> Common mistakes to watch for</div>
@@ -286,7 +311,7 @@ function PredictedScoreCard({ data }: { data: ReturnType<typeof useFakeData> }) 
   const conf = data.confidence;
   const dots = [1, 2, 3, 4, 5];
   return (
-    <div className="rounded-xl border border-border bg-card p-5 relative overflow-hidden">
+    <div className="rounded-3xl border border-border bg-card p-6 shadow-card relative overflow-hidden">
       <div className="absolute -top-20 -right-20 h-48 w-48 rounded-full blur-3xl opacity-30 bg-primary" />
       <div className="relative">
         <div className="flex items-center justify-between text-xs">
@@ -319,7 +344,7 @@ function PointsCard({ current, target, gap }: { current: number; target: number;
   const pct = Math.min(100, (current / 108) * 100);
   const targetPct = Math.min(100, (target / 108) * 100);
   return (
-    <div className="rounded-xl border border-border bg-card p-5">
+    <div className="rounded-3xl border border-border bg-card p-6 shadow-card">
       <div className="flex items-center justify-between text-xs">
         <span className="uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5"><Target className="h-3.5 w-3.5" /> 108-point engine</span>
         <Link to="/108-points-breakdown" className="text-primary inline-flex items-center gap-1 hover:underline">View map <ArrowUpRight className="h-3 w-3" /></Link>
@@ -347,7 +372,7 @@ function PointsCard({ current, target, gap }: { current: number; target: number;
 
 function FastestPathCard({ actions }: { actions: { title: string; detail: string; estimated_gain: number; target: string }[] }) {
   return (
-    <div className="rounded-xl border border-border bg-card p-5">
+    <div className="rounded-3xl border border-border bg-card p-6 shadow-card">
       <div className="flex items-center justify-between text-xs">
         <span className="uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5"><Zap className="h-3.5 w-3.5 text-amber-400" /> Fastest path</span>
         <span className="text-muted-foreground">Ranked by ROI</span>
@@ -398,9 +423,9 @@ function PerformanceDiagnostics({ units }: { units: UnitRow[] }) {
         rows={weaknesses.map((u) => ({ id: u.unit_id, label: `Unit ${u.number} · ${u.name}`, value: `${u.mastery}%`, meta: `${u.attempts} attempts · worth ${u.ap_points}p`, pct: u.mastery }))}
       />
       {/* Untouched / projected lift */}
-      <div className="rounded-xl border border-border bg-card p-5">
+      <div className="rounded-3xl border border-border bg-card p-6 shadow-card">
         <div className="text-xs uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5">
-          <Sparkles className="h-3.5 w-3.5 text-pink-400" /> Untouched units
+          <Sparkles className="h-3.5 w-3.5 text-primary" /> Untouched units
         </div>
         <h3 className="font-display font-semibold mt-1">Highest ROI to start</h3>
         {untouched.length === 0 ? (
@@ -413,7 +438,7 @@ function PerformanceDiagnostics({ units }: { units: UnitRow[] }) {
                   <div className="text-sm font-medium truncate">Unit {u.number} · {u.name}</div>
                   <div className="text-[10px] text-muted-foreground">{u.ap_weight_pct}% of exam</div>
                 </div>
-                <span className="font-mono text-xs text-pink-300 shrink-0">+{u.ap_points}p</span>
+                <span className="font-mono text-xs text-primary shrink-0">+{u.ap_points}p</span>
               </li>
             ))}
           </ul>
@@ -421,7 +446,7 @@ function PerformanceDiagnostics({ units }: { units: UnitRow[] }) {
       </div>
 
       {/* Full unit performance table — topic-level placeholder */}
-      <div className="lg:col-span-3 rounded-xl border border-border bg-card overflow-hidden">
+      <div className="lg:col-span-3 rounded-3xl border border-border bg-card overflow-hidden">
         <div className="flex items-center justify-between px-5 py-4 border-b border-border">
           <div>
             <div className="text-xs uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5">
@@ -508,7 +533,7 @@ function DiagnosticColumn({
     ? { dot: "bg-emerald-400", value: "text-emerald-300", bar: "bg-emerald-500" }
     : { dot: "bg-rose-400",    value: "text-rose-300",    bar: "bg-rose-500" };
   return (
-    <div className="rounded-xl border border-border bg-card p-5">
+    <div className="rounded-3xl border border-border bg-card p-6 shadow-card">
       <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-muted-foreground">
         <span className={`h-1.5 w-1.5 rounded-full ${tone.dot}`} /> {title}
       </div>
@@ -537,7 +562,7 @@ function DiagnosticColumn({
 
 function TopMistakesPanel({ mistakes }: { mistakes: Array<{ code: string; title: string; category: string; occurrences: number; est_point_loss: number }> }) {
   return (
-    <div className="rounded-xl border border-border bg-card p-5 h-full">
+    <div className="rounded-3xl border border-border bg-card p-6 shadow-card h-full">
       <div className="flex items-center justify-between mb-4">
         <div>
           <div className="text-xs uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5"><AlertTriangle className="h-3.5 w-3.5 text-rose-400" /> Where you're losing points</div>
@@ -574,8 +599,8 @@ function InsightsPanel({ data }: { data: Awaited<ReturnType<typeof getPerformanc
   const untouched = data.unit_mastery.filter((u) => u.mastery < 0).length;
   const weak = data.unit_mastery.filter((u) => u.mastery >= 0 && u.mastery < 60).length;
   return (
-    <div className="rounded-xl border border-border bg-card p-5 h-full">
-      <div className="text-xs uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5"><Sparkles className="h-3.5 w-3.5 text-pink-400" /> Insights</div>
+    <div className="rounded-3xl border border-border bg-card p-6 shadow-card h-full">
+      <div className="text-xs uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5"><Sparkles className="h-3.5 w-3.5 text-primary" /> Insights</div>
       <ul className="mt-4 space-y-3 text-sm">
         <li className="flex items-start gap-2">
           <span className="h-1.5 w-1.5 rounded-full bg-primary mt-1.5 shrink-0" />

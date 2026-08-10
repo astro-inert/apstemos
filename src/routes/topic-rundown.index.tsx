@@ -23,36 +23,39 @@ export const Route = createFileRoute("/topic-rundown/")({
 function Page() {
   return (
     <PageShell
-      eyebrow="Topic Rundowns"
-      title={<>Every unit, <span className="text-primary">condensed</span>.</>}
+      eyebrow="topic rundowns"
+      title={
+        <>
+          Every unit, <span className="text-primary">condensed</span>.
+        </>
+      }
       description="A concise, exam-focused guide to every core concept tested on the AP exam. Open a unit for its rundown."
     >
-      <div className="grid gap-3">
+      <div className="overflow-hidden rounded-3xl border border-border bg-card shadow-card">
         {QN_UNITS.map((u) => (
           <Link
             key={u.slug}
             to="/topic-rundown/$unitId"
             params={{ unitId: u.slug }}
-            className="group rounded-2xl border border-border bg-card p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:border-primary/40 transition"
+            className="group grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-4 border-b border-border px-5 py-4 transition-colors last:border-b-0 hover:bg-elevated/60 sm:px-6 sm:py-5"
           >
-            <div className="flex items-start gap-5 min-w-0">
-              <span className="font-display font-extrabold text-2xl text-primary w-16 shrink-0 tabular-nums">
-                {u.number.toString().padStart(2, "0")}
-              </span>
-              <div className="min-w-0">
-                <h2 className="font-display text-lg font-bold">{u.title}</h2>
-                <p className="text-sm text-muted-foreground mt-0.5">{u.blurb}</p>
-              </div>
+            <span className="num w-9 shrink-0 font-display text-lg font-semibold text-primary">
+              {u.number.toString().padStart(2, "0")}
+            </span>
+            <div className="min-w-0">
+              <h2 className="truncate font-display text-[15px] font-semibold leading-tight">{u.title}</h2>
+              <p className="mt-1 truncate text-[13px] text-muted-foreground">{u.blurb}</p>
             </div>
-            <div className="flex items-center gap-3 shrink-0">
-              <span className="text-xs font-mono px-2.5 py-1 rounded-full bg-elevated text-muted-foreground">
+            <div className="flex shrink-0 items-center gap-3">
+              <span className="num hidden rounded-full border border-border px-2.5 py-1 text-[11px] text-muted-foreground sm:inline-block">
                 {u.weight}
               </span>
-              <ArrowRight className="h-4 w-4 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
+              <ArrowRight className="h-4 w-4 text-subtle transition-all group-hover:translate-x-0.5 group-hover:text-primary" />
             </div>
           </Link>
         ))}
       </div>
+      
     </PageShell>
   );
 }

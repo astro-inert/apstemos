@@ -1,6 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 import { PageShell } from "@/components/PageShell";
+import { Reveal } from "@/components/home/primitives";
 import { QN_UNITS, type TopicEntry, type UnitEntry } from "@/lib/question-navigator-data";
 
 export const Route = createFileRoute("/topic-rundown/$unitId")({
@@ -34,30 +35,28 @@ function Page() {
   const { unit } = Route.useLoaderData() as { unit: UnitEntry };
 
   return (
-    <PageShell
-      eyebrow={`Topic Rundown · Unit ${unit.number}`}
-      title={unit.title}
-      description={unit.blurb}
-    >
-      <div className="mb-6">
+    <PageShell eyebrow={`topic rundown · unit ${unit.number}`} title={unit.title} description={unit.blurb}>
+      <div className="mb-8">
         <Link
           to="/topic-rundown"
-          className="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground transition"
+          className="micro-label inline-flex items-center gap-1.5 transition-colors hover:text-foreground"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
           All units
         </Link>
       </div>
 
-      <div className="grid gap-3">
-        {unit.topics.map((t: TopicEntry) => (
-          <section key={t.slug} className="rounded-xl border border-border bg-card p-5">
-            <h2 className="font-display font-semibold">{t.title}</h2>
-            <p className="text-sm text-muted-foreground mt-1">{t.blurb}</p>
-            <div className="mt-4 rounded-lg border border-dashed border-border bg-elevated/40 px-4 py-5 text-sm text-muted-foreground">
-              Content coming soon.
-            </div>
-          </section>
+      <div className="grid gap-4">
+        {unit.topics.map((t: TopicEntry, i: number) => (
+          <Reveal key={t.slug} delay={Math.min(i, 6) * 0.04}>
+            <section className="rounded-3xl border border-border bg-card p-6 shadow-card sm:p-7">
+              <h2 className="font-display text-[16px] font-semibold leading-tight">{t.title}</h2>
+              <p className="mt-2 text-[14px] leading-relaxed text-muted-foreground">{t.blurb}</p>
+              <div className="mt-5 rounded-2xl border border-dashed border-border bg-elevated/40 px-4 py-5 text-[13px] text-muted-foreground">
+                Content coming soon.
+              </div>
+            </section>
+          </Reveal>
         ))}
       </div>
     </PageShell>

@@ -12,12 +12,12 @@ export const Route = createFileRoute("/ab-track")({
   }),
   component: () => (
     <PageShell
-      eyebrow="AB Track"
+      eyebrow="ab track"
       title={<>Calculus <span className="text-primary">AB</span>.</>}
       description="A first-semester college calculus course. Eight units covering limits, derivatives, integrals, differential equations, and their applications."
     >
-      <div className="bg-card p-8 rounded-3xl border border-border">
-        <p className="text-muted-foreground">Pair the AB track with the Self-Study Guide and the Topic Rundown to build a complete preparation path.</p>
+      <div className="rounded-3xl border border-border bg-card p-6 shadow-card sm:p-8">
+        <p className="text-[14px] leading-relaxed text-muted-foreground">Pair the AB track with the Topic Rundowns and the Question Type Navigator to build a complete preparation path.</p>
       </div>
     </PageShell>
   ),

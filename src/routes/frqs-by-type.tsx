@@ -11,7 +11,12 @@ export const Route = createFileRoute("/frqs-by-type")({
         content:
           "AP Calc FRQs #1–6 organized by topic, with links to every past FRQ from 2000–2025 for AB and BC.",
       },
+      { property: "og:title", content: "FRQ Library — AP STEM OS" },
+      { property: "og:description", content: "Every past AP Calculus FRQ #1–6, organized by question type." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
+
   }),
   component: FRQsByType,
 });
@@ -28,17 +33,17 @@ function frqLink(year: number, track: "AB" | "BC", num: number) {
 
 function YearGrid({ years, track, num }: { years: number[]; track: "AB" | "BC"; num: number }) {
   if (years.length === 0) {
-    return <p className="text-sm text-muted-foreground italic">No years.</p>;
+    return <p className="text-[13px] italic text-muted-foreground">No years.</p>;
   }
   return (
-    <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-px bg-border border border-border">
+    <div className="grid grid-cols-4 gap-2 sm:grid-cols-6 md:grid-cols-8">
       {years.map((y) => (
         <a
           key={y}
           href={frqLink(y, track, num)}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-center px-2 py-2 bg-card hover:bg-primary hover:text-primary-foreground text-sm font-mono font-medium transition-colors"
+          className="num rounded-lg border border-border bg-card px-2 py-2 text-center text-[12px] font-medium transition-colors hover:border-primary/40 hover:bg-primary/10 hover:text-primary"
         >
           {y}
         </a>
@@ -49,7 +54,7 @@ function YearGrid({ years, track, num }: { years: number[]; track: "AB" | "BC"; 
 
 function TypeHeading({ children }: { children: React.ReactNode }) {
   return (
-    <h3 className="text-[11px] font-bold uppercase tracking-[0.22em] text-foreground border-b border-foreground/30 pb-2 mb-3">
+    <h3 className="micro-label mb-3 border-b border-border pb-2 text-foreground">
       {children}
     </h3>
   );
@@ -57,7 +62,7 @@ function TypeHeading({ children }: { children: React.ReactNode }) {
 
 function TrackLabel({ children }: { children: React.ReactNode }) {
   return (
-    <div className="text-xs font-bold uppercase tracking-[0.18em] text-muted-foreground mb-4">
+    <div className="num mb-4 inline-block rounded-full border border-border bg-elevated/60 px-2.5 py-0.5 text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
       {children}
     </div>
   );
@@ -73,30 +78,30 @@ const BC_Q2_OTHER = ALL_YEARS.filter(
 
 function Section({ children }: { children: React.ReactNode }) {
   return (
-    <section className="p-6 sm:p-8 bg-card border border-border">{children}</section>
+    <section className="rounded-3xl border border-border bg-card p-6 shadow-card sm:p-8">{children}</section>
   );
 }
 
 function SectionTitle({ num }: { num: number }) {
   return (
-    <h2 className="font-display text-2xl font-bold text-foreground mb-1">FRQ #{num}</h2>
+    <h2 className="font-display text-xl font-semibold tracking-[-0.02em] sm:text-2xl">FRQ #{num}</h2>
   );
 }
 
 function FRQsByType() {
   return (
     <PageShell
-      eyebrow="FRQs by Type"
-      title="FRQs by Type"
+      eyebrow="frq library"
+      title={<>FRQs by <span className="text-primary">type</span>.</>}
       description="FRQs 1, 3, and 4 are shared between AB and BC; FRQs 2, 5, and 6 differ between the two exams. Click any year to open that FRQ on College Board."
     >
       <Tabs defaultValue="1" className="w-full">
-        <TabsList className="grid grid-cols-6 w-full mb-8 rounded-none border border-border bg-card p-0 h-auto">
+        <TabsList className="mb-8 grid h-auto w-full grid-cols-3 gap-1 rounded-2xl border border-border bg-card p-1 sm:grid-cols-6">
           {[1, 2, 3, 4, 5, 6].map((n) => (
             <TabsTrigger
               key={n}
               value={String(n)}
-              className="font-bold rounded-none border-r border-border last:border-r-0 py-3 data-[state=active]:bg-foreground data-[state=active]:text-background"
+              className="num rounded-xl py-2.5 text-[12px] font-semibold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
             >
               FRQ #{n}
             </TabsTrigger>
@@ -106,7 +111,7 @@ function FRQsByType() {
         <TabsContent value="1">
           <Section>
             <SectionTitle num={1} />
-            <p className="text-sm text-muted-foreground mb-6">Shared between AB &amp; BC.</p>
+            <p className="mt-2 mb-6 text-[13px] text-muted-foreground">Shared between AB &amp; BC.</p>
             <TypeHeading>Interpretation</TypeHeading>
             <YearGrid years={ALL_YEARS} track="AB" num={1} />
           </Section>
@@ -115,7 +120,7 @@ function FRQsByType() {
         <TabsContent value="2">
           <Section>
             <SectionTitle num={2} />
-            <p className="text-sm text-muted-foreground mb-6">Differs between AB and BC.</p>
+            <p className="mt-2 mb-6 text-[13px] text-muted-foreground">Differs between AB and BC.</p>
             <div className="space-y-8">
               <div>
                 <TrackLabel>AB</TrackLabel>
@@ -146,7 +151,7 @@ function FRQsByType() {
         <TabsContent value="3">
           <Section>
             <SectionTitle num={3} />
-            <p className="text-sm text-muted-foreground mb-6">Shared between AB &amp; BC.</p>
+            <p className="mt-2 mb-6 text-[13px] text-muted-foreground">Shared between AB &amp; BC.</p>
             <TypeHeading>Miscellaneous</TypeHeading>
             <YearGrid years={ALL_YEARS} track="AB" num={3} />
           </Section>
@@ -155,7 +160,7 @@ function FRQsByType() {
         <TabsContent value="4">
           <Section>
             <SectionTitle num={4} />
-            <p className="text-sm text-muted-foreground mb-6">Shared between AB &amp; BC.</p>
+            <p className="mt-2 mb-6 text-[13px] text-muted-foreground">Shared between AB &amp; BC.</p>
             <TypeHeading>Extrema and Derivative Tests</TypeHeading>
             <YearGrid years={ALL_YEARS} track="AB" num={4} />
           </Section>
@@ -164,7 +169,7 @@ function FRQsByType() {
         <TabsContent value="5">
           <Section>
             <SectionTitle num={5} />
-            <p className="text-sm text-muted-foreground mb-6">Differs between AB and BC.</p>
+            <p className="mt-2 mb-6 text-[13px] text-muted-foreground">Differs between AB and BC.</p>
             <div className="space-y-8">
               <div>
                 <TrackLabel>AB</TrackLabel>
@@ -183,7 +188,7 @@ function FRQsByType() {
         <TabsContent value="6">
           <Section>
             <SectionTitle num={6} />
-            <p className="text-sm text-muted-foreground mb-6">Differs between AB and BC.</p>
+            <p className="mt-2 mb-6 text-[13px] text-muted-foreground">Differs between AB and BC.</p>
             <div className="space-y-8">
               <div>
                 <TrackLabel>AB</TrackLabel>

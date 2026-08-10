@@ -35,7 +35,7 @@ export function SubtopicPanel({ subtopics }: { subtopics: Sub[] }) {
         empty={`Nothing below ${STRENGTH_CUTOFF}% with ${SUBTOPIC_THRESHOLD}+ questions logged.`}
       />
 
-      <div className="rounded-xl border border-border bg-card p-5">
+      <div className="rounded-3xl border border-border bg-card p-6 shadow-card">
         <div className="text-xs uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5">
           <Lock className="h-3.5 w-3.5" /> Building data
         </div>
@@ -80,7 +80,7 @@ function Column({
 }) {
   const c = tone === "emerald" ? { dot: "bg-emerald-400", txt: "text-emerald-300", bar: "bg-emerald-500" } : { dot: "bg-rose-400", txt: "text-rose-300", bar: "bg-rose-500" };
   return (
-    <div className="rounded-xl border border-border bg-card p-5">
+    <div className="rounded-3xl border border-border bg-card p-6 shadow-card">
       <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-muted-foreground">
         <span className={`h-1.5 w-1.5 rounded-full ${c.dot}`} /> {title}
       </div>
