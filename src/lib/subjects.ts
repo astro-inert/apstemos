@@ -521,3 +521,13 @@ export const PHYSICS_STORAGE_KEY = "ap-os:last-physics-course";
 export function getSubject(id: SubjectId): SubjectConfig {
   return SUBJECTS[id];
 }
+
+/**
+ * Subjects whose tools (practice bank, navigator, mistake database, resources)
+ * are actually built. Everything else shows "content coming soon".
+ */
+export const LIVE_SUBJECTS: SubjectId[] = ["calc-bc"];
+
+export function isSubjectLive(id: SubjectId): boolean {
+  return LIVE_SUBJECTS.includes(id);
+}
