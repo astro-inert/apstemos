@@ -5,6 +5,7 @@ import { CheckCircle2, XCircle } from "lucide-react";
 import { LaTeX } from "@/components/LaTeX";
 import { getAnswerLog } from "@/lib/practice.functions";
 import { QN_UNITS } from "@/lib/question-navigator-data";
+import { MistakeTagger } from "@/components/mistakes/MistakeTagger";
 
 const topicTitle = (slug: string | null) =>
   slug ? (QN_UNITS.flatMap((u) => u.topics).find((t) => t.slug === slug)?.title ?? slug) : "Untagged";
@@ -63,6 +64,13 @@ export function AnswerLogPanel() {
                       {c}
                     </Link>
                   ))}
+                  {!r.correct && (
+                    <MistakeTagger
+                      attemptId={r.id}
+                      questionPrompt={r.prompt}
+                      topic={topicTitle(r.topic_slug)}
+                    />
+                  )}
                 </div>
               </div>
               <div
