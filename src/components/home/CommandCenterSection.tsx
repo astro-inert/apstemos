@@ -1,9 +1,9 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
-import type { SubjectConfig } from "@/lib/subjects";
+import { isSubjectLive, type SubjectConfig } from "@/lib/subjects";
 import type { InstrumentData } from "@/lib/use-home-instrument";
-import { CountUp, ExampleBadge, MasteryBar, MicroLabel, Reveal, Section, SectionHeading } from "./primitives";
+import { ComingSoon, CountUp, ExampleBadge, MasteryBar, MicroLabel, Reveal, Section, SectionHeading } from "./primitives";
 
 export function CommandCenterSection({
   subject,
@@ -13,6 +13,7 @@ export function CommandCenterSection({
   data: InstrumentData;
 }) {
   const reduced = useReducedMotion();
+  const live = isSubjectLive(subject.id);
   return (
     <Section className="border-t border-border">
       <SectionHeading
@@ -68,6 +69,7 @@ export function CommandCenterSection({
                     whileHover={reduced ? undefined : { y: -2 }}
                     transition={{ type: "spring", stiffness: 300, damping: 24 }}
                   >
+                    {live ? (
                     <Link
                       to="/practice"
                       className="group flex items-start gap-4 rounded-2xl border border-border bg-background/70 px-4 py-4 transition-colors hover:border-primary/40"
@@ -80,6 +82,16 @@ export function CommandCenterSection({
                       </span>
                       <ArrowRight className="mt-1 h-4 w-4 shrink-0 text-subtle transition-all group-hover:translate-x-0.5 group-hover:text-primary" />
                     </Link>
+                    ) : (
+                      <div className="flex items-start gap-4 rounded-2xl border border-border bg-background/70 px-4 py-4">
+                        <span className="num text-[13px] text-primary">{i + 1}.</span>
+                        <span className="min-w-0 flex-1">
+                          <span className="block font-display text-[15px] font-semibold leading-tight">{m.name}</span>
+                          <span className="num mt-1 block text-[11px] text-muted-foreground">{m.mastery}% mastery</span>
+                          <ComingSoon className="mt-2" />
+                        </span>
+                      </div>
+                    )}
                   </motion.li>
                 ))}
               </ol>

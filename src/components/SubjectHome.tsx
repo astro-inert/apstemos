@@ -42,7 +42,7 @@ export function SubjectHome({ subject }: { subject: SubjectConfig }) {
       <PillarsSection subject={subject} />
       <ResourcesSection subject={subject} />
       <ManifestoSection />
-      <FinalCTASection />
+      <FinalCTASection subject={subject} />
       <SiteFooter />
     </div>
   );

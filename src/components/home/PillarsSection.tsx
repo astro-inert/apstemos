@@ -1,18 +1,19 @@
 import { Link } from "@tanstack/react-router";
 import { motion, useReducedMotion } from "motion/react";
 import { HOME_DEMO } from "@/lib/home-demo";
-import type { SubjectConfig } from "@/lib/subjects";
-import { MicroLabel, Reveal, Section, SectionHeading } from "./primitives";
+import { isSubjectLive, type SubjectConfig } from "@/lib/subjects";
+import { ComingSoon, MicroLabel, Reveal, Section, SectionHeading } from "./primitives";
 
 export function PillarsSection({ subject }: { subject: SubjectConfig }) {
   const demo = HOME_DEMO[subject.id];
   const reduced = useReducedMotion();
+  const live = isSubjectLive(subject.id);
 
   const pillars = [
     {
       n: "01",
       title: "Practice",
-      copy: `${demo.questionCount} AP-style questions. Organized by unit, subtopic, and difficulty.`,
+      copy: `${demo.questionCount} AP-style questions. Organized by unit, topic, and difficulty.`,
       to: "/practice",
       preview: (
         <div className="space-y-1.5">
@@ -85,21 +86,28 @@ export function PillarsSection({ subject }: { subject: SubjectConfig }) {
         title="Built around what actually moves your preparation forward."
       />
       <div className="mt-14 grid gap-4 md:grid-cols-3 lg:gap-6">
-        {pillars.map((p, i) => (
+        {pillars.map((p, i) => {
+          const clickable = live || p.to === "/command-center";
+          const Card = clickable ? Link : "div";
+          return (
           <Reveal key={p.title} delay={i * 0.07}>
-            <Link
-              to={p.to}
-              className="group flex h-full flex-col rounded-3xl border border-border bg-card p-6 shadow-card transition-all hover:border-primary/35 hover:shadow-elevated sm:p-8"
+            <Card
+              {...(clickable ? ({ to: p.to } as never) : {})}
+              className={`group flex h-full flex-col rounded-3xl border border-border bg-card p-6 shadow-card sm:p-8 ${
+                clickable ? "transition-all hover:border-primary/35 hover:shadow-elevated" : "opacity-80"
+              }`}
             >
               <MicroLabel>{p.n}</MicroLabel>
               <h3 className="mt-4 font-display text-xl font-semibold leading-tight">{p.title}</h3>
               <p className="mt-3 text-[14px] leading-relaxed text-muted-foreground">{p.copy}</p>
+              {clickable ? null : <ComingSoon className="mt-4 self-start" />}
               <div className="mt-8 flex min-h-[6.5rem] items-end rounded-2xl border border-border bg-background p-4">
                 <div className="w-full">{p.preview}</div>
               </div>
-            </Link>
+            </Card>
           </Reveal>
-        ))}
+          );
+        })}
       </div>
     </Section>
   );
