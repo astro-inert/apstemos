@@ -1,68 +1,45 @@
-# AP Calculus BC Performance OS — Build Plan
+# Making the site match the AP STEM OS identity
 
-A staged rebuild. I'll ship Phase 1 now (the foundation + flagship UI you can actually see). Phases 2–3 follow once you confirm Phase 1 feels right — that avoids burning credits on screens you'd want redesigned.
+Three passes, in order. Pass 1 is the identity/landing work; passes 2 and 3 fill the gaps I found while reading the project.
 
-## Phase 1 — Foundation + Score Command Center (this turn)
+## What's already true
 
-**Backend (Lovable Cloud)**
-- Enable Cloud, configure email + Google auth.
-- Schema (all RLS-locked to `auth.uid()`):
-  - `profiles` (display name, target score, exam date, track AB/BC)
-  - `units` (curriculum, AP weight %, point value out of 108)
-  - `topics` (FK unit)
-  - `questions` (type MCQ/FRQ, unit, topic, difficulty, calculator, skills[], common_mistakes[], ap_value, answer, explanation) — schema only, empty
-  - `attempts` (user, question, correct, time_spent, mistake_tags[])
-  - `mastery` (user, topic, score 0–100, last_practiced, attempts_count) — derived view + trigger
-  - `common_mistakes` (catalog with description, example, consequence, fix, est_point_loss)
-  - `mistake_occurrences` (user, mistake, question)
-- `user_roles` table + `has_role()` for future admin question authoring.
-- Seed: units (1–10), 108-pt distribution, ~20 starter common mistakes (sign errors, missing units, wrong bounds, etc.) — these are general AP knowledge, not question content.
+- Practice (1700+ generated questions, unit/subtopic tags, difficulty, explanations), Score Command Center (70% strength/weakness threshold, unit mastery, ROI suggestions), Answer Log with mistake tagging, Common Mistakes Database, Question Type Navigator (unit → topic), FRQ Library, and the formula-sheet PDF link all exist.
 
-**Frontend**
-- Auth pages (`/auth`, `/reset-password`) with email + Google.
-- `_authenticated/` shell with sidebar nav: Command Center, Practice, FRQ Library, Common Mistakes, Topics, Roadmap, Formula Sheet, Settings.
-- **Homepage `/`** (public, marketing): new hero ("Everything You Need For A 5"), Score Command Center preview, 108-pt engine visual, common-mistakes teaser, formula-sheet card, CTAs to sign in. Removes streaks/daily-question/generic-progress.
-- **`/command-center`** (authed, flagship):
-  - Predicted AP Score card (1–5) with confidence + trend sparkline
-  - 108-pt bar: current / target / gap
-  - "Fastest path to your target" — ranked recommended actions by ROI
-  - Unit mastery heatmap (10 units × MCQ/FRQ)
-  - Recent mistakes feed
-- **`/common-mistakes`**: searchable catalog (description, example, AP consequence, fix, est. point loss, related links).
-- **`/108-points`**: full breakdown — Section I MCQ (45 = 54 raw pts scaled), Section II FRQ (54 pts) — visualized as a treemap of where points live and where this user is losing them.
-- Keep existing `/frqs-by-type`, `/topic-rundown`, `/exam-strategy`, `/self-study-guide`, `/latex-master-sheet` but restyle to match new shell.
+## What's missing
 
-**Design**
-- Keep Cloud White / Modern Tech / Bento / Dark-default tokens already in `src/styles.css`.
-- Tighten to "data-dense premium" (UWorld + Linear): more tables, sparklines, heatmaps; fewer hero gradients. Add Recharts for mastery viz.
+- The site never says what it is: open-source, forever-free, built for a 5 — not for deep learning. Naming is inconsist­ent ("Performance OS" vs "AP STEM OS").
+- Exam Strategy is an empty page ("[Content coming soon.]").
+- Topic Rundowns is a list of 10 unit cards with no content behind them.
+- Question Type Navigator topic pages end in a "Question-type PDF · coming soon" block instead of the MCQ/FRQ how-to writeup.
+- There is no way to add a mistake the database doesn't have.
 
-## Phase 2 — Practice Engine (next turn)
+## Pass 1 — Identity and landing
 
-- `/practice` MCQ runner: Practice / Timed / Exam Sim / Custom / Adaptive Weakness modes
-- Per-question review screen (answer, explanation, skill, mistakes, related FRQ/topic/formula links)
-- Post-test analytics: unit/topic breakdown, time analysis, weakness detection, projected score delta, recommended actions
-- Adaptive selection: weighted random by `mastery.score` ASC + low `attempts_count`
-- Mastery recalc trigger on `attempts` insert
+- Rename the product to **AP STEM OS** everywhere: footer, page titles, meta/OG tags, sidebar wordmark (keep the per-subject short forms AP Calc/OS, AP Physics/OS, AP Stats/OS).
+- Rewrite the landing hero and add a short positioning band stating: open-source, forever free, covers AP Calculus AB/BC, Physics 1, 2, C Mechanics, C E&M, and Statistics, and built for one outcome — a 5. Keep the existing dark palette, cards, and animations.
+- Retitle the supporting-resources group to the real names: **FRQ Library**, **Topic Rundowns**, **Formula and Strategy Guide**, **Exam Strategy**. Update the nav dropdown to match.
+- Describe each resource with the user's own one-liners (what it is and when to use it) instead of generic copy.
+- Add a short "why this exists / open source" block near the footer with a repo link placeholder.
 
-## Phase 3 — FRQ DB + Roadmap + Admin (later)
+## Pass 2 — Fill the empty content (AP Calculus)
 
-- FRQ DB with full filter set (year/unit/topic/calc/difficulty/skill/type), scoring guidelines view, point breakdown
-- Self-study roadmap generator (1/3/6/9 mo based on exam date + diagnostic)
-- Admin route (`/_authenticated/_admin/questions`) for you to add questions over time — covers the "you'll provide them later" answer
-- Subject-agnostic refactor: rename `units` → `(subject_id, unit)` so AP Physics C / Stats can be added without redesign
+- **Exam Strategy**: build the real page with three sections — calculator usage (graphing-calc tasks with worked examples), timing (per-section pacing and point-per-minute triage), and efficient approaches to recurring question types. LaTeX-rendered.
+- **Topic Rundowns**: make each unit card open a unit page with an exam-focused rundown of every core concept for that unit — what's tested, the formula/rule, the trap, and the fastest solve.
+- **Question Type Navigator level 4**: replace the "coming soon" block with the actual writeup per subtopic — how to answer MCQs on it, how to answer FRQs on it, worked pattern, and the mistakes it triggers.
+- **Formula and Strategy Guide**: keep the printable PDF as the primary action, plus an in-app LaTeX-rendered version of the same 10 pages so it's usable without downloading.
 
-## Technical Notes
+Physics and Statistics stay as they are for now (skeleton pages, no bank).
 
-- All authed reads via `createServerFn` + `requireSupabaseAuth`.
-- Public homepage uses `supabaseAdmin` server fn for any read (none needed Phase 1; it's static marketing).
-- Predicted score = linear model on mastery-weighted unit accuracy until enough attempts; documented as estimate.
-- No streaks, no daily question, no generic readiness % — replaced by Predicted AP Score (1–5) backed by real attempt data, "Estimate based on N questions" when low signal.
+## Pass 3 — Close the loop with AI mistake capture
 
-## What I'm NOT building this turn
+- On a missed question in the Answer Log (and from the Common Mistakes page), add "My mistake isn't here → describe it".
+- The student describes it in plain language; AI drafts a structured entry — title, category, description, example, how to avoid, estimated point loss — shown for edit before saving.
+- Saved entries are **private to that student**: they appear in their own Common Mistakes view alongside the shared ones, marked as personal, and are taggable from the Answer Log exactly like shared mistakes.
 
-- Question content (you're supplying)
-- The MCQ runner UI (Phase 2)
-- FRQ filterable DB (Phase 3 — existing `/frqs-by-type` stays as the placeholder)
-- Subject-agnostic abstraction (Phase 3; schema is forward-compatible but uses BC fields now)
+## Technical notes
 
-Approve and I'll start with Cloud + schema + auth + Command Center + new homepage.
+- New `user_mistakes` table (owner-scoped RLS + grants) for personal AI-drafted entries; Answer Log tags reference either a shared `common_mistakes.code` or a personal entry id.
+- Drafting runs through a `createServerFn` calling Lovable AI (`google/gemini-3.6-flash`) with a Zod-validated structured output — no key in the client.
+- Topic Rundowns and the Navigator writeups become data modules (like `question-navigator-data.ts`) with new nested routes, so content is authored once and rendered by shared components.
+- All new prose renders through the existing `LaTeX` component; per-route `head()` metadata added for every new page.
