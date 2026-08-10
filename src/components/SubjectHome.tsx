@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import {
   AlertTriangle,
+  ArrowDown,
   ArrowRight,
   ArrowUpRight,
   ChevronRight,
