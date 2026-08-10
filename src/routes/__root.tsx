@@ -75,9 +75,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "APCalcExamPrep — AP Calculus AB & BC Exam Prep" },
+      { title: "AP STEM OS — Score optimization for AP Calculus, Physics & Statistics" },
       { name: "description", content: "The friendly, no-fluff prep companion for AP Calculus AB & BC. Self-study guides, topic rundowns, the 108 points breakdown, and FRQs by type." },
-      { property: "og:title", content: "APCalcExamPrep — AP Calculus AB & BC Exam Prep" },
+      { property: "og:title", content: "AP STEM OS — Score optimization for AP Calculus, Physics & Statistics" },
       { property: "og:description", content: "Self-study guides, topic rundowns, 108 points breakdown, and FRQs by type — built to help you score a 5." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
