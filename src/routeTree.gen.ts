@@ -9,7 +9,6 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as TopicRundownRouteImport } from './routes/topic-rundown'
 import { Route as StatisticsRouteImport } from './routes/statistics'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as PhysicsCMechanicsRouteImport } from './routes/physics-c-mechanics'
@@ -34,11 +33,6 @@ import { Route as AuthenticatedPracticeRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedCommandCenterRouteImport } from './routes/_authenticated/command-center'
 import { Route as QuestionNavigatorUnitIdTopicIdRouteImport } from './routes/question-navigator.$unitId.$topicId'
 
-const TopicRundownRoute = TopicRundownRouteImport.update({
-  id: '/topic-rundown',
-  path: '/topic-rundown',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const StatisticsRoute = StatisticsRouteImport.update({
   id: '/statistics',
   path: '/statistics',
@@ -120,9 +114,9 @@ const IndexRoute = IndexRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const TopicRundownIndexRoute = TopicRundownIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => TopicRundownRoute,
+  id: '/topic-rundown/',
+  path: '/topic-rundown/',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const QuestionNavigatorIndexRoute = QuestionNavigatorIndexRouteImport.update({
   id: '/question-navigator/',
@@ -130,9 +124,9 @@ const QuestionNavigatorIndexRoute = QuestionNavigatorIndexRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const TopicRundownUnitIdRoute = TopicRundownUnitIdRouteImport.update({
-  id: '/$unitId',
-  path: '/$unitId',
-  getParentRoute: () => TopicRundownRoute,
+  id: '/topic-rundown/$unitId',
+  path: '/topic-rundown/$unitId',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const QuestionNavigatorUnitIdRoute = QuestionNavigatorUnitIdRouteImport.update({
   id: '/question-navigator/$unitId',
@@ -173,7 +167,6 @@ export interface FileRoutesByFullPath {
   '/physics-c-mechanics': typeof PhysicsCMechanicsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/statistics': typeof StatisticsRoute
-  '/topic-rundown': typeof TopicRundownRouteWithChildren
   '/command-center': typeof AuthenticatedCommandCenterRoute
   '/practice': typeof AuthenticatedPracticeRoute
   '/question-navigator/$unitId': typeof QuestionNavigatorUnitIdRouteWithChildren
@@ -224,7 +217,6 @@ export interface FileRoutesById {
   '/physics-c-mechanics': typeof PhysicsCMechanicsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/statistics': typeof StatisticsRoute
-  '/topic-rundown': typeof TopicRundownRouteWithChildren
   '/_authenticated/command-center': typeof AuthenticatedCommandCenterRoute
   '/_authenticated/practice': typeof AuthenticatedPracticeRoute
   '/question-navigator/$unitId': typeof QuestionNavigatorUnitIdRouteWithChildren
@@ -251,7 +243,6 @@ export interface FileRouteTypes {
     | '/physics-c-mechanics'
     | '/sitemap.xml'
     | '/statistics'
-    | '/topic-rundown'
     | '/command-center'
     | '/practice'
     | '/question-navigator/$unitId'
@@ -301,7 +292,6 @@ export interface FileRouteTypes {
     | '/physics-c-mechanics'
     | '/sitemap.xml'
     | '/statistics'
-    | '/topic-rundown'
     | '/_authenticated/command-center'
     | '/_authenticated/practice'
     | '/question-navigator/$unitId'
@@ -328,20 +318,14 @@ export interface RootRouteChildren {
   PhysicsCMechanicsRoute: typeof PhysicsCMechanicsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   StatisticsRoute: typeof StatisticsRoute
-  TopicRundownRoute: typeof TopicRundownRouteWithChildren
   QuestionNavigatorUnitIdRoute: typeof QuestionNavigatorUnitIdRouteWithChildren
+  TopicRundownUnitIdRoute: typeof TopicRundownUnitIdRoute
   QuestionNavigatorIndexRoute: typeof QuestionNavigatorIndexRoute
+  TopicRundownIndexRoute: typeof TopicRundownIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/topic-rundown': {
-      id: '/topic-rundown'
-      path: '/topic-rundown'
-      fullPath: '/topic-rundown'
-      preLoaderRoute: typeof TopicRundownRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/statistics': {
       id: '/statistics'
       path: '/statistics'
@@ -456,10 +440,10 @@ declare module '@tanstack/react-router' {
     }
     '/topic-rundown/': {
       id: '/topic-rundown/'
-      path: '/'
+      path: '/topic-rundown'
       fullPath: '/topic-rundown/'
       preLoaderRoute: typeof TopicRundownIndexRouteImport
-      parentRoute: typeof TopicRundownRoute
+      parentRoute: typeof rootRouteImport
     }
     '/question-navigator/': {
       id: '/question-navigator/'
@@ -470,10 +454,10 @@ declare module '@tanstack/react-router' {
     }
     '/topic-rundown/$unitId': {
       id: '/topic-rundown/$unitId'
-      path: '/$unitId'
+      path: '/topic-rundown/$unitId'
       fullPath: '/topic-rundown/$unitId'
       preLoaderRoute: typeof TopicRundownUnitIdRouteImport
-      parentRoute: typeof TopicRundownRoute
+      parentRoute: typeof rootRouteImport
     }
     '/question-navigator/$unitId': {
       id: '/question-navigator/$unitId'
@@ -519,20 +503,6 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
-interface TopicRundownRouteChildren {
-  TopicRundownUnitIdRoute: typeof TopicRundownUnitIdRoute
-  TopicRundownIndexRoute: typeof TopicRundownIndexRoute
-}
-
-const TopicRundownRouteChildren: TopicRundownRouteChildren = {
-  TopicRundownUnitIdRoute: TopicRundownUnitIdRoute,
-  TopicRundownIndexRoute: TopicRundownIndexRoute,
-}
-
-const TopicRundownRouteWithChildren = TopicRundownRoute._addFileChildren(
-  TopicRundownRouteChildren,
-)
-
 interface QuestionNavigatorUnitIdRouteChildren {
   QuestionNavigatorUnitIdTopicIdRoute: typeof QuestionNavigatorUnitIdTopicIdRoute
 }
@@ -564,9 +534,10 @@ const rootRouteChildren: RootRouteChildren = {
   PhysicsCMechanicsRoute: PhysicsCMechanicsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   StatisticsRoute: StatisticsRoute,
-  TopicRundownRoute: TopicRundownRouteWithChildren,
   QuestionNavigatorUnitIdRoute: QuestionNavigatorUnitIdRouteWithChildren,
+  TopicRundownUnitIdRoute: TopicRundownUnitIdRoute,
   QuestionNavigatorIndexRoute: QuestionNavigatorIndexRoute,
+  TopicRundownIndexRoute: TopicRundownIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
