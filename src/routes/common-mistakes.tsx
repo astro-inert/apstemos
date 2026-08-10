@@ -9,7 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 export const Route = createFileRoute("/common-mistakes")({
   head: () => ({
     meta: [
-      { title: "Common Mistakes — AP Calc Performance OS" },
+      { title: "Common Mistakes — AP STEM OS" },
       { name: "description", content: "The 22+ ways AP Calculus students lose points — described, exampled, and fixed." },
     ],
   }),

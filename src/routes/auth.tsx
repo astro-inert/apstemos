@@ -7,7 +7,7 @@ import { toast } from "sonner";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
-    meta: [{ title: "Sign in — AP Calc Performance OS" }],
+    meta: [{ title: "Sign in — AP STEM OS" }],
   }),
   component: AuthPage,
 });
@@ -72,7 +72,7 @@ function AuthPage() {
           <span className="grid place-items-center h-7 w-7 rounded-md bg-primary text-primary-foreground">
             <Sigma className="h-4 w-4" strokeWidth={2.5} />
           </span>
-          <span>APCalc<span className="text-muted-foreground font-medium">/PerformanceOS</span></span>
+          <span>AP STEM<span className="text-muted-foreground font-medium">/OS</span></span>
         </Link>
         <div className="relative space-y-6 max-w-md">
           <div className="text-xs font-mono uppercase tracking-[0.2em] text-muted-foreground">// the operating system for a 5</div>
@@ -95,7 +95,7 @@ function AuthPage() {
             ))}
           </div>
         </div>
-        <div className="relative text-xs text-muted-foreground">© {new Date().getFullYear()} APCalc Performance OS</div>
+        <div className="relative text-xs text-muted-foreground">© {new Date().getFullYear()} AP STEM OS</div>
       </div>
 
       {/* Right — form */}

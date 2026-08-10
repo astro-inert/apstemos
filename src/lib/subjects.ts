@@ -121,11 +121,11 @@ export const SUBJECTS: Record<SubjectId, SubjectConfig> = {
     toolsHeading: "Every tool, one system",
     tools: [
       sharedTool(Activity, "Score Command Center", "Your predicted AP score, point gap, and ranked next moves.", "primary", "/command-center"),
-      sharedTool(MapIcon, "Topic Rundowns", "All 10 units distilled — limits through series.", "sky", "/topic-rundown"),
-      sharedTool(ListChecks, "FRQ Library", "Every FRQ since 2000, organized by topic and year.", "emerald", "/frqs-by-type"),
-      sharedTool(Gauge, "Exam Strategy", "Pacing, calculator tricks, time triage.", "amber", "/exam-strategy"),
+      sharedTool(MapIcon, "Topic Rundowns", "Concise, exam-focused rundown of every core concept, unit by unit.", "sky", "/topic-rundown"),
+      sharedTool(ListChecks, "FRQ Library", "Every FRQ from the past 26 years, categorized by question number and topic.", "emerald", "/frqs-by-type"),
+      sharedTool(Gauge, "Exam Strategy", "Calculator tips, timing plans, and efficient approaches to each question type.", "amber", "/exam-strategy"),
       sharedTool(Compass, "Question Type Navigator", "Unit → topic → the exact MCQ & FRQ patterns College Board asks.", "blue", "/question-navigator"),
-      { icon: Calculator, title: "Formula Sheet", description: "10-page LaTeX master sheet — one click to PDF.", accent: "rose", href: FORMULA_SHEET_URL },
+      { icon: Calculator, title: "Formula and Strategy Guide", description: "10-page LaTeX summary of every formula plus the strategies to apply them — printable.", accent: "rose", href: FORMULA_SHEET_URL },
     ],
     mistakesHeading: "The Common Mistakes Database",
     mistakesSub: "22+ ways AP Calc students lose points — described, exampled, and fixed.",
@@ -150,7 +150,7 @@ export const SUBJECTS: Record<SubjectId, SubjectConfig> = {
     ctaTitle: "Stop studying. Start optimizing.",
     ctaSub: "Free to start. No credit card. Your predicted AP score updates with every question you answer.",
     meta: {
-      title: "AP Calc Performance OS — Everything you need for a 5",
+      title: "AP Calc — AP STEM OS — Everything you need for a 5",
       description:
         "Diagnose weaknesses, drill what matters, and watch your predicted AP score climb. The performance OS for AP Calculus BC and AB.",
     },
@@ -191,8 +191,8 @@ export const SUBJECTS: Record<SubjectId, SubjectConfig> = {
     tools: [
       sharedTool(Activity, "Score Command Center", "Your predicted AP score, point gap, and ranked next moves.", "primary", "/command-center"),
       sharedTool(MapIcon, "Unit Rundowns", "All 8 units distilled — kinematics through SHM.", "sky"),
-      sharedTool(ListChecks, "FRQ Library", "Experimental design, QQT, and paragraph responses by year.", "emerald"),
-      sharedTool(Gauge, "Exam Strategy", "Pacing, when to symbol-solve, and paragraph-argument templates.", "amber"),
+      sharedTool(ListChecks, "FRQ Library", "Every FRQ from the past 26 years, categorized by question number and topic.", "emerald"),
+      sharedTool(Gauge, "Exam Strategy", "Calculator tips, timing plans, and efficient approaches to each question type.", "amber"),
       sharedTool(Compass, "Question Type Navigator", "Unit → topic → the exact MCQ & FRQ patterns College Board asks.", "blue"),
       sharedTool(Ruler, "Equation Sheet", "The official table, annotated with when each relation actually applies.", "rose"),
     ],
@@ -217,7 +217,7 @@ export const SUBJECTS: Record<SubjectId, SubjectConfig> = {
     ctaTitle: "Stop memorizing. Start reasoning.",
     ctaSub: "Free to start. No credit card. Your predicted AP score updates with every question you answer.",
     meta: {
-      title: "AP Physics 1 Performance OS — Everything you need for a 5",
+      title: "AP Physics 1 — AP STEM OS — Everything you need for a 5",
       description:
         "Diagnose weak units, drill kinematics through simple harmonic motion, and watch your predicted AP Physics 1 score climb in real time.",
     },
@@ -258,8 +258,8 @@ export const SUBJECTS: Record<SubjectId, SubjectConfig> = {
     tools: [
       sharedTool(Activity, "Score Command Center", "Your predicted AP score, point gap, and ranked next moves.", "primary", "/command-center"),
       sharedTool(MapIcon, "Unit Rundowns", "All 7 units distilled — fluids through modern physics.", "sky"),
-      sharedTool(ListChecks, "FRQ Library", "Lab design, translation, and quantitative FRQs by topic.", "emerald"),
-      sharedTool(Gauge, "Exam Strategy", "Pacing, unit-check habits, and partial-credit harvesting.", "amber"),
+      sharedTool(ListChecks, "FRQ Library", "Every FRQ from the past 26 years, categorized by question number and topic.", "emerald"),
+      sharedTool(Gauge, "Exam Strategy", "Calculator tips, timing plans, and efficient approaches to each question type.", "amber"),
       sharedTool(Compass, "Question Type Navigator", "Unit → topic → the exact MCQ & FRQ patterns College Board asks.", "blue"),
       sharedTool(Ruler, "Equation Sheet", "The official table, annotated with assumptions and limits.", "rose"),
     ],
@@ -283,7 +283,7 @@ export const SUBJECTS: Record<SubjectId, SubjectConfig> = {
     ctaTitle: "Stop memorizing. Start reasoning.",
     ctaSub: "Free to start. No credit card. Your predicted AP score updates with every question you answer.",
     meta: {
-      title: "AP Physics 2 Performance OS — Everything you need for a 5",
+      title: "AP Physics 2 — AP STEM OS — Everything you need for a 5",
       description:
         "Fluids, thermodynamics, circuits, optics, and modern physics — diagnosed, drilled, and scored in real time.",
     },
@@ -324,8 +324,8 @@ export const SUBJECTS: Record<SubjectId, SubjectConfig> = {
     tools: [
       sharedTool(Activity, "Score Command Center", "Your predicted AP score, point gap, and ranked next moves.", "primary", "/command-center"),
       sharedTool(MapIcon, "Unit Rundowns", "All 7 units distilled — kinematics through oscillations.", "sky"),
-      sharedTool(ListChecks, "FRQ Library", "Every Mechanics FRQ organized by derivation type.", "emerald"),
-      sharedTool(Gauge, "Exam Strategy", "45-minute FRQ pacing and symbolic-answer discipline.", "amber"),
+      sharedTool(ListChecks, "FRQ Library", "Every FRQ from the past 26 years, categorized by question number and topic.", "emerald"),
+      sharedTool(Gauge, "Exam Strategy", "Calculator tips, timing plans, and efficient approaches to each question type.", "amber"),
       sharedTool(Compass, "Question Type Navigator", "Unit → topic → the exact MCQ & FRQ patterns College Board asks.", "blue"),
       sharedTool(Calculator, "Derivation Sheet", "Every core mechanics derivation on one reference page.", "rose"),
     ],
@@ -349,7 +349,7 @@ export const SUBJECTS: Record<SubjectId, SubjectConfig> = {
     ctaTitle: "Stop memorizing. Start deriving.",
     ctaSub: "Free to start. No credit card. Your predicted AP score updates with every question you answer.",
     meta: {
-      title: "AP Physics C: Mechanics Performance OS — Everything you need for a 5",
+      title: "AP Physics C: Mechanics — AP STEM OS — Everything you need for a 5",
       description:
         "Calculus-based mechanics: diagnose weak derivations, drill FRQ patterns, and track your predicted AP score in real time.",
     },
@@ -390,8 +390,8 @@ export const SUBJECTS: Record<SubjectId, SubjectConfig> = {
     tools: [
       sharedTool(Activity, "Score Command Center", "Your predicted AP score, point gap, and ranked next moves.", "primary", "/command-center"),
       sharedTool(MapIcon, "Unit Rundowns", "All 5 units distilled — electrostatics through induction.", "sky"),
-      sharedTool(ListChecks, "FRQ Library", "Every E&M FRQ organized by field, circuit, or induction type.", "emerald"),
-      sharedTool(Gauge, "Exam Strategy", "Flux setup checklists and limiting-case sanity checks.", "amber"),
+      sharedTool(ListChecks, "FRQ Library", "Every FRQ from the past 26 years, categorized by question number and topic.", "emerald"),
+      sharedTool(Gauge, "Exam Strategy", "Calculator tips, timing plans, and efficient approaches to each question type.", "amber"),
       sharedTool(Compass, "Question Type Navigator", "Unit → topic → the exact MCQ & FRQ patterns College Board asks.", "blue"),
       sharedTool(Calculator, "Derivation Sheet", "Maxwell-adjacent derivations on one reference page.", "rose"),
     ],
@@ -413,7 +413,7 @@ export const SUBJECTS: Record<SubjectId, SubjectConfig> = {
     ctaTitle: "Stop memorizing. Start deriving.",
     ctaSub: "Free to start. No credit card. Your predicted AP score updates with every question you answer.",
     meta: {
-      title: "AP Physics C: E&M Performance OS — Everything you need for a 5",
+      title: "AP Physics C: E&M — AP STEM OS — Everything you need for a 5",
       description:
         "Gauss, Ampère, and Faraday drilled to mastery, with a predicted AP score that updates with every question.",
     },
@@ -454,8 +454,8 @@ export const SUBJECTS: Record<SubjectId, SubjectConfig> = {
     tools: [
       sharedTool(Activity, "Score Command Center", "Your predicted AP score, point gap, and ranked next moves.", "primary", "/command-center"),
       sharedTool(MapIcon, "Unit Rundowns", "All 9 units distilled — exploring data through inference.", "sky"),
-      sharedTool(ListChecks, "FRQ Library", "FRQs 1–6 by type, including the investigative task.", "emerald"),
-      sharedTool(Gauge, "Exam Strategy", "Pacing, calculator output, and rubric-first writing.", "amber"),
+      sharedTool(ListChecks, "FRQ Library", "Every FRQ from the past 26 years, categorized by question number and topic.", "emerald"),
+      sharedTool(Gauge, "Exam Strategy", "Calculator tips, timing plans, and efficient approaches to each question type.", "amber"),
       sharedTool(Compass, "Question Type Navigator", "Unit → topic → the exact MCQ & FRQ patterns College Board asks.", "blue"),
       sharedTool(Ruler, "Formula & Table Sheet", "Every formula and table, annotated with when to use it.", "rose"),
     ],
@@ -482,7 +482,7 @@ export const SUBJECTS: Record<SubjectId, SubjectConfig> = {
     ctaSub: "Free to start. No credit card. Your predicted AP score updates with every question you answer.",
 
     meta: {
-      title: "AP Statistics Performance OS — Everything you need for a 5",
+      title: "AP Statistics — AP STEM OS — Everything you need for a 5",
       description:
         "Inference conditions, contextual conclusions, and the investigative task — diagnosed, drilled, and scored in real time.",
     },
