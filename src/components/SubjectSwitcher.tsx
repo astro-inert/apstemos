@@ -7,7 +7,7 @@ import {
   SUBJECT_MENU,
   type SubjectId,
 } from "@/lib/subjects";
-import { persistCurrentSubject } from "@/lib/use-subject";
+import { persistCurrentSubject, useSubjectFromPath } from "@/lib/use-subject";
 
 interface Props {
   current: SubjectId;
@@ -27,13 +27,17 @@ export function SubjectSwitcher({ current }: Props) {
     if (stored && PHYSICS_IDS.includes(stored)) setLastPhysics(stored);
   }, []);
 
+  // Only persist a subject the URL actually identifies. Shared routes fall back
+  // to the stored subject, so writing there would clobber it with the default.
+  const fromPath = useSubjectFromPath();
   useEffect(() => {
-    if (PHYSICS_IDS.includes(current)) {
-      setLastPhysics(current);
-      window.localStorage.setItem(PHYSICS_STORAGE_KEY, current);
+    if (!fromPath) return;
+    if (PHYSICS_IDS.includes(fromPath)) {
+      setLastPhysics(fromPath);
+      window.localStorage.setItem(PHYSICS_STORAGE_KEY, fromPath);
     }
-    persistCurrentSubject(current);
-  }, [current]);
+    persistCurrentSubject(fromPath);
+  }, [fromPath]);
 
   useEffect(() => {
     if (!open) return;
