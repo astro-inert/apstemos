@@ -10,10 +10,12 @@ function getInitial(): "dark" | "light" {
 
 export function ThemeToggle() {
   const [theme, setTheme] = useState<"dark" | "light">("light");
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     const t = getInitial();
     setTheme(t);
+    setMounted(true);
     document.documentElement.classList.toggle("dark", t === "dark");
   }, []);
 
@@ -28,9 +30,12 @@ export function ThemeToggle() {
     <button
       onClick={toggle}
       aria-label="Toggle theme"
-      className="h-9 w-9 grid place-items-center rounded-lg border border-border bg-card/50 hover:bg-elevated transition-colors"
+      className="grid h-9 w-9 shrink-0 place-items-center rounded-lg border border-border bg-card/50 transition-colors hover:bg-elevated focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
     >
-      {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+      {/* Icon only after hydration so SSR and client markup match. */}
+      <span className="grid h-4 w-4 place-items-center">
+        {mounted ? theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" /> : null}
+      </span>
     </button>
   );
 }

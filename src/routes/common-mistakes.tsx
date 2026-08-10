@@ -5,7 +5,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { AlertTriangle, Search } from "lucide-react";
 import { MistakeCaptureDialog } from "@/components/mistakes/MistakeCaptureDialog";
 import { listUserMistakes, type UserMistake } from "@/lib/user-mistakes.functions";
-import { AppShell } from "@/components/AppShell";
+import { PageShell } from "@/components/PageShell";
 import { LaTeX } from "@/components/LaTeX";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -79,96 +79,112 @@ function CommonMistakes() {
   }, [mistakes, q, cat]);
 
   return (
-    <AppShell>
-      <div className="px-4 py-6 sm:px-6 lg:px-10 lg:py-10 max-w-6xl">
-        <div className="mb-6">
-          <div className="text-xs font-mono uppercase tracking-[0.2em] text-muted-foreground mb-1">// common point losses</div>
-          <h1 className="font-display text-2xl lg:text-3xl font-bold tracking-tight">Where AP Calc points die</h1>
-          <p className="text-sm text-muted-foreground mt-2 max-w-2xl">
-            Every mistake here has cost real students real points. Read the description, study the example, and copy the "how to avoid" line into your notes.
-          </p>
-          <div className="mt-4">
-            <MistakeCaptureDialog />
-          </div>
+    <PageShell
+      eyebrow="mistake intelligence"
+      title={
+        <>
+          Where points <span className="text-primary">die</span>.
+        </>
+      }
+      description='Every mistake here has cost real students real points. Read the description, study the example, and copy the "how to avoid" line into your notes.'
+    >
+      <div className="mb-8">
+        <MistakeCaptureDialog />
+      </div>
+
+      {/* Controls */}
+      <div className="mb-6 flex flex-wrap gap-2">
+        <div className="relative min-w-[200px] flex-1">
+          <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-subtle" />
+          <input
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder="Search mistakes…"
+            className="w-full rounded-full border border-border bg-card py-2.5 pl-10 pr-4 text-[14px] outline-none transition-colors focus:border-primary/50"
+          />
         </div>
-
-        {/* Controls */}
-        <div className="flex flex-wrap gap-2 mb-5">
-          <div className="relative flex-1 min-w-[200px]">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <input
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              placeholder="Search mistakes…"
-              className="w-full pl-9 pr-3 py-2 rounded-lg border border-border bg-card text-sm outline-none focus:ring-2 focus:ring-primary"
-            />
-          </div>
-          <div className="flex gap-1.5 flex-wrap">
-            {categories.map((c) => (
-              <button
-                key={c} onClick={() => setCat(c)}
-                className={`px-3 py-1.5 rounded-md text-xs font-medium border transition ${cat === c ? "bg-primary text-primary-foreground border-primary" : "bg-card border-border text-muted-foreground hover:text-foreground"}`}
-              >
-                {c}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* List */}
-        <div className="grid md:grid-cols-2 gap-3">
-          {filtered.map((m) => (
-            <article key={m.code} id={m.code} className="rounded-xl border border-border bg-card p-5 hover-lift scroll-mt-24">
-              <div className="flex items-start justify-between gap-3">
-                <div className="flex items-start gap-2.5">
-                  <div className="grid place-items-center h-8 w-8 rounded-md bg-rose-500/10 text-rose-400 ring-1 ring-rose-500/20 shrink-0">
-                    <AlertTriangle className="h-4 w-4" />
-                  </div>
-                  <div>
-                    <h3 className="font-display font-semibold leading-tight">
-                      <LaTeX>{m.title}</LaTeX>
-                    </h3>
-
-                    <div className="text-[10px] uppercase tracking-wider text-muted-foreground mt-0.5 flex items-center gap-2">
-                      {m.category}
-                      {m.personal && (
-                        <span className="rounded bg-primary/15 px-1.5 py-0.5 text-primary tracking-wider">personal</span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-                <div className="text-right shrink-0">
-                  <div className="font-mono text-sm font-bold text-rose-400">−{Number(m.est_point_loss).toFixed(1)}</div>
-                  <div className="text-[10px] text-muted-foreground">avg pts</div>
-                </div>
-              </div>
-              <p className="text-sm text-muted-foreground mt-3 leading-relaxed">
-                <LaTeX>{m.description}</LaTeX>
-              </p>
-              {m.example && (
-                <div className="mt-3 rounded-md bg-elevated/60 border border-border p-2.5 text-xs leading-relaxed">
-                  <div className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">Example</div>
-                  <LaTeX>{m.example}</LaTeX>
-                </div>
-              )}
-              {m.ap_consequence && (
-                <div className="mt-3 text-xs">
-                  <div className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">AP consequence</div>
-                  <div className="text-foreground/90"><LaTeX>{m.ap_consequence}</LaTeX></div>
-                </div>
-              )}
-              <div className="mt-3 pt-3 border-t border-border">
-                <div className="text-[10px] uppercase tracking-wider text-emerald-400 mb-1">How to avoid</div>
-                <div className="text-sm text-foreground/90"><LaTeX>{m.how_to_avoid}</LaTeX></div>
-              </div>
-            </article>
+        <div className="flex flex-wrap gap-1.5">
+          {categories.map((c) => (
+            <button
+              key={c}
+              onClick={() => setCat(c)}
+              className={`num rounded-full border px-3.5 py-1.5 text-[11px] uppercase tracking-[0.12em] transition-colors ${cat === c ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-muted-foreground hover:border-primary/40 hover:text-foreground"}`}
+            >
+              {c}
+            </button>
           ))}
         </div>
-
-        {filtered.length === 0 && (
-          <div className="text-center py-12 text-sm text-muted-foreground">No mistakes match that filter.</div>
-        )}
       </div>
-    </AppShell>
+
+      {/* List */}
+      <div className="grid gap-4 md:grid-cols-2">
+        {filtered.map((m) => (
+          <article
+            key={m.code}
+            id={m.code}
+            className="scroll-mt-28 rounded-3xl border border-border bg-card p-6 shadow-card transition-all hover:border-primary/30 hover:shadow-elevated"
+          >
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex min-w-0 items-start gap-3">
+                <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-destructive/10 text-destructive ring-1 ring-destructive/20">
+                  <AlertTriangle className="h-4 w-4" />
+                </div>
+                <div className="min-w-0">
+                  <h3 className="font-display text-[15px] font-semibold leading-tight">
+                    <LaTeX>{m.title}</LaTeX>
+                  </h3>
+                  <div className="micro-label mt-1.5 flex items-center gap-2">
+                    {m.category}
+                    {m.personal && (
+                      <span className="rounded-full bg-primary/15 px-2 py-0.5 text-primary">personal</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div className="shrink-0 text-right">
+                <div className="num text-[14px] font-semibold text-destructive">
+                  −{Number(m.est_point_loss).toFixed(1)}
+                </div>
+                <div className="num text-[10px] text-subtle">avg pts</div>
+              </div>
+            </div>
+
+            <p className="mt-4 text-[14px] leading-relaxed text-muted-foreground">
+              <LaTeX>{m.description}</LaTeX>
+            </p>
+
+            {m.example && (
+              <div className="mt-4 rounded-2xl border border-border bg-elevated/50 p-4 text-[13px] leading-relaxed">
+                <div className="micro-label mb-2">example</div>
+                <LaTeX>{m.example}</LaTeX>
+              </div>
+            )}
+
+            {m.ap_consequence && (
+              <div className="mt-4">
+                <div className="micro-label mb-2">ap consequence</div>
+                <div className="text-[13px] leading-relaxed text-foreground/90">
+                  <LaTeX>{m.ap_consequence}</LaTeX>
+                </div>
+              </div>
+            )}
+
+            <div className="mt-5 border-t border-border pt-4">
+              <div className="micro-label mb-2 text-primary">how to avoid</div>
+              <div className="text-[13px] leading-relaxed text-foreground/90">
+                <LaTeX>{m.how_to_avoid}</LaTeX>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      {filtered.length === 0 && (
+        <div className="rounded-3xl border border-dashed border-border py-16 text-center text-[14px] text-muted-foreground">
+          No mistakes match that filter.
+        </div>
+      )}
+    </PageShell>
   );
 }
+

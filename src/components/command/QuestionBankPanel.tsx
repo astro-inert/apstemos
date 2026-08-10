@@ -82,7 +82,7 @@ export function QuestionBankPanel() {
   return (
     <div className="space-y-6">
       {/* Upload */}
-      <div className="rounded-xl border border-border bg-card p-5">
+      <div className="rounded-3xl border border-border bg-card p-6 shadow-card">
         <div className="text-xs uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5">
           <FileUp className="h-3.5 w-3.5" /> Exam PDF ingestion
         </div>
@@ -160,11 +160,11 @@ export function QuestionBankPanel() {
       </div>
 
       {/* Review queue */}
-      <div className="rounded-xl border border-border bg-card">
+      <div className="rounded-3xl border border-border bg-card shadow-card">
         <div className="flex items-center justify-between gap-3 px-5 py-4 border-b border-border">
           <div>
             <div className="text-xs uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5">
-              <Wand2 className="h-3.5 w-3.5 text-pink-400" /> Review queue
+              <Wand2 className="h-3.5 w-3.5 text-primary" /> Review queue
             </div>
             <h3 className="font-display font-semibold mt-1">{rows.length} extracted questions awaiting review</h3>
           </div>

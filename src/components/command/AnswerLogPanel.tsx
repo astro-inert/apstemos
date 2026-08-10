@@ -17,7 +17,7 @@ export function AnswerLogPanel() {
   const rows = data ?? [];
 
   return (
-    <div className="rounded-xl border border-border bg-card">
+    <div className="rounded-3xl border border-border bg-card shadow-card">
       <div className="px-5 py-4 border-b border-border">
         <div className="text-xs uppercase tracking-wider text-muted-foreground">// answer log</div>
         <h3 className="font-display font-semibold mt-1">Every question you've answered</h3>

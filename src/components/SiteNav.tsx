@@ -1,8 +1,10 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ChevronDown, Menu, X } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
+import { ChevronDown, LogOut, Menu, X } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 import { SubjectSwitcher } from "./SubjectSwitcher";
+import { supabase } from "@/integrations/supabase/client";
 import type { SubjectId } from "@/lib/subjects";
 
 const resources = [
@@ -18,6 +20,9 @@ const resources = [
 export function SiteNav({ subject = "calc-bc" }: { subject?: SubjectId }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [signedIn, setSignedIn] = useState(false);
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -25,6 +30,26 @@ export function SiteNav({ subject = "calc-bc" }: { subject?: SubjectId }) {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    let alive = true;
+    supabase.auth.getSession().then(({ data }) => {
+      if (alive) setSignedIn(Boolean(data.session));
+    });
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => setSignedIn(Boolean(session)));
+    return () => {
+      alive = false;
+      sub.subscription.unsubscribe();
+    };
+  }, []);
+
+  async function signOut() {
+    setOpen(false);
+    await queryClient.cancelQueries();
+    queryClient.clear();
+    await supabase.auth.signOut();
+    navigate({ to: "/auth", replace: true });
+  }
 
   return (
     <header
@@ -67,12 +92,22 @@ export function SiteNav({ subject = "calc-bc" }: { subject?: SubjectId }) {
 
         <div className="ml-auto flex shrink-0 items-center gap-2 md:ml-0">
           <ThemeToggle />
-          <Link
-            to="/practice"
-            className="hidden items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-[13px] font-semibold text-primary-foreground transition-shadow hover:shadow-glow sm:inline-flex"
-          >
-            Start practicing →
-          </Link>
+          {signedIn ? (
+            <button
+              onClick={signOut}
+              className="hidden items-center gap-1.5 rounded-full border border-border px-4 py-2 text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground sm:inline-flex"
+            >
+              <LogOut className="h-3.5 w-3.5" />
+              Sign out
+            </button>
+          ) : (
+            <Link
+              to="/practice"
+              className="hidden items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-[13px] font-semibold text-primary-foreground transition-shadow hover:shadow-glow sm:inline-flex"
+            >
+              Start practicing →
+            </Link>
+          )}
           <button
             onClick={() => setOpen((v) => !v)}
             aria-label="Menu"
@@ -95,20 +130,30 @@ export function SiteNav({ subject = "calc-bc" }: { subject?: SubjectId }) {
             <MobileLink to="/command-center" onClick={() => setOpen(false)}>
               Score Command Center
             </MobileLink>
-            <div className="micro-label mt-4 mb-1 px-3">resources</div>
+            <div className="micro-label mb-1 mt-4 px-3">resources</div>
             {resources.map((r) => (
               <MobileLink key={r.to} to={r.to} onClick={() => setOpen(false)}>
                 {r.label}
               </MobileLink>
             ))}
           </div>
-          <Link
-            to="/practice"
-            onClick={() => setOpen(false)}
-            className="mt-5 flex items-center justify-center rounded-full bg-primary px-4 py-2.5 text-[13px] font-semibold text-primary-foreground"
-          >
-            Start practicing →
-          </Link>
+          {signedIn ? (
+            <button
+              onClick={signOut}
+              className="mt-5 flex w-full items-center justify-center gap-1.5 rounded-full border border-border px-4 py-3 text-[13px] font-medium text-muted-foreground"
+            >
+              <LogOut className="h-3.5 w-3.5" />
+              Sign out
+            </button>
+          ) : (
+            <Link
+              to="/practice"
+              onClick={() => setOpen(false)}
+              className="mt-5 flex items-center justify-center rounded-full bg-primary px-4 py-3 text-[13px] font-semibold text-primary-foreground"
+            >
+              Start practicing →
+            </Link>
+          )}
         </div>
       ) : null}
     </header>
@@ -119,7 +164,7 @@ function NavLink({ to, children }: { to: string; children: React.ReactNode }) {
   return (
     <Link
       to={to}
-      className="rounded-full px-3.5 py-1.5 text-[13px] text-muted-foreground transition-colors hover:text-foreground"
+      className="rounded-full px-3.5 py-1.5 text-[13px] text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
       activeProps={{ className: "rounded-full px-3.5 py-1.5 text-[13px] text-foreground" }}
     >
       {children}
@@ -132,7 +177,7 @@ function MobileLink({ to, children, onClick }: { to: string; children: React.Rea
     <Link
       to={to}
       onClick={onClick}
-      className="rounded-xl px-3 py-2.5 text-[14px] text-muted-foreground transition-colors hover:bg-elevated hover:text-foreground"
+      className="rounded-xl px-3 py-3 text-[14px] text-muted-foreground transition-colors hover:bg-elevated hover:text-foreground"
     >
       {children}
     </Link>

@@ -1,22 +1,27 @@
 import type { ReactNode } from "react";
 import { AppShell } from "./AppShell";
+import { Reveal } from "./home/primitives";
 
 interface PageHeroProps {
   eyebrow: string;
   title: ReactNode;
-  description: string;
+  description?: string;
   children?: ReactNode;
 }
 
 export function PageShell({ eyebrow, title, description, children }: PageHeroProps) {
   return (
     <AppShell>
-      <div className="px-4 py-6 sm:px-6 lg:px-10 lg:py-10 max-w-6xl">
-        <div className="mb-8">
-          <div className="text-xs font-mono uppercase tracking-[0.2em] text-muted-foreground mb-2">// {eyebrow}</div>
-          <h1 className="font-display text-3xl lg:text-4xl font-bold tracking-tight leading-tight">{title}</h1>
-          <p className="text-sm text-muted-foreground mt-3 max-w-2xl">{description}</p>
-        </div>
+      <div className="mx-auto max-w-6xl px-5 pb-24 pt-12 sm:px-8 sm:pt-16">
+        <Reveal className="mb-12 sm:mb-14">
+          <div className="micro-label">{eyebrow}</div>
+          <h1 className="mt-5 max-w-3xl font-display text-3xl font-semibold leading-[1.06] tracking-[-0.035em] sm:text-5xl">
+            {title}
+          </h1>
+          {description ? (
+            <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-muted-foreground">{description}</p>
+          ) : null}
+        </Reveal>
         {children}
       </div>
     </AppShell>
