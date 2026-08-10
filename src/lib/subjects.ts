@@ -150,7 +150,7 @@ export const SUBJECTS: Record<SubjectId, SubjectConfig> = {
     ctaTitle: "Stop studying. Start optimizing.",
     ctaSub: "Free to start. No credit card. Your predicted AP score updates with every question you answer.",
     meta: {
-      title: "AP Calc — AP STEM OS — Everything you need for a 5",
+      title: "AP Calculus AB/BC — AP STEM OS: built for a 5",
       description:
         "Diagnose weaknesses, drill what matters, and watch your predicted AP score climb. The performance OS for AP Calculus BC and AB.",
     },
@@ -217,7 +217,7 @@ export const SUBJECTS: Record<SubjectId, SubjectConfig> = {
     ctaTitle: "Stop memorizing. Start reasoning.",
     ctaSub: "Free to start. No credit card. Your predicted AP score updates with every question you answer.",
     meta: {
-      title: "AP Physics 1 — AP STEM OS — Everything you need for a 5",
+      title: "AP Physics 1 — AP STEM OS: built for a 5",
       description:
         "Diagnose weak units, drill kinematics through simple harmonic motion, and watch your predicted AP Physics 1 score climb in real time.",
     },
@@ -283,7 +283,7 @@ export const SUBJECTS: Record<SubjectId, SubjectConfig> = {
     ctaTitle: "Stop memorizing. Start reasoning.",
     ctaSub: "Free to start. No credit card. Your predicted AP score updates with every question you answer.",
     meta: {
-      title: "AP Physics 2 — AP STEM OS — Everything you need for a 5",
+      title: "AP Physics 2 — AP STEM OS: built for a 5",
       description:
         "Fluids, thermodynamics, circuits, optics, and modern physics — diagnosed, drilled, and scored in real time.",
     },
@@ -349,7 +349,7 @@ export const SUBJECTS: Record<SubjectId, SubjectConfig> = {
     ctaTitle: "Stop memorizing. Start deriving.",
     ctaSub: "Free to start. No credit card. Your predicted AP score updates with every question you answer.",
     meta: {
-      title: "AP Physics C: Mechanics — AP STEM OS — Everything you need for a 5",
+      title: "AP Physics C: Mechanics — AP STEM OS: built for a 5",
       description:
         "Calculus-based mechanics: diagnose weak derivations, drill FRQ patterns, and track your predicted AP score in real time.",
     },
@@ -413,7 +413,7 @@ export const SUBJECTS: Record<SubjectId, SubjectConfig> = {
     ctaTitle: "Stop memorizing. Start deriving.",
     ctaSub: "Free to start. No credit card. Your predicted AP score updates with every question you answer.",
     meta: {
-      title: "AP Physics C: E&M — AP STEM OS — Everything you need for a 5",
+      title: "AP Physics C: E&M — AP STEM OS: built for a 5",
       description:
         "Gauss, Ampère, and Faraday drilled to mastery, with a predicted AP score that updates with every question.",
     },
@@ -482,7 +482,7 @@ export const SUBJECTS: Record<SubjectId, SubjectConfig> = {
     ctaSub: "Free to start. No credit card. Your predicted AP score updates with every question you answer.",
 
     meta: {
-      title: "AP Statistics — AP STEM OS — Everything you need for a 5",
+      title: "AP Statistics — AP STEM OS: built for a 5",
       description:
         "Inference conditions, contextual conclusions, and the investigative task — diagnosed, drilled, and scored in real time.",
     },
