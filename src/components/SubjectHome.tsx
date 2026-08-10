@@ -193,128 +193,100 @@ function PositioningBand() {
 }
 
 
-const flowSteps = [
-  { icon: PencilLine, title: "Practice", copy: "Answer original AP-style questions built from real exam patterns." },
-  { icon: Gauge, title: "Score Command Center", copy: "Receive a live AP score prediction after every response." },
-  { icon: ScanSearch, title: "Weak subtopics", copy: "Discover exactly which subtopics are holding your score down." },
-  { icon: AlertTriangle, title: "Common mistakes", copy: "Identify the recurring AP mistakes costing you points." },
-  { icon: Compass, title: "Question Type Navigator", copy: "Learn the exact College Board question patterns behind them." },
-  { icon: RefreshCw, title: "Targeted practice", copy: "Return to practice that is rebuilt around your weakest points." },
+const loopStages = [
+  {
+    icon: PencilLine,
+    title: "Practice",
+    copy: "Answer original AP-style questions built from real exam patterns.",
+  },
+  {
+    icon: Gauge,
+    title: "Score Command Center",
+    copy: "Every response updates a live AP score prediction — and surfaces what is holding it down.",
+    surfaces: [
+      { icon: ScanSearch, label: "Weak subtopics", copy: "Below the 70% threshold, ranked by point value." },
+      { icon: AlertTriangle, label: "Common mistakes", copy: "The recurring errors behind your misses." },
+      { icon: Compass, label: "Question types", copy: "The exact College Board patterns to relearn." },
+    ],
+  },
+  {
+    icon: RefreshCw,
+    title: "Targeted practice",
+    copy: "The next question set is rebuilt around your weakest points — and the loop tightens.",
+  },
 ] as const;
 
 function HowItWorks({ subject }: { subject: SubjectConfig }) {
   return (
     <section className="px-6 pb-16 pt-4">
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-5xl mx-auto">
         <SectionHeader
           eyebrow="00 · the loop"
-          title="How it works"
-          sub={`One closed loop, not six separate tools. Each step in ${subject.label} feeds the next.`}
+          title="Every answer changes what comes next"
+          sub={`One adaptive cycle in ${subject.label} — practice, diagnosis, and then practice rebuilt around the diagnosis.`}
         />
         <div className="relative mt-10">
-          <div className="pointer-events-none absolute left-0 right-0 top-11 hidden lg:block">
-            <div className="h-px w-full bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
-          </div>
-          <ol className="relative grid gap-3 sm:grid-cols-2 lg:grid-cols-6">
-            {flowSteps.map((s, i) => {
+          <ol className="relative grid gap-3 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)_minmax(0,1fr)] lg:items-stretch">
+            {loopStages.map((s, i) => {
               const Icon = s.icon;
+              const emphasized = "surfaces" in s;
               return (
                 <li
                   key={s.title}
                   style={{ animationDelay: `${i * 70}ms` }}
-                  className="group relative rounded-2xl border border-white/10 bg-card/70 backdrop-blur-sm p-4 hover-lift transition hover:border-primary/40"
+                  className={`group relative rounded-2xl border bg-card/70 backdrop-blur-sm p-5 hover-lift transition ${
+                    emphasized ? "border-primary/30 hover:border-primary/50" : "border-white/10 hover:border-primary/40"
+                  }`}
                 >
                   <div className="flex items-center gap-2">
                     <span className="grid h-9 w-9 place-items-center rounded-xl bg-primary/10 text-primary ring-1 ring-primary/20">
                       <Icon className="h-4.5 w-4.5" />
                     </span>
-                    <span className="font-mono text-[10px] text-subtle">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    {i < flowSteps.length - 1 && (
-                      <ChevronRight className="ml-auto h-4 w-4 text-muted-foreground/60 transition-transform group-hover:translate-x-0.5 lg:text-primary/50" />
-                    )}
-                    {i === flowSteps.length - 1 && (
+                    <span className="font-mono text-[10px] text-subtle">{String(i + 1).padStart(2, "0")}</span>
+                    {i < loopStages.length - 1 ? (
+                      <ChevronRight className="ml-auto h-4 w-4 text-primary/50 transition-transform group-hover:translate-x-0.5" />
+                    ) : (
                       <RefreshCw className="ml-auto h-4 w-4 text-primary/50 transition-transform group-hover:rotate-90" />
                     )}
                   </div>
                   <div className="mt-3 font-display text-sm font-semibold leading-tight">{s.title}</div>
                   <p className="mt-1 text-xs text-muted-foreground leading-relaxed">{s.copy}</p>
+                  {"surfaces" in s && (
+                    <div className="mt-4 pt-4 border-t border-white/10">
+                      <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-subtle">
+                        what it surfaces
+                      </div>
+                      <ul className="mt-3 space-y-2.5">
+                        {s.surfaces.map((f) => {
+                          const FIcon = f.icon;
+                          return (
+                            <li key={f.label} className="flex items-start gap-2.5">
+                              <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-lg bg-primary/10 text-primary ring-1 ring-primary/20">
+                                <FIcon className="h-3.5 w-3.5" />
+                              </span>
+                              <span className="text-xs leading-relaxed">
+                                <span className="font-medium">{f.label}</span>
+                                <span className="text-muted-foreground"> — {f.copy}</span>
+                              </span>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </div>
+                  )}
                 </li>
               );
             })}
           </ol>
+          <div className="mt-4 hidden lg:flex items-center justify-center gap-3 text-[11px] text-muted-foreground">
+            <RefreshCw className="h-3.5 w-3.5 text-primary/70" />
+            Targeted practice feeds straight back into Practice — the loop never resets, it tightens.
+          </div>
           <div className="mt-6 flex flex-col items-center gap-2 text-center">
-            <p className="text-xs text-muted-foreground">
-              The loop never resets — each pass sharpens the prediction, the diagnosis, and the next question you see.
-            </p>
             <Link to="/practice" className="inline-flex items-center gap-2 text-sm text-primary hover:underline">
               Start the loop <ArrowUpRight className="h-4 w-4" />
             </Link>
           </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-
-function ScoreCommandPreview({ subject }: { subject: SubjectConfig }) {
-  const { predicted, confidence, raw, total, target, engineLabel } = subject.score;
-  const pct = Math.round((raw / total) * 100);
-  const targetPct = Math.round((target / total) * 100);
-  return (
-    <section className="px-6 pb-16">
-      <div className="max-w-6xl mx-auto">
-        <SectionHeader eyebrow="01 · the dashboard" title="The Score Command Center" sub="Predicted AP score, point gap, and ranked recommendations — updated every time you practice." />
-        <div className="grid lg:grid-cols-3 gap-4 mt-8">
-          <div className="rounded-xl border border-white/10 bg-card p-5 relative overflow-hidden">
-            <div className="absolute -top-20 -right-20 h-48 w-48 rounded-full blur-3xl opacity-30 bg-primary" />
-            <div className="relative">
-              <div className="text-xs uppercase tracking-wider text-subtle inline-flex items-center gap-1.5"><TrendingUp className="h-3.5 w-3.5" /> Predicted AP score</div>
-              <div className="mt-4 flex items-baseline gap-3">
-                <span className="font-display text-6xl font-bold tabular-nums">{predicted}</span>
-                <span className="text-sm text-muted-foreground">/ 5</span>
-                <span className="ml-auto text-[10px] px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 font-medium">{confidence}</span>
-              </div>
-              <div className="mt-3 flex gap-1">
-                {[1, 2, 3, 4, 5].map((i) => <div key={i} className={`h-1.5 flex-1 rounded-full ${i <= predicted ? "bg-primary" : "bg-elevated"}`} />)}
-              </div>
-              <div className="mt-4 pt-4 border-t border-white/10 text-xs text-muted-foreground">
-                Raw estimate: <span className="text-foreground font-medium tabular-nums">{raw} / {total}</span>
-              </div>
-            </div>
-          </div>
-          <div className="rounded-xl border border-white/10 bg-card p-5">
-            <div className="text-xs uppercase tracking-wider text-subtle inline-flex items-center gap-1.5"><Target className="h-3.5 w-3.5" /> {engineLabel}</div>
-            <div className="mt-4 flex items-baseline gap-2">
-              <span className="font-display text-4xl font-bold tabular-nums">{raw}</span>
-              <span className="text-muted-foreground text-sm">/ {total}</span>
-              <span className="ml-auto text-xs text-muted-foreground">target {target}</span>
-            </div>
-            <div className="mt-4 relative h-2.5 rounded-full bg-elevated overflow-hidden">
-              <div className="absolute inset-y-0 left-0 bg-gradient-to-r from-primary to-emerald-400 rounded-full transition-all duration-500" style={{ width: `${pct}%` }} />
-              <div className="absolute inset-y-0 w-0.5 bg-foreground/70" style={{ left: `${targetPct}%` }} />
-            </div>
-            <div className="mt-3 text-xs text-amber-400 font-medium">{target - raw}-point gap to a 5</div>
-          </div>
-          <div className="rounded-xl border border-white/10 bg-card p-5">
-            <div className="text-xs uppercase tracking-wider text-subtle inline-flex items-center gap-1.5"><Zap className="h-3.5 w-3.5 text-amber-400" /> Fastest path to your target</div>
-            <ol className="mt-4 space-y-2.5 text-sm">
-              {subject.recommendations.map((a, i) => (
-                <li key={a.t} className="flex items-center gap-3">
-                  <span className="font-mono text-xs text-muted-foreground w-4">{i + 1}</span>
-                  <span className="flex-1 truncate">{a.t}</span>
-                  <span className="font-mono text-xs font-semibold text-emerald-500">+{a.g}</span>
-                </li>
-              ))}
-            </ol>
-          </div>
-        </div>
-        <div className="mt-4">
-          <Link to="/command-center" className="inline-flex items-center gap-2 text-sm text-primary hover:underline">
-            Open my Command Center <ArrowUpRight className="h-4 w-4" />
-          </Link>
         </div>
       </div>
     </section>
