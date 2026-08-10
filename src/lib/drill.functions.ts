@@ -3,6 +3,7 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { z } from "zod";
 import { bankCount, bankKeys, buildQuestion, uuidFromKey } from "./generated-bank";
 import { makeRng, shuffle, type Figure } from "./question-templates";
+import { recordExposure } from "./exposure.server";
 
 export type DrillQuestion = {
   key: string;
@@ -71,6 +72,13 @@ export const submitDrillAttempt = createServerFn({ method: "POST" })
 
     const correct = data.selected_label === q.answer_label;
 
+    const attempt_kind = await recordExposure(
+      context.supabase,
+      context.userId,
+      { key: q.key, unit_slug: q.unit_slug, topic_slug: q.topic_slug, difficulty: q.difficulty },
+      correct,
+    );
+
     const { error } = await context.supabase.from("attempts").insert({
       user_id: context.userId,
       question_id: uuidFromKey(q.key),
@@ -82,6 +90,9 @@ export const submitDrillAttempt = createServerFn({ method: "POST" })
       points_possible: q.ap_value,
       time_spent_seconds: data.time_spent_seconds ?? null,
       mistake_codes: correct ? [] : q.common_mistake_codes,
+      question_key: q.key,
+      difficulty: q.difficulty,
+      attempt_kind,
     });
     if (error) throw new Error(error.message);
 
@@ -101,6 +112,7 @@ export const submitDrillAttempt = createServerFn({ method: "POST" })
       explanation: q.explanation,
       points_earned: correct ? q.ap_value : 0,
       points_possible: q.ap_value,
+      attempt_kind,
       related_mistakes: related,
     };
   });

@@ -10,13 +10,14 @@ import {
   Calendar,
   Sparkles,
   Target,
-  TrendingUp,
   Zap,
 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { AnswerLogPanel } from "@/components/command/AnswerLogPanel";
 import { QuestionBankPanel } from "@/components/command/QuestionBankPanel";
 import { SubtopicPanel } from "@/components/command/SubtopicPanel";
+import { ScoreEstimateCard } from "@/components/command/ScoreEstimateCard";
+import { ActualScoreReporter } from "@/components/command/ActualScoreReporter";
 import { getPerformanceSnapshot, UNIT_MASTERY_THRESHOLD, type PerformanceSnapshot } from "@/lib/performance.functions";
 import { getBankAccess } from "@/lib/question-bank.functions";
 import { QN_UNITS } from "@/lib/question-navigator-data";
@@ -102,7 +103,7 @@ function CalcCommandCenter() {
     data.profile?.target_score === 5 ? 75 :
     data.profile?.target_score === 4 ? 60 :
     data.profile?.target_score === 3 ? 45 : 30;
-  const gap = Math.max(0, targetRaw - data.predicted_raw_score);
+  const gap = Math.max(0, targetRaw - data.mastery_points);
   const daysToExam = Math.max(0, Math.ceil(
     (new Date(data.profile?.exam_date ?? "2026-05-12").getTime() - Date.now()) / 86400000
   ));
@@ -135,6 +136,20 @@ function CalcCommandCenter() {
           >
             Practice <ArrowRight className="h-3.5 w-3.5" />
           </Link>
+          <Link
+            to="/predict"
+            className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-4 py-2 text-[13px] font-medium transition-colors hover:border-primary/40"
+          >
+            MCQ diagnostic
+          </Link>
+          {isAdmin && (
+            <Link
+              to="/admin/predictions"
+              className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-4 py-2 text-[13px] font-medium transition-colors hover:border-primary/40"
+            >
+              Prediction analytics
+            </Link>
+          )}
           <span className="num inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-2 text-[12px] text-muted-foreground">
             <Calendar className="h-3.5 w-3.5" /> {daysToExam} days to exam
           </span>
@@ -162,8 +177,8 @@ function CalcCommandCenter() {
         <div className="space-y-6">
           {/* Top row: Predicted score + 108-pt + Path */}
           <div className="grid lg:grid-cols-3 gap-4">
-            <PredictedScoreCard data={data} />
-            <PointsCard current={data.predicted_raw_score} target={targetRaw} gap={gap} />
+            <ScoreEstimateCard />
+            <PointsCard current={data.mastery_points} target={targetRaw} gap={gap} />
             <FastestPathCard actions={data.recommended_actions} />
           </div>
 
@@ -180,6 +195,8 @@ function CalcCommandCenter() {
             </div>
             <InsightsPanel data={data} />
           </div>
+
+          <ActualScoreReporter />
         </div>
       )}
 
@@ -210,6 +227,7 @@ function OtherSubjectCommandCenter({ subjectId }: { subjectId: SubjectId }) {
         </div>
         <div className="flex shrink-0 items-center gap-2">
           <span className="num inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-2 text-[12px] text-muted-foreground">
+
             <Calendar className="h-3.5 w-3.5" /> {daysToExam} days to exam
           </span>
         </div>
@@ -307,36 +325,6 @@ function OtherSubjectCommandCenter({ subjectId }: { subjectId: SubjectId }) {
   );
 }
 
-function PredictedScoreCard({ data }: { data: ReturnType<typeof useFakeData> }) {
-  const conf = data.confidence;
-  const dots = [1, 2, 3, 4, 5];
-  return (
-    <div className="rounded-3xl border border-border bg-card p-6 shadow-card relative overflow-hidden">
-      <div className="absolute -top-20 -right-20 h-48 w-48 rounded-full blur-3xl opacity-30 bg-primary" />
-      <div className="relative">
-        <div className="flex items-center justify-between text-xs">
-          <span className="uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5"><TrendingUp className="h-3.5 w-3.5" /> Predicted AP score</span>
-          <span className={`px-2 py-0.5 rounded-full text-[10px] font-medium ${conf === "high" ? "bg-emerald-500/10 text-emerald-400" : conf === "medium" ? "bg-amber-500/10 text-amber-400" : "bg-muted text-muted-foreground"}`}>
-            {conf} confidence
-          </span>
-        </div>
-        <div className="mt-4 flex items-baseline gap-3">
-          <span className="font-display text-6xl font-bold tracking-tight tabular-nums">{data.predicted_ap_score}</span>
-          <span className="text-sm text-muted-foreground">/ 5</span>
-        </div>
-        <div className="mt-3 flex items-center gap-1.5">
-          {dots.map((d) => (
-            <div key={d} className={`h-1.5 flex-1 rounded-full ${d <= data.predicted_ap_score ? "bg-primary" : "bg-elevated"}`} />
-          ))}
-        </div>
-        <div className="mt-4 pt-4 border-t border-border text-xs text-muted-foreground">
-          Based on {data.attempts_count} attempts · raw score est. <span className="text-foreground font-medium tabular-nums">{data.predicted_raw_score} / 108</span>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 // helper type
 function useFakeData() { return null as unknown as Awaited<ReturnType<typeof getPerformanceSnapshot>>; }
 
@@ -346,7 +334,7 @@ function PointsCard({ current, target, gap }: { current: number; target: number;
   return (
     <div className="rounded-3xl border border-border bg-card p-6 shadow-card">
       <div className="flex items-center justify-between text-xs">
-        <span className="uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5"><Target className="h-3.5 w-3.5" /> 108-point engine</span>
+        <span className="uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5"><Target className="h-3.5 w-3.5" /> 108-point mastery map</span>
         <Link to="/108-points-breakdown" className="text-primary inline-flex items-center gap-1 hover:underline">View map <ArrowUpRight className="h-3 w-3" /></Link>
       </div>
       <div className="mt-4 flex items-baseline gap-2">

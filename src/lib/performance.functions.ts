@@ -23,9 +23,9 @@ export type PerformanceSnapshot = {
   accuracy: number; // 0-1
   points_earned: number;
   points_possible: number;
-  predicted_raw_score: number; // out of 108
-  predicted_ap_score: number; // 1-5
-  confidence: "low" | "medium" | "high";
+  /** Unit-weighted mastery expressed on the 108-point map. NOT a score prediction. */
+  mastery_points: number;
+  mastery_points_possible: number;
   unit_mastery: Array<{
     unit_id: string;
     number: number;
@@ -66,15 +66,6 @@ export type PerformanceSnapshot = {
     target: string;
   }>;
 };
-
-// AP Calc BC cutoffs (approximate, recent years): 5≥68, 4≥54, 3≥40, 2≥27
-function rawToAp(raw: number): number {
-  if (raw >= 68) return 5;
-  if (raw >= 54) return 4;
-  if (raw >= 40) return 3;
-  if (raw >= 27) return 2;
-  return 1;
-}
 
 export const getPerformanceSnapshot = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
@@ -179,15 +170,11 @@ export const getPerformanceSnapshot = createServerFn({ method: "GET" })
         }),
     );
 
-    // Predicted score: weighted accuracy across units, defaulting untouched to 50%
-    const weightedAcc = unit_mastery.reduce((s, u) => {
-      const acc = u.mastery >= 0 ? u.mastery / 100 : 0.5;
-      return s + acc * u.ap_points;
-    }, 0);
-    const predicted_raw_score = Math.round(weightedAcc);
-    const predicted_ap_score = rawToAp(predicted_raw_score);
-    const confidence: "low" | "medium" | "high" =
-      attempts_count < 20 ? "low" : attempts_count < 80 ? "medium" : "high";
+    // Unit-weighted mastery on the 108-point map. Untouched units contribute 0 —
+    // this is a picture of demonstrated mastery, not an estimate of exam score.
+    const mastery_points = Math.round(
+      unit_mastery.reduce((s, u) => s + (u.mastery >= 0 ? u.mastery / 100 : 0) * u.ap_points, 0),
+    );
 
     // Top mistakes from the user's attempts
     const mistakeCounts = new Map<string, number>();
@@ -235,9 +222,8 @@ export const getPerformanceSnapshot = createServerFn({ method: "GET" })
       accuracy,
       points_earned,
       points_possible,
-      predicted_raw_score,
-      predicted_ap_score,
-      confidence,
+      mastery_points,
+      mastery_points_possible: 108,
       unit_mastery,
       subtopics,
       untouched_units,
