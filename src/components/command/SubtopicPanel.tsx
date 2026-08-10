@@ -8,7 +8,7 @@ type Sub = PerformanceSnapshot["subtopics"][number];
 export function SubtopicPanel({ subtopics }: { subtopics: Sub[] }) {
   const unlocked = subtopics.filter((s) => s.unlocked);
   const building = subtopics.filter((s) => !s.unlocked);
-  // A subtopic is either a strength or a weakness — never both.
+  // A topic is either a strength or a weakness — never both.
   const strengths = unlocked
     .filter((s) => s.accuracy >= STRENGTH_CUTOFF)
     .sort((a, b) => b.accuracy - a.accuracy)
@@ -21,14 +21,14 @@ export function SubtopicPanel({ subtopics }: { subtopics: Sub[] }) {
   return (
     <div className="grid lg:grid-cols-3 gap-4">
       <Column
-        title="Subtopic strengths"
+        title="Topic strengths"
         sub={`At or above ${STRENGTH_CUTOFF}% accuracy, unlocked at ${SUBTOPIC_THRESHOLD}+ questions.`}
         rows={strengths}
         tone="emerald"
-        empty={`No subtopic is at ${STRENGTH_CUTOFF}%+ yet with ${SUBTOPIC_THRESHOLD}+ questions logged.`}
+        empty={`No topic is at ${STRENGTH_CUTOFF}%+ yet with ${SUBTOPIC_THRESHOLD}+ questions logged.`}
       />
       <Column
-        title="Subtopic weaknesses"
+        title="Topic weaknesses"
         sub={`Below ${STRENGTH_CUTOFF}% accuracy — drill these first.`}
         rows={weaknesses}
         tone="rose"
@@ -42,11 +42,11 @@ export function SubtopicPanel({ subtopics }: { subtopics: Sub[] }) {
         <h3 className="font-display font-semibold mt-1">Almost enough evidence</h3>
         {building.length === 0 ? (
           <p className="mt-4 text-sm text-muted-foreground">
-            No partial subtopics.{" "}
+            No partial topics.{" "}
             <Link to="/practice" className="text-primary hover:underline">
               Practice more
             </Link>{" "}
-            to open subtopic diagnostics.
+            to open topic diagnostics.
           </p>
         ) : (
           <ul className="mt-4 space-y-2">

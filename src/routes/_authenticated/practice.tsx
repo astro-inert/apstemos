@@ -23,7 +23,7 @@ export const Route = createFileRoute("/_authenticated/practice")({
       {
         name: "description",
         content:
-          "Drill 1,800+ original, auto-generated AP Calculus multiple choice questions by unit and subtopic — every answer logs to your Score Command Center.",
+          "Drill 1,800+ original, auto-generated AP Calculus multiple choice questions by unit and topic — every answer logs to your Score Command Center.",
       },
       { property: "og:title", content: "Practice Questions — AP Calc OS" },
       { property: "og:description", content: "Original parameterized AP Calculus MCQs; every answer feeds your predicted score." },
@@ -101,7 +101,7 @@ function PracticePage() {
     <PageShell
       eyebrow="practice"
       title={unit ? `Unit ${unit.number} drill` : "Question bank"}
-      description={`${data ? `${data.total.toLocaleString()} original questions in this filter. ` : ""}Every answer logs to your Score Command Center and updates unit mastery and subtopic accuracy.`}
+      description={`${data ? `${data.total.toLocaleString()} original questions in this filter. ` : ""}Every answer logs to your Score Command Center and updates unit mastery and topic accuracy.`}
     >
       <div className="grid gap-2 sm:grid-cols-[1fr_1fr_auto]">
         <select
@@ -121,7 +121,7 @@ function PracticePage() {
           onChange={(e) => setFilter({ topic: e.target.value || undefined })}
           className="rounded-full border border-border bg-card px-4 py-2.5 text-[13px] outline-none transition-colors focus:border-primary/50"
         >
-          <option value="">All subtopics</option>
+          <option value="">All topics</option>
           {(unit?.topics ?? []).map((t) => (
             <option key={t.slug} value={t.slug}>
               {t.title}
