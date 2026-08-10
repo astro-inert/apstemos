@@ -28,6 +28,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TopicRundownIndexRouteImport } from './routes/topic-rundown.index'
 import { Route as QuestionNavigatorIndexRouteImport } from './routes/question-navigator.index'
+import { Route as TopicRundownUnitIdRouteImport } from './routes/topic-rundown.$unitId'
 import { Route as QuestionNavigatorUnitIdRouteImport } from './routes/question-navigator.$unitId'
 import { Route as AuthenticatedPracticeRouteImport } from './routes/_authenticated/practice'
 import { Route as AuthenticatedCommandCenterRouteImport } from './routes/_authenticated/command-center'
@@ -128,6 +129,11 @@ const QuestionNavigatorIndexRoute = QuestionNavigatorIndexRouteImport.update({
   path: '/question-navigator/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TopicRundownUnitIdRoute = TopicRundownUnitIdRouteImport.update({
+  id: '/$unitId',
+  path: '/$unitId',
+  getParentRoute: () => TopicRundownRoute,
+} as any)
 const QuestionNavigatorUnitIdRoute = QuestionNavigatorUnitIdRouteImport.update({
   id: '/question-navigator/$unitId',
   path: '/question-navigator/$unitId',
@@ -171,6 +177,7 @@ export interface FileRoutesByFullPath {
   '/command-center': typeof AuthenticatedCommandCenterRoute
   '/practice': typeof AuthenticatedPracticeRoute
   '/question-navigator/$unitId': typeof QuestionNavigatorUnitIdRouteWithChildren
+  '/topic-rundown/$unitId': typeof TopicRundownUnitIdRoute
   '/question-navigator/': typeof QuestionNavigatorIndexRoute
   '/topic-rundown/': typeof TopicRundownIndexRoute
   '/question-navigator/$unitId/$topicId': typeof QuestionNavigatorUnitIdTopicIdRoute
@@ -194,6 +201,7 @@ export interface FileRoutesByTo {
   '/command-center': typeof AuthenticatedCommandCenterRoute
   '/practice': typeof AuthenticatedPracticeRoute
   '/question-navigator/$unitId': typeof QuestionNavigatorUnitIdRouteWithChildren
+  '/topic-rundown/$unitId': typeof TopicRundownUnitIdRoute
   '/question-navigator': typeof QuestionNavigatorIndexRoute
   '/topic-rundown': typeof TopicRundownIndexRoute
   '/question-navigator/$unitId/$topicId': typeof QuestionNavigatorUnitIdTopicIdRoute
@@ -220,6 +228,7 @@ export interface FileRoutesById {
   '/_authenticated/command-center': typeof AuthenticatedCommandCenterRoute
   '/_authenticated/practice': typeof AuthenticatedPracticeRoute
   '/question-navigator/$unitId': typeof QuestionNavigatorUnitIdRouteWithChildren
+  '/topic-rundown/$unitId': typeof TopicRundownUnitIdRoute
   '/question-navigator/': typeof QuestionNavigatorIndexRoute
   '/topic-rundown/': typeof TopicRundownIndexRoute
   '/question-navigator/$unitId/$topicId': typeof QuestionNavigatorUnitIdTopicIdRoute
@@ -246,6 +255,7 @@ export interface FileRouteTypes {
     | '/command-center'
     | '/practice'
     | '/question-navigator/$unitId'
+    | '/topic-rundown/$unitId'
     | '/question-navigator/'
     | '/topic-rundown/'
     | '/question-navigator/$unitId/$topicId'
@@ -269,6 +279,7 @@ export interface FileRouteTypes {
     | '/command-center'
     | '/practice'
     | '/question-navigator/$unitId'
+    | '/topic-rundown/$unitId'
     | '/question-navigator'
     | '/topic-rundown'
     | '/question-navigator/$unitId/$topicId'
@@ -294,6 +305,7 @@ export interface FileRouteTypes {
     | '/_authenticated/command-center'
     | '/_authenticated/practice'
     | '/question-navigator/$unitId'
+    | '/topic-rundown/$unitId'
     | '/question-navigator/'
     | '/topic-rundown/'
     | '/question-navigator/$unitId/$topicId'
@@ -456,6 +468,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof QuestionNavigatorIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/topic-rundown/$unitId': {
+      id: '/topic-rundown/$unitId'
+      path: '/$unitId'
+      fullPath: '/topic-rundown/$unitId'
+      preLoaderRoute: typeof TopicRundownUnitIdRouteImport
+      parentRoute: typeof TopicRundownRoute
+    }
     '/question-navigator/$unitId': {
       id: '/question-navigator/$unitId'
       path: '/question-navigator/$unitId'
@@ -501,10 +520,12 @@ const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
 interface TopicRundownRouteChildren {
+  TopicRundownUnitIdRoute: typeof TopicRundownUnitIdRoute
   TopicRundownIndexRoute: typeof TopicRundownIndexRoute
 }
 
 const TopicRundownRouteChildren: TopicRundownRouteChildren = {
+  TopicRundownUnitIdRoute: TopicRundownUnitIdRoute,
   TopicRundownIndexRoute: TopicRundownIndexRoute,
 }
 

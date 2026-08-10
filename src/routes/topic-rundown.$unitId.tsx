@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 import { PageShell } from "@/components/PageShell";
-import { QN_UNITS } from "@/lib/question-navigator-data";
+import { QN_UNITS, type TopicEntry, type UnitEntry } from "@/lib/question-navigator-data";
 
 export const Route = createFileRoute("/topic-rundown/$unitId")({
   loader: ({ params }) => {
@@ -31,7 +31,7 @@ export const Route = createFileRoute("/topic-rundown/$unitId")({
 });
 
 function Page() {
-  const { unit } = Route.useLoaderData();
+  const { unit } = Route.useLoaderData() as { unit: UnitEntry };
 
   return (
     <PageShell
@@ -50,7 +50,7 @@ function Page() {
       </div>
 
       <div className="grid gap-3">
-        {unit.topics.map((t) => (
+        {unit.topics.map((t: TopicEntry) => (
           <section key={t.slug} className="rounded-xl border border-border bg-card p-5">
             <h2 className="font-display font-semibold">{t.title}</h2>
             <p className="text-sm text-muted-foreground mt-1">{t.blurb}</p>
