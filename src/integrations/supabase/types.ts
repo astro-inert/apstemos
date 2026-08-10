@@ -423,6 +423,48 @@ export type Database = {
           },
         ]
       }
+      user_mistakes: {
+        Row: {
+          category: string
+          code: string
+          created_at: string
+          description: string
+          est_point_loss: number
+          example: string | null
+          how_to_avoid: string
+          id: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category?: string
+          code: string
+          created_at?: string
+          description?: string
+          est_point_loss?: number
+          example?: string | null
+          how_to_avoid?: string
+          id?: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: string
+          code?: string
+          created_at?: string
+          description?: string
+          est_point_loss?: number
+          example?: string | null
+          how_to_avoid?: string
+          id?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string
