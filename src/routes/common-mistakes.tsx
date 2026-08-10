@@ -1,7 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
+import { useSuspenseQuery, queryOptions, useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { AlertTriangle, Search } from "lucide-react";
+import { MistakeCaptureDialog } from "@/components/mistakes/MistakeCaptureDialog";
+import { listUserMistakes, type UserMistake } from "@/lib/user-mistakes.functions";
 import { AppShell } from "@/components/AppShell";
 import { LaTeX } from "@/components/LaTeX";
 import { supabase } from "@/integrations/supabase/client";
@@ -28,8 +31,40 @@ const mistakesQuery = queryOptions({
   },
 });
 
+type MistakeRow = {
+  code: string;
+  title: string;
+  category: string;
+  description: string;
+  example: string | null;
+  ap_consequence?: string | null;
+  how_to_avoid: string;
+  est_point_loss: number | string;
+  personal?: boolean;
+};
+
 function CommonMistakes() {
-  const { data: mistakes } = useSuspenseQuery(mistakesQuery);
+  const { data: shared } = useSuspenseQuery(mistakesQuery);
+  const listMine = useServerFn(listUserMistakes);
+  const { data: mine } = useQuery({
+    queryKey: ["user-mistakes"],
+    queryFn: async (): Promise<UserMistake[]> => {
+      try {
+        return await listMine();
+      } catch {
+        return [];
+      }
+    },
+    retry: false,
+  });
+
+  const mistakes: MistakeRow[] = useMemo(
+    () => [
+      ...(mine ?? []).map((m) => ({ ...m, ap_consequence: null, personal: true }) as MistakeRow),
+      ...(shared as unknown as MistakeRow[]),
+    ],
+    [shared, mine],
+  );
   const [q, setQ] = useState("");
   const [cat, setCat] = useState<string>("all");
 
@@ -52,6 +87,9 @@ function CommonMistakes() {
           <p className="text-sm text-muted-foreground mt-2 max-w-2xl">
             Every mistake here has cost real students real points. Read the description, study the example, and copy the "how to avoid" line into your notes.
           </p>
+          <div className="mt-4">
+            <MistakeCaptureDialog />
+          </div>
         </div>
 
         {/* Controls */}
@@ -91,7 +129,12 @@ function CommonMistakes() {
                       <LaTeX>{m.title}</LaTeX>
                     </h3>
 
-                    <div className="text-[10px] uppercase tracking-wider text-muted-foreground mt-0.5">{m.category}</div>
+                    <div className="text-[10px] uppercase tracking-wider text-muted-foreground mt-0.5 flex items-center gap-2">
+                      {m.category}
+                      {m.personal && (
+                        <span className="rounded bg-primary/15 px-1.5 py-0.5 text-primary tracking-wider">personal</span>
+                      )}
+                    </div>
                   </div>
                 </div>
                 <div className="text-right shrink-0">
