@@ -19,7 +19,7 @@ export const Route = createFileRoute("/latex-master-sheet")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: FormulaGuide;
+  component: FormulaGuide,
 });
 
 function FormulaGuide() {
