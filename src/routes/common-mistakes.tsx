@@ -8,6 +8,7 @@ import { listUserMistakes, type UserMistake } from "@/lib/user-mistakes.function
 import { PageShell } from "@/components/PageShell";
 import { LaTeX } from "@/components/LaTeX";
 import { supabase } from "@/integrations/supabase/client";
+import { SubjectContentGate } from "@/components/SubjectContentGate";
 
 export const Route = createFileRoute("/common-mistakes")({
   head: () => ({
@@ -16,7 +17,11 @@ export const Route = createFileRoute("/common-mistakes")({
       { name: "description", content: "The 22+ ways AP Calculus students lose points — described, exampled, and fixed." },
     ],
   }),
-  component: CommonMistakes,
+  component: () => (
+    <SubjectContentGate>
+      <CommonMistakes />
+    </SubjectContentGate>
+  ),
 });
 
 const mistakesQuery = queryOptions({

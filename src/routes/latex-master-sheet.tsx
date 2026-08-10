@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Download, FileText } from "lucide-react";
 import { PageShell } from "@/components/PageShell";
 import { Reveal } from "@/components/home/primitives";
+import { SubjectContentGate } from "@/components/SubjectContentGate";
 
 const PDF_URL = "https://drive.google.com/file/d/1O6iD6MP3R_p4NZzZ4vt-7kVAHrUBYtdJ/view?usp=drive_open";
 
@@ -20,7 +21,11 @@ export const Route = createFileRoute("/latex-master-sheet")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: FormulaGuide,
+  component: () => (
+    <SubjectContentGate>
+      <FormulaGuide />
+    </SubjectContentGate>
+  ),
 });
 
 function FormulaGuide() {

@@ -1,11 +1,12 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { HOME_DEMO } from "@/lib/home-demo";
-import type { SubjectConfig } from "@/lib/subjects";
-import { MicroLabel, Reveal, Section, SectionHeading } from "./primitives";
+import { isSubjectLive, type SubjectConfig } from "@/lib/subjects";
+import { ComingSoon, MicroLabel, Reveal, Section, SectionHeading } from "./primitives";
 
 export function MistakesSection({ subject }: { subject: SubjectConfig }) {
   const m = HOME_DEMO[subject.id].mistake;
+  const live = isSubjectLive(subject.id);
   return (
     <Section className="border-t border-border">
       <SectionHeading
@@ -45,13 +46,17 @@ export function MistakesSection({ subject }: { subject: SubjectConfig }) {
               <MicroLabel>Your history</MicroLabel>
               <div className="num mt-1.5 text-[13px]">Tagged {m.tagged} times</div>
             </div>
-            <Link
-              to="/common-mistakes"
-              className="group inline-flex items-center gap-1.5 text-sm font-medium transition-colors hover:text-primary"
-            >
-              Open the database
-              <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-            </Link>
+            {live ? (
+              <Link
+                to="/common-mistakes"
+                className="group inline-flex items-center gap-1.5 text-sm font-medium transition-colors hover:text-primary"
+              >
+                Open the database
+                <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+              </Link>
+            ) : (
+              <ComingSoon />
+            )}
           </div>
         </Reveal>
 
@@ -62,13 +67,19 @@ export function MistakesSection({ subject }: { subject: SubjectConfig }) {
             Describe what went wrong in plain language. It gets structured into an entry only you can see, taggable from
             your answer log.
           </p>
-          <Link
-            to="/common-mistakes"
-            className="mt-6 inline-flex items-center gap-2 rounded-full border border-border bg-card px-5 py-2.5 text-sm font-semibold transition-colors hover:border-primary/40"
-          >
-            Describe it
-            <ArrowRight className="h-3.5 w-3.5" />
-          </Link>
+          {live ? (
+            <Link
+              to="/common-mistakes"
+              className="mt-6 inline-flex items-center gap-2 rounded-full border border-border bg-card px-5 py-2.5 text-sm font-semibold transition-colors hover:border-primary/40"
+            >
+              Describe it
+              <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
+          ) : (
+            <div className="mt-6">
+              <ComingSoon />
+            </div>
+          )}
           <div className="mt-8 rounded-2xl border border-border bg-background p-4">
             <div className="micro-label">draft entry</div>
             <div className="mt-2 space-y-2 text-[12px] text-muted-foreground">

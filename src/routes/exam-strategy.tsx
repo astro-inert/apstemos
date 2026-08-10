@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Calculator, Clock, Route as RouteIcon, type LucideIcon } from "lucide-react";
 import { PageShell } from "@/components/PageShell";
+import { SubjectContentGate } from "@/components/SubjectContentGate";
 
 export const Route = createFileRoute("/exam-strategy")({
   head: () => ({
@@ -17,7 +18,11 @@ export const Route = createFileRoute("/exam-strategy")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: ExamStrategy,
+  component: () => (
+    <SubjectContentGate>
+      <ExamStrategy />
+    </SubjectContentGate>
+  ),
 });
 
 const sections: { icon: LucideIcon; eyebrow: string; title: string; sub: string }[] = [

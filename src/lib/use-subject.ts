@@ -16,6 +16,12 @@ function subjectIdForPath(pathname: string): SubjectId | null {
  * subject's home page, otherwise from localStorage, defaulting to calc-bc.
  * SSR-safe: localStorage is only read in an effect, never during render.
  */
+/** The subject implied by the URL, or null on shared (subject-agnostic) routes. */
+export function useSubjectFromPath(): SubjectId | null {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  return subjectIdForPath(pathname);
+}
+
 export function useCurrentSubject(): SubjectId {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const fromPath = subjectIdForPath(pathname);

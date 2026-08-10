@@ -1,9 +1,9 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
-import type { SubjectConfig } from "@/lib/subjects";
+import { isSubjectLive, type SubjectConfig } from "@/lib/subjects";
 import type { InstrumentData } from "@/lib/use-home-instrument";
-import { CountUp, ExampleBadge, MasteryBar, MicroLabel, Reveal } from "./primitives";
+import { ComingSoon, CountUp, ExampleBadge, MasteryBar, MicroLabel } from "./primitives";
 
 export function HeroSection({ subject, data }: { subject: SubjectConfig; data: InstrumentData }) {
   const reduced = useReducedMotion();
@@ -27,10 +27,20 @@ export function HeroSection({ subject, data }: { subject: SubjectConfig; data: I
             you're missing, and what to work on next.
           </p>
           <div className="mt-9 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-            <MagneticLink to="/practice">
-              Start optimizing my score
-              <ArrowRight className="h-4 w-4" />
-            </MagneticLink>
+            {isSubjectLive(subject.id) ? (
+              <MagneticLink to="/practice">
+                Start optimizing my score
+                <ArrowRight className="h-4 w-4" />
+              </MagneticLink>
+            ) : (
+              <div className="flex flex-col items-start gap-3">
+                <span className="inline-flex cursor-not-allowed items-center gap-2 rounded-full border border-dashed border-border bg-card px-6 py-3 text-sm font-semibold text-muted-foreground">
+                  {subject.navLabel} question bank
+                  <ArrowRight className="h-4 w-4" />
+                </span>
+                <ComingSoon />
+              </div>
+            )}
             <a
               href="#the-system"
               className="group inline-flex items-center gap-1.5 text-sm font-medium text-foreground/80 transition-colors hover:text-primary"
@@ -125,7 +135,7 @@ function Instrument({ subject, data }: { subject: SubjectConfig; data: Instrumen
 
         {/* Subtopic mastery */}
         <div className="border-b border-border p-6 sm:p-7 lg:border-b-0 lg:border-r">
-          <MicroLabel>Subtopic mastery</MicroLabel>
+          <MicroLabel>Topic mastery</MicroLabel>
           <ul className="mt-5 space-y-4">
             {data.subtopics.map((s, i) => (
               <li key={s.name} className="group">
@@ -149,24 +159,32 @@ function Instrument({ subject, data }: { subject: SubjectConfig; data: Instrumen
         <div className="p-6 sm:p-7">
           <MicroLabel>Your next moves</MicroLabel>
           <ol className="mt-5 space-y-2">
-            {data.moves.map((m, i) => (
+            {data.moves.map((m, i) => {
+              const live = isSubjectLive(subject.id);
+              const Row: React.ElementType = live ? Link : "div";
+              return (
               <li key={m.name}>
-                <Link
-                  to="/practice"
-                  className="group flex items-center gap-3 rounded-xl border border-transparent px-3 py-3 transition-all hover:border-primary/25 hover:bg-accent/40"
+                <Row
+                  {...(live ? ({ to: "/practice" } as never) : {})}
+                  className={`group flex items-center gap-3 rounded-xl border border-transparent px-3 py-3 transition-all ${live ? "hover:border-primary/25 hover:bg-accent/40" : ""}`}
                 >
                   <span className="num text-[11px] text-subtle">{String(i + 1).padStart(2, "0")}</span>
                   <span className="min-w-0 flex-1">
                     <span className="block truncate text-[13px] font-medium">{m.name}</span>
                     <span className="num block text-[11px] text-muted-foreground">{m.mastery}% mastery</span>
                   </span>
-                  <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-border px-2.5 py-1 text-[11px] font-medium transition-colors group-hover:border-primary/40 group-hover:text-primary">
-                    {m.cta}
-                    <ArrowRight className="h-3 w-3" />
-                  </span>
-                </Link>
+                  {live ? (
+                    <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-border px-2.5 py-1 text-[11px] font-medium transition-colors group-hover:border-primary/40 group-hover:text-primary">
+                      {m.cta}
+                      <ArrowRight className="h-3 w-3" />
+                    </span>
+                  ) : (
+                    <span className="num shrink-0 text-[10px] uppercase tracking-[0.16em] text-subtle">soon</span>
+                  )}
+                </Row>
               </li>
-            ))}
+              );
+            })}
           </ol>
         </div>
       </div>

@@ -4,8 +4,8 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ArrowRight, Check, X } from "lucide-react";
 import { LaTeX } from "@/components/LaTeX";
 import { HOME_DEMO } from "@/lib/home-demo";
-import type { SubjectConfig } from "@/lib/subjects";
-import { Section, SectionHeading, MicroLabel } from "./primitives";
+import { isSubjectLive, type SubjectConfig } from "@/lib/subjects";
+import { ComingSoon, Section, SectionHeading, MicroLabel } from "./primitives";
 
 export function DiagnosisSection({ subject }: { subject: SubjectConfig }) {
   const q = HOME_DEMO[subject.id].question;
@@ -137,13 +137,19 @@ export function DiagnosisSection({ subject }: { subject: SubjectConfig }) {
                   ))}
                 </dl>
 
-                <Link
-                  to="/practice"
-                  className="mt-7 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-shadow hover:shadow-glow"
-                >
-                  Practice this weakness
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
+                {isSubjectLive(subject.id) ? (
+                  <Link
+                    to="/practice"
+                    className="mt-7 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-shadow hover:shadow-glow"
+                  >
+                    Practice this weakness
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                ) : (
+                  <div className="mt-7">
+                    <ComingSoon />
+                  </div>
+                )}
               </motion.div>
             )}
           </AnimatePresence>

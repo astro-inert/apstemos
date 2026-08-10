@@ -3,8 +3,8 @@ import { Link } from "@tanstack/react-router";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ArrowRight, ChevronRight } from "lucide-react";
 import { HOME_DEMO } from "@/lib/home-demo";
-import type { SubjectConfig } from "@/lib/subjects";
-import { MicroLabel, Reveal, Section, SectionHeading } from "./primitives";
+import { isSubjectLive, type SubjectConfig } from "@/lib/subjects";
+import { ComingSoon, MicroLabel, Reveal, Section, SectionHeading } from "./primitives";
 
 export function NavigatorSection({ subject }: { subject: SubjectConfig }) {
   const nav = HOME_DEMO[subject.id].navigator;
@@ -16,7 +16,7 @@ export function NavigatorSection({ subject }: { subject: SubjectConfig }) {
       <SectionHeading
         label="05 · question type navigator"
         title="Know how the AP asks."
-        sub="A field manual for the exam: unit, subtopic, and the exact approach for each question type."
+        sub="A field manual for the exam: unit, topic, and the exact approach for each question type."
       />
 
       <div className="mt-14 overflow-hidden rounded-3xl border border-border bg-card shadow-card">
@@ -25,13 +25,17 @@ export function NavigatorSection({ subject }: { subject: SubjectConfig }) {
             <MicroLabel>{subject.navLabel}</MicroLabel>
             <div className="num mt-1.5 text-[12px] tracking-[0.08em]">{nav.unitLabel}</div>
           </div>
-          <Link
-            to="/question-navigator"
-            className="group inline-flex items-center gap-1.5 text-sm font-medium transition-colors hover:text-primary"
-          >
-            Open the navigator
-            <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-          </Link>
+          {isSubjectLive(subject.id) ? (
+            <Link
+              to="/question-navigator"
+              className="group inline-flex items-center gap-1.5 text-sm font-medium transition-colors hover:text-primary"
+            >
+              Open the navigator
+              <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+            </Link>
+          ) : (
+            <ComingSoon />
+          )}
         </div>
 
         <div className="grid lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">

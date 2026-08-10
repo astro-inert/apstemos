@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageShell } from "@/components/PageShell";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { SubjectContentGate } from "@/components/SubjectContentGate";
 
 export const Route = createFileRoute("/frqs-by-type")({
   head: () => ({
@@ -18,7 +19,11 @@ export const Route = createFileRoute("/frqs-by-type")({
     ],
 
   }),
-  component: FRQsByType,
+  component: () => (
+    <SubjectContentGate>
+      <FRQsByType />
+    </SubjectContentGate>
+  ),
 });
 
 // Years 2000-2025, excluding 2020 (no exam)

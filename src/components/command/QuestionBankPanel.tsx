@@ -88,7 +88,7 @@ export function QuestionBankPanel() {
         </div>
         <h3 className="font-display font-semibold mt-1">Upload an AP Calculus exam</h3>
         <p className="text-sm text-muted-foreground mt-1">
-          Questions are transcribed with LaTeX preserved, figures described, and auto-tagged to units and subtopics.
+          Questions are transcribed with LaTeX preserved, figures described, and auto-tagged to units and topics.
           Nothing goes live until you approve it.
         </p>
 
@@ -290,7 +290,7 @@ function ReviewRow({ q }: { q: ExtractedQuestion }) {
           onChange={(e) => setTopicSlug(e.target.value)}
           className="rounded-md border border-border bg-background px-2 py-1.5 text-xs"
         >
-          <option value="">Unassigned subtopic</option>
+          <option value="">Unassigned topic</option>
           {(unit?.topics ?? []).map((t) => (
             <option key={t.slug} value={t.slug}>
               {t.title}

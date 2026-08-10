@@ -34,15 +34,15 @@ export function SubjectHome({ subject }: { subject: SubjectConfig }) {
 
       <SiteNav subject={subject.id} />
       <HeroSection subject={subject} data={data} />
-      <PipelineSection />
+      <PipelineSection subject={subject} />
       <DiagnosisSection subject={subject} />
       <CommandCenterSection subject={subject} data={data} />
       <MistakesSection subject={subject} />
       <NavigatorSection subject={subject} />
       <PillarsSection subject={subject} />
-      <ResourcesSection />
+      <ResourcesSection subject={subject} />
       <ManifestoSection />
-      <FinalCTASection />
+      <FinalCTASection subject={subject} />
       <SiteFooter />
     </div>
   );
