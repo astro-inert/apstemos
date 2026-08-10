@@ -697,6 +697,18 @@ const TOOLKIT_COPY: Record<string, { title: string; body: string }> = {
     title: "FRQ LIBRARY",
     body: "Every AP FRQ from the past 26 years, organized by question number and topic.",
   },
+  "Unit Rundowns": {
+    title: "TOPIC RUNDOWNS",
+    body: "Concise, exam-focused summaries of every core concept needed for the AP exam.",
+  },
+  "Equation Sheet": {
+    title: "FORMULA & STRATEGY GUIDE",
+    body: "A LaTeX-rendered printable reference covering essential formulas and the strategies needed to apply them correctly.",
+  },
+  "Derivation Sheet": {
+    title: "FORMULA & STRATEGY GUIDE",
+    body: "A LaTeX-rendered printable reference covering essential derivations and the strategies needed to apply them correctly.",
+  },
   "Topic Rundowns": {
     title: "TOPIC RUNDOWNS",
     body: "Concise, exam-focused summaries of every core concept needed for the AP exam.",
