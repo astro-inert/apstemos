@@ -298,7 +298,16 @@ function SystemMap({ subject }: { subject: SubjectConfig }) {
   const commandCenter = byTitle("Score Command Center");
   const navigator = byTitle("Question Type Navigator");
 
-  const primary: { tool: SubjectTool; caption: string }[] = [
+  const center: SubjectTool =
+    commandCenter ?? {
+      icon: Gauge,
+      title: "Score Command Center",
+      description: "Predicted score, point gap, and ranked next moves.",
+      accent: "primary",
+      to: "/command-center",
+    };
+
+  const inputs: { tool: SubjectTool; accent: Accent; caption: string }[] = [
     {
       tool: {
         icon: PencilLine,
@@ -307,18 +316,8 @@ function SystemMap({ subject }: { subject: SubjectConfig }) {
         accent: "primary",
         to: "/practice",
       },
-      caption: "Every answer is written into your performance model →",
-    },
-    {
-      tool:
-        commandCenter ?? {
-          icon: Gauge,
-          title: "Score Command Center",
-          description: "Predicted score, point gap, and ranked next moves.",
-          accent: "primary",
-          to: "/command-center",
-        },
-      caption: "Your weakest subtopics surface the mistakes behind them →",
+      accent: "primary",
+      caption: "Feeds in: every answer, right or wrong",
     },
     {
       tool: {
@@ -328,7 +327,8 @@ function SystemMap({ subject }: { subject: SubjectConfig }) {
         accent: "rose",
         to: "/common-mistakes",
       },
-      caption: "Each mistake maps to the question patterns that trigger it →",
+      accent: "rose",
+      caption: "Feeds in: the mistakes you tag",
     },
     {
       tool:
@@ -339,13 +339,13 @@ function SystemMap({ subject }: { subject: SubjectConfig }) {
           accent: "blue",
           to: "/question-navigator",
         },
-      caption: "Sends you back into targeted practice ↻",
+      accent: "blue",
+      caption: "Feeds in: the patterns you relearn",
     },
   ];
 
-  const stepAccents: Accent[] = ["primary", "violet", "rose", "blue"];
-  const primaryTitles = new Set(primary.map((p) => p.tool.title));
-  const secondary = subject.tools.filter((t) => !primaryTitles.has(t.title));
+  const excluded = new Set([center.title, ...inputs.map((i) => i.tool.title)]);
+  const secondary = subject.tools.filter((t) => !excluded.has(t.title));
 
   return (
     <section className="px-6 py-16 border-t border-white/10">
@@ -353,69 +353,89 @@ function SystemMap({ subject }: { subject: SubjectConfig }) {
         <SectionHeader
           eyebrow="02 · the system"
           title={subject.toolsHeading}
-          sub="Not six independent tools — one adaptive loop with supporting reference layers underneath."
+          sub="Every tool writes into the same place. The Score Command Center is the system; the rest are inputs and reference layers."
         />
 
         <div className="mt-10">
           <div className="flex items-center gap-3 justify-center mb-6">
             <span className="h-1.5 w-1.5 rounded-full bg-primary" />
             <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-subtle">
-              the adaptive loop
+              inputs
             </span>
             <span className="h-px w-16 bg-gradient-to-r from-primary/50 to-transparent" />
           </div>
 
-          <div className="relative">
-            <div className="pointer-events-none absolute left-0 right-0 top-20 hidden lg:block">
-              <div className="h-px w-full bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
-            </div>
-            <ol className="relative grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {primary.map(({ tool, caption }, idx) => {
-                const Icon = tool.icon;
-                const a = accentMap[stepAccents[idx] ?? tool.accent];
-                const inner = (
-                  <>
-                    <div className={`pointer-events-none absolute -top-16 -right-16 h-40 w-40 rounded-full blur-3xl opacity-60 bg-gradient-to-br ${a.glow} to-transparent`} />
-                    <div className="relative flex items-start justify-between">
-                      <div className={`grid place-items-center h-12 w-12 rounded-xl ring-1 shadow-[0_0_24px_-6px_currentColor] ${a.icon} ${a.ring}`}>
-                        <Icon className="h-6 w-6" />
-                      </div>
-                      <span className="font-mono text-[10px] text-subtle">
-                        step {String(idx + 1).padStart(2, "0")}
-                      </span>
+          <div className="grid sm:grid-cols-3 gap-3">
+            {inputs.map(({ tool, accent, caption }) => {
+              const Icon = tool.icon;
+              const a = accentMap[accent];
+              const inner = (
+                <>
+                  <div className="relative flex items-start justify-between">
+                    <div className={`grid place-items-center h-10 w-10 rounded-xl ring-1 ${a.icon} ${a.ring}`}>
+                      <Icon className="h-5 w-5" />
                     </div>
-                    <div className="relative font-display text-lg font-semibold mt-5">{tool.title}</div>
-                    <div className="relative text-sm text-muted-foreground mt-1.5 leading-relaxed">{tool.description}</div>
-                    <div className="relative mt-5 pt-4 border-t border-white/10 text-[11px] leading-relaxed text-primary/80">
-                      {caption}
-                    </div>
-                  </>
-                );
-                const cls = `group relative overflow-hidden rounded-2xl border border-white/10 bg-card p-6 min-h-[15rem] hover-lift transition ${a.hover}`;
-                return (
-                  <li key={tool.title} className="relative">
-                    {tool.to ? (
-                      <Link to={tool.to} className={cls}>{inner}</Link>
-                    ) : (
-                      <div className={cls}>{inner}</div>
-                    )}
-                    {idx < primary.length - 1 ? (
-                      <span className="pointer-events-none absolute top-1/2 -right-3.5 z-10 hidden lg:grid h-7 w-7 -translate-y-1/2 place-items-center rounded-full border border-border bg-background text-primary">
-                        <ArrowRight className="h-3.5 w-3.5" />
-                      </span>
-                    ) : (
-                      <span className="pointer-events-none absolute top-1/2 -right-3.5 z-10 hidden lg:grid h-7 w-7 -translate-y-1/2 place-items-center rounded-full border border-border bg-background text-primary">
-                        <RefreshCw className="h-3.5 w-3.5" />
-                      </span>
-                    )}
-                  </li>
-                );
-              })}
-            </ol>
-            <div className="mt-4 hidden lg:flex items-center gap-3 justify-center text-[11px] text-muted-foreground">
-              <RefreshCw className="h-3.5 w-3.5 text-primary/70" />
-              The Navigator feeds straight back into Practice — the loop closes and tightens on every pass.
-            </div>
+                    <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-foreground group-hover:translate-x-0.5 transition" />
+                  </div>
+                  <div className="relative font-display font-semibold text-base mt-4">{tool.title}</div>
+                  <div className="relative text-xs text-muted-foreground mt-1.5 leading-relaxed">{tool.description}</div>
+                  <div className="relative mt-4 pt-3 border-t border-white/10 text-[11px] text-primary/80">{caption}</div>
+                </>
+              );
+              const cls = `group relative overflow-hidden rounded-2xl border border-white/10 bg-card/60 p-5 h-full hover-lift transition ${a.hover}`;
+              return tool.to ? (
+                <Link key={tool.title} to={tool.to} className={cls}>{inner}</Link>
+              ) : (
+                <div key={tool.title} className={cls}>{inner}</div>
+              );
+            })}
+          </div>
+
+          <div className="flex justify-center py-4">
+            <span className="grid h-8 w-8 place-items-center rounded-full border border-border bg-background text-primary">
+              <ArrowDown className="h-4 w-4" />
+            </span>
+          </div>
+
+          {(() => {
+            const Icon = center.icon;
+            const a = accentMap.primary;
+            const inner = (
+              <>
+                <div className={`pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 h-56 w-[36rem] rounded-full blur-3xl opacity-60 bg-gradient-to-br ${a.glow} to-transparent`} />
+                <div className="relative sm:flex sm:items-center sm:gap-6">
+                  <div className={`grid place-items-center h-14 w-14 rounded-2xl ring-1 shadow-[0_0_24px_-6px_currentColor] ${a.icon} ${a.ring}`}>
+                    <Icon className="h-7 w-7" />
+                  </div>
+                  <div className="mt-4 sm:mt-0">
+                    <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-subtle">the core system</div>
+                    <div className="font-display text-xl sm:text-2xl font-semibold mt-1.5">{center.title}</div>
+                    <div className="text-sm text-muted-foreground mt-1.5 leading-relaxed max-w-2xl">{center.description}</div>
+                  </div>
+                  <ArrowRight className="hidden sm:block ml-auto h-5 w-5 text-primary/60 transition-transform group-hover:translate-x-0.5" />
+                </div>
+              </>
+            );
+            const cls = `group relative block overflow-hidden rounded-2xl border border-primary/30 bg-card p-6 sm:p-8 hover-lift transition ${a.hover}`;
+            return center.to ? (
+              <Link to={center.to} className={cls}>{inner}</Link>
+            ) : (
+              <div className={cls}>{inner}</div>
+            );
+          })()}
+
+          <div className="flex justify-center py-4">
+            <span className="grid h-8 w-8 place-items-center rounded-full border border-border bg-background text-primary">
+              <ArrowDown className="h-4 w-4" />
+            </span>
+          </div>
+
+          <div className="rounded-2xl border border-white/10 bg-card/60 px-5 py-4 flex flex-wrap items-center gap-x-3 gap-y-1.5">
+            <Zap className="h-4 w-4 text-amber-400" />
+            <span className="font-display text-sm font-semibold">Next recommendation</span>
+            <span className="text-xs text-muted-foreground">
+              The single highest-ROI move for your score, recalculated after every answer.
+            </span>
           </div>
 
           <div className="flex items-center gap-3 justify-center mt-14 mb-6">
