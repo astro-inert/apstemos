@@ -9,6 +9,7 @@ import { SlopeField } from "@/components/SlopeField";
 
 import { QN_UNITS } from "@/lib/question-navigator-data";
 import { getDrillSet, submitDrillAttempt, type DrillQuestion } from "@/lib/drill.functions";
+import { SubjectContentGate } from "@/components/SubjectContentGate";
 
 type Search = { unit?: string; topic?: string };
 
@@ -31,7 +32,11 @@ export const Route = createFileRoute("/_authenticated/practice")({
       { name: "twitter:card", content: "summary" },
     ],
   }),
-  component: PracticePage,
+  component: () => (
+    <SubjectContentGate>
+      <PracticePage />
+    </SubjectContentGate>
+  ),
 });
 
 type Feedback = Awaited<ReturnType<typeof submitDrillAttempt>>;

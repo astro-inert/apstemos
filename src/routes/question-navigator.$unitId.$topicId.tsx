@@ -3,6 +3,7 @@ import { PageShell } from "@/components/PageShell";
 import { Reveal } from "@/components/home/primitives";
 import { findTopic, type UnitEntry, type TopicEntry } from "@/lib/question-navigator-data";
 import { ArrowLeft, FileText, ListChecks, MessageSquareQuote, AlertTriangle, Sparkles } from "lucide-react";
+import { SubjectContentGate } from "@/components/SubjectContentGate";
 
 export const Route = createFileRoute("/question-navigator/$unitId/$topicId")({
   loader: ({ params }): { unit: UnitEntry; topic: TopicEntry } => {
@@ -27,7 +28,11 @@ export const Route = createFileRoute("/question-navigator/$unitId/$topicId")({
       </Link>
     </PageShell>
   ),
-  component: Page,
+  component: () => (
+    <SubjectContentGate>
+      <Page />
+    </SubjectContentGate>
+  ),
 });
 
 const sections = [

@@ -3,6 +3,7 @@ import { ArrowLeft } from "lucide-react";
 import { PageShell } from "@/components/PageShell";
 import { Reveal } from "@/components/home/primitives";
 import { QN_UNITS, type TopicEntry, type UnitEntry } from "@/lib/question-navigator-data";
+import { SubjectContentGate } from "@/components/SubjectContentGate";
 
 export const Route = createFileRoute("/topic-rundown/$unitId")({
   loader: ({ params }) => {
@@ -28,7 +29,11 @@ export const Route = createFileRoute("/topic-rundown/$unitId")({
       ],
     };
   },
-  component: Page,
+  component: () => (
+    <SubjectContentGate>
+      <Page />
+    </SubjectContentGate>
+  ),
 });
 
 function Page() {

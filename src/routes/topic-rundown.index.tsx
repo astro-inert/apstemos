@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { PageShell } from "@/components/PageShell";
 import { QN_UNITS } from "@/lib/question-navigator-data";
+import { SubjectContentGate } from "@/components/SubjectContentGate";
 
 export const Route = createFileRoute("/topic-rundown/")({
   head: () => ({
@@ -17,7 +18,11 @@ export const Route = createFileRoute("/topic-rundown/")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: Page,
+  component: () => (
+    <SubjectContentGate>
+      <Page />
+    </SubjectContentGate>
+  ),
 });
 
 function Page() {
