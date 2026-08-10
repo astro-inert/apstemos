@@ -73,43 +73,95 @@ function Hero({ subject }: { subject: SubjectConfig }) {
   const target = useMemo(() => new Date(subject.examDate), [subject.examDate]);
   const { d } = useCountdown(target);
   return (
-    <section className="px-6 pt-16 pb-12 relative">
-      <div className="max-w-5xl mx-auto text-center">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full glass text-xs font-medium text-muted-foreground mb-6">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-          {d} days until the {subject.examLabel}
+    <section className="px-6 pt-16 pb-14 relative">
+      <div className="max-w-6xl mx-auto grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] lg:gap-10 lg:items-center">
+        <div className="text-center lg:text-left">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full glass text-xs font-medium text-muted-foreground mb-6">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            {d} days until the {subject.examLabel}
+          </div>
+          <h1 className="font-display text-4xl sm:text-6xl font-bold tracking-tight leading-[1.05] gradient-text">
+            {subject.heroTitle[0]}<br />{subject.heroTitle[1]}
+          </h1>
+          <p className="mt-6 font-display text-lg sm:text-2xl font-semibold tracking-tight text-foreground">
+            Every answer makes the platform smarter.
+          </p>
+          <p className="mt-3 text-base text-muted-foreground max-w-xl mx-auto lg:mx-0 leading-relaxed">
+            {subject.heroSub} Every response updates your predicted score, subtopic mastery, mistake profile, and next
+            recommendation.
+          </p>
+          <div className="mt-8 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3">
+            <Link to="/auth" className="group inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-primary text-primary-foreground text-sm font-semibold shadow-glow hover:opacity-95 transition">
+              Start optimizing my score
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+            </Link>
+            <Link to="/common-mistakes" className="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-white/10 bg-card/50 text-sm font-semibold hover:bg-elevated transition">
+              Explore free resources
+            </Link>
+          </div>
+          <div className="mt-8 flex flex-wrap items-center justify-center lg:justify-start gap-x-6 gap-y-3">
+            {subject.stats.map((s) => (
+              <div key={s.l} className="flex items-baseline gap-2">
+                <span className="font-display text-base font-bold tabular-nums">{s.v}</span>
+                <span className="text-[10px] uppercase tracking-wider text-subtle">{s.l}</span>
+              </div>
+            ))}
+          </div>
         </div>
-        <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.05] gradient-text">
-          {subject.heroTitle[0]}<br />{subject.heroTitle[1]}
-        </h1>
-        <p className="mt-6 font-display text-lg sm:text-2xl font-semibold tracking-tight text-foreground">
-          Every answer makes the platform smarter.
-        </p>
-        <p className="mt-3 text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">{subject.heroSub}</p>
-        <p className="mt-3 text-sm text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-          Answer original AP-style questions and every response updates your predicted score, subtopic mastery, mistake
-          profile, and next recommendation.
-        </p>
-        <div className="mt-9 flex flex-col sm:flex-row items-center justify-center gap-3">
-
-          <Link to="/auth" className="group inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-primary text-primary-foreground text-sm font-semibold shadow-glow hover:opacity-95 transition">
-            Start optimizing my score
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-          </Link>
-          <Link to="/common-mistakes" className="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-white/10 bg-card/50 text-sm font-semibold hover:bg-elevated transition">
-            Explore free resources
-          </Link>
-        </div>
-        <div className="mt-10 grid grid-cols-3 max-w-2xl mx-auto rounded-xl overflow-hidden border border-white/10 bg-card/40">
-          {subject.stats.map((s, i) => (
-            <div key={s.l} className={`px-4 py-4 text-center ${i < 2 ? "border-r border-border" : ""}`}>
-              <div className="font-display text-xl sm:text-2xl font-bold tabular-nums">{s.v}</div>
-              <div className="text-[10px] uppercase tracking-wider text-subtle mt-1">{s.l}</div>
-            </div>
-          ))}
-        </div>
+        <HeroDashboard subject={subject} />
       </div>
     </section>
+  );
+}
+
+function HeroDashboard({ subject }: { subject: SubjectConfig }) {
+  const { predicted, confidence, raw, total, target } = subject.score;
+  const pct = Math.round((raw / total) * 100);
+  const targetPct = Math.round((target / total) * 100);
+  return (
+    <div className="relative">
+      <div className="rounded-xl border border-white/10 bg-card p-5 relative overflow-hidden">
+        <div className="absolute -top-20 -right-20 h-48 w-48 rounded-full blur-3xl opacity-30 bg-primary" />
+        <div className="relative">
+          <div className="text-xs uppercase tracking-wider text-subtle inline-flex items-center gap-1.5"><TrendingUp className="h-3.5 w-3.5" /> Predicted AP score</div>
+          <div className="mt-4 flex items-baseline gap-3">
+            <span className="font-display text-5xl font-bold tabular-nums">{predicted}</span>
+            <span className="text-sm text-muted-foreground">/ 5</span>
+            <span className="ml-auto text-[10px] px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 font-medium">{confidence}</span>
+          </div>
+          <div className="mt-3 flex gap-1">
+            {[1, 2, 3, 4, 5].map((i) => <div key={i} className={`h-1.5 flex-1 rounded-full ${i <= predicted ? "bg-primary" : "bg-elevated"}`} />)}
+          </div>
+          <div className="mt-4 pt-4 border-t border-white/10">
+            <div className="flex items-baseline gap-2 text-xs text-muted-foreground">
+              <Target className="h-3.5 w-3.5" />
+              <span className="text-foreground font-medium tabular-nums">{raw} / {total}</span>
+              <span className="ml-auto">target {target}</span>
+            </div>
+            <div className="mt-3 relative h-2.5 rounded-full bg-elevated overflow-hidden">
+              <div className="absolute inset-y-0 left-0 bg-gradient-to-r from-primary to-emerald-400 rounded-full transition-all duration-500" style={{ width: `${pct}%` }} />
+              <div className="absolute inset-y-0 w-0.5 bg-foreground/70" style={{ left: `${targetPct}%` }} />
+            </div>
+            <div className="mt-3 text-xs text-amber-400 font-medium">{target - raw}-point gap to a 5</div>
+          </div>
+        </div>
+      </div>
+      <div className="mt-3 rounded-xl border border-white/10 bg-card p-5">
+        <div className="text-xs uppercase tracking-wider text-subtle inline-flex items-center gap-1.5"><Zap className="h-3.5 w-3.5 text-amber-400" /> Fastest path to your target</div>
+        <ol className="mt-4 space-y-2.5 text-sm">
+          {subject.recommendations.slice(0, 3).map((a, i) => (
+            <li key={a.t} className="flex items-center gap-3">
+              <span className="font-mono text-xs text-muted-foreground w-4">{i + 1}</span>
+              <span className="flex-1 truncate">{a.t}</span>
+              <span className="font-mono text-xs font-semibold text-emerald-500">+{a.g}</span>
+            </li>
+          ))}
+        </ol>
+        <Link to="/command-center" className="mt-4 inline-flex items-center gap-2 text-xs text-primary hover:underline">
+          Open my Command Center <ArrowUpRight className="h-3.5 w-3.5" />
+        </Link>
+      </div>
+    </div>
   );
 }
 
