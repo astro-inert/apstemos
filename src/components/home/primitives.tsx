@@ -144,3 +144,14 @@ export function ExampleBadge({ live }: { live: boolean }) {
     </span>
   );
 }
+
+/** Inline "content coming soon" marker for subjects whose tools aren't built yet. */
+export function ComingSoon({ className = "" }: { className?: string }) {
+  return (
+    <span
+      className={`num inline-flex items-center rounded-full border border-dashed border-border bg-elevated/50 px-2.5 py-0.5 text-[10px] uppercase tracking-[0.16em] text-subtle ${className}`}
+    >
+      content coming soon
+    </span>
+  );
+}
