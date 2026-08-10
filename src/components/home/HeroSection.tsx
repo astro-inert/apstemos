@@ -113,23 +113,36 @@ function Instrument({ subject, data }: { subject: SubjectConfig; data: Instrumen
       <div className="grid lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)_minmax(0,1fr)]">
         {/* Predicted score */}
         <div className="border-b border-border p-6 sm:p-7 lg:border-b-0 lg:border-r">
-          <MicroLabel>Predicted score</MicroLabel>
-          <div className="mt-5 flex items-end gap-2">
-            <span className="num font-display text-[4.5rem] font-semibold leading-none tracking-tight">
-              <CountUp to={data.predicted} />
-            </span>
-            <span className="num pb-3 text-lg text-muted-foreground">/ 5</span>
-          </div>
-          <div className="mt-6 flex gap-1.5">
-            {[1, 2, 3, 4, 5].map((i) => (
-              <div
-                key={i}
-                className={`h-1 flex-1 rounded-full ${i <= data.predicted ? "bg-primary" : "bg-elevated"}`}
-              />
-            ))}
-          </div>
+          <MicroLabel>MCQ-based score estimate</MicroLabel>
+          {data.predicted === null ? (
+            <>
+              <div className="mt-5 font-display text-2xl font-semibold leading-tight tracking-tight">
+                Not enough evidence yet
+              </div>
+              <p className="mt-4 text-xs leading-relaxed text-muted-foreground">
+                We only show an estimate once your first-attempt answers cover enough of the course to support one.
+              </p>
+            </>
+          ) : (
+            <>
+              <div className="mt-5 flex items-end gap-2">
+                <span className="num font-display text-[4.5rem] font-semibold leading-none tracking-tight">
+                  <CountUp to={data.predicted} />
+                </span>
+                <span className="num pb-3 text-lg text-muted-foreground">/ 5</span>
+              </div>
+              <div className="mt-6 flex gap-1.5">
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <div
+                    key={i}
+                    className={`h-1 flex-1 rounded-full ${i <= (data.predicted ?? 0) ? "bg-primary" : "bg-elevated"}`}
+                  />
+                ))}
+              </div>
+            </>
+          )}
           <p className="mt-6 text-xs leading-relaxed text-muted-foreground">
-            Mastery is measured against AP STEM OS's operational 70% threshold. Every answer you log moves it.
+            Estimated from multiple-choice evidence only — free-response performance is not modeled.
           </p>
         </div>
 

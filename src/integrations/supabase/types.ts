@@ -16,13 +16,17 @@ export type Database = {
     Tables: {
       attempts: {
         Row: {
+          attempt_kind: Database["public"]["Enums"]["attempt_kind"]
           correct: boolean
           created_at: string
+          diagnostic_id: string | null
+          difficulty: Database["public"]["Enums"]["difficulty"] | null
           id: string
           mistake_codes: string[]
           points_earned: number
           points_possible: number
           question_id: string
+          question_key: string | null
           selected_answer: string | null
           time_spent_seconds: number | null
           topic_id: string | null
@@ -32,13 +36,17 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          attempt_kind?: Database["public"]["Enums"]["attempt_kind"]
           correct: boolean
           created_at?: string
+          diagnostic_id?: string | null
+          difficulty?: Database["public"]["Enums"]["difficulty"] | null
           id?: string
           mistake_codes?: string[]
           points_earned?: number
           points_possible?: number
           question_id: string
+          question_key?: string | null
           selected_answer?: string | null
           time_spent_seconds?: number | null
           topic_id?: string | null
@@ -48,13 +56,17 @@ export type Database = {
           user_id: string
         }
         Update: {
+          attempt_kind?: Database["public"]["Enums"]["attempt_kind"]
           correct?: boolean
           created_at?: string
+          diagnostic_id?: string | null
+          difficulty?: Database["public"]["Enums"]["difficulty"] | null
           id?: string
           mistake_codes?: string[]
           points_earned?: number
           points_possible?: number
           question_id?: string
+          question_key?: string | null
           selected_answer?: string | null
           time_spent_seconds?: number | null
           topic_id?: string | null
@@ -113,6 +125,235 @@ export type Database = {
         }
         Relationships: []
       }
+      diagnostic_responses: {
+        Row: {
+          answered_at: string
+          correct: boolean | null
+          created_at: string
+          diagnostic_id: string
+          difficulty: Database["public"]["Enums"]["difficulty"] | null
+          id: string
+          question_key: string
+          selected_answer: string | null
+          time_spent_ms: number | null
+          topic_slug: string | null
+          unit_slug: string | null
+          user_id: string
+          was_unseen: boolean
+        }
+        Insert: {
+          answered_at?: string
+          correct?: boolean | null
+          created_at?: string
+          diagnostic_id: string
+          difficulty?: Database["public"]["Enums"]["difficulty"] | null
+          id?: string
+          question_key: string
+          selected_answer?: string | null
+          time_spent_ms?: number | null
+          topic_slug?: string | null
+          unit_slug?: string | null
+          user_id: string
+          was_unseen?: boolean
+        }
+        Update: {
+          answered_at?: string
+          correct?: boolean | null
+          created_at?: string
+          diagnostic_id?: string
+          difficulty?: Database["public"]["Enums"]["difficulty"] | null
+          id?: string
+          question_key?: string
+          selected_answer?: string | null
+          time_spent_ms?: number | null
+          topic_slug?: string | null
+          unit_slug?: string | null
+          user_id?: string
+          was_unseen?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "diagnostic_responses_diagnostic_id_fkey"
+            columns: ["diagnostic_id"]
+            isOneToOne: false
+            referencedRelation: "diagnostics"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      diagnostics: {
+        Row: {
+          correct_count: number
+          created_at: string
+          id: string
+          item_count: number
+          locked: boolean
+          question_keys: string[]
+          started_at: string
+          subject_id: string
+          submitted_at: string | null
+          time_limit_seconds: number
+          unseen_share: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          correct_count?: number
+          created_at?: string
+          id?: string
+          item_count?: number
+          locked?: boolean
+          question_keys?: string[]
+          started_at?: string
+          subject_id?: string
+          submitted_at?: string | null
+          time_limit_seconds?: number
+          unseen_share?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          correct_count?: number
+          created_at?: string
+          id?: string
+          item_count?: number
+          locked?: boolean
+          question_keys?: string[]
+          started_at?: string
+          subject_id?: string
+          submitted_at?: string | null
+          time_limit_seconds?: number
+          unseen_share?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      item_stats: {
+        Row: {
+          calibrated: boolean
+          created_at: string
+          difficulty_label: Database["public"]["Enums"]["difficulty"]
+          discrimination: number | null
+          empirical_difficulty: number | null
+          n_first_attempts: number
+          n_first_correct: number
+          provisional_difficulty: number
+          question_key: string
+          topic_slug: string | null
+          unit_slug: string | null
+          updated_at: string
+        }
+        Insert: {
+          calibrated?: boolean
+          created_at?: string
+          difficulty_label?: Database["public"]["Enums"]["difficulty"]
+          discrimination?: number | null
+          empirical_difficulty?: number | null
+          n_first_attempts?: number
+          n_first_correct?: number
+          provisional_difficulty?: number
+          question_key: string
+          topic_slug?: string | null
+          unit_slug?: string | null
+          updated_at?: string
+        }
+        Update: {
+          calibrated?: boolean
+          created_at?: string
+          difficulty_label?: Database["public"]["Enums"]["difficulty"]
+          discrimination?: number | null
+          empirical_difficulty?: number | null
+          n_first_attempts?: number
+          n_first_correct?: number
+          provisional_difficulty?: number
+          question_key?: string
+          topic_slug?: string | null
+          unit_slug?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      predictions: {
+        Row: {
+          ability: number | null
+          actual_ap_score: number | null
+          actual_reported_at: string | null
+          confidence_state: string
+          coverage_score: number
+          created_at: string
+          diagnostic_id: string | null
+          diagnostic_score: number | null
+          distribution: Json
+          estimated_score: number | null
+          id: string
+          model_version: string
+          provisional_share: number
+          question_count: number
+          score_high: number | null
+          score_low: number | null
+          standard_error: number | null
+          subject_id: string
+          unique_question_count: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          ability?: number | null
+          actual_ap_score?: number | null
+          actual_reported_at?: string | null
+          confidence_state: string
+          coverage_score?: number
+          created_at?: string
+          diagnostic_id?: string | null
+          diagnostic_score?: number | null
+          distribution?: Json
+          estimated_score?: number | null
+          id?: string
+          model_version: string
+          provisional_share?: number
+          question_count?: number
+          score_high?: number | null
+          score_low?: number | null
+          standard_error?: number | null
+          subject_id?: string
+          unique_question_count?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          ability?: number | null
+          actual_ap_score?: number | null
+          actual_reported_at?: string | null
+          confidence_state?: string
+          coverage_score?: number
+          created_at?: string
+          diagnostic_id?: string | null
+          diagnostic_score?: number | null
+          distribution?: Json
+          estimated_score?: number | null
+          id?: string
+          model_version?: string
+          provisional_share?: number
+          question_count?: number
+          score_high?: number | null
+          score_low?: number | null
+          standard_error?: number | null
+          subject_id?: string
+          unique_question_count?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "predictions_diagnostic_id_fkey"
+            columns: ["diagnostic_id"]
+            isOneToOne: false
+            referencedRelation: "diagnostics"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           created_at: string
@@ -140,6 +381,48 @@ export type Database = {
           target_score?: number
           track?: Database["public"]["Enums"]["ap_track"]
           updated_at?: string
+        }
+        Relationships: []
+      }
+      question_exposure: {
+        Row: {
+          attempt_count: number
+          created_at: string
+          first_attempt_at: string | null
+          first_attempt_correct: boolean | null
+          first_seen_at: string
+          id: string
+          question_key: string
+          topic_slug: string | null
+          unit_slug: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          attempt_count?: number
+          created_at?: string
+          first_attempt_at?: string | null
+          first_attempt_correct?: boolean | null
+          first_seen_at?: string
+          id?: string
+          question_key: string
+          topic_slug?: string | null
+          unit_slug?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          attempt_count?: number
+          created_at?: string
+          first_attempt_at?: string | null
+          first_attempt_correct?: boolean | null
+          first_seen_at?: string
+          id?: string
+          question_key?: string
+          topic_slug?: string | null
+          unit_slug?: string | null
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -499,6 +782,11 @@ export type Database = {
     Enums: {
       ap_track: "AB" | "BC"
       app_role: "admin" | "user"
+      attempt_kind:
+        | "first_attempt"
+        | "previously_seen"
+        | "previously_answered"
+        | "repeat_attempt"
       difficulty: "easy" | "medium" | "hard"
       question_type: "MCQ" | "FRQ"
     }
@@ -630,6 +918,12 @@ export const Constants = {
     Enums: {
       ap_track: ["AB", "BC"],
       app_role: ["admin", "user"],
+      attempt_kind: [
+        "first_attempt",
+        "previously_seen",
+        "previously_answered",
+        "repeat_attempt",
+      ],
       difficulty: ["easy", "medium", "hard"],
       question_type: ["MCQ", "FRQ"],
     },

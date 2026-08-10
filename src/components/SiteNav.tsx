@@ -70,6 +70,7 @@ export function SiteNav({ subject = "calc-bc" }: { subject?: SubjectId }) {
 
         <div className="ml-auto hidden items-center gap-1 md:flex">
           <NavLink to="/practice">Practice</NavLink>
+          <NavLink to="/predict">Diagnostic</NavLink>
           <NavLink to="/command-center">Score Command Center</NavLink>
           <div className="group relative">
             <button className="inline-flex items-center gap-1 rounded-full px-3.5 py-1.5 text-[13px] text-muted-foreground transition-colors hover:text-foreground">
@@ -126,6 +127,9 @@ export function SiteNav({ subject = "calc-bc" }: { subject?: SubjectId }) {
           <div className="mt-4 flex flex-col gap-1">
             <MobileLink to="/practice" onClick={() => setOpen(false)}>
               Practice
+            </MobileLink>
+            <MobileLink to="/predict" onClick={() => setOpen(false)}>
+              Diagnostic
             </MobileLink>
             <MobileLink to="/command-center" onClick={() => setOpen(false)}>
               Score Command Center

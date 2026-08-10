@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowRight, CheckCircle2, RefreshCw, XCircle } from "lucide-react";
 import { PageShell } from "@/components/PageShell";
 import { LaTeX } from "@/components/LaTeX";
@@ -52,6 +52,7 @@ function PracticePage() {
   const [index, setIndex] = useState(0);
   const [choice, setChoice] = useState("");
   const [feedback, setFeedback] = useState<Feedback | null>(null);
+  const startedAt = useRef<number>(Date.now());
 
   const fetchFn = useServerFn(getDrillSet);
   const submitFn = useServerFn(submitDrillAttempt);
@@ -62,7 +63,13 @@ function PracticePage() {
     setIndex(0);
     setChoice("");
     setFeedback(null);
+    startedAt.current = Date.now();
   }, [unitSlug, topicSlug, seed]);
+
+  // Response time is real evidence for the model, so it gets recorded per item.
+  useEffect(() => {
+    startedAt.current = Date.now();
+  }, [index]);
 
   const { data, isLoading } = useQuery({
     queryKey: ["drill", unitSlug, topicSlug, seed],
@@ -83,12 +90,14 @@ function PracticePage() {
   const submit = useMutation({
     mutationFn: async () => {
       if (!q) throw new Error("No question loaded.");
-      return submitFn({ data: { key: q.key, selected_label: choice } });
+      const time_spent_seconds = Math.min(7200, Math.max(0, Math.round((Date.now() - startedAt.current) / 1000)));
+      return submitFn({ data: { key: q.key, selected_label: choice, time_spent_seconds } });
     },
     onSuccess: (res) => {
       setFeedback(res);
       qc.invalidateQueries({ queryKey: ["performance-snapshot"] });
       qc.invalidateQueries({ queryKey: ["answer-log"] });
+      qc.invalidateQueries({ queryKey: ["score-estimate"] });
     },
   });
 

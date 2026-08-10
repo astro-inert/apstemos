@@ -3,13 +3,15 @@ import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { getPerformanceSnapshot } from "@/lib/performance.functions";
+import { getScoreEstimate } from "@/lib/prediction.functions";
 import { HOME_DEMO, type DemoMove, type DemoSubtopic } from "@/lib/home-demo";
 import type { SubjectConfig } from "@/lib/subjects";
 
 export interface InstrumentData {
   /** true when these numbers come from the signed-in user's own attempts */
   live: boolean;
-  predicted: number;
+  /** null when the user has too little evidence for an honest MCQ-based estimate */
+  predicted: number | null;
   subtopics: DemoSubtopic[];
   moves: DemoMove[];
   units: { label: string; name: string; mastery: number }[];
@@ -34,10 +36,19 @@ export function useHomeInstrument(subject: SubjectConfig): InstrumentData {
   const demo = HOME_DEMO[subject.id];
   const signedIn = useSignedIn();
   const snapshotFn = useServerFn(getPerformanceSnapshot);
+  const estimateFn = useServerFn(getScoreEstimate);
 
   const { data } = useQuery({
     queryKey: ["home-instrument", subject.id],
     queryFn: () => snapshotFn(),
+    enabled: signedIn && subject.id === "calc-bc",
+    retry: false,
+    staleTime: 60_000,
+  });
+
+  const { data: estimate } = useQuery({
+    queryKey: ["score-estimate"],
+    queryFn: () => estimateFn(),
     enabled: signedIn && subject.id === "calc-bc",
     retry: false,
     staleTime: 60_000,
@@ -86,7 +97,7 @@ export function useHomeInstrument(subject: SubjectConfig): InstrumentData {
 
   return {
     live: true,
-    predicted: data.predicted_ap_score,
+    predicted: estimate?.estimated_score ?? null,
     subtopics: subtopics.length ? subtopics : demo.subtopics,
     moves,
     units,

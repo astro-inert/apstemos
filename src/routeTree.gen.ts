@@ -28,10 +28,12 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as TopicRundownIndexRouteImport } from './routes/topic-rundown.index'
 import { Route as QuestionNavigatorIndexRouteImport } from './routes/question-navigator.index'
 import { Route as TopicRundownUnitIdRouteImport } from './routes/topic-rundown.$unitId'
+import { Route as AuthenticatedPredictRouteImport } from './routes/_authenticated/predict'
 import { Route as AuthenticatedPracticeRouteImport } from './routes/_authenticated/practice'
 import { Route as AuthenticatedCommandCenterRouteImport } from './routes/_authenticated/command-center'
 import { Route as QuestionNavigatorUnitIdIndexRouteImport } from './routes/question-navigator.$unitId.index'
 import { Route as QuestionNavigatorUnitIdTopicIdRouteImport } from './routes/question-navigator.$unitId.$topicId'
+import { Route as AuthenticatedAdminPredictionsRouteImport } from './routes/_authenticated/admin/predictions'
 
 const StatisticsRoute = StatisticsRouteImport.update({
   id: '/statistics',
@@ -128,6 +130,11 @@ const TopicRundownUnitIdRoute = TopicRundownUnitIdRouteImport.update({
   path: '/topic-rundown/$unitId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedPredictRoute = AuthenticatedPredictRouteImport.update({
+  id: '/predict',
+  path: '/predict',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedPracticeRoute = AuthenticatedPracticeRouteImport.update({
   id: '/practice',
   path: '/practice',
@@ -151,6 +158,12 @@ const QuestionNavigatorUnitIdTopicIdRoute =
     path: '/question-navigator/$unitId/$topicId',
     getParentRoute: () => rootRouteImport,
   } as any)
+const AuthenticatedAdminPredictionsRoute =
+  AuthenticatedAdminPredictionsRouteImport.update({
+    id: '/admin/predictions',
+    path: '/admin/predictions',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -170,9 +183,11 @@ export interface FileRoutesByFullPath {
   '/statistics': typeof StatisticsRoute
   '/command-center': typeof AuthenticatedCommandCenterRoute
   '/practice': typeof AuthenticatedPracticeRoute
+  '/predict': typeof AuthenticatedPredictRoute
   '/topic-rundown/$unitId': typeof TopicRundownUnitIdRoute
   '/question-navigator/': typeof QuestionNavigatorIndexRoute
   '/topic-rundown/': typeof TopicRundownIndexRoute
+  '/admin/predictions': typeof AuthenticatedAdminPredictionsRoute
   '/question-navigator/$unitId/$topicId': typeof QuestionNavigatorUnitIdTopicIdRoute
   '/question-navigator/$unitId/': typeof QuestionNavigatorUnitIdIndexRoute
 }
@@ -194,9 +209,11 @@ export interface FileRoutesByTo {
   '/statistics': typeof StatisticsRoute
   '/command-center': typeof AuthenticatedCommandCenterRoute
   '/practice': typeof AuthenticatedPracticeRoute
+  '/predict': typeof AuthenticatedPredictRoute
   '/topic-rundown/$unitId': typeof TopicRundownUnitIdRoute
   '/question-navigator': typeof QuestionNavigatorIndexRoute
   '/topic-rundown': typeof TopicRundownIndexRoute
+  '/admin/predictions': typeof AuthenticatedAdminPredictionsRoute
   '/question-navigator/$unitId/$topicId': typeof QuestionNavigatorUnitIdTopicIdRoute
   '/question-navigator/$unitId': typeof QuestionNavigatorUnitIdIndexRoute
 }
@@ -220,9 +237,11 @@ export interface FileRoutesById {
   '/statistics': typeof StatisticsRoute
   '/_authenticated/command-center': typeof AuthenticatedCommandCenterRoute
   '/_authenticated/practice': typeof AuthenticatedPracticeRoute
+  '/_authenticated/predict': typeof AuthenticatedPredictRoute
   '/topic-rundown/$unitId': typeof TopicRundownUnitIdRoute
   '/question-navigator/': typeof QuestionNavigatorIndexRoute
   '/topic-rundown/': typeof TopicRundownIndexRoute
+  '/_authenticated/admin/predictions': typeof AuthenticatedAdminPredictionsRoute
   '/question-navigator/$unitId/$topicId': typeof QuestionNavigatorUnitIdTopicIdRoute
   '/question-navigator/$unitId/': typeof QuestionNavigatorUnitIdIndexRoute
 }
@@ -246,9 +265,11 @@ export interface FileRouteTypes {
     | '/statistics'
     | '/command-center'
     | '/practice'
+    | '/predict'
     | '/topic-rundown/$unitId'
     | '/question-navigator/'
     | '/topic-rundown/'
+    | '/admin/predictions'
     | '/question-navigator/$unitId/$topicId'
     | '/question-navigator/$unitId/'
   fileRoutesByTo: FileRoutesByTo
@@ -270,9 +291,11 @@ export interface FileRouteTypes {
     | '/statistics'
     | '/command-center'
     | '/practice'
+    | '/predict'
     | '/topic-rundown/$unitId'
     | '/question-navigator'
     | '/topic-rundown'
+    | '/admin/predictions'
     | '/question-navigator/$unitId/$topicId'
     | '/question-navigator/$unitId'
   id:
@@ -295,9 +318,11 @@ export interface FileRouteTypes {
     | '/statistics'
     | '/_authenticated/command-center'
     | '/_authenticated/practice'
+    | '/_authenticated/predict'
     | '/topic-rundown/$unitId'
     | '/question-navigator/'
     | '/topic-rundown/'
+    | '/_authenticated/admin/predictions'
     | '/question-navigator/$unitId/$topicId'
     | '/question-navigator/$unitId/'
   fileRoutesById: FileRoutesById
@@ -461,6 +486,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TopicRundownUnitIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/predict': {
+      id: '/_authenticated/predict'
+      path: '/predict'
+      fullPath: '/predict'
+      preLoaderRoute: typeof AuthenticatedPredictRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/practice': {
       id: '/_authenticated/practice'
       path: '/practice'
@@ -489,17 +521,28 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof QuestionNavigatorUnitIdTopicIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin/predictions': {
+      id: '/_authenticated/admin/predictions'
+      path: '/admin/predictions'
+      fullPath: '/admin/predictions'
+      preLoaderRoute: typeof AuthenticatedAdminPredictionsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedCommandCenterRoute: typeof AuthenticatedCommandCenterRoute
   AuthenticatedPracticeRoute: typeof AuthenticatedPracticeRoute
+  AuthenticatedPredictRoute: typeof AuthenticatedPredictRoute
+  AuthenticatedAdminPredictionsRoute: typeof AuthenticatedAdminPredictionsRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedCommandCenterRoute: AuthenticatedCommandCenterRoute,
   AuthenticatedPracticeRoute: AuthenticatedPracticeRoute,
+  AuthenticatedPredictRoute: AuthenticatedPredictRoute,
+  AuthenticatedAdminPredictionsRoute: AuthenticatedAdminPredictionsRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
@@ -531,13 +574,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
