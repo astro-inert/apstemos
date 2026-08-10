@@ -88,7 +88,7 @@ export function PillarsSection({ subject }: { subject: SubjectConfig }) {
       <div className="mt-14 grid gap-4 md:grid-cols-3 lg:gap-6">
         {pillars.map((p, i) => {
           const clickable = live || p.to === "/command-center";
-          const Card = clickable ? Link : "div";
+          const Card: React.ElementType = clickable ? Link : "div";
           return (
           <Reveal key={p.title} delay={i * 0.07}>
             <Card

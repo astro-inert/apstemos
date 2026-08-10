@@ -161,7 +161,7 @@ function Instrument({ subject, data }: { subject: SubjectConfig; data: Instrumen
           <ol className="mt-5 space-y-2">
             {data.moves.map((m, i) => {
               const live = isSubjectLive(subject.id);
-              const Row = live ? Link : "div";
+              const Row: React.ElementType = live ? Link : "div";
               return (
               <li key={m.name}>
                 <Row
