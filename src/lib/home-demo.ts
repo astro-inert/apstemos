@@ -47,8 +47,18 @@ export interface DemoNavigator {
   frq: string[];
 }
 
+export interface DemoLoop {
+  /** three practice topics; index 1 is the one the demo student answers */
+  practiceTopics: [string, string, string];
+  diagnose: { topic: string; from: number; to: number };
+  mistake: { label: string; count: number };
+  target: { topic: string; questions: number };
+  next: { label: string; note: string };
+}
+
 export interface HomeDemo {
   predicted: number;
+  loop: DemoLoop;
   subtopics: DemoSubtopic[];
   moves: DemoMove[];
   /** mastery % per unit, aligned with the subject's unit list order */
@@ -61,6 +71,13 @@ export interface HomeDemo {
 
 const calcBC: HomeDemo = {
   predicted: 4,
+  loop: {
+    practiceTopics: ["Interpretation", "Chain rule", "Accumulation"],
+    diagnose: { topic: "Chain Rule", from: 68, to: 74 },
+    mistake: { label: "Forgot the inner derivative", count: 3 },
+    target: { topic: "Composite functions", questions: 8 },
+    next: { label: "MCQ · Unit 3 · Hard", note: "chosen from 2 weak topics" },
+  },
   questionCount: "1,700+",
   subtopics: [
     { name: "Integration by Parts", mastery: 86 },
@@ -126,6 +143,13 @@ const calcBC: HomeDemo = {
 
 const physics1: HomeDemo = {
   predicted: 3,
+  loop: {
+    practiceTopics: ["Kinematics graphs", "Newton's second law", "Energy bar charts"],
+    diagnose: { topic: "Newton's Second Law", from: 64, to: 71 },
+    mistake: { label: "Missing force on the free-body diagram", count: 3 },
+    target: { topic: "Free-body diagrams", questions: 8 },
+    next: { label: "MCQ · Unit 2 · Hard", note: "chosen from 2 weak topics" },
+  },
   questionCount: "1,700+",
   subtopics: [
     { name: "Kinematics Graphs", mastery: 88 },
@@ -191,6 +215,13 @@ const physics1: HomeDemo = {
 
 const physics2: HomeDemo = {
   predicted: 3,
+  loop: {
+    practiceTopics: ["Fluid pressure", "Parallel circuits", "Thermal processes"],
+    diagnose: { topic: "Parallel Circuits", from: 61, to: 70 },
+    mistake: { label: "Added parallel resistances directly", count: 3 },
+    target: { topic: "Equivalent resistance", questions: 8 },
+    next: { label: "MCQ · Circuits · Hard", note: "chosen from 2 weak topics" },
+  },
   questionCount: "1,700+",
   subtopics: [
     { name: "Fluid Statics", mastery: 87 },
@@ -255,6 +286,13 @@ const physics2: HomeDemo = {
 
 const physicsCMech: HomeDemo = {
   predicted: 4,
+  loop: {
+    practiceTopics: ["Rotational inertia", "Work by a variable force", "Oscillations"],
+    diagnose: { topic: "Work by a Variable Force", from: 66, to: 74 },
+    mistake: { label: "Skipped the work integral and used $Fd$", count: 3 },
+    target: { topic: "Work integrals", questions: 8 },
+    next: { label: "MCQ · Energy · Hard", note: "chosen from 2 weak topics" },
+  },
   questionCount: "1,700+",
   subtopics: [
     { name: "Kinematics with Calculus", mastery: 85 },
@@ -319,6 +357,13 @@ const physicsCMech: HomeDemo = {
 
 const physicsCEM: HomeDemo = {
   predicted: 3,
+  loop: {
+    practiceTopics: ["Electric flux", "Gauss's law symmetry", "RC circuits"],
+    diagnose: { topic: "Gauss's Law", from: 62, to: 69 },
+    mistake: { label: "Used total charge instead of enclosed charge", count: 3 },
+    target: { topic: "Gaussian surface choice", questions: 8 },
+    next: { label: "MCQ · Unit 2 · Hard", note: "chosen from 2 weak topics" },
+  },
   questionCount: "1,700+",
   subtopics: [
     { name: "Coulomb's Law", mastery: 84 },
@@ -384,6 +429,13 @@ const physicsCEM: HomeDemo = {
 
 const stats: HomeDemo = {
   predicted: 4,
+  loop: {
+    practiceTopics: ["Sampling methods", "Confidence intervals", "Chi-square tests"],
+    diagnose: { topic: "Confidence Intervals", from: 66, to: 73 },
+    mistake: { label: "Interpreted the interval as a probability", count: 3 },
+    target: { topic: "Interpreting intervals in context", questions: 8 },
+    next: { label: "MCQ · Inference · Hard", note: "chosen from 2 weak topics" },
+  },
   questionCount: "1,700+",
   subtopics: [
     { name: "Describing Distributions", mastery: 89 },
