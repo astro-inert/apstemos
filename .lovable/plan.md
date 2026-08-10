@@ -24,9 +24,9 @@ Three passes, in order. Pass 1 is the identity/landing work; passes 2 and 3 fill
 
 ## Pass 2 — Fill the empty content (AP Calculus)
 
-- **Exam Strategy**: build the real page with three sections — calculator usage (graphing-calc tasks with worked examples), timing (per-section pacing and point-per-minute triage), and efficient approaches to recurring question types. LaTeX-rendered.
-- **Topic Rundowns**: make each unit card open a unit page with an exam-focused rundown of every core concept for that unit — what's tested, the formula/rule, the trap, and the fastest solve.
-- **Question Type Navigator level 4**: replace the "coming soon" block with the actual writeup per subtopic — how to answer MCQs on it, how to answer FRQs on it, worked pattern, and the mistakes it triggers.
+- **Exam Strategy**: build the page structure (calculator usage, timing, efficient approaches) with "Content coming soon" in each section — no written content.
+- **Topic Rundowns**: each unit card opens a unit page shell that says "Content coming soon" — no written content.
+- **Question Type Navigator level 4**: keep the MCQ/FRQ sections as "Content coming soon" placeholders — no written content.
 - **Formula and Strategy Guide**: keep the printable PDF as the primary action, plus an in-app LaTeX-rendered version of the same 10 pages so it's usable without downloading.
 
 Physics and Statistics stay as they are for now (skeleton pages, no bank).
