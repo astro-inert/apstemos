@@ -120,6 +120,13 @@ export function poly(parts: Array<[number, string]>): string {
   return s || "0";
 }
 
+/** Attaches a coefficient to \pi without emitting a redundant leading 1. */
+export function piCoef(c: string): string {
+  if (c === "1") return "\\pi";
+  if (c === "-1") return "-\\pi";
+  return `${c}\\pi`;
+}
+
 export const CONTEXTS = [
   { thing: "water", unit: "liters", rateUnit: "liters per minute", time: "minutes", vessel: "a reservoir" },
   { thing: "sand", unit: "cubic feet", rateUnit: "cubic feet per hour", time: "hours", vessel: "a hopper" },
@@ -1101,8 +1108,8 @@ export const BASE_TEMPLATES: QuestionTemplate[] = [
       const a = ri(r, 2, 6);
       return {
         prompt: `Find the area enclosed by one petal of $r=${coef(a, "\\sin(2\\theta)")}$.`,
-        correct: `${frac(a * a, 8)}\\pi`,
-        distractors: [`${frac(a * a, 4)}\\pi`, `${frac(a * a, 2)}\\pi`, `${coef(a * a, "\\pi")}`],
+        correct: `${piCoef(frac(a * a, 8))}`,
+        distractors: [`${piCoef(frac(a * a, 4))}`, `${piCoef(frac(a * a, 2))}`, `${coef(a * a, "\\pi")}`],
         explanation: `$A=\\frac{1}{2}\\int_0^{\\pi/2} ${a * a}\\sin^{2}(2\\theta)d\\theta = \\frac{${a * a}\\pi}{8}$.`,
       };
     },
