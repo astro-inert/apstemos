@@ -8,6 +8,8 @@ import {
   ArrowRight,
   Calendar,
   Sparkles,
+  Target,
+  Zap,
 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { AnswerLogPanel } from "@/components/command/AnswerLogPanel";
