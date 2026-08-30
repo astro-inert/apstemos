@@ -122,11 +122,12 @@ function PredictPage() {
         <div className="space-y-5 rounded-3xl border border-border bg-card p-6 shadow-card sm:p-8">
           <div className="grid gap-3 sm:grid-cols-3">
             <Fact label="Questions" value="30" />
-            <Fact label="Time limit" value="45 min" />
+            <Fact label="Time limit" value="70 min total" />
             <Fact label="Sampling" value="AP-weighted" />
           </div>
           <ul className="space-y-2 text-[13px] leading-relaxed text-muted-foreground">
-            <li>· Items are spread across units by AP exam weight with a fixed easy/medium/hard mix.</li>
+            <li>· 30 questions: 20 no-calculator and 10 calculator, spread across units by AP exam weight.</li>
+            <li>· Timing is budgeted at 2 minutes per no-calculator item and 3 per calculator item, then pooled — you get one 70-minute aggregate timer to spend however you like.</li>
             <li>· Questions you haven't seen are used first, so nothing is inflated by repetition.</li>
             <li>· Answers lock when you submit. You can't change them afterward.</li>
             <li>· The result is an MCQ-based estimate with an explicit range, not a promised score.</li>
@@ -173,7 +174,15 @@ function PredictPage() {
             <div className="micro-label flex items-center gap-3">
               <span className="rounded-full border border-border bg-elevated/60 px-2 py-0.5 text-primary">MCQ</span>
               <span>{q.difficulty}</span>
-              {q.calculator && <span>calculator</span>}
+              <span
+                className={`rounded-full border px-2 py-0.5 ${
+                  q.calculator
+                    ? "border-sky-500/40 bg-sky-500/10 text-sky-600"
+                    : "border-border bg-elevated/60 text-muted-foreground"
+                }`}
+              >
+                {q.calculator ? "calculator" : "no calculator"}
+              </span>
             </div>
             <div className="text-[15px] leading-relaxed">
               <LaTeX>{q.prompt}</LaTeX>
