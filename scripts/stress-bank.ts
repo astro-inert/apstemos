@@ -55,6 +55,13 @@ for (const key of keys) {
     if (/\\text\{[^}]*$/.test(text)) add(key, "latex", `${label}: unterminated \\text{`);
   }
 
+  // Redundant coefficient / exponent artifacts such as "1x", "1\\pi", "x^{1}".
+  const ONE_ARTIFACT = /(^|[^\d.\w])1\s*(\\pi|\\sin|\\cos|\\tan|\\sec|\\csc|\\cot|\\ln|\\sqrt|\\theta|\\left|[a-zA-Z]\()/;
+  for (const [label, text] of [["prompt", q.prompt], ...q.choices.map((c) => [`choice ${c.label}`, c.text])] as Array<[string, string]>) {
+    if (ONE_ARTIFACT.test(text)) add(key, "redundant-one", `${label}: ${text}`);
+    if (/\^\{1\}/.test(text)) add(key, "redundant-exponent", `${label}: ${text}`);
+  }
+
   // Choices
   if (q.choices.length !== 4) add(key, "choice-count", `${q.choices.length} choices`);
   const texts = q.choices.map((c) => c.text.replace(/\s+/g, ""));

@@ -123,17 +123,21 @@ function asMath(text: string): string {
  * off-by-one denominator) before falling back to generic options.
  */
 function shapeMatchedDistractors(correct: string, distractors: string[]): string[] {
-  const isFrac = (t: string) => /\\d?frac\{/.test(t.replace("\\dfrac", "\\frac"));
+  const norm = (t: string) => t.replace(/\\dfrac/g, "\\frac");
+  const isFrac = (t: string) => norm(t).includes("\\frac{");
   if (!isFrac(correct) || distractors.some(isFrac)) return [];
-  const m = /^(-?)\\d?frac\{(\d+)\}\{(\d+)\}$/.exec(correct.replace("\\dfrac", "\\frac"));
+  const c = norm(correct);
+  const m = /\\frac\{(\d+)\}\{(\d+)\}/.exec(c);
   if (!m) return [];
-  const neg = m[1] === "-";
-  const n = Number(m[2]);
-  const d = Number(m[3]);
-  const f = (a: number, b: number, negative: boolean) =>
-    b === 0 || a === 0 ? null : `${negative ? "-" : ""}\\frac{${a}}{${b}}`;
-  return [f(d, n, neg), f(n, d, !neg), f(n + 1, d, neg), f(n, d + 1, neg)]
-    .filter((x): x is string => Boolean(x) && x !== correct);
+  const n = Number(m[1]);
+  const d = Number(m[2]);
+  const swap = (a: number, b: number) =>
+    a === 0 || b === 0 || (a === n && b === d)
+      ? null
+      : c.slice(0, m.index) + `\\frac{${a}}{${b}}` + c.slice(m.index + m[0].length);
+  return [swap(d, n), swap(n + 1, d), swap(n, d + 1), swap(n + 1, d + 1)].filter(
+    (x): x is string => Boolean(x) && x !== correct,
+  );
 }
 
 const FALLBACK_DISTRACTORS = ["0", "1", "-1", "\\text{None of these}", "2", "\\text{The limit does not exist.}"];
