@@ -1187,13 +1187,13 @@ export const EXTRA_TEMPLATES: QuestionTemplate[] = [
       const p = pick(r, [1, 2]);
       const conv = p > 1;
       return {
-        prompt: `Classify $\\displaystyle\\sum_{n=1}^{\\infty}\\frac{(-1)^{n}}{n^{${p}}}$.`,
+        prompt: `Classify $\\displaystyle\\sum_{n=1}^{\\infty}\\frac{(-1)^{n}}{${pow("n", p)}}$.`,
         correct: conv ? `\\text{Absolutely convergent}` : `\\text{Conditionally convergent}`,
         distractors: conv
           ? [`\\text{Conditionally convergent}`, `\\text{Divergent}`, `\\text{Convergent only for even } n`]
           : [`\\text{Absolutely convergent}`, `\\text{Divergent}`, `\\text{Convergent only for even } n`],
         explanation: conv
-          ? `$\\sum n^{-${p}}$ converges as a $p$-series with $p=${p}>1$, so the alternating series converges absolutely.`
+          ? `$\\sum ${pow("n", -p)}$ converges as a $p$-series with $p=${p}>1$, so the alternating series converges absolutely.`
           : `The alternating series converges, but $\\sum \\frac{1}{n}$ diverges, so convergence is conditional.`,
       };
     },
