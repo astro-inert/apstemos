@@ -10,7 +10,6 @@ export type UserMistake = {
   description: string;
   example: string | null;
   how_to_avoid: string;
-  est_point_loss: number;
 };
 
 export type MistakeDraft = {
@@ -19,7 +18,6 @@ export type MistakeDraft = {
   description: string;
   example: string;
   how_to_avoid: string;
-  est_point_loss: number;
 };
 
 const draftSchema = z.object({
@@ -28,7 +26,6 @@ const draftSchema = z.object({
   description: z.string().min(3).max(1200),
   example: z.string().max(1200).default(""),
   how_to_avoid: z.string().min(3).max(1200),
-  est_point_loss: z.number().min(0).max(9),
 });
 
 export const listUserMistakes = createServerFn({ method: "GET" })
@@ -36,10 +33,10 @@ export const listUserMistakes = createServerFn({ method: "GET" })
   .handler(async ({ context }): Promise<UserMistake[]> => {
     const { data, error } = await context.supabase
       .from("user_mistakes")
-      .select("id, code, title, category, description, example, how_to_avoid, est_point_loss")
+      .select("id, code, title, category, description, example, how_to_avoid")
       .order("created_at", { ascending: false });
     if (error) throw new Error(error.message);
-    return (data ?? []).map((m) => ({ ...m, est_point_loss: Number(m.est_point_loss) })) as UserMistake[];
+    return (data ?? []) as UserMistake[];
   });
 
 export const draftUserMistake = createServerFn({ method: "POST" })
@@ -65,7 +62,6 @@ export const draftUserMistake = createServerFn({ method: "POST" })
       "- category: one or two words (e.g. Algebra, Calculator, Units, Justification, Series).",
       "- example: a short concrete instance of the mistake, with the correct version.",
       "- how_to_avoid: one actionable checkable habit.",
-      "- est_point_loss: realistic average AP points lost per occurrence, between 0.5 and 4.",
     ].join("\n");
 
     const userText = [
@@ -99,9 +95,8 @@ export const draftUserMistake = createServerFn({ method: "POST" })
                   description: { type: "string" },
                   example: { type: "string" },
                   how_to_avoid: { type: "string" },
-                  est_point_loss: { type: "number" },
                 },
-                required: ["title", "category", "description", "how_to_avoid", "est_point_loss"],
+                required: ["title", "category", "description", "how_to_avoid"],
               },
             },
           },
@@ -144,12 +139,11 @@ export const saveUserMistake = createServerFn({ method: "POST" })
         description: data.description,
         example: data.example || null,
         how_to_avoid: data.how_to_avoid,
-        est_point_loss: data.est_point_loss,
       })
-      .select("id, code, title, category, description, example, how_to_avoid, est_point_loss")
+      .select("id, code, title, category, description, example, how_to_avoid")
       .single();
     if (error) throw new Error(error.message);
-    return { ...row, est_point_loss: Number(row.est_point_loss) } as UserMistake;
+    return row as UserMistake;
   });
 
 export const tagAttemptMistake = createServerFn({ method: "POST" })

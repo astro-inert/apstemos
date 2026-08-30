@@ -52,18 +52,13 @@ export type PerformanceSnapshot = {
     unlocked: boolean;
   }>;
   untouched_units: Array<{ unit_id: string; number: number; name: string; ap_points: number; ap_weight_pct: number }>;
+  /** Ranked by how often the mistake actually occurred. No point-loss estimates:
+   *  there is no defensible way to convert a mistake tally into AP points. */
   top_mistakes: Array<{
     code: string;
     title: string;
     category: string;
     occurrences: number;
-    est_point_loss: number;
-  }>;
-  recommended_actions: Array<{
-    title: string;
-    detail: string;
-    estimated_gain: number;
-    target: string;
   }>;
 };
 
@@ -79,7 +74,7 @@ export const getPerformanceSnapshot = createServerFn({ method: "GET" })
         .from("attempts")
         .select("unit_id, unit_slug, topic_slug, correct, points_earned, points_possible, mistake_codes")
         .eq("user_id", userId),
-      supabase.from("common_mistakes").select("code, title, category, est_point_loss"),
+      supabase.from("common_mistakes").select("code, title, category"),
     ]);
 
     const attempts = attemptsRes.data ?? [];
@@ -191,29 +186,9 @@ export const getPerformanceSnapshot = createServerFn({ method: "GET" })
           title: meta?.title ?? code,
           category: meta?.category ?? "—",
           occurrences,
-          est_point_loss: Number(meta?.est_point_loss ?? 1) * occurrences,
         };
       })
-      .sort((a, b) => b.est_point_loss - a.est_point_loss)
-      .slice(0, 5);
-
-    // Recommended actions = weakest weighted units
-    const recommended_actions = [...unit_mastery]
-      .filter((u) => u.mastery !== 100)
-      .map((u) => {
-        const acc = u.mastery >= 0 ? u.mastery / 100 : 0.5;
-        const gain = Math.round((1 - acc) * u.ap_points * 0.6);
-        return {
-          title: `Drill Unit ${u.number}: ${u.name}`,
-          detail:
-            u.mastery < 0
-              ? `Untouched. Worth ${u.ap_points} AP points (${u.ap_weight_pct}% of exam).`
-              : `Currently ${u.mastery}% mastery. Highest ROI in your study plan.`,
-          estimated_gain: gain,
-          target: `unit-${u.number}`,
-        };
-      })
-      .sort((a, b) => b.estimated_gain - a.estimated_gain)
+      .sort((a, b) => b.occurrences - a.occurrences || a.title.localeCompare(b.title))
       .slice(0, 5);
 
     return {
@@ -228,6 +203,5 @@ export const getPerformanceSnapshot = createServerFn({ method: "GET" })
       subtopics,
       untouched_units,
       top_mistakes,
-      recommended_actions,
     };
   });

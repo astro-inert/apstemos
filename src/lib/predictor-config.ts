@@ -50,17 +50,17 @@ export const CONFIDENCE_GATES: Record<Exclude<ConfidenceState, "insufficient_dat
 }> = {
   preliminary: {
     minEffectiveItems: 12,
-    minUniqueItems: 15,
+    minUniqueItems: 20,
     minCoverage: 0.15,
     maxStandardError: 1.2,
-    requiresDiagnostic: false,
+    requiresDiagnostic: true,
   },
   moderate: {
     minEffectiveItems: 30,
     minUniqueItems: 40,
     minCoverage: 0.45,
     maxStandardError: 0.55,
-    requiresDiagnostic: false,
+    requiresDiagnostic: true,
   },
   high: {
     minEffectiveItems: 65,
@@ -81,10 +81,22 @@ export const COVERAGE = {
   weights: { unit: 0.45, topic: 0.25, difficultyMix: 0.15, spread: 0.15 },
 };
 
-/** Dedicated diagnostic blueprint. */
+/** Dedicated diagnostic blueprint.
+ *  Two thirds of the form is no-calculator at 2 minutes per question, one third
+ *  is calculator at 3 minutes per question. The timer is a single aggregate
+ *  budget, not a per-question clock. */
 export const DIAGNOSTIC = {
   itemCount: 30,
-  timeLimitSeconds: 45 * 60,
+  noCalculatorCount: 20,
+  calculatorCount: 10,
+  minutesPerNoCalculator: 2,
+  minutesPerCalculator: 3,
+  get timeLimitSeconds() {
+    return (
+      this.noCalculatorCount * this.minutesPerNoCalculator * 60 +
+      this.calculatorCount * this.minutesPerCalculator * 60
+    );
+  },
   /** Target share of items per difficulty band. */
   difficultyMix: { easy: 0.3, medium: 0.5, hard: 0.2 },
   /** A diagnostic older than this stops counting as primary evidence. */

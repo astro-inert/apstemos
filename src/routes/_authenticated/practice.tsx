@@ -115,7 +115,7 @@ function PracticePage() {
     <PageShell
       eyebrow="practice"
       title={unit ? `Unit ${unit.number} drill` : "Question bank"}
-      description={`${data ? `${data.total.toLocaleString()} original questions in this filter. ` : ""}Every answer logs to your Score Command Center and updates unit mastery and topic accuracy.`}
+      description={`${data ? `${data.remaining.toLocaleString()} unseen questions left in this filter (AP Calculus ${data.track}). ` : ""}Questions you've already answered never come back. Every answer logs to your Score Command Center and updates unit mastery and topic accuracy.`}
     >
       <div className="grid gap-2 sm:grid-cols-[1fr_1fr_auto]">
         <select
@@ -157,16 +157,26 @@ function PracticePage() {
           </div>
         ) : !q ? (
           <div className="rounded-3xl border border-dashed border-border p-12 text-center text-[14px] text-muted-foreground">
-            {questions.length === 0
-              ? "No questions match this filter yet."
-              : "You've finished this set — hit “New set” for 20 freshly generated questions."}
+            {data?.exhausted
+              ? "You've answered every question in this filter. Pick another unit or topic — answered questions are never repeated."
+              : questions.length === 0
+                ? "No unseen questions match this filter yet."
+                : "You've finished this set — hit “New set” for 20 more unseen questions."}
           </div>
         ) : (
           <div className="space-y-5 rounded-3xl border border-border bg-card p-6 shadow-card sm:p-8">
             <div className="micro-label flex items-center gap-3">
               <span className="rounded-full border border-border bg-elevated/60 px-2 py-0.5 text-primary">MCQ</span>
               <span>{q.difficulty}</span>
-              {q.calculator && <span>calculator</span>}
+              <span
+                className={`rounded-full border px-2 py-0.5 ${
+                  q.calculator
+                    ? "border-sky-500/40 bg-sky-500/10 text-sky-600"
+                    : "border-border bg-elevated/60 text-muted-foreground"
+                }`}
+              >
+                {q.calculator ? "calculator" : "no calculator"}
+              </span>
               <span className="num ml-auto text-subtle">
                 {index + 1} / {questions.length}
               </span>
@@ -229,7 +239,7 @@ function PracticePage() {
                 )}
                 {feedback.related_mistakes.length > 0 && (
                   <div className="rounded-2xl border border-destructive/30 bg-destructive/5 p-4">
-                    <div className="micro-label text-destructive">likely point loss</div>
+                    <div className="micro-label text-destructive">related common mistakes</div>
                     <ul className="mt-3 space-y-2 text-[13px]">
                       {feedback.related_mistakes.map((m) => (
                         <li key={m.code}>

@@ -1,12 +1,11 @@
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
-import { useSuspenseQuery, useQuery, queryOptions } from "@tanstack/react-query";
+import { useSuspenseQuery, useQuery, queryOptions, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { Suspense, useState } from "react";
 import {
   Activity,
   AlertTriangle,
   ArrowRight,
-  ArrowUpRight,
   Calendar,
   Sparkles,
   Target,
@@ -17,9 +16,9 @@ import { AnswerLogPanel } from "@/components/command/AnswerLogPanel";
 import { QuestionBankPanel } from "@/components/command/QuestionBankPanel";
 import { SubtopicPanel } from "@/components/command/SubtopicPanel";
 import { ScoreEstimateCard } from "@/components/command/ScoreEstimateCard";
-import { ActualScoreReporter } from "@/components/command/ActualScoreReporter";
 import { getPerformanceSnapshot, UNIT_MASTERY_THRESHOLD, type PerformanceSnapshot } from "@/lib/performance.functions";
 import { getBankAccess } from "@/lib/question-bank.functions";
+import { setExamTrack } from "@/lib/profile.functions";
 import { QN_UNITS } from "@/lib/question-navigator-data";
 import { useCurrentSubject } from "@/lib/use-subject";
 import { LaTeX } from "@/components/LaTeX";
@@ -99,13 +98,8 @@ function CalcCommandCenter() {
   const access = useQuery({ queryKey: ["bank-access"], queryFn: () => accessFn() });
   const isAdmin = access.data?.is_admin === true;
 
-  const targetRaw =
-    data.profile?.target_score === 5 ? 75 :
-    data.profile?.target_score === 4 ? 60 :
-    data.profile?.target_score === 3 ? 45 : 30;
-  const gap = Math.max(0, targetRaw - data.mastery_points);
   const daysToExam = Math.max(0, Math.ceil(
-    (new Date(data.profile?.exam_date ?? "2026-05-12").getTime() - Date.now()) / 86400000
+    (new Date(data.profile?.exam_date ?? "2027-05-10").getTime() - Date.now()) / 86400000
   ));
 
   const tabs = [
@@ -150,6 +144,7 @@ function CalcCommandCenter() {
               Prediction analytics
             </Link>
           )}
+          <TrackSwitcher track={data.profile?.track === "AB" ? "AB" : "BC"} />
           <span className="num inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-2 text-[12px] text-muted-foreground">
             <Calendar className="h-3.5 w-3.5" /> {daysToExam} days to exam
           </span>
@@ -175,11 +170,12 @@ function CalcCommandCenter() {
 
       {tab === "overview" && (
         <div className="space-y-6">
-          {/* Top row: Predicted score + 108-pt + Path */}
+          {/* Top row: predicted score + insights */}
           <div className="grid lg:grid-cols-3 gap-4">
-            <ScoreEstimateCard />
-            <PointsCard current={data.mastery_points} target={targetRaw} gap={gap} />
-            <FastestPathCard actions={data.recommended_actions} />
+            <div className="lg:col-span-2">
+              <ScoreEstimateCard />
+            </div>
+            <InsightsPanel data={data} />
           </div>
 
           {/* Topic diagnostics (3-question threshold) */}
@@ -188,15 +184,7 @@ function CalcCommandCenter() {
           {/* Unit performance */}
           <PerformanceDiagnostics units={data.unit_mastery} />
 
-          {/* Bottom row: Top mistakes + Confidence/insights */}
-          <div className="grid lg:grid-cols-3 gap-4">
-            <div className="lg:col-span-2">
-              <TopMistakesPanel mistakes={data.top_mistakes} />
-            </div>
-            <InsightsPanel data={data} />
-          </div>
-
-          <ActualScoreReporter />
+          <TopMistakesPanel mistakes={data.top_mistakes} />
         </div>
       )}
 
@@ -274,7 +262,7 @@ function OtherSubjectCommandCenter({ subjectId }: { subjectId: SubjectId }) {
         <div className="flex items-center justify-between px-5 py-4 border-b border-border">
           <div>
             <div className="text-xs uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5">
-              <Activity className="h-3.5 w-3.5" /> Unit performance
+              <Activity className="h-3.5 w-3.5" /> Unit level breakdown
             </div>
             <h3 className="font-display font-semibold mt-1">All {subject.units.length} units · no data yet</h3>
           </div>
@@ -325,65 +313,6 @@ function OtherSubjectCommandCenter({ subjectId }: { subjectId: SubjectId }) {
   );
 }
 
-// helper type
-function useFakeData() { return null as unknown as Awaited<ReturnType<typeof getPerformanceSnapshot>>; }
-
-function PointsCard({ current, target, gap }: { current: number; target: number; gap: number }) {
-  const pct = Math.min(100, (current / 108) * 100);
-  const targetPct = Math.min(100, (target / 108) * 100);
-  return (
-    <div className="rounded-3xl border border-border bg-card p-6 shadow-card">
-      <div className="flex items-center justify-between text-xs">
-        <span className="uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5"><Target className="h-3.5 w-3.5" /> 108-point mastery map</span>
-        <Link to="/108-points-breakdown" className="text-primary inline-flex items-center gap-1 hover:underline">View map <ArrowUpRight className="h-3 w-3" /></Link>
-      </div>
-      <div className="mt-4 flex items-baseline gap-2">
-        <span className="font-display text-4xl font-bold tabular-nums">{current}</span>
-        <span className="text-muted-foreground text-sm">/ 108</span>
-        <span className="ml-auto text-xs text-muted-foreground">target {target}</span>
-      </div>
-      <div className="mt-4 relative h-2.5 rounded-full bg-elevated overflow-hidden">
-        <div className="absolute inset-y-0 left-0 bg-gradient-to-r from-primary to-emerald-400 rounded-full" style={{ width: `${pct}%` }} />
-        <div className="absolute inset-y-0 w-0.5 bg-foreground/70" style={{ left: `${targetPct}%` }} />
-      </div>
-      <div className="mt-3 flex items-center justify-between text-xs">
-        <span className="text-muted-foreground">Current</span>
-        {gap > 0 ? (
-          <span className="text-amber-400 font-medium">{gap}-point gap to {target}</span>
-        ) : (
-          <span className="text-emerald-400 font-medium">On target ✓</span>
-        )}
-      </div>
-    </div>
-  );
-}
-
-function FastestPathCard({ actions }: { actions: { title: string; detail: string; estimated_gain: number; target: string }[] }) {
-  return (
-    <div className="rounded-3xl border border-border bg-card p-6 shadow-card">
-      <div className="flex items-center justify-between text-xs">
-        <span className="uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5"><Zap className="h-3.5 w-3.5 text-amber-400" /> Fastest path</span>
-        <span className="text-muted-foreground">Ranked by ROI</span>
-      </div>
-      <ol className="mt-4 space-y-2.5">
-        {actions.slice(0, 4).map((a, i) => (
-          <li key={a.target} className="flex items-start gap-3">
-            <span className="font-mono text-xs text-muted-foreground w-4 mt-0.5">{i + 1}</span>
-            <div className="flex-1 min-w-0">
-              <div className="text-sm font-medium leading-tight truncate">{a.title}</div>
-              <div className="text-xs text-muted-foreground truncate">{a.detail}</div>
-            </div>
-            <span className="text-xs font-mono text-emerald-400 shrink-0">+{a.estimated_gain}</span>
-          </li>
-        ))}
-        {actions.length === 0 && (
-          <li className="text-xs text-muted-foreground">All units mastered. Start mock exams.</li>
-        )}
-      </ol>
-    </div>
-  );
-}
-
 type UnitRow = PerformanceSnapshot["unit_mastery"][number];
 
 function PerformanceDiagnostics({ units }: { units: UnitRow[] }) {
@@ -419,11 +348,11 @@ function PerformanceDiagnostics({ units }: { units: UnitRow[] }) {
         <div className="flex items-center justify-between px-5 py-4 border-b border-border">
           <div>
             <div className="text-xs uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5">
-              <Activity className="h-3.5 w-3.5" /> Unit performance
+              <Activity className="h-3.5 w-3.5" /> Unit level breakdown
             </div>
             <h3 className="font-display font-semibold mt-1">All 10 units · ranked by mastery</h3>
           </div>
-          <div className="text-[10px] text-muted-foreground hidden sm:block">Topic-level breakdown unlocks after your first 10 attempts per unit.</div>
+          <div className="text-[10px] text-muted-foreground hidden sm:block">Unit level breakdown unlocks after 10 attempts and one question in every topic.</div>
         </div>
         <div className="divide-y divide-border">
           {[...units].sort((a, b) => (b.mastery < 0 ? -1 : a.mastery < 0 ? 1 : b.mastery - a.mastery)).map((u) => {
@@ -491,12 +420,12 @@ function PerformanceDiagnostics({ units }: { units: UnitRow[] }) {
   );
 }
 
-function TopMistakesPanel({ mistakes }: { mistakes: Array<{ code: string; title: string; category: string; occurrences: number; est_point_loss: number }> }) {
+function TopMistakesPanel({ mistakes }: { mistakes: Array<{ code: string; title: string; category: string; occurrences: number }> }) {
   return (
     <div className="rounded-3xl border border-border bg-card p-6 shadow-card h-full">
       <div className="flex items-center justify-between mb-4">
         <div>
-          <div className="text-xs uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5"><AlertTriangle className="h-3.5 w-3.5 text-rose-400" /> Where you're losing points</div>
+          <div className="text-xs uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5"><AlertTriangle className="h-3.5 w-3.5 text-rose-400" /> Ranked by occurrences</div>
           <h3 className="font-display font-semibold mt-1">Your top mistakes</h3>
         </div>
         <Link to="/common-mistakes" className="text-xs text-primary hover:underline inline-flex items-center gap-1">All mistakes <ArrowRight className="h-3 w-3" /></Link>
@@ -512,11 +441,11 @@ function TopMistakesPanel({ mistakes }: { mistakes: Array<{ code: string; title:
               <div className="flex-1 min-w-0">
                 <div className="text-sm font-medium truncate"><LaTeX>{m.title}</LaTeX></div>
 
-                <div className="text-xs text-muted-foreground">{m.category} · {m.occurrences}× occurrences</div>
+                <div className="text-xs text-muted-foreground">{m.category}</div>
               </div>
               <div className="text-right shrink-0">
-                <div className="text-rose-400 font-mono text-sm font-semibold">−{m.est_point_loss.toFixed(1)}</div>
-                <div className="text-[10px] text-muted-foreground">est. pts lost</div>
+                <div className="font-mono text-sm font-semibold tabular-nums">{m.occurrences}×</div>
+                <div className="text-[10px] text-muted-foreground">occurrences</div>
               </div>
             </div>
           ))}
@@ -543,9 +472,37 @@ function InsightsPanel({ data }: { data: Awaited<ReturnType<typeof getPerformanc
         </li>
         <li className="flex items-start gap-2">
           <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 mt-1.5 shrink-0" />
-          <span>Predictions stabilize after ~50 attempts. You have {data.attempts_count}.</span>
+          <span>Score estimates unlock only after you submit the timed MCQ diagnostic. Practice attempts logged: {data.attempts_count}.</span>
         </li>
       </ul>
+    </div>
+  );
+}
+
+function TrackSwitcher({ track }: { track: "AB" | "BC" }) {
+  const save = useServerFn(setExamTrack);
+  const qc = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: (next: "AB" | "BC") => save({ data: { track: next } }),
+    onSuccess: () => {
+      qc.invalidateQueries();
+    },
+  });
+  const active = mutation.isPending ? (mutation.variables as "AB" | "BC") : track;
+  return (
+    <div className="inline-flex items-center rounded-full border border-border bg-card p-0.5" role="group" aria-label="Exam track">
+      {(["AB", "BC"] as const).map((t) => (
+        <button
+          key={t}
+          onClick={() => t !== active && mutation.mutate(t)}
+          aria-pressed={active === t}
+          className={`rounded-full px-3 py-1.5 text-[12px] font-semibold transition-colors ${
+            active === t ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          {t}
+        </button>
+      ))}
     </div>
   );
 }

@@ -316,6 +316,7 @@ export function resolveConfidence(input: {
 
   const g = CONFIDENCE_GATES.preliminary;
   const missing: string[] = [];
+  if (!input.hasFreshDiagnostic) missing.push("a submitted timed MCQ diagnostic");
   if (input.uniqueItems < g.minUniqueItems) {
     missing.push(`${g.minUniqueItems - input.uniqueItems} more questions you haven't seen before`);
   }
@@ -332,7 +333,9 @@ export function nextStepFor(input: {
   hasFreshDiagnostic: boolean;
 }): string {
   if (input.state === "insufficient_data") {
-    return "Answer more new practice questions, or take the timed MCQ diagnostic.";
+    return input.hasFreshDiagnostic
+      ? "Answer more questions you haven't seen before to sharpen the estimate."
+      : "Take the timed MCQ diagnostic — the estimate starts there.";
   }
   if (!input.hasFreshDiagnostic) return "Take the timed MCQ diagnostic — it is the strongest single source of evidence.";
   if (input.coverage < CONFIDENCE_GATES.high.minCoverage) return "Practice units and topics you have barely touched to widen coverage.";

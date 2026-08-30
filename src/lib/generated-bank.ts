@@ -1,4 +1,40 @@
-import { TEMPLATES, makeRng, shuffle, tidyTex, type Difficulty, type Figure } from "./question-templates";
+import {
+  TEMPLATES,
+  makeRng,
+  shuffle,
+  tidyTex,
+  type Difficulty,
+  type Figure,
+  type QuestionTemplate,
+  type Track,
+} from "./question-templates";
+
+/** Topics that only appear on the BC exam. */
+const BC_ONLY_TOPICS = new Set([
+  "integration-by-parts",
+  "partial-fractions",
+  "improper-integrals",
+  "eulers-method",
+  "logistic-growth",
+  "arc-length",
+]);
+
+/** Units that only appear on the BC exam. */
+const BC_ONLY_UNITS = new Set(["unit-9-parametric-polar-vector", "unit-10-infinite-sequences-and-series"]);
+
+/** Which exam a template belongs to, from its own tag or its unit/topic. */
+export function templateTrack(t: QuestionTemplate): Track {
+  if (t.track) return t.track;
+  if (BC_ONLY_UNITS.has(t.unit) || BC_ONLY_TOPICS.has(t.topic)) return "BC";
+  return "both";
+}
+
+/** A BC student sees everything; an AB student never sees BC-only material. */
+function inTrack(t: QuestionTemplate, track?: "AB" | "BC"): boolean {
+  if (!track) return true;
+  const tt = templateTrack(t);
+  return tt === "both" || tt === track;
+}
 
 /** Variants generated per template. 60 templates × 30 variants = 1,800 original questions. */
 export const VARIANTS_PER_TEMPLATE = 27;
@@ -14,6 +50,7 @@ export type GeneratedQuestion = {
   unit_slug: string;
   topic_slug: string;
   difficulty: Difficulty;
+  track: Track;
   calculator: boolean;
   ap_value: number;
   prompt: string;
@@ -79,6 +116,30 @@ function asMath(text: string): string {
 }
 
 
+/**
+ * Keeps the correct answer from standing out by shape. If the answer is a
+ * fraction but every distractor is a bare integer, the answer is visually
+ * obvious, so we mint plausible same-shape fractions (reciprocal, negation,
+ * off-by-one denominator) before falling back to generic options.
+ */
+function shapeMatchedDistractors(correct: string, distractors: string[]): string[] {
+  const norm = (t: string) => t.replace(/\\dfrac/g, "\\frac");
+  const isFrac = (t: string) => norm(t).includes("\\frac{");
+  if (!isFrac(correct) || distractors.some(isFrac)) return [];
+  const c = norm(correct);
+  const m = /\\frac\{(\d+)\}\{(\d+)\}/.exec(c);
+  if (!m) return [];
+  const n = Number(m[1]);
+  const d = Number(m[2]);
+  const swap = (a: number, b: number) =>
+    a === 0 || b === 0 || (a === n && b === d)
+      ? null
+      : c.slice(0, m.index) + `\\frac{${a}}{${b}}` + c.slice(m.index + m[0].length);
+  return [swap(d, n), swap(n + 1, d), swap(n, d + 1), swap(n + 1, d + 1)].filter(
+    (x): x is string => Boolean(x) && x !== correct,
+  );
+}
+
 const FALLBACK_DISTRACTORS = ["0", "1", "-1", "\\text{None of these}", "2", "\\text{The limit does not exist.}"];
 
 /** Deterministic UUID derived from a question key, so attempts stay stable across sessions. */
@@ -121,7 +182,16 @@ export function buildQuestion(key: string): GeneratedQuestion | null {
 
   const seen = new Set([built.correct]);
   const options: string[] = [built.correct];
-  for (const d of [...built.distractors, ...FALLBACK_DISTRACTORS]) {
+  // Shape-matched options come first when the answer would otherwise be the
+  // only fraction on the list; two of the original distractors still survive.
+  // Only distractors that survive de-duplication count toward the shape check;
+  // a distractor equal to the answer is discarded below.
+  const usable = built.distractors.filter((d) => d !== built.correct);
+  const extras = shapeMatchedDistractors(built.correct, usable);
+  const pool = extras.length
+    ? [extras[0]!, usable[0] ?? "", extras[1] ?? "", ...usable.slice(1), ...extras.slice(2)]
+    : built.distractors;
+  for (const d of [...pool.filter(Boolean), ...FALLBACK_DISTRACTORS]) {
     if (options.length >= 4) break;
     if (seen.has(d)) continue;
     seen.add(d);
@@ -139,6 +209,7 @@ export function buildQuestion(key: string): GeneratedQuestion | null {
     type: "MCQ",
     unit_slug: tpl.unit,
     topic_slug: tpl.topic,
+    track: templateTrack(tpl),
     difficulty: tpl.difficulty,
     calculator: tpl.calculator ?? false,
     ap_value: 1,
@@ -158,11 +229,27 @@ const VARIANT_SCAN = 240;
 
 let KEY_CACHE: string[] | null = null;
 
+/**
+ * Structural signature of a prompt: numbers collapsed so two *families* that
+ * only differ by their constants are recognised as the same question, while
+ * variants inside a family stay distinct (those are deduplicated by exact text).
+ */
+function structuralSignature(prompt: string): string {
+  return prompt.replace(/-?\d+(\.\d+)?/g, "#").replace(/\s+/g, " ").trim();
+}
+
 /** Distinct generated question keys — duplicates from RNG collisions are dropped. */
 function allKeys(): string[] {
   if (KEY_CACHE) return KEY_CACHE;
   const keys: string[] = [];
+  const familySignatures = new Set<string>();
   for (const t of TEMPLATES) {
+    const probe = buildQuestion(`${t.id}::0`);
+    if (probe) {
+      const sig = `${t.topic}|${structuralSignature(probe.prompt)}`;
+      if (familySignatures.has(sig)) continue; // same question asked twice — skip the family
+      familySignatures.add(sig);
+    }
     const seen = new Set<string>();
     for (let v = 0; v < VARIANT_SCAN && seen.size < VARIANTS_PER_TEMPLATE; v++) {
       const key = `${t.id}::${v}`;
@@ -178,19 +265,27 @@ function allKeys(): string[] {
   return keys;
 }
 
-/** Index of every generated question key, optionally filtered by unit/subtopic. */
-export function bankKeys(filter?: { unit_slug?: string; topic_slug?: string }): string[] {
+export type BankFilter = {
+  unit_slug?: string;
+  topic_slug?: string;
+  track?: "AB" | "BC";
+  calculator?: boolean;
+};
+
+/** Index of every generated question key, optionally filtered. */
+export function bankKeys(filter?: BankFilter): string[] {
   const templateById = new Map(TEMPLATES.map((t) => [t.id, t]));
   return allKeys().filter((k) => {
     const t = templateById.get(k.slice(0, k.lastIndexOf("::")));
     if (!t) return false;
     if (filter?.unit_slug && t.unit !== filter.unit_slug) return false;
     if (filter?.topic_slug && t.topic !== filter.topic_slug) return false;
-    return true;
+    if (filter?.calculator !== undefined && (t.calculator ?? false) !== filter.calculator) return false;
+    return inTrack(t, filter?.track);
   });
 }
 
-export function bankCount(filter?: { unit_slug?: string; topic_slug?: string }): number {
+export function bankCount(filter?: BankFilter): number {
   return bankKeys(filter).length;
 }
 

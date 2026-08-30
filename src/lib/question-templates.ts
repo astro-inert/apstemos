@@ -27,11 +27,17 @@ export type BuiltQuestion = {
   figure?: Figure;
 };
 
+/** AB-only, BC-only, or shared by both tracks. */
+export type Track = "AB" | "BC" | "both";
+
 export type QuestionTemplate = {
   id: string;
   unit: string;
   topic: string;
   difficulty: Difficulty;
+  /** Which exam this question belongs to. Defaults are derived per unit/topic
+   *  in `generated-bank.ts` when a template does not declare one. */
+  track?: Track;
   calculator?: boolean;
   mistakes?: string[];
   build: (r: RNG) => BuiltQuestion;
@@ -64,8 +70,8 @@ export function makeRng(seed: string): RNG {
   };
 }
 
-const ri = (r: RNG, a: number, b: number) => a + Math.floor(r() * (b - a + 1));
-const pick = <T,>(r: RNG, xs: readonly T[]): T => xs[Math.floor(r() * xs.length) % xs.length];
+export const ri = (r: RNG, a: number, b: number) => a + Math.floor(r() * (b - a + 1));
+export const pick = <T,>(r: RNG, xs: readonly T[]): T => xs[Math.floor(r() * xs.length) % xs.length];
 
 export function shuffle<T>(r: RNG, xs: T[]): T[] {
   const out = xs.slice();
@@ -82,7 +88,7 @@ export function shuffle<T>(r: RNG, xs: T[]): T[] {
 
 const gcd = (a: number, b: number): number => (b ? gcd(b, Math.abs(a % b)) : Math.abs(a));
 
-function frac(n: number, d: number): string {
+export function frac(n: number, d: number): string {
   if (d < 0) {
     n = -n;
     d = -d;
@@ -94,13 +100,13 @@ function frac(n: number, d: number): string {
   return `${n < 0 ? "-" : ""}\\frac{${Math.abs(n)}}{${d}}`;
 }
 
-function dec(x: number, p = 3): string {
+export function dec(x: number, p = 3): string {
   const v = Math.round(x * 10 ** p) / 10 ** p;
   return `${v}`;
 }
 
 /** signed term like " + 3x" / " - x^2" */
-function term(coef: number, body: string): string {
+export function term(coef: number, body: string): string {
   if (coef === 0) return "";
   const sign = coef < 0 ? " - " : " + ";
   const a = Math.abs(coef);
@@ -108,13 +114,20 @@ function term(coef: number, body: string): string {
   return `${sign}${c}${body}`;
 }
 
-function poly(parts: Array<[number, string]>): string {
+export function poly(parts: Array<[number, string]>): string {
   let s = parts.map(([c, b]) => term(c, b)).join("");
   s = s.replace(/^ \+ /, "").replace(/^ - /, "-");
   return s || "0";
 }
 
-const CONTEXTS = [
+/** Attaches a coefficient to \pi without emitting a redundant leading 1. */
+export function piCoef(c: string): string {
+  if (c === "1") return "\\pi";
+  if (c === "-1") return "-\\pi";
+  return `${c}\\pi`;
+}
+
+export const CONTEXTS = [
   { thing: "water", unit: "liters", rateUnit: "liters per minute", time: "minutes", vessel: "a reservoir" },
   { thing: "sand", unit: "cubic feet", rateUnit: "cubic feet per hour", time: "hours", vessel: "a hopper" },
   { thing: "fuel", unit: "gallons", rateUnit: "gallons per minute", time: "minutes", vessel: "a tank" },
@@ -122,7 +135,7 @@ const CONTEXTS = [
   { thing: "coolant", unit: "liters", rateUnit: "liters per second", time: "seconds", vessel: "a chamber" },
 ] as const;
 
-const TRIPLES = [
+export const TRIPLES = [
   [3, 4, 5],
   [6, 8, 10],
   [5, 12, 13],
@@ -147,7 +160,7 @@ const U8 = "unit-8-applications-of-integration";
 const U9 = "unit-9-parametric-polar-vector";
 const U10 = "unit-10-infinite-sequences-and-series";
 
-export const TEMPLATES: QuestionTemplate[] = [
+export const BASE_TEMPLATES: QuestionTemplate[] = [
   /* ---------------- Unit 1 ---------------- */
   {
     id: "u1-removable",
@@ -402,12 +415,12 @@ export const TEMPLATES: QuestionTemplate[] = [
       const a = ri(r, 2, 6);
       const n = ri(r, 2, 5);
       return {
-        prompt: `Find $\\dfrac{d}{dx}\\left[\\sin^{${n}}(${a}x)\\right]$.`,
-        correct: `${n * a}\\sin^{${n - 1}}(${a}x)\\cos(${a}x)`,
+        prompt: `Find $\\dfrac{d}{dx}\\left[${pow(`\\sin(${coef(a, "x")})`, n)}\\right]$.`,
+        correct: `${coef(n * a, `${pow(`\\sin(${coef(a, "x")})`, n - 1)}\\cos(${coef(a, "x")})`)}`,
         distractors: [
-          `${n}\\sin^{${n - 1}}(${a}x)\\cos(${a}x)`,
-          `${n * a}\\sin^{${n - 1}}(${a}x)`,
-          `${n * a}\\cos^{${n - 1}}(${a}x)`,
+          `${coef(n, `${pow(`\\sin(${coef(a, "x")})`, n - 1)}\\cos(${coef(a, "x")})`)}`,
+          `${coef(n * a, pow(`\\sin(${coef(a, "x")})`, n - 1))}`,
+          `${coef(n * a, pow(`\\cos(${coef(a, "x")})`, n - 1))}`,
         ],
         explanation: `Two chain layers: bring down ${n}, keep $\\sin^{${n - 1}}(${a}x)$, multiply by $\\cos(${a}x)$ and by the inner derivative ${a}.`,
       };
@@ -748,7 +761,7 @@ export const TEMPLATES: QuestionTemplate[] = [
     build: (r) => {
       const c = ri(r, 1, 5);
       const b = ri(r, 1, 3);
-      const n = ri(r, 1, 2);
+      const n = ri(r, 2, 3);
       const val = ((b * b + c) ** (n + 1) - c ** (n + 1)) / (2 * (n + 1));
       return {
         prompt: `Evaluate $\\displaystyle\\int_{0}^{${b}} x\\left(x^{2} ${term(c, "")}\\right)^{${n}} dx$.`,
@@ -1092,11 +1105,11 @@ export const TEMPLATES: QuestionTemplate[] = [
     difficulty: "hard",
     mistakes: ["polar-area-formula"],
     build: (r) => {
-      const a = ri(r, 1, 6);
+      const a = ri(r, 2, 6);
       return {
-        prompt: `Find the area enclosed by one petal of $r=${a}\\sin(2\\theta)$.`,
-        correct: `${frac(a * a, 8)}\\pi`,
-        distractors: [`${frac(a * a, 4)}\\pi`, `${frac(a * a, 2)}\\pi`, `${a * a}\\pi`],
+        prompt: `Find the area enclosed by one petal of $r=${coef(a, "\\sin(2\\theta)")}$.`,
+        correct: `${piCoef(frac(a * a, 8))}`,
+        distractors: [`${piCoef(frac(a * a, 4))}`, `${piCoef(frac(a * a, 2))}`, `${coef(a * a, "\\pi")}`],
         explanation: `$A=\\frac{1}{2}\\int_0^{\\pi/2} ${a * a}\\sin^{2}(2\\theta)d\\theta = \\frac{${a * a}\\pi}{8}$.`,
       };
     },
@@ -1145,7 +1158,7 @@ export const TEMPLATES: QuestionTemplate[] = [
     topic: "geometric-and-p-series",
     difficulty: "easy",
     build: (r) => {
-      const a = ri(r, 1, 9);
+      const a = ri(r, 2, 9);
       const p = ri(r, 1, 4);
       const q = p + ri(r, 1, 5);
       return {
@@ -1180,8 +1193,9 @@ export const TEMPLATES: QuestionTemplate[] = [
     difficulty: "easy",
     mistakes: ["series-test-justify"],
     build: (r) => {
-      const num = ri(r, 1, 5);
-      const den = ri(r, 1, 4);
+      const den = ri(r, 2, 4);
+      let num = ri(r, 1, 7);
+      if (num % den === 0) num += 1; // keep p away from the harmonic exponent 1
       const p = num / den;
       const conv = p > 1;
       return {
@@ -1225,7 +1239,7 @@ export const TEMPLATES: QuestionTemplate[] = [
       const p = ri(r, 2, 4);
       const N = ri(r, 2, 8);
       return {
-        prompt: `The alternating series $\\displaystyle\\sum_{n=1}^{\\infty}\\frac{(-1)^{n+1}}{n^{${p}}}$ is approximated by its first $${N}$ terms. What is the best bound on the error?`,
+        prompt: `The alternating series $\\displaystyle\\sum_{n=1}^{\\infty}\\frac{(-1)^{n+1}}{${pow("n", p)}}$ is approximated by its first $${N}$ terms. What is the best bound on the error?`,
         correct: frac(1, (N + 1) ** p),
         distractors: [frac(1, N ** p), frac(1, (N + 1) * p), frac(1, (N + 2) ** p)],
         explanation: `For a convergent alternating series the error is at most the first omitted term: $\\frac{1}{${N + 1}^{${p}}} = ${frac(1, (N + 1) ** p)}$.`,
@@ -1564,14 +1578,14 @@ export const TEMPLATES: QuestionTemplate[] = [
       const p = ri(r, 2, 6);
       const c = ri(r, 1, 9);
       return {
-        prompt: `Use a comparison test on $\\displaystyle\\sum_{n=1}^{\\infty}\\frac{1}{n^{${p}} ${term(c, "")}}$. Which conclusion is correct?`,
+        prompt: `Use a comparison test on $\\displaystyle\\sum_{n=1}^{\\infty}\\frac{1}{${pow("n", p)} ${term(c, "")}}$. Which conclusion is correct?`,
         correct: `\\text{It converges by comparison with the } p\\text{-series } \\sum n^{-${p}}.`,
         distractors: [
           `\\text{It diverges by comparison with the harmonic series.}`,
           `\\text{It diverges because the terms are positive.}`,
           `\\text{Comparison gives no information here.}`,
         ],
-        explanation: `For $n\\ge 1$, $\\frac{1}{n^{${p}}+${c}} < \\frac{1}{n^{${p}}}$, and $\\sum n^{-${p}}$ converges because $${p}>1$. A smaller positive series under a convergent one converges.`,
+        explanation: `For $n\\ge 1$, $\\frac{1}{${pow("n", p)}+${c}} < \\frac{1}{${pow("n", p)}}$, and $\\sum n^{-${p}}$ converges because $${p}>1$. A smaller positive series under a convergent one converges.`,
       };
     },
   },
@@ -1599,24 +1613,39 @@ export const TEMPLATES: QuestionTemplate[] = [
 /* Output hygiene                                                      */
 /* ------------------------------------------------------------------ */
 
-const ALLOW_STRIP_MACRO = /^\\(sin|cos|tan|sec|csc|cot|ln|log|sqrt|pi|theta|left|e)\b/;
-
 /**
- * Removes mathematically redundant `1`s that generators can emit —
- * `1x`, `1\sin x`, `x^{1}`, `1(x+2)` — without touching real numbers
- * such as `10`, `21x`, or `\frac{1}{2}`.
+ * Whitespace-only hygiene. Redundant coefficients and exponents are handled at
+ * construction time by `term`, `poly`, `coef` and `pow` — never by rewriting
+ * finished LaTeX, which used to delete mathematically necessary 1s
+ * (e.g. `\\int_1^2`, `f(1)`, `x = 1`).
  */
 export function tidyTex(input: string): string {
-  let s = input;
-  s = s.replace(/\^\{1\}/g, "");
-  s = s.replace(/(^|[^\d.\w\\])1(?=[a-zA-Z(\\])/g, (m, pre: string, idx: number) => {
-    const rest = s.slice(idx + m.length);
-    if (rest.startsWith("\\") && !ALLOW_STRIP_MACRO.test(rest)) return m;
-    return pre;
-  });
-  s = s.replace(/(^|[^\d.\w\\])1\\cdot\s*/g, "$1");
-  s = s.replace(/\\cdot\s*1(?![\d.])/g, "");
-  s = s.replace(/ {2,}/g, " ");
-  return s;
+  return input.replace(/[ \t]{2,}/g, " ").replace(/\s+([.,;])/g, "$1").trim();
 }
 
+/** Coefficient prefix: 1 disappears, -1 becomes a bare minus, 0 kills the term. */
+export function coef(c: number, body: string): string {
+  if (c === 0) return "0";
+  if (!body) return `${c}`;
+  if (c === 1) return body;
+  if (c === -1) return `-${body}`;
+  return `${c}${body}`;
+}
+
+/** Power with exponent 1 rendered without the exponent. */
+export function pow(base: string, e: number): string {
+  if (e === 0) return "1";
+  if (e === 1) return base;
+  return `${base}^{${e}}`;
+}
+
+
+/* ------------------------------------------------------------------ */
+/* Full template registry                                             */
+/* ------------------------------------------------------------------ */
+
+import { EXTRA_TEMPLATES } from "./question-templates-extra";
+
+/** Every template in the bank: the original families plus the expanded
+ *  CED-coverage families (second and third asked-forms per topic). */
+export const TEMPLATES: QuestionTemplate[] = [...BASE_TEMPLATES, ...EXTRA_TEMPLATES];
