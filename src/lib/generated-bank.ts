@@ -184,9 +184,12 @@ export function buildQuestion(key: string): GeneratedQuestion | null {
   const options: string[] = [built.correct];
   // Shape-matched options come first when the answer would otherwise be the
   // only fraction on the list; two of the original distractors still survive.
-  const extras = shapeMatchedDistractors(built.correct, built.distractors);
+  // Only distractors that survive de-duplication count toward the shape check;
+  // a distractor equal to the answer is discarded below.
+  const usable = built.distractors.filter((d) => d !== built.correct);
+  const extras = shapeMatchedDistractors(built.correct, usable);
   const pool = extras.length
-    ? [extras[0]!, built.distractors[0] ?? "", extras[1] ?? "", ...built.distractors.slice(1), ...extras.slice(2)]
+    ? [extras[0]!, usable[0] ?? "", extras[1] ?? "", ...usable.slice(1), ...extras.slice(2)]
     : built.distractors;
   for (const d of [...pool.filter(Boolean), ...FALLBACK_DISTRACTORS]) {
     if (options.length >= 4) break;

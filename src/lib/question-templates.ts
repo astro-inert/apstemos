@@ -1238,7 +1238,7 @@ export const BASE_TEMPLATES: QuestionTemplate[] = [
       const p = ri(r, 2, 4);
       const N = ri(r, 2, 8);
       return {
-        prompt: `The alternating series $\\displaystyle\\sum_{n=1}^{\\infty}\\frac{(-1)^{n+1}}{n^{${p}}}$ is approximated by its first $${N}$ terms. What is the best bound on the error?`,
+        prompt: `The alternating series $\\displaystyle\\sum_{n=1}^{\\infty}\\frac{(-1)^{n+1}}{${pow("n", p)}}$ is approximated by its first $${N}$ terms. What is the best bound on the error?`,
         correct: frac(1, (N + 1) ** p),
         distractors: [frac(1, N ** p), frac(1, (N + 1) * p), frac(1, (N + 2) ** p)],
         explanation: `For a convergent alternating series the error is at most the first omitted term: $\\frac{1}{${N + 1}^{${p}}} = ${frac(1, (N + 1) ** p)}$.`,
@@ -1577,14 +1577,14 @@ export const BASE_TEMPLATES: QuestionTemplate[] = [
       const p = ri(r, 2, 6);
       const c = ri(r, 1, 9);
       return {
-        prompt: `Use a comparison test on $\\displaystyle\\sum_{n=1}^{\\infty}\\frac{1}{n^{${p}} ${term(c, "")}}$. Which conclusion is correct?`,
+        prompt: `Use a comparison test on $\\displaystyle\\sum_{n=1}^{\\infty}\\frac{1}{${pow("n", p)} ${term(c, "")}}$. Which conclusion is correct?`,
         correct: `\\text{It converges by comparison with the } p\\text{-series } \\sum n^{-${p}}.`,
         distractors: [
           `\\text{It diverges by comparison with the harmonic series.}`,
           `\\text{It diverges because the terms are positive.}`,
           `\\text{Comparison gives no information here.}`,
         ],
-        explanation: `For $n\\ge 1$, $\\frac{1}{n^{${p}}+${c}} < \\frac{1}{n^{${p}}}$, and $\\sum n^{-${p}}$ converges because $${p}>1$. A smaller positive series under a convergent one converges.`,
+        explanation: `For $n\\ge 1$, $\\frac{1}{${pow("n", p)}+${c}} < \\frac{1}{${pow("n", p)}}$, and $\\sum n^{-${p}}$ converges because $${p}>1$. A smaller positive series under a convergent one converges.`,
       };
     },
   },
