@@ -28,7 +28,19 @@ Source material (all four confirmed downloadable): the official AP Calculus AB/B
 
 - Rewrite the "tidy" pass that strips redundant `1`s. It currently runs as blind regexes over the whole string and can delete meaningful 1s. Replacement: templates emit coefficients through formatting helpers that decide at construction time (coefficient 1 → omitted, exponent 1 → omitted, constant 1 → kept), and the regex pass is removed.
 - Add a build-time audit script that renders every generated question, choice, and explanation through KaTeX in strict mode and fails on any unrendered/malformed expression, stray `\text{}`, unbalanced braces, or literal backslashes leaking into prose. Fix everything it flags.
-- Run the same audit over the Common Mistakes rows and the answer-log/practice tables so those render identically.
+
+## 4b. Stress-test every single question
+
+An automated sweep runs over the entire generated bank (every template × every variant) and fails the build on any of these, and each failure gets fixed rather than suppressed:
+
+- **Obvious answers**: the correct choice must not be identifiable without doing the math. Checks reject sets where the key is the only choice with a different form/length/sign, the only simplified one, the only one with the right units, or an outlier in magnitude; distractors must come from real error paths (sign slip, chain-rule omission, wrong bound, derivative/antiderivative swap), not filler.
+- **Degenerate math**: no duplicate choices, no case where two choices are algebraically equal, no unanswerable or ambiguous prompt, no answer absent from the choice set, and answer positions distributed evenly across A–D across the bank.
+- **Non-AP questions**: every item must map to a real CED topic and skill and read like an AP-style stem (function/graph/table/context framing, standard notation and phrasing). Anything trivial, contrived, or outside the CED gets rewritten or cut.
+- **AP-style coverage without copyright risk**: the CED and your practice tests set which *forms* get tested and how prompts are phrased in general; all numbers, functions, contexts, and wording are original, and a similarity check flags any prompt that drifts too close to source text.
+- Verification: run the sweep, read the full report, and fix every flagged item before this is called done.
+
+- Run the LaTeX audit over the Common Mistakes rows and the answer-log/practice tables so those render identically.
+
 
 ## 5. Statistics vs. prediction
 
