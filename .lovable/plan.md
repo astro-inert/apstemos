@@ -4,11 +4,14 @@ Goal: the practice / command center / mistakes workflow is airtight — no repea
 
 ## 1. Question bank: comprehensiveness and no near-duplicates
 
-- Expand the parameterized template set (currently 77 templates) so every CED topic — and every distinct question *form* inside a topic — is represented: each topic gets templates for the different ways the CED asks it (graph-based, table-based, symbolic, contextual/units, theorem-justification), not just more numeric variants of one form.
-- Add a duplicate guard: variants are kept only when their prompt *structure* differs, not just their constants. Today variant de-duplication compares full prompt text, so 27 numeric re-skins of one sentence all survive. New rule: cap variants per template and reject variants whose normalized prompt (numbers stripped) already exists in the same topic beyond a small quota.
+Source material (all four confirmed downloadable): the official AP Calculus AB/BC Course and Exam Description, plus the three practice-test PDFs you linked (82-page test, 8-page set, and the third packet). These are read as a *coverage map and style reference only* — every question stays original, with no College Board text reproduced.
+
+- Extract the full CED topic/skill inventory (every numbered topic 1.1 → 10.15 and its skill statements) and audit the current 77 templates against it. Any topic or asked-form with no template gets one.
+- Expand templates so every distinct question *form* inside a topic exists — graph-based, table-based, symbolic, contextual with units, theorem-justification, and the calculator-dependent forms the practice tests use — not just more numeric variants of one sentence.
+- Add a duplicate guard: today variant de-duplication compares full prompt text, so 27 numeric re-skins of one sentence all survive. New rule: reject variants whose normalized prompt (numbers stripped) already exists in the same topic beyond a small quota, and cap variants per template.
 - Tag every template with `track: "AB" | "BC" | "both"` so BC-only topics (parametric/polar/vector, series, logistic growth, improper integrals, Euler's method) never appear for AB students.
-- Tag every template's `calculator` flag deliberately (currently mostly default `false`) — calculator-required forms (numeric integration, root-finding, decimal evaluation, rate accumulation in context) marked `true`.
-- Once you upload the additional practice tests, a second pass broadens coverage further against them (originals only, no reproduced text).
+- Tag every template's `calculator` flag deliberately (currently mostly default `false`) — numeric integration, root-finding, decimal evaluation, and contextual rate accumulation marked `true`, calibrated against how the practice tests split their sections.
+
 
 ## 2. Never show an answered question again
 
