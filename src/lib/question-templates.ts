@@ -761,7 +761,7 @@ export const BASE_TEMPLATES: QuestionTemplate[] = [
     build: (r) => {
       const c = ri(r, 1, 5);
       const b = ri(r, 1, 3);
-      const n = ri(r, 1, 2);
+      const n = ri(r, 2, 3);
       const val = ((b * b + c) ** (n + 1) - c ** (n + 1)) / (2 * (n + 1));
       return {
         prompt: `Evaluate $\\displaystyle\\int_{0}^{${b}} x\\left(x^{2} ${term(c, "")}\\right)^{${n}} dx$.`,
