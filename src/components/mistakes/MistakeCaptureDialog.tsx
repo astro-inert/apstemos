@@ -109,24 +109,12 @@ export function MistakeCaptureDialog({ questionPrompt, topic, trigger, onSaved }
                 className="mt-1 w-full rounded-lg border border-border bg-card px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
               />
             </label>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 gap-3">
               <label className="block">
                 <span className="text-[10px] uppercase tracking-wider text-muted-foreground">Category</span>
                 <input
                   value={draft.category}
                   onChange={(e) => setDraft({ ...draft, category: e.target.value })}
-                  className="mt-1 w-full rounded-lg border border-border bg-card px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
-                />
-              </label>
-              <label className="block">
-                <span className="text-[10px] uppercase tracking-wider text-muted-foreground">Avg points lost</span>
-                <input
-                  type="number"
-                  step="0.5"
-                  min="0"
-                  max="9"
-                  value={draft.est_point_loss}
-                  onChange={(e) => setDraft({ ...draft, est_point_loss: Number(e.target.value) })}
                   className="mt-1 w-full rounded-lg border border-border bg-card px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
                 />
               </label>

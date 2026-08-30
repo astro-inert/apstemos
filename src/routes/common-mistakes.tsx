@@ -30,7 +30,8 @@ const mistakesQuery = queryOptions({
     const { data, error } = await supabase
       .from("common_mistakes")
       .select("*")
-      .order("est_point_loss", { ascending: false });
+      .order("category", { ascending: true })
+      .order("title", { ascending: true });
     if (error) throw error;
     return data ?? [];
   },
@@ -44,7 +45,6 @@ type MistakeRow = {
   example: string | null;
   ap_consequence?: string | null;
   how_to_avoid: string;
-  est_point_loss: number | string;
   personal?: boolean;
 };
 
@@ -145,12 +145,6 @@ function CommonMistakes() {
                     )}
                   </div>
                 </div>
-              </div>
-              <div className="shrink-0 text-right">
-                <div className="num text-[14px] font-semibold text-destructive">
-                  −{Number(m.est_point_loss).toFixed(1)}
-                </div>
-                <div className="num text-[10px] text-subtle">avg pts</div>
               </div>
             </div>
 
