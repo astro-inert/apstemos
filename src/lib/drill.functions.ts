@@ -30,13 +30,20 @@ export const getDrillSet = createServerFn({ method: "POST" })
       })
       .parse(input ?? {}),
   )
-  .handler(async ({ data, context }): Promise<{ total: number; questions: DrillQuestion[] }> => {
-    const filter = { unit_slug: data.unit_slug, topic_slug: data.topic_slug };
-    const keys = bankKeys(filter);
-    const picked = shuffle(makeRng(`${context.userId}:${data.seed}:${data.unit_slug ?? ""}:${data.topic_slug ?? ""}`), keys).slice(
-      0,
-      data.limit,
-    );
+  .handler(async (
+    { data, context },
+  ): Promise<{ total: number; remaining: number; exhausted: boolean; track: "AB" | "BC"; questions: DrillQuestion[] }> => {
+    const { getActiveTrack, getSeenKeys } = await import("./track.server");
+    const track = await getActiveTrack(context.supabase, context.userId);
+    const seen = await getSeenKeys(context.supabase, context.userId);
+
+    const filter = { unit_slug: data.unit_slug, topic_slug: data.topic_slug, track };
+    // A question the student has already answered never comes back.
+    const unseen = bankKeys(filter).filter((k) => !seen.has(k));
+    const picked = shuffle(
+      makeRng(`${context.userId}:${data.seed}:${data.unit_slug ?? ""}:${data.topic_slug ?? ""}`),
+      unseen,
+    ).slice(0, data.limit);
     const questions = picked
       .map(buildQuestion)
       .filter((q): q is NonNullable<ReturnType<typeof buildQuestion>> => q !== null)
@@ -52,7 +59,13 @@ export const getDrillSet = createServerFn({ method: "POST" })
         choices: q.choices,
       }));
 
-    return { total: bankCount(filter), questions };
+    return {
+      total: bankCount(filter),
+      remaining: unseen.length,
+      exhausted: unseen.length === 0,
+      track,
+      questions,
+    };
   });
 
 export const submitDrillAttempt = createServerFn({ method: "POST" })

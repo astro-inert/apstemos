@@ -4,6 +4,7 @@ import { bankKeys, buildQuestion } from "./generated-bank";
 import { makeRng, shuffle } from "./question-templates";
 import { DIAGNOSTIC } from "./predictor-config";
 import { QN_UNITS } from "./question-navigator-data";
+import { getActiveTrack, getSeenKeys, type ExamTrack } from "./track.server";
 
 type DB = SupabaseClient<Database>;
 
@@ -21,83 +22,73 @@ export type DiagnosticItem = {
 type Built = NonNullable<ReturnType<typeof buildQuestion>>;
 
 /**
- * Blueprint sample: AP-weighted spread across units, target easy/medium/hard mix,
- * unseen items strongly preferred. Returns the item list plus how much of it is
- * genuinely unseen so the UI can say so honestly.
+ * Blueprint sample for the timed MCQ diagnostic.
+ *
+ * Rules enforced here:
+ *  - only questions the student has never seen are eligible, so the diagnostic
+ *    is never contaminated by items already answered in practice;
+ *  - AB students never receive BC-only material;
+ *  - the form is two thirds no-calculator and one third calculator, matching the
+ *    aggregate timing budget in `DIAGNOSTIC`;
+ *  - units are sampled in proportion to their AP exam weight.
  */
 export async function sampleBlueprint(
   supabase: DB,
   userId: string,
   seed: string,
-): Promise<{ items: Built[]; unseenShare: number }> {
+): Promise<{ items: Built[]; unseenShare: number; track: ExamTrack }> {
+  const track = await getActiveTrack(supabase, userId);
+  const seen = await getSeenKeys(supabase, userId);
+
   const { data: unitRows } = await supabase
     .from("units")
     .select("number, ap_weight_pct")
     .eq("subject_id", "ap-calc-bc");
   const weightByNumber = new Map((unitRows ?? []).map((u) => [u.number, Number(u.ap_weight_pct)]));
 
-  const { data: exposure } = await supabase
-    .from("question_exposure")
-    .select("question_key")
-    .eq("user_id", userId);
-  const seen = new Set((exposure ?? []).map((e) => e.question_key));
-
   const rng = makeRng(`${userId}:${seed}`);
-  const totalWeight = QN_UNITS.reduce((s, u) => s + (weightByNumber.get(u.number) ?? 10), 0);
 
-  // Per-unit target counts proportional to AP weight.
-  const targets = QN_UNITS.map((u) => ({
-    unit: u,
-    n: Math.max(1, Math.round((DIAGNOSTIC.itemCount * (weightByNumber.get(u.number) ?? 10)) / totalWeight)),
-  }));
+  const eligible = (opts: { unit_slug?: string; calculator: boolean }) =>
+    shuffle(
+      rng,
+      bankKeys({ unit_slug: opts.unit_slug, calculator: opts.calculator, track }).filter((k) => !seen.has(k)),
+    );
 
-  const diffTargets = {
-    easy: Math.round(DIAGNOSTIC.itemCount * DIAGNOSTIC.difficultyMix.easy),
-    medium: Math.round(DIAGNOSTIC.itemCount * DIAGNOSTIC.difficultyMix.medium),
-    hard: Math.round(DIAGNOSTIC.itemCount * DIAGNOSTIC.difficultyMix.hard),
-  };
-  const diffUsed = { easy: 0, medium: 0, hard: 0 };
+  const units = QN_UNITS.filter((u) => track === "BC" || (u.number !== 9 && u.number !== 10));
+  const totalWeight = units.reduce((s, u) => s + (weightByNumber.get(u.number) ?? 10), 0) || 1;
 
   const chosen: Built[] = [];
-  let unseenCount = 0;
+  const have = new Set<string>();
 
-  for (const t of targets) {
-    const pool = shuffle(rng, bankKeys({ unit_slug: t.unit.slug }));
-    const unseenFirst = [...pool.filter((k) => !seen.has(k)), ...pool.filter((k) => seen.has(k))];
+  const take = (keys: string[], max: number) => {
     let taken = 0;
-    for (const key of unseenFirst) {
-      if (taken >= t.n || chosen.length >= DIAGNOSTIC.itemCount) break;
-      const q = buildQuestion(key);
-      if (!q) continue;
-      // Respect the difficulty blueprint unless nothing else is left.
-      if (diffUsed[q.difficulty] >= diffTargets[q.difficulty] && chosen.length < DIAGNOSTIC.itemCount - 3) continue;
-      diffUsed[q.difficulty] += 1;
-      chosen.push(q);
-      if (!seen.has(key)) unseenCount += 1;
-      taken += 1;
-    }
-  }
-
-  // Top up if blueprint rounding left us short.
-  if (chosen.length < DIAGNOSTIC.itemCount) {
-    const have = new Set(chosen.map((q) => q.key));
-    const pool = shuffle(rng, bankKeys());
-    for (const key of [...pool.filter((k) => !seen.has(k)), ...pool.filter((k) => seen.has(k))]) {
-      if (chosen.length >= DIAGNOSTIC.itemCount) break;
+    for (const key of keys) {
+      if (taken >= max) break;
       if (have.has(key)) continue;
       const q = buildQuestion(key);
       if (!q) continue;
       chosen.push(q);
       have.add(key);
-      if (!seen.has(key)) unseenCount += 1;
+      taken += 1;
     }
+    return taken;
+  };
+
+  // Fill each calculator bucket unit by unit, proportional to AP weight.
+  for (const calculator of [false, true]) {
+    const bucketSize = calculator ? DIAGNOSTIC.calculatorCount : DIAGNOSTIC.noCalculatorCount;
+    let filled = 0;
+    for (const u of units) {
+      const target = Math.max(1, Math.round((bucketSize * (weightByNumber.get(u.number) ?? 10)) / totalWeight));
+      if (filled >= bucketSize) break;
+      filled += take(eligible({ unit_slug: u.slug, calculator }), Math.min(target, bucketSize - filled));
+    }
+    // Top up the bucket from any unit if rounding or thin pools left it short.
+    if (filled < bucketSize) take(eligible({ calculator }), bucketSize - filled);
   }
 
   const items = shuffle(rng, chosen).slice(0, DIAGNOSTIC.itemCount);
-  return {
-    items,
-    unseenShare: items.length ? Math.round((unseenCount / items.length) * 100) / 100 : 0,
-  };
+  return { items, unseenShare: 1, track };
 }
 
 export function toClientItem(q: Built): DiagnosticItem {
