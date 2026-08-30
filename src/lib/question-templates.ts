@@ -408,12 +408,12 @@ export const BASE_TEMPLATES: QuestionTemplate[] = [
       const a = ri(r, 2, 6);
       const n = ri(r, 2, 5);
       return {
-        prompt: `Find $\\dfrac{d}{dx}\\left[\\sin^{${n}}(${a}x)\\right]$.`,
-        correct: `${n * a}\\sin^{${n - 1}}(${a}x)\\cos(${a}x)`,
+        prompt: `Find $\\dfrac{d}{dx}\\left[${pow(`\\sin(${coef(a, "x")})`, n)}\\right]$.`,
+        correct: `${coef(n * a, `${pow(`\\sin(${coef(a, "x")})`, n - 1)}\\cos(${coef(a, "x")})`)}`,
         distractors: [
-          `${n}\\sin^{${n - 1}}(${a}x)\\cos(${a}x)`,
-          `${n * a}\\sin^{${n - 1}}(${a}x)`,
-          `${n * a}\\cos^{${n - 1}}(${a}x)`,
+          `${coef(n, `${pow(`\\sin(${coef(a, "x")})`, n - 1)}\\cos(${coef(a, "x")})`)}`,
+          `${coef(n * a, pow(`\\sin(${coef(a, "x")})`, n - 1))}`,
+          `${coef(n * a, pow(`\\cos(${coef(a, "x")})`, n - 1))}`,
         ],
         explanation: `Two chain layers: bring down ${n}, keep $\\sin^{${n - 1}}(${a}x)$, multiply by $\\cos(${a}x)$ and by the inner derivative ${a}.`,
       };
@@ -1098,11 +1098,11 @@ export const BASE_TEMPLATES: QuestionTemplate[] = [
     difficulty: "hard",
     mistakes: ["polar-area-formula"],
     build: (r) => {
-      const a = ri(r, 1, 6);
+      const a = ri(r, 2, 6);
       return {
-        prompt: `Find the area enclosed by one petal of $r=${a}\\sin(2\\theta)$.`,
+        prompt: `Find the area enclosed by one petal of $r=${coef(a, "\\sin(2\\theta)")}$.`,
         correct: `${frac(a * a, 8)}\\pi`,
-        distractors: [`${frac(a * a, 4)}\\pi`, `${frac(a * a, 2)}\\pi`, `${a * a}\\pi`],
+        distractors: [`${frac(a * a, 4)}\\pi`, `${frac(a * a, 2)}\\pi`, `${coef(a * a, "\\pi")}`],
         explanation: `$A=\\frac{1}{2}\\int_0^{\\pi/2} ${a * a}\\sin^{2}(2\\theta)d\\theta = \\frac{${a * a}\\pi}{8}$.`,
       };
     },
@@ -1151,7 +1151,7 @@ export const BASE_TEMPLATES: QuestionTemplate[] = [
     topic: "geometric-and-p-series",
     difficulty: "easy",
     build: (r) => {
-      const a = ri(r, 1, 9);
+      const a = ri(r, 2, 9);
       const p = ri(r, 1, 4);
       const q = p + ri(r, 1, 5);
       return {
