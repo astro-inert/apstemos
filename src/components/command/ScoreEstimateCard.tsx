@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { ArrowRight, Info, ShieldQuestion } from "lucide-react";
+import { ArrowRight, Info } from "lucide-react";
 import { getScoreEstimate } from "@/lib/prediction.functions";
 import { CONFIDENCE_GATES } from "@/lib/predictor-config";
 
@@ -96,9 +96,9 @@ export function ScoreEstimateCard() {
             </div>
 
             <p className="mt-4 text-[11px] leading-relaxed text-muted-foreground">
-              Model estimates, not calibrated probabilities. Your current multiple-choice performance is most
-              consistent with a {data.estimated_score}. <strong className="font-medium text-foreground">Free-response
-              performance is not included</strong> — AP STEM OS contains MCQs only.
+              Your current multiple-choice performance is most consistent with a {data.estimated_score}.{" "}
+              <strong className="font-medium text-foreground">Free-response performance is not included</strong> — AP
+              STEM OS contains MCQs only.
             </p>
 
             <div className="mt-4 border-t border-border pt-4 text-[12px] text-muted-foreground">
@@ -110,12 +110,6 @@ export function ScoreEstimateCard() {
                 <Info className="mt-0.5 h-3 w-3 shrink-0" />
                 <span>{data.next_step}</span>
               </div>
-              {data.uncalibrated && (
-                <div className="mt-1.5 flex items-start gap-1.5">
-                  <ShieldQuestion className="mt-0.5 h-3 w-3 shrink-0" />
-                  <span>Item difficulties are author-assigned, not yet empirically calibrated.</span>
-                </div>
-              )}
             </div>
           </>
         )}
