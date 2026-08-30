@@ -472,7 +472,7 @@ function InsightsPanel({ data }: { data: Awaited<ReturnType<typeof getPerformanc
         </li>
         <li className="flex items-start gap-2">
           <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 mt-1.5 shrink-0" />
-          <span>Predictions stabilize after ~50 attempts. You have {data.attempts_count}.</span>
+          <span>Score estimates unlock only after you submit the timed MCQ diagnostic. Practice attempts logged: {data.attempts_count}.</span>
         </li>
       </ul>
     </div>
