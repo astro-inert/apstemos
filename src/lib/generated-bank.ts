@@ -116,6 +116,26 @@ function asMath(text: string): string {
 }
 
 
+/**
+ * Keeps the correct answer from standing out by shape. If the answer is a
+ * fraction but every distractor is a bare integer, the answer is visually
+ * obvious, so we mint plausible same-shape fractions (reciprocal, negation,
+ * off-by-one denominator) before falling back to generic options.
+ */
+function shapeMatchedDistractors(correct: string, distractors: string[]): string[] {
+  const isFrac = (t: string) => /\\d?frac\{/.test(t.replace("\\dfrac", "\\frac"));
+  if (!isFrac(correct) || distractors.some(isFrac)) return [];
+  const m = /^(-?)\\d?frac\{(\d+)\}\{(\d+)\}$/.exec(correct.replace("\\dfrac", "\\frac"));
+  if (!m) return [];
+  const neg = m[1] === "-";
+  const n = Number(m[2]);
+  const d = Number(m[3]);
+  const f = (a: number, b: number, negative: boolean) =>
+    b === 0 || a === 0 ? null : `${negative ? "-" : ""}\\frac{${a}}{${b}}`;
+  return [f(d, n, neg), f(n, d, !neg), f(n + 1, d, neg), f(n, d + 1, neg)]
+    .filter((x): x is string => Boolean(x) && x !== correct);
+}
+
 const FALLBACK_DISTRACTORS = ["0", "1", "-1", "\\text{None of these}", "2", "\\text{The limit does not exist.}"];
 
 /** Deterministic UUID derived from a question key, so attempts stay stable across sessions. */
@@ -158,7 +178,8 @@ export function buildQuestion(key: string): GeneratedQuestion | null {
 
   const seen = new Set([built.correct]);
   const options: string[] = [built.correct];
-  for (const d of [...built.distractors, ...FALLBACK_DISTRACTORS]) {
+  const extras = shapeMatchedDistractors(built.correct, built.distractors);
+  for (const d of [...built.distractors, ...extras, ...FALLBACK_DISTRACTORS]) {
     if (options.length >= 4) break;
     if (seen.has(d)) continue;
     seen.add(d);
