@@ -1605,24 +1605,29 @@ export const TEMPLATES: QuestionTemplate[] = [
 /* Output hygiene                                                      */
 /* ------------------------------------------------------------------ */
 
-const ALLOW_STRIP_MACRO = /^\\(sin|cos|tan|sec|csc|cot|ln|log|sqrt|pi|theta|left|e)\b/;
-
 /**
- * Removes mathematically redundant `1`s that generators can emit —
- * `1x`, `1\sin x`, `x^{1}`, `1(x+2)` — without touching real numbers
- * such as `10`, `21x`, or `\frac{1}{2}`.
+ * Whitespace-only hygiene. Redundant coefficients and exponents are handled at
+ * construction time by `term`, `poly`, `coef` and `pow` — never by rewriting
+ * finished LaTeX, which used to delete mathematically necessary 1s
+ * (e.g. `\\int_1^2`, `f(1)`, `x = 1`).
  */
 export function tidyTex(input: string): string {
-  let s = input;
-  s = s.replace(/\^\{1\}/g, "");
-  s = s.replace(/(^|[^\d.\w\\])1(?=[a-zA-Z(\\])/g, (m, pre: string, idx: number) => {
-    const rest = s.slice(idx + m.length);
-    if (rest.startsWith("\\") && !ALLOW_STRIP_MACRO.test(rest)) return m;
-    return pre;
-  });
-  s = s.replace(/(^|[^\d.\w\\])1\\cdot\s*/g, "$1");
-  s = s.replace(/\\cdot\s*1(?![\d.])/g, "");
-  s = s.replace(/ {2,}/g, " ");
-  return s;
+  return input.replace(/[ \t]{2,}/g, " ").replace(/\s+([.,;])/g, "$1").trim();
+}
+
+/** Coefficient prefix: 1 disappears, -1 becomes a bare minus, 0 kills the term. */
+export function coef(c: number, body: string): string {
+  if (c === 0) return "0";
+  if (!body) return `${c}`;
+  if (c === 1) return body;
+  if (c === -1) return `-${body}`;
+  return `${c}${body}`;
+}
+
+/** Power with exponent 1 rendered without the exponent. */
+export function pow(base: string, e: number): string {
+  if (e === 0) return "1";
+  if (e === 1) return base;
+  return `${base}^{${e}}`;
 }
 
