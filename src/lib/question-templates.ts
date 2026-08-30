@@ -1193,8 +1193,9 @@ export const BASE_TEMPLATES: QuestionTemplate[] = [
     difficulty: "easy",
     mistakes: ["series-test-justify"],
     build: (r) => {
-      const num = ri(r, 1, 5);
-      const den = ri(r, 1, 4);
+      const den = ri(r, 2, 4);
+      let num = ri(r, 1, 7);
+      if (num % den === 0) num += 1; // keep p away from the harmonic exponent 1
       const p = num / den;
       const conv = p > 1;
       return {
