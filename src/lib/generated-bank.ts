@@ -178,8 +178,13 @@ export function buildQuestion(key: string): GeneratedQuestion | null {
 
   const seen = new Set([built.correct]);
   const options: string[] = [built.correct];
+  // Shape-matched options come first when the answer would otherwise be the
+  // only fraction on the list; two of the original distractors still survive.
   const extras = shapeMatchedDistractors(built.correct, built.distractors);
-  for (const d of [...built.distractors, ...extras, ...FALLBACK_DISTRACTORS]) {
+  const pool = extras.length
+    ? [extras[0]!, built.distractors[0] ?? "", extras[1] ?? "", ...built.distractors.slice(1), ...extras.slice(2)]
+    : built.distractors;
+  for (const d of [...pool.filter(Boolean), ...FALLBACK_DISTRACTORS]) {
     if (options.length >= 4) break;
     if (seen.has(d)) continue;
     seen.add(d);
