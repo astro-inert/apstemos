@@ -70,8 +70,8 @@ export function makeRng(seed: string): RNG {
   };
 }
 
-const ri = (r: RNG, a: number, b: number) => a + Math.floor(r() * (b - a + 1));
-const pick = <T,>(r: RNG, xs: readonly T[]): T => xs[Math.floor(r() * xs.length) % xs.length];
+export const ri = (r: RNG, a: number, b: number) => a + Math.floor(r() * (b - a + 1));
+export const pick = <T,>(r: RNG, xs: readonly T[]): T => xs[Math.floor(r() * xs.length) % xs.length];
 
 export function shuffle<T>(r: RNG, xs: T[]): T[] {
   const out = xs.slice();
@@ -88,7 +88,7 @@ export function shuffle<T>(r: RNG, xs: T[]): T[] {
 
 const gcd = (a: number, b: number): number => (b ? gcd(b, Math.abs(a % b)) : Math.abs(a));
 
-function frac(n: number, d: number): string {
+export function frac(n: number, d: number): string {
   if (d < 0) {
     n = -n;
     d = -d;
@@ -100,13 +100,13 @@ function frac(n: number, d: number): string {
   return `${n < 0 ? "-" : ""}\\frac{${Math.abs(n)}}{${d}}`;
 }
 
-function dec(x: number, p = 3): string {
+export function dec(x: number, p = 3): string {
   const v = Math.round(x * 10 ** p) / 10 ** p;
   return `${v}`;
 }
 
 /** signed term like " + 3x" / " - x^2" */
-function term(coef: number, body: string): string {
+export function term(coef: number, body: string): string {
   if (coef === 0) return "";
   const sign = coef < 0 ? " - " : " + ";
   const a = Math.abs(coef);
@@ -114,13 +114,13 @@ function term(coef: number, body: string): string {
   return `${sign}${c}${body}`;
 }
 
-function poly(parts: Array<[number, string]>): string {
+export function poly(parts: Array<[number, string]>): string {
   let s = parts.map(([c, b]) => term(c, b)).join("");
   s = s.replace(/^ \+ /, "").replace(/^ - /, "-");
   return s || "0";
 }
 
-const CONTEXTS = [
+export const CONTEXTS = [
   { thing: "water", unit: "liters", rateUnit: "liters per minute", time: "minutes", vessel: "a reservoir" },
   { thing: "sand", unit: "cubic feet", rateUnit: "cubic feet per hour", time: "hours", vessel: "a hopper" },
   { thing: "fuel", unit: "gallons", rateUnit: "gallons per minute", time: "minutes", vessel: "a tank" },
@@ -128,7 +128,7 @@ const CONTEXTS = [
   { thing: "coolant", unit: "liters", rateUnit: "liters per second", time: "seconds", vessel: "a chamber" },
 ] as const;
 
-const TRIPLES = [
+export const TRIPLES = [
   [3, 4, 5],
   [6, 8, 10],
   [5, 12, 13],
@@ -153,7 +153,7 @@ const U8 = "unit-8-applications-of-integration";
 const U9 = "unit-9-parametric-polar-vector";
 const U10 = "unit-10-infinite-sequences-and-series";
 
-export const TEMPLATES: QuestionTemplate[] = [
+export const BASE_TEMPLATES: QuestionTemplate[] = [
   /* ---------------- Unit 1 ---------------- */
   {
     id: "u1-removable",
@@ -1631,3 +1631,13 @@ export function pow(base: string, e: number): string {
   return `${base}^{${e}}`;
 }
 
+
+/* ------------------------------------------------------------------ */
+/* Full template registry                                             */
+/* ------------------------------------------------------------------ */
+
+import { EXTRA_TEMPLATES } from "./question-templates-extra";
+
+/** Every template in the bank: the original families plus the expanded
+ *  CED-coverage families (second and third asked-forms per topic). */
+export const TEMPLATES: QuestionTemplate[] = [...BASE_TEMPLATES, ...EXTRA_TEMPLATES];
