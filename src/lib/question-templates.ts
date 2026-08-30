@@ -27,11 +27,17 @@ export type BuiltQuestion = {
   figure?: Figure;
 };
 
+/** AB-only, BC-only, or shared by both tracks. */
+export type Track = "AB" | "BC" | "both";
+
 export type QuestionTemplate = {
   id: string;
   unit: string;
   topic: string;
   difficulty: Difficulty;
+  /** Which exam this question belongs to. Defaults are derived per unit/topic
+   *  in `generated-bank.ts` when a template does not declare one. */
+  track?: Track;
   calculator?: boolean;
   mistakes?: string[];
   build: (r: RNG) => BuiltQuestion;
