@@ -55,10 +55,11 @@ function Page() {
       eyebrow="108 points"
       title={
         <>
-          Where the <span className="text-primary">points</span> live.
+          Where the points <span className="text-primary">live</span>.
         </>
       }
-      description="The AP Calculus exam is scored out of 108 raw points. Here's how every one of them is earned, and the cutoffs for each AP score."
+      description="The AP Calculus exam is scored out of 108 raw points, and these are the cutoffs for each AP score."
+
     >
       <div className="grid gap-4 lg:gap-6">
         {sections.map((s, i) => (
