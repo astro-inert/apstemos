@@ -19,6 +19,7 @@ import {
   type RNG,
   type TableFigure,
 } from "../question-templates";
+import { fitWindow, sampleCurve } from "../figures";
 
 const U5 = "unit-5-analytical-applications-of-differentiation";
 const U6 = "unit-6-integration-and-accumulation-of-change";
@@ -586,6 +587,10 @@ export const UNIT_05_06_TEMPLATES: QuestionTemplate[] = [
     build: (r: RNG) => {
       const c = ri(r, -2, 2);
       const correct = `\\text{Graph I is $f$, Graph II is $f'$, and Graph III is $f''$.}`;
+      const graphI = sampleCurve((x) => (x - c) * (x - c), c - 3, c + 3, 40);
+      const graphII = sampleCurve((x) => 2 * (x - c), c - 3, c + 3, 20);
+      const graphIII = sampleCurve(() => 2, c - 3, c + 3, 20);
+      const window = fitWindow([...graphI, ...graphII, ...graphIII], 1);
       return {
         prompt: `Three graphs are described: Graph I is a curve with a single local minimum at $x=${c}$; Graph II is a line that is negative for $x<${c}$, zero at $x=${c}$, and positive for $x>${c}$; Graph III is a constant positive horizontal line. If these represent $f$, $f'$, and $f''$ in some order, which assignment is consistent?`,
         correct,
@@ -595,6 +600,16 @@ export const UNIT_05_06_TEMPLATES: QuestionTemplate[] = [
           `\\text{Graph I is $f$, Graph II is $f''$, and Graph III is $f'$.}`,
         ],
         explanation: `Graph I's minimum at $x=${c}$ matches Graph II being zero (and changing sign) there, since $f'=0$ at an extremum of $f$; Graph II's constant positive slope matches Graph III being its (constant) derivative.`,
+        figure: {
+          kind: "graph",
+          curves: [
+            { label: "Graph I", points: graphI, smooth: true, tone: 0 },
+            { label: "Graph II", points: graphII, smooth: false, tone: 1 },
+            { label: "Graph III", points: graphIII, smooth: false, dashed: true, tone: 0 },
+          ],
+          window,
+          caption: "Graphs I, II, and III",
+        },
       };
     },
   },
@@ -606,6 +621,9 @@ export const UNIT_05_06_TEMPLATES: QuestionTemplate[] = [
     manifestation: "curve-sketching:match-graphs",
     build: (r: RNG) => {
       const correct = `\\text{Curve B, since it is the parabola that is zero exactly where Curve A has horizontal tangents.}`;
+      const curveA = sampleCurve((x) => x ** 3 - 3 * x, -2, 2, 40);
+      const curveB = sampleCurve((x) => x * x - 1, -2, 2, 40);
+      const window = fitWindow([...curveA, ...curveB], 1);
       return {
         prompt: `Curve A is the graph of a cubic $f$ with local extrema at $x=-1$ and $x=1$. Curve B is an upward parabola with zeros at $x=-1$ and $x=1$. Which curve could represent $f'$?`,
         correct,
@@ -615,6 +633,15 @@ export const UNIT_05_06_TEMPLATES: QuestionTemplate[] = [
           `\\text{Curve B, since it must have the same sign as $f$ everywhere.}`,
         ],
         explanation: `The derivative of a cubic is a quadratic, and it must vanish exactly at the cubic's critical numbers, $x=\\pm1$. Curve B matches both facts, so it is consistent with being $f'$.`,
+        figure: {
+          kind: "graph",
+          curves: [
+            { label: "Curve A", points: curveA, smooth: true, tone: 0 },
+            { label: "Curve B", points: curveB, smooth: true, tone: 1 },
+          ],
+          window,
+          caption: "Curve A (cubic) and Curve B (parabola)",
+        },
       };
     },
   },
@@ -627,6 +654,10 @@ export const UNIT_05_06_TEMPLATES: QuestionTemplate[] = [
     build: (r: RNG) => {
       const c = ri(r, -1, 3);
       const correct = `\\text{The graph with a single zero-crossing at $x=${c}$ and no sign changes elsewhere is $f''$.}`;
+      const graphOneCrossing = sampleCurve((x) => x - c, c - 3, c + 3, 20);
+      const graphAlwaysPositive = sampleCurve(() => 2, c - 3, c + 3, 20);
+      const graphTwoCrossings = sampleCurve((x) => (x - c) * (x - c) - 1, c - 3, c + 3, 40);
+      const window = fitWindow([...graphOneCrossing, ...graphAlwaysPositive, ...graphTwoCrossings], 1);
       return {
         prompt: `Function $f$ has exactly one inflection point, at $x=${c}$, and is concave down for $x<${c}$, concave up for $x>${c}$. Among three candidate graphs — one that is negative then positive with one crossing at $x=${c}$, one that is always positive, and one that has two crossings — which must represent $f''$?`,
         correct,
@@ -636,6 +667,16 @@ export const UNIT_05_06_TEMPLATES: QuestionTemplate[] = [
           `\\text{None of them, since $f''$ cannot be determined from concavity alone.}`,
         ],
         explanation: `A single inflection point with concave-down-to-concave-up behavior means $f''$ changes sign exactly once, from negative to positive, at $x=${c}$ — matching the graph with one crossing there.`,
+        figure: {
+          kind: "graph",
+          curves: [
+            { label: "One crossing", points: graphOneCrossing, smooth: false, tone: 0 },
+            { label: "Always positive", points: graphAlwaysPositive, smooth: false, dashed: true, tone: 1 },
+            { label: "Two crossings", points: graphTwoCrossings, smooth: true, tone: 1 },
+          ],
+          window,
+          caption: "Three candidate graphs",
+        },
       };
     },
   },
