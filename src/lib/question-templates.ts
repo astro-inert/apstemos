@@ -1670,6 +1670,7 @@ import { GAP_TEMPLATES } from "./question-templates-gap";
 import { UNIT_01_02_TEMPLATES } from "./templates/unit-01-02";
 import { UNIT_03_04_TEMPLATES } from "./templates/unit-03-04";
 import { UNIT_05_06_TEMPLATES } from "./templates/unit-05-06";
+import { UNIT_07_08_TEMPLATES } from "./templates/unit-07-08";
 import { UNIT_09_10_TEMPLATES } from "./templates/unit-09-10";
 
 /** Every template in the bank: the original families, the expanded
@@ -1682,6 +1683,7 @@ export const TEMPLATES: QuestionTemplate[] = [
   ...UNIT_01_02_TEMPLATES,
   ...UNIT_03_04_TEMPLATES,
   ...UNIT_05_06_TEMPLATES,
+  ...UNIT_07_08_TEMPLATES,
   ...UNIT_09_10_TEMPLATES,
 ];
 
