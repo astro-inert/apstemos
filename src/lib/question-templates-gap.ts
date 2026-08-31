@@ -1670,3 +1670,460 @@ GAP_TEMPLATES.push(
     },
   },
 );
+
+/* ------------------------------------------------------------------ */
+/* Unit 4 — Contextual applications of differentiation                 */
+/* ------------------------------------------------------------------ */
+
+const U4 = "unit-4-contextual-applications-of-differentiation";
+
+GAP_TEMPLATES.push(
+  {
+    id: "g4-similar-triangles",
+    unit: U4,
+    topic: "related-rates",
+    difficulty: "hard",
+    manifestation: "related-rates:similar-triangles",
+    calculator: true,
+    build: (r: RNG) => {
+      const H = ri(r, 12, 20);
+      const h = ri(r, 5, 6);
+      const v = ri(r, 2, 5);
+      const rate = (v * H) / (H - h);
+      const correct = dec(rate, 3);
+      return {
+        prompt: `A street lamp sits atop a $${H}$-foot pole. A person $${h}$ feet tall walks away from the pole at $${v}$ feet per second. How fast is the tip of the person's shadow moving away from the pole, in feet per second?`,
+        correct,
+        distractors: opts(correct, [dec(v, 3), dec((v * h) / (H - h), 3), dec((v * H) / h, 3), dec(rate / 2, 3)]),
+        explanation: `Similar triangles give $\\frac{s}{${H}} = \\frac{s - x}{${h}}$, so $s = \\frac{${H}}{${H - h}}x$. Differentiating, $\\frac{ds}{dt} = \\frac{${H}}{${H - h}}(${v}) = ${correct}$.`,
+      };
+    },
+  },
+  {
+    id: "g4-trig-angle",
+    unit: U4,
+    topic: "related-rates",
+    difficulty: "hard",
+    manifestation: "related-rates:trig-angle",
+    calculator: true,
+    build: (r: RNG) => {
+      const d = ri(r, 3, 9);
+      const v = ri(r, 2, 6);
+      const rate = v / d;
+      const correct = dec(rate, 4);
+      return {
+        prompt: `A balloon rises vertically from a point $${d}$ meters from an observer, at $${v}$ meters per second. When the balloon is at the observer's eye level height above the launch point is $0$, how fast is the angle of elevation increasing, in radians per second?`,
+        correct,
+        distractors: opts(correct, [dec(v * d, 4), dec(d / v, 4), dec(rate / 2, 4), `0`]),
+        explanation: `With $\\tan\\theta = \\frac{y}{${d}}$, differentiating gives $\\sec^{2}\\theta\\,\\frac{d\\theta}{dt} = \\frac{1}{${d}}\\frac{dy}{dt}$. At $y=0$, $\\theta = 0$ and $\\sec^{2}\\theta = 1$, so $\\frac{d\\theta}{dt} = \\frac{${v}}{${d}} = ${correct}$.`,
+      };
+    },
+  },
+  {
+    id: "g4-related-setup",
+    unit: U4,
+    topic: "related-rates",
+    difficulty: "medium",
+    manifestation: "related-rates:setup",
+    build: (r: RNG) => {
+      const rr = ri(r, 2, 9);
+      const correct = `\\dfrac{dV}{dt} = 4\\pi r^{2}\\dfrac{dr}{dt}`;
+      return {
+        prompt: `A spherical balloon of radius $r$ has volume $V = \\dfrac{4}{3}\\pi r^{3}$. When the radius is $${rr}$ centimeters and growing, which equation correctly relates the rates?`,
+        correct,
+        distractors: [
+          `\\dfrac{dV}{dt} = 4\\pi r^{2}`,
+          `\\dfrac{dV}{dt} = \\dfrac{4}{3}\\pi r^{3}\\dfrac{dr}{dt}`,
+          `\\dfrac{dV}{dr} = 4\\pi r^{2}\\dfrac{dr}{dt}`,
+        ],
+        explanation: `Differentiating $V=\\frac{4}{3}\\pi r^{3}$ with respect to time gives $\\frac{dV}{dt} = 4\\pi r^{2}\\frac{dr}{dt}$; the chain-rule factor $\\frac{dr}{dt}$ is required.`,
+      };
+    },
+  },
+  {
+    id: "g4-sign-interpretation",
+    unit: U4,
+    topic: "related-rates",
+    difficulty: "medium",
+    manifestation: "related-rates:sign-interpretation",
+    build: (r: RNG) => {
+      const v = ri(r, 2, 9);
+      const correct = `\\text{The area is shrinking at } ${v} \\text{ square centimeters per second.}`;
+      return {
+        prompt: `A square metal plate cools, and its area $A$ satisfies $\\dfrac{dA}{dt} = -${v}$ square centimeters per second. What does this mean?`,
+        correct,
+        distractors: [
+          `\\text{The area is growing at } ${v} \\text{ square centimeters per second.}`,
+          `\\text{The side length is shrinking at } ${v} \\text{ centimeters per second.}`,
+          `\\text{The area is } -${v} \\text{ square centimeters.}`,
+        ],
+        explanation: `A negative rate of change of area means the area is decreasing; the rate describes area, not side length, and is not itself an area.`,
+      };
+    },
+  },
+  {
+    id: "g4-linearization-over-under",
+    unit: U4,
+    topic: "linearization",
+    difficulty: "hard",
+    manifestation: "linearization:over-under",
+    build: (r: RNG) => {
+      const c = ri(r, 2, 9);
+      const correct = `\\text{an overestimate, because the graph is concave down}`;
+      return {
+        prompt: `The tangent line to $f(x)=\\sqrt{x}$ at $x=${c * c}$ is used to approximate $\\sqrt{${c * c} + 1}$. Is the approximation an overestimate or an underestimate, and why?`,
+        correct,
+        distractors: [
+          `\\text{an underestimate, because the graph is concave up}`,
+          `\\text{an overestimate, because the graph is increasing}`,
+          `\\text{exact, because the tangent line touches the graph}`,
+        ],
+        explanation: `$f''(x) = -\\frac{1}{4}x^{-3/2} < 0$, so the graph is concave down and lies below its tangent line, making the tangent-line value too large.`,
+      };
+    },
+  },
+  {
+    id: "g4-linearization-context",
+    unit: U4,
+    topic: "linearization",
+    difficulty: "medium",
+    manifestation: "linearization:context",
+    build: (r: RNG) => {
+      const t = ri(r, 2, 8);
+      const v = ri(r, 20, 60);
+      const rate = ri(r, 2, 6);
+      const dt = pick(r, [0.2, 0.5] as const);
+      const est = v + rate * dt;
+      const correct = dec(est, 2);
+      return {
+        prompt: `A tank contains $${v}$ liters at time $t=${t}$ minutes, and the volume is increasing at $${rate}$ liters per minute at that moment. Use a linear approximation to estimate the volume at $t=${t + dt}$ minutes.`,
+        correct,
+        distractors: opts(correct, [dec(v + rate, 2), dec(v - rate * dt, 2), dec(v * dt, 2), dec(v + rate * dt * 2, 2)]),
+        explanation: `The tangent-line estimate is $V(${t}) + V'(${t})\\Delta t = ${v} + ${rate}(${dt}) = ${correct}$ liters.`,
+      };
+    },
+  },
+  {
+    id: "g4-linearization-table",
+    unit: U4,
+    topic: "linearization",
+    difficulty: "medium",
+    manifestation: "linearization:table",
+    build: (r: RNG) => {
+      const a = ri(r, 2, 6);
+      const fa = ri(r, 5, 15);
+      const fpa = ri(r, 2, 6);
+      const h = pick(r, [0.1, 0.3] as const);
+      const est = fa + fpa * h;
+      const correct = dec(est, 2);
+      const body = table(["$x$", "$f(x)$", "$f'(x)$"], [`$${a}$`, `$${fa}$`, `$${fpa}$`]);
+      return {
+        prompt: `The table gives values of a differentiable function $f$.\n\n${body}\n\nUse the tangent line at $x=${a}$ to approximate $f(${a + h})$.`,
+        correct,
+        distractors: opts(correct, [dec(fa + fpa, 2), dec(fa - fpa * h, 2), dec(fa * h, 2), dec(fpa, 2)]),
+        explanation: `$f(${a + h}) \\approx f(${a}) + f'(${a})(${h}) = ${fa} + ${fpa}(${h}) = ${correct}$.`,
+      };
+    },
+  },
+  {
+    id: "g4-linearization-reverse",
+    unit: U4,
+    topic: "linearization",
+    difficulty: "hard",
+    manifestation: "linearization:reverse",
+    build: (r: RNG) => {
+      const a = ri(r, 2, 8);
+      const b = ri(r, 2, 9);
+      const correct = `f(${a}) = ${b}\\text{ and }f'(${a}) = ${b}`;
+      return {
+        prompt: `The tangent line to a differentiable function $f$ at $x=${a}$ is $y = ${b}\\left(x - ${a}\\right) + ${b}$. What are $f(${a})$ and $f'(${a})$?`,
+        correct,
+        distractors: [
+          `f(${a}) = ${a}\\text{ and }f'(${a}) = ${b}`,
+          `f(${a}) = ${b}\\text{ and }f'(${a}) = ${a}`,
+          `f(${a}) = ${b + a}\\text{ and }f'(${a}) = ${b}`,
+        ],
+        explanation: `Point-slope form shows the line passes through $(${a}, ${b})$ with slope $${b}$, so $f(${a})=${b}$ and $f'(${a})=${b}$.`,
+      };
+    },
+  },
+  {
+    id: "g4-lhopital-inf",
+    unit: U4,
+    topic: "lhopitals-rule",
+    difficulty: "medium",
+    manifestation: "lhopitals-rule:infinity-over-infinity",
+    build: (r: RNG) => {
+      const p = ri(r, 2, 9);
+      const q = ri(r, 2, 9);
+      const correct = frac(p, q);
+      return {
+        prompt: `Evaluate $\\displaystyle\\lim_{x\\to\\infty}\\frac{${p}x + \\ln x}{${q}x}$.`,
+        correct,
+        distractors: opts(correct, [frac(q, p), `0`, `\\infty`, frac(p + 1, q)]),
+        explanation: `The form is $\\infty/\\infty$; applying the rule gives $\\lim\\frac{${p} + \\frac{1}{x}}{${q}} = ${correct}$.`,
+      };
+    },
+  },
+  {
+    id: "g4-lhopital-repeated",
+    unit: U4,
+    topic: "lhopitals-rule",
+    difficulty: "hard",
+    manifestation: "lhopitals-rule:repeated",
+    build: (r: RNG) => {
+      const a = ri(r, 2, 6);
+      const b = ri(r, 2, 8);
+      const correct = frac(a * a, 2 * b);
+      return {
+        prompt: `Evaluate $\\displaystyle\\lim_{x\\to 0}\\frac{e^{${a}x} - ${a}x - 1}{${b}x^{2}}$.`,
+        correct,
+        distractors: opts(correct, [frac(a, 2 * b), frac(a * a, b), `0`, frac(a, b)]),
+        explanation: `Both numerator and denominator vanish twice; applying the rule twice gives $\\frac{${a}^{2}e^{${a}x}}{2\\cdot ${b}}\\to ${correct}$.`,
+      };
+    },
+  },
+  {
+    id: "g4-lhopital-rewrite",
+    unit: U4,
+    topic: "lhopitals-rule",
+    difficulty: "hard",
+    manifestation: "lhopitals-rule:rewrite-first",
+    build: (r: RNG) => {
+      const a = ri(r, 2, 9);
+      const correct = `\\text{Rewrite as } \\dfrac{\\ln x}{1/x} \\text{ or } \\dfrac{x}{1/\\ln x} \\text{ to obtain a quotient.}`;
+      return {
+        prompt: `To evaluate $\\displaystyle\\lim_{x\\to 0^{+}} ${a}x\\ln x$, what must be done before the rule can be applied?`,
+        correct,
+        distractors: [
+          `\\text{Apply the rule directly to the product.}`,
+          `\\text{Differentiate } ${a}x \\text{ and } \\ln x \\text{ and multiply the results.}`,
+          `\\text{Substitute } x = 0 \\text{ into the expression.}`,
+        ],
+        explanation: `The rule applies only to quotients of the form $0/0$ or $\\infty/\\infty$, so the product must first be written as a quotient.`,
+      };
+    },
+  },
+  {
+    id: "g4-lhopital-applicability",
+    unit: U4,
+    topic: "lhopitals-rule",
+    difficulty: "medium",
+    manifestation: "lhopitals-rule:applicability",
+    build: (r: RNG) => {
+      const a = ri(r, 2, 9);
+      const b = ri(r, 2, 9);
+      const correct = `\\text{The rule does not apply; the limit is } \\dfrac{${a}}{${b}}\\text{ by substitution.}`;
+      return {
+        prompt: `A student applies L'Hôpital's rule to $\\displaystyle\\lim_{x\\to 0}\\frac{x + ${a}}{x + ${b}}$. Which statement is correct?`,
+        correct: `\\text{The rule does not apply; the limit is } ${frac(a, b)} \\text{ by substitution.}`,
+        distractors: [
+          `\\text{The rule applies and gives } 1.`,
+          `\\text{The rule applies and gives } ${frac(b, a)}.`,
+          `\\text{The limit does not exist.}`,
+        ],
+        explanation: `At $x=0$ the expression is $\\frac{${a}}{${b}}$, not an indeterminate form, so the rule is not applicable and direct substitution gives the limit.`,
+      };
+    },
+  },
+  {
+    id: "g4-lhopital-parameter",
+    unit: U4,
+    topic: "lhopitals-rule",
+    difficulty: "hard",
+    manifestation: "lhopitals-rule:parameter",
+    build: (r: RNG) => {
+      const L = ri(r, 2, 8);
+      const b = ri(r, 2, 6);
+      const k = L * b;
+      const correct = `${k}`;
+      return {
+        prompt: `For what value of $k$ does $\\displaystyle\\lim_{x\\to 0}\\frac{e^{kx} - 1}{${b}x} = ${L}$?`,
+        correct,
+        distractors: opts(correct, [`${L}`, `${b}`, frac(L, b), `${k + 1}`]),
+        explanation: `The rule gives $\\lim\\frac{ke^{kx}}{${b}} = \\frac{k}{${b}}$. Setting $\\frac{k}{${b}} = ${L}$ gives $k = ${k}$.`,
+      };
+    },
+  },
+  {
+    id: "g4-speed-increasing",
+    unit: U4,
+    topic: "rectilinear-motion",
+    difficulty: "hard",
+    manifestation: "rectilinear-motion:speed-increasing",
+    build: (r: RNG) => {
+      const correct = `\\text{when } v \\text{ and } a \\text{ have the same sign}`;
+      return {
+        prompt: `A particle moves along a line with velocity $v(t)$ and acceleration $a(t)$. The particle's speed is increasing exactly:`,
+        correct,
+        distractors: [
+          `\\text{when } a(t) > 0`,
+          `\\text{when } v(t) > 0`,
+          `\\text{when } v \\text{ and } a \\text{ have opposite signs}`,
+        ],
+        explanation: `Speed is $|v|$, and it grows exactly when velocity moves away from zero, which happens when velocity and acceleration share a sign.`,
+      };
+    },
+  },
+  {
+    id: "g4-graph-velocity",
+    unit: U4,
+    topic: "rectilinear-motion",
+    difficulty: "medium",
+    manifestation: "rectilinear-motion:graph-velocity",
+    build: (r: RNG) => {
+      const c = ri(r, 2, 4);
+      const pts: Array<[number, number]> = [
+        [0, -ri(r, 2, 4)],
+        [c, 0],
+        [c + 3, ri(r, 2, 5)],
+      ];
+      const correct = `\\text{The particle changes direction at } t = ${c}.`;
+      return {
+        prompt: `The graph of a particle's velocity $v$ consists of the line segments shown. Which statement is true?`,
+        figure: graph("y = v(t)", pts, { xMin: -1, xMax: c + 4, yMin: -5, yMax: 6 }),
+        correct,
+        distractors: [
+          `\\text{The particle is at rest for } 0 < t < ${c}.`,
+          `\\text{The particle changes direction at } t = 0.`,
+          `\\text{The particle's acceleration is negative throughout.}`,
+        ],
+        explanation: `Velocity crosses zero at $t=${c}$, changing from negative to positive, so the direction of motion reverses there. The graph's positive slope means acceleration is positive.`,
+      };
+    },
+  },
+  {
+    id: "g4-table-motion",
+    unit: U4,
+    topic: "rectilinear-motion",
+    difficulty: "medium",
+    manifestation: "rectilinear-motion:table-motion",
+    build: (r: RNG) => {
+      const xs = [0, 2, 4, 6];
+      const v0 = ri(r, 2, 5);
+      const v3 = v0 + ri(r, 4, 10);
+      const ys = [`${v0}`, `${v0 + 1}`, `${v3 - 1}`, `${v3}`];
+      const est = (v3 - (v3 - 1)) / 2;
+      const correct = dec(est, 3);
+      return {
+        prompt: `Values of a particle's velocity $v$, in meters per second, are given for time $t$ in seconds.\n\n${tablePair("v(t)", xs, ys)}\n\nUse the data on $[4,6]$ to estimate the acceleration at $t=5$, in meters per second squared.`,
+        correct,
+        distractors: opts(correct, [dec(v3 - (v3 - 1), 3), dec(-est, 3), dec(est * 4, 3), `0`]),
+        explanation: `Estimate with the difference quotient $\\frac{v(6) - v(4)}{6 - 4} = \\frac{${v3} - ${v3 - 1}}{2} = ${correct}$.`,
+      };
+    },
+  },
+  {
+    id: "g4-displacement-vs-distance",
+    unit: U4,
+    topic: "rectilinear-motion",
+    difficulty: "medium",
+    manifestation: "rectilinear-motion:displacement-vs-distance",
+    build: (r: RNG) => {
+      const d = ri(r, 3, 9);
+      const back = ri(r, 1, d - 1);
+      const correct = `\\text{displacement } ${d - back}\\text{ meters, distance } ${d + back}\\text{ meters}`;
+      return {
+        prompt: `A particle moves $${d}$ meters in the positive direction, then $${back}$ meters in the negative direction. What are its displacement and total distance traveled?`,
+        correct,
+        distractors: [
+          `\\text{displacement } ${d + back}\\text{ meters, distance } ${d - back}\\text{ meters}`,
+          `\\text{displacement } ${d}\\text{ meters, distance } ${d}\\text{ meters}`,
+          `\\text{displacement } ${d - back}\\text{ meters, distance } ${d - back}\\text{ meters}`,
+        ],
+        explanation: `Displacement is the net change in position, $${d} - ${back} = ${d - back}$. Total distance adds the magnitudes of both legs, $${d} + ${back} = ${d + back}$.`,
+      };
+    },
+  },
+  {
+    id: "g4-rate-units",
+    unit: U4,
+    topic: "rates-of-change-in-context",
+    difficulty: "easy",
+    manifestation: "rates-of-change-in-context:units",
+    build: (r: RNG) => {
+      const t = ri(r, 2, 9);
+      const correct = `\\text{degrees Celsius per hour}`;
+      return {
+        prompt: `Let $T(t)$ be the temperature, in degrees Celsius, of a liquid after $t$ hours. What are the units of $T'(${t})$?`,
+        correct,
+        distractors: [
+          `\\text{degrees Celsius}`,
+          `\\text{hours per degree Celsius}`,
+          `\\text{degrees Celsius per hour squared}`,
+        ],
+        explanation: `A derivative carries the output units divided by the input units: degrees Celsius per hour.`,
+      };
+    },
+  },
+  {
+    id: "g4-compare-rates",
+    unit: U4,
+    topic: "rates-of-change-in-context",
+    difficulty: "medium",
+    manifestation: "rates-of-change-in-context:compare-rates",
+    build: (r: RNG) => {
+      const xs = [0, 3, 6, 9];
+      const y0 = ri(r, 2, 5);
+      const y1 = y0 + ri(r, 2, 4);
+      const y2 = y1 + ri(r, 8, 14);
+      const y3 = y2 + ri(r, 1, 3);
+      const ys = [`${y0}`, `${y1}`, `${y2}`, `${y3}`];
+      const correct = `[3,6]`;
+      return {
+        prompt: `The table gives the volume $V$, in liters, of liquid in a tank at time $t$ hours.\n\n${tablePair("V(t)", xs, ys)}\n\nOver which interval is the average rate of change of $V$ greatest?`,
+        correct,
+        distractors: [`[0,3]`, `[6,9]`, `[0,9]`],
+        explanation: `The intervals all have width $3$, so the largest change wins: $${y2 - y1}$ liters on $[3,6]$ exceeds $${y1 - y0}$ and $${y3 - y2}$.`,
+      };
+    },
+  },
+  {
+    id: "g4-graph-rate",
+    unit: U4,
+    topic: "rates-of-change-in-context",
+    difficulty: "medium",
+    manifestation: "rates-of-change-in-context:graph-rate",
+    build: (r: RNG) => {
+      const c = ri(r, 2, 4);
+      const peak = ri(r, 5, 8);
+      const pts: Array<[number, number]> = [
+        [0, 1],
+        [c, peak],
+        [c + 4, 1],
+      ];
+      const correct = `\\text{The volume is increasing throughout, fastest at } t = ${c}\\text{ hours or earlier.}`;
+      return {
+        prompt: `The graph shows $R$, the rate at which water enters a tank, in liters per hour. Which statement about the tank's volume on $0 < t < ${c + 4}$ is true?`,
+        figure: graph("y = R(t)", pts, { xMin: -1, xMax: c + 5, yMin: 0, yMax: peak + 2 }),
+        correct,
+        distractors: [
+          `\\text{The volume decreases after } t = ${c}\\text{ hours.}`,
+          `\\text{The volume is greatest at } t = ${c}\\text{ hours.}`,
+          `\\text{The volume is constant after } t = ${c}\\text{ hours.}`,
+        ],
+        explanation: `$R$ stays positive, so volume always increases; after $t=${c}$ the rate falls but remains positive, so the volume grows more slowly rather than decreasing.`,
+      };
+    },
+  },
+  {
+    id: "g4-non-motion-rate",
+    unit: U4,
+    topic: "rates-of-change-in-context",
+    difficulty: "medium",
+    manifestation: "rates-of-change-in-context:non-motion",
+    build: (r: RNG) => {
+      const k = ri(r, 2, 6);
+      const c = ri(r, 10, 40);
+      const t = ri(r, 2, 5);
+      const v = 2 * k * t;
+      const correct = `${v}`;
+      return {
+        prompt: `A colony's mass, in grams, is $M(t)=${k}t^{2} + ${c}$ after $t$ days. How fast is the mass growing at $t=${t}$ days, in grams per day?`,
+        correct,
+        distractors: opts(correct, [`${k * t * t + c}`, `${k * t}`, `${2 * k}`, `${v + c}`]),
+        explanation: `$M'(t) = ${2 * k}t$, so $M'(${t}) = ${v}$ grams per day.`,
+      };
+    },
+  },
+);
