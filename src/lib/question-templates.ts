@@ -1707,6 +1707,7 @@ export function pow(base: string, e: number): string {
 
 import { EXTRA_TEMPLATES } from "./question-templates-extra";
 import { GAP_TEMPLATES } from "./question-templates-gap";
+import { GAP_FINAL_TEMPLATES } from "./templates/gap-final";
 import { UNIT_01_02_TEMPLATES } from "./templates/unit-01-02";
 import { UNIT_03_04_TEMPLATES } from "./templates/unit-03-04";
 import { UNIT_05_06_TEMPLATES } from "./templates/unit-05-06";
@@ -1725,6 +1726,7 @@ export const TEMPLATES: QuestionTemplate[] = [
   ...UNIT_05_06_TEMPLATES,
   ...UNIT_07_08_TEMPLATES,
   ...UNIT_09_10_TEMPLATES,
+  ...GAP_FINAL_TEMPLATES,
 ];
 
 
