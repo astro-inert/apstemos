@@ -4653,7 +4653,7 @@ GAP_TEMPLATES.push(
     track: "bc",
     manifestation: "nth-term-test:inconclusive",
     build: (r: RNG) => {
-      const p = pick(r, [1, 2] as const);
+      const p = pick(r, [2, 3] as const);
       const correct = `\\text{Terms tending to } 0 \\text{ does not guarantee that the series converges.}`;
       return {
         prompt: `The terms of $\\displaystyle\\sum_{n=1}^{\\infty} \\frac{1}{n^{${p}}}$ tend to $0$. Why does the nth-term test fail to settle convergence?`,
@@ -5096,7 +5096,7 @@ GAP_TEMPLATES.push(
     track: "bc",
     manifestation: "taylor-and-maclaurin-series:center-shift",
     build: (r: RNG) => {
-      const c = ri(r, 1, 5);
+      const c = ri(r, 2, 5);
       const correct = `\\displaystyle\\sum_{n=0}^{\\infty} \\frac{e^{${c}}\\left(x - ${c}\\right)^{n}}{n!}`;
       return {
         prompt: `Write the Taylor series for $e^{x}$ centered at $x = ${c}$.`,
@@ -5137,7 +5137,7 @@ GAP_TEMPLATES.push(
     manifestation: "lagrange-error-bound:degree-needed",
     build: (r: RNG) => {
       void r;
-      const correct = `\\text{Increase } n \\text{ until } \\dfrac{M\\left|x - a\\right|^{n+1}}{(n+1)!} \\text{ is below the tolerance.}`;
+      const correct = `\\text{Increase } n \\text{ until the bound on the remainder falls below the tolerance.}`;
       return {
         prompt: `How is the Lagrange error bound used to decide what degree Taylor polynomial achieves a given accuracy?`,
         correct,
