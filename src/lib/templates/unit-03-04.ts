@@ -32,6 +32,13 @@ const signedLinear = (m: number, b: number): string => {
   return `${head}${term(b, "")}`;
 };
 
+/** Renders x^n with the exponent omitted when n === 1 (and 1 when n === 0). */
+function pwx(base: string, n: number): string {
+  if (n === 0) return "";
+  if (n === 1) return base;
+  return `${base}^{${n}}`;
+}
+
 export const UNIT_03_04_TEMPLATES: QuestionTemplate[] = [
   /* ================================================================== */
   /* Unit 3: chain-rule:with-product                                     */
