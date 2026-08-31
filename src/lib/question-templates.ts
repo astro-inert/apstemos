@@ -27,6 +27,7 @@ export type {
 export { fitWindow, sampleCurve, samplePolar, sampleParametric } from "./figures";
 
 import type { Figure } from "./figures";
+import { fitWindow, samplePolar } from "./figures";
 
 
 export type BuiltQuestion = {
