@@ -563,14 +563,14 @@ export const UNIT_05_06_TEMPLATES: QuestionTemplate[] = [
     manifestation: "local-and-global-extrema:open-interval",
     build: (r: RNG) => {
       const c = ri(r, 1, 5);
-      const correct = `\\text{If $f$ has exactly one critical number $x=${c}$ on $(${c - 3},${c + 3})$ and $f'$ changes from negative to positive there, then $f(${c})$ is a global minimum on that interval.}`;
+      const correct = `\\text{If $f'$ changes from negative to positive only at $x=${c}$, then $f(${c})$ is the global minimum.}`;
       return {
         prompt: `Which statement about a differentiable function $f$ on the open interval $(${c - 3},${c + 3})$ must be true?`,
         correct,
         distractors: [
-          `\\text{Any critical number of $f$ on $(${c - 3},${c + 3})$ must be a global extremum.}`,
-          `\\text{If $f'(${c})=0$, then $f(${c})$ must be a global maximum.}`,
-          `\\text{A function with no critical numbers on $(${c - 3},${c + 3})$ must be constant.}`,
+          `\\text{Every critical number of $f$ on the open interval is a global extremum of $f$.}`,
+          `\\text{If $f'(${c})=0$ and $f''(${c})=0$, then $f(${c})$ is the global maximum.}`,
+          `\\text{If $f$ has no critical numbers on the open interval, then $f$ is constant there.}`,
         ],
         explanation: `On an open interval, a single critical number where $f'$ switches from negative to positive is a local minimum that is also the global minimum, since $f$ decreases into it and increases away from it with no other competing critical points.`,
       };
