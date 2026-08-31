@@ -2128,3 +2128,712 @@ GAP_TEMPLATES.push(
     },
   },
 );
+
+/* ------------------------------------------------------------------ */
+/* Unit 5 — Analytical applications of differentiation                 */
+/* ------------------------------------------------------------------ */
+
+const U5 = "unit-5-analytical-applications-of-differentiation";
+
+GAP_TEMPLATES.push(
+  {
+    id: "g5-mvt-hypotheses",
+    unit: U5,
+    topic: "mean-value-theorem",
+    difficulty: "hard",
+    manifestation: "mean-value-theorem:hypotheses",
+    build: (r: RNG) => {
+      const a = ri(r, 1, 4);
+      const b = a + ri(r, 2, 5);
+      const correct = `\\text{No, because } f \\text{ is not differentiable at } x = ${a + 1}.`;
+      return {
+        prompt: `Does the Mean Value Theorem apply to $f(x)=\\left|x - ${a + 1}\\right|$ on $[${a}, ${b}]$?`,
+        correct,
+        distractors: [
+          `\\text{Yes, because } f \\text{ is continuous on } [${a},${b}].`,
+          `\\text{No, because } f \\text{ is not continuous on } [${a},${b}].`,
+          `\\text{Yes, and } c = ${a + 1}.`,
+        ],
+        explanation: `The theorem needs differentiability on the open interval. The absolute value has a corner at $x=${a + 1}$, which lies inside $(${a},${b})$, so a hypothesis fails even though $f$ is continuous.`,
+      };
+    },
+  },
+  {
+    id: "g5-mvt-table",
+    unit: U5,
+    topic: "mean-value-theorem",
+    difficulty: "medium",
+    manifestation: "mean-value-theorem:table-conclusion",
+    build: (r: RNG) => {
+      const xs = [0, 4];
+      const f0 = ri(r, 2, 6);
+      const slope = ri(r, 2, 5);
+      const f4 = f0 + 4 * slope;
+      const correct = `f'(c) = ${slope} \\text{ for some } c \\text{ in } (0,4)`;
+      const body = table(["$x$", "$0$", "$4$"], ["$f(x)$", `$${f0}$`, `$${f4}$`]);
+      return {
+        prompt: `A differentiable function $f$ has the values shown.\n\n${body}\n\nWhich conclusion is guaranteed?`,
+        correct,
+        distractors: [
+          `f'(x) = ${slope} \\text{ for every } x \\text{ in } (0,4)`,
+          `f'(c) = ${f4 - f0} \\text{ for some } c \\text{ in } (0,4)`,
+          `f \\text{ is increasing on all of } (0,4)`,
+        ],
+        explanation: `The Mean Value Theorem guarantees one point where the derivative equals the average rate $\\frac{${f4} - ${f0}}{4} = ${slope}$. It says nothing about every point, and ${xs.length === 2 ? "the total change" : ""} $${f4 - f0}$ is not a rate.`,
+      };
+    },
+  },
+  {
+    id: "g5-mvt-graph",
+    unit: U5,
+    topic: "mean-value-theorem",
+    difficulty: "medium",
+    manifestation: "mean-value-theorem:graph",
+    build: (r: RNG) => {
+      const s = ri(r, 2, 5);
+      const pts: Array<[number, number]> = [
+        [0, 1],
+        [2, 1 + s],
+        [4, 1 + 4 * s],
+      ];
+      const avg = (pts[2][1] - pts[0][1]) / 4;
+      const correct = dec(avg, 3);
+      return {
+        prompt: `The graph of the differentiable function $f$ passes through the plotted points shown. What slope does the Mean Value Theorem guarantee $f'$ attains somewhere on $(0,4)$?`,
+        figure: graph("y = f(x)", pts, { xMin: -1, xMax: 5, yMin: 0, yMax: pts[2][1] + 2 }),
+        correct,
+        distractors: opts(correct, [dec(s, 3), dec(4 * avg, 3), dec(avg / 2, 3), `0`]),
+        explanation: `The average rate of change is $\\frac{${pts[2][1]} - ${pts[0][1]}}{4 - 0} = ${correct}$, and the theorem guarantees $f'$ equals that value somewhere inside the interval.`,
+      };
+    },
+  },
+  {
+    id: "g5-mvt-context",
+    unit: U5,
+    topic: "mean-value-theorem",
+    difficulty: "medium",
+    manifestation: "mean-value-theorem:context",
+    build: (r: RNG) => {
+      const d = ri(r, 40, 90);
+      const t = ri(r, 1, 2);
+      const avg = d / t;
+      const correct = `\\text{At some moment the car's speed was exactly } ${dec(avg, 2)} \\text{ miles per hour.}`;
+      return {
+        prompt: `A car travels $${d}$ miles in $${t}$ hour${t > 1 ? "s" : ""} along a straight road, and its position is a differentiable function of time. What does the Mean Value Theorem guarantee?`,
+        correct,
+        distractors: [
+          `\\text{The car's speed was } ${dec(avg, 2)} \\text{ miles per hour for the whole trip.}`,
+          `\\text{The car's speed never exceeded } ${dec(avg, 2)} \\text{ miles per hour.}`,
+          `\\text{The car's speed was } ${dec(avg, 2)} \\text{ miles per hour at both the start and the end.}`,
+        ],
+        explanation: `The average speed is $${dec(avg, 2)}$ miles per hour, and the theorem guarantees the instantaneous speed equals that average at least once.`,
+      };
+    },
+  },
+  {
+    id: "g5-mvt-invalid",
+    unit: U5,
+    topic: "mean-value-theorem",
+    difficulty: "medium",
+    manifestation: "mean-value-theorem:invalid-application",
+    build: (r: RNG) => {
+      const a = ri(r, 1, 5);
+      const correct = `\\text{The theorem gives existence of one such } c, \\text{ not uniqueness.}`;
+      return {
+        prompt: `A student concludes from the Mean Value Theorem that there is exactly one $c$ in $(0,${a + 3})$ with $f'(c)$ equal to the average rate of change. Why is this reasoning wrong?`,
+        correct,
+        distractors: [
+          `\\text{The theorem requires } f \\text{ to be increasing.}`,
+          `\\text{The theorem applies only on closed intervals.}`,
+          `\\text{The theorem concerns } f, \\text{ not } f'.`,
+        ],
+        explanation: `The conclusion is an existence statement: at least one such $c$ exists, and there may be many.`,
+      };
+    },
+  },
+  {
+    id: "g5-critical-undefined",
+    unit: U5,
+    topic: "critical-points",
+    difficulty: "medium",
+    manifestation: "critical-points:undefined-derivative",
+    build: (r: RNG) => {
+      const a = ri(r, 1, 8);
+      const correct = `x = ${a}`;
+      return {
+        prompt: `Find every critical number of $f(x)=\\left(x - ${a}\\right)^{\\frac{2}{3}}$.`,
+        correct,
+        distractors: [
+          `x = ${-a}`,
+          `x = 0`,
+          `\\text{There are no critical numbers.}`,
+        ],
+        explanation: `$f'(x) = \\frac{2}{3}(x-${a})^{-1/3}$ is never zero but fails to exist at $x=${a}$, which is in the domain of $f$, so $x=${a}$ is a critical number.`,
+      };
+    },
+  },
+  {
+    id: "g5-critical-not-extremum",
+    unit: U5,
+    topic: "critical-points",
+    difficulty: "medium",
+    manifestation: "critical-points:not-extremum",
+    build: (r: RNG) => {
+      const a = ri(r, 1, 6);
+      const correct = `f\\text{ has a critical number at }x=${a}\\text{ but no extremum there.}`;
+      return {
+        prompt: `Let $f(x)=\\left(x - ${a}\\right)^{3}$. Which statement is true?`,
+        correct,
+        distractors: [
+          `f\\text{ has a local minimum at }x=${a}.`,
+          `f\\text{ has a local maximum at }x=${a}.`,
+          `f\\text{ has no critical number.}`,
+        ],
+        explanation: `$f'(x)=3(x-${a})^{2}$ is zero at $x=${a}$ but does not change sign there, so $f$ increases through the point with no extremum.`,
+      };
+    },
+  },
+  {
+    id: "g5-critical-graph",
+    unit: U5,
+    topic: "critical-points",
+    difficulty: "medium",
+    manifestation: "critical-points:graph",
+    build: (r: RNG) => {
+      const c1 = ri(r, 1, 2);
+      const c2 = c1 + ri(r, 2, 3);
+      const pts: Array<[number, number]> = [
+        [0, -2],
+        [c1, 0],
+        [(c1 + c2) / 2, 3],
+        [c2, 0],
+        [c2 + 2, -3],
+      ];
+      const correct = `x = ${c1}\\text{ and }x = ${c2}`;
+      return {
+        prompt: `The graph of $f'$ consists of the line segments shown. At which values of $x$ does $f$ have a critical number?`,
+        figure: graph("y = f'(x)", pts, { xMin: -1, xMax: c2 + 3, yMin: -4, yMax: 4 }),
+        correct,
+        distractors: [
+          `x = ${(c1 + c2) / 2}`,
+          `x = ${c1}\\text{ only}`,
+          `x = 0\\text{ and }x = ${c2 + 2}`,
+        ],
+        explanation: `Critical numbers occur where $f'=0$, which the graph shows at $x=${c1}$ and $x=${c2}$. The peak of $f'$ is where $f''=0$, not a critical number of $f$.`,
+      };
+    },
+  },
+  {
+    id: "g5-evt-hypotheses",
+    unit: U5,
+    topic: "critical-points",
+    difficulty: "medium",
+    manifestation: "critical-points:evt-hypotheses",
+    build: (r: RNG) => {
+      const a = ri(r, 0, 3);
+      const b = a + ri(r, 2, 6);
+      const correct = `f\\text{ continuous on the closed interval }[${a},${b}]`;
+      return {
+        prompt: `Which hypothesis guarantees that $f$ attains both an absolute maximum and an absolute minimum on $[${a},${b}]$?`,
+        correct,
+        distractors: [
+          `f\\text{ differentiable on the open interval }(${a},${b})`,
+          `f\\text{ continuous on the open interval }(${a},${b})`,
+          `f\\text{ increasing on }[${a},${b}]`,
+        ],
+        explanation: `The Extreme Value Theorem requires continuity on a closed, bounded interval; openness or differentiability alone is not enough.`,
+      };
+    },
+  },
+  {
+    id: "g5-fdt-intervals",
+    unit: U5,
+    topic: "first-derivative-test",
+    difficulty: "medium",
+    manifestation: "first-derivative-test:intervals",
+    build: (r: RNG) => {
+      const a = ri(r, 1, 4);
+      const b = a + ri(r, 2, 5);
+      const correct = `\\left(${a},${b}\\right)`;
+      return {
+        prompt: `A differentiable function satisfies $f'(x) = -\\left(x - ${a}\\right)\\left(x - ${b}\\right)$. On which interval is $f$ increasing?`,
+        correct,
+        distractors: [
+          `\\left(-\\infty,${a}\\right)`,
+          `\\left(${b},\\infty\\right)`,
+          `\\left(-\\infty,\\infty\\right)`,
+        ],
+        explanation: `The product $(x-${a})(x-${b})$ is negative between the roots, so $f' = -(x-${a})(x-${b})$ is positive there and $f$ increases on $(${a},${b})$.`,
+      };
+    },
+  },
+  {
+    id: "g5-fdt-fprime-graph",
+    unit: U5,
+    topic: "first-derivative-test",
+    difficulty: "medium",
+    manifestation: "first-derivative-test:from-fprime-graph",
+    build: (r: RNG) => {
+      const c = ri(r, 2, 4);
+      const pts: Array<[number, number]> = [
+        [0, 3],
+        [c, 0],
+        [c + 3, -3],
+      ];
+      const correct = `\\text{a local maximum at } x = ${c}`;
+      return {
+        prompt: `The graph of $f'$ shown consists of line segments. What happens to $f$ at $x=${c}$?`,
+        figure: graph("y = f'(x)", pts, { xMin: -1, xMax: c + 4, yMin: -4, yMax: 4 }),
+        correct,
+        distractors: [
+          `\\text{a local minimum at } x = ${c}`,
+          `\\text{an inflection point at } x = ${c}`,
+          `\\text{nothing; } f \\text{ is increasing through } x = ${c}`,
+        ],
+        explanation: `$f'$ changes from positive to negative at $x=${c}$, so $f$ changes from increasing to decreasing: a local maximum.`,
+      };
+    },
+  },
+  {
+    id: "g5-fdt-table",
+    unit: U5,
+    topic: "first-derivative-test",
+    difficulty: "medium",
+    manifestation: "first-derivative-test:table-sign",
+    build: (r: RNG) => {
+      const c = ri(r, 2, 5);
+      const xs = [c - 1, c, c + 1];
+      const ys = [`-${ri(r, 2, 6)}`, `0`, `${ri(r, 2, 6)}`];
+      const correct = `f\\text{ has a local minimum at }x=${c}.`;
+      return {
+        prompt: `Values of $f'$ for a differentiable function are given, and $f'$ is continuous.\n\n${tablePair("f'(x)", xs, ys)}\n\nWhich conclusion is best supported?`,
+        correct,
+        distractors: [
+          `f\\text{ has a local maximum at }x=${c}.`,
+          `f\\text{ has an inflection point at }x=${c}.`,
+          `f\\text{ is decreasing on }[${c - 1},${c + 1}].`,
+        ],
+        explanation: `The sampled values show $f'$ passing from negative to positive at $x=${c}$, which is the first-derivative-test signature of a local minimum.`,
+      };
+    },
+  },
+  {
+    id: "g5-fdt-parameter",
+    unit: U5,
+    topic: "first-derivative-test",
+    difficulty: "hard",
+    manifestation: "first-derivative-test:parameter",
+    build: (r: RNG) => {
+      const c = ri(r, 1, 6);
+      const k = 3 * c * c;
+      const correct = `${k}`;
+      return {
+        prompt: `For what value of $k$ does $f(x)=x^{3} - kx$ have a critical number at $x=${c}$?`,
+        correct,
+        distractors: opts(correct, [`${c}`, `${3 * c}`, `${c * c}`, `${k + 1}`]),
+        explanation: `$f'(x)=3x^{2} - k$, so $f'(${c}) = 0$ gives $k = 3(${c})^{2} = ${k}$.`,
+      };
+    },
+  },
+  {
+    id: "g5-fdt-reverse",
+    unit: U5,
+    topic: "first-derivative-test",
+    difficulty: "hard",
+    manifestation: "first-derivative-test:reverse",
+    build: (r: RNG) => {
+      const a = ri(r, 1, 4);
+      const b = a + ri(r, 2, 4);
+      const correct = `f'(x) = \\left(x - ${a}\\right)\\left(x - ${b}\\right)`;
+      return {
+        prompt: `A function $f$ has a local maximum at $x=${a}$ and a local minimum at $x=${b}$, with no other extrema. Which derivative is consistent with this?`,
+        correct,
+        distractors: [
+          `f'(x) = -\\left(x - ${a}\\right)\\left(x - ${b}\\right)`,
+          `f'(x) = \\left(x - ${a}\\right)^{2}\\left(x - ${b}\\right)^{2}`,
+          `f'(x) = \\left(x - ${a}\\right) + \\left(x - ${b}\\right)`,
+        ],
+        explanation: `$(x-${a})(x-${b})$ is positive, then negative, then positive, so $f$ rises to a maximum at $x=${a}$ and falls to a minimum at $x=${b}$. The negated version reverses the roles, and the squared version never changes sign.`,
+      };
+    },
+  },
+  {
+    id: "g5-sdt-classify",
+    unit: U5,
+    topic: "second-derivative-test",
+    difficulty: "medium",
+    manifestation: "second-derivative-test:classify-extremum",
+    build: (r: RNG) => {
+      const c = ri(r, 1, 6);
+      const correct = `\\text{a local minimum, because } f''(${c}) > 0`;
+      return {
+        prompt: `A function satisfies $f'(${c}) = 0$ and $f''(${c}) = ${ri(r, 2, 9)}$. What does $f$ have at $x=${c}$?`,
+        correct,
+        distractors: [
+          `\\text{a local maximum, because } f''(${c}) > 0`,
+          `\\text{an inflection point, because } f'(${c}) = 0`,
+          `\\text{nothing can be determined}`,
+        ],
+        explanation: `A positive second derivative at a critical point means the graph is concave up there, so the critical point is a local minimum.`,
+      };
+    },
+  },
+  {
+    id: "g5-sdt-graph",
+    unit: U5,
+    topic: "second-derivative-test",
+    difficulty: "medium",
+    manifestation: "second-derivative-test:from-graph",
+    build: (r: RNG) => {
+      const c = ri(r, 2, 4);
+      const pts: Array<[number, number]> = [
+        [0, -2],
+        [c, 2],
+        [c + 3, 1],
+      ];
+      const correct = `\\text{concave up on } (0,${c}) \\text{ and concave down on } (${c},${c + 3})`;
+      return {
+        prompt: `The graph of $f'$ shown consists of line segments. Describe the concavity of $f$.`,
+        figure: graph("y = f'(x)", pts, { xMin: -1, xMax: c + 4, yMin: -3, yMax: 3 }),
+        correct,
+        distractors: [
+          `\\text{concave down on } (0,${c}) \\text{ and concave up on } (${c},${c + 3})`,
+          `\\text{concave up on } (0,${c + 3})`,
+          `\\text{concave down on } (0,${c + 3})`,
+        ],
+        explanation: `$f''$ is the slope of $f'$. The graph of $f'$ rises on $(0,${c})$ and falls afterward, so $f$ is concave up then concave down.`,
+      };
+    },
+  },
+  {
+    id: "g5-sdt-inconclusive",
+    unit: U5,
+    topic: "second-derivative-test",
+    difficulty: "medium",
+    manifestation: "second-derivative-test:inconclusive",
+    build: (r: RNG) => {
+      const c = ri(r, 1, 8);
+      const correct = `\\text{The test is inconclusive; use the first derivative test.}`;
+      return {
+        prompt: `A function satisfies $f'(${c}) = 0$ and $f''(${c}) = 0$. What can be concluded about $x=${c}$?`,
+        correct,
+        distractors: [
+          `f\\text{ has an inflection point at }x=${c}.`,
+          `f\\text{ has neither a maximum nor a minimum at }x=${c}.`,
+          `f\\text{ has a local minimum at }x=${c}.`,
+        ],
+        explanation: `A zero second derivative gives no information at a critical point; the sign change of $f'$ must be examined instead.`,
+      };
+    },
+  },
+  {
+    id: "g5-sdt-table",
+    unit: U5,
+    topic: "second-derivative-test",
+    difficulty: "medium",
+    manifestation: "second-derivative-test:table",
+    build: (r: RNG) => {
+      const xs = [1, 2, 3, 4];
+      const base = ri(r, 2, 5);
+      const ys = [`${base}`, `${base + 1}`, `${base + 3}`, `${base + 6}`];
+      const correct = `\\text{concave up, because the increments of } f \\text{ are growing}`;
+      return {
+        prompt: `Values of $f$ are given for equally spaced inputs.\n\n${tablePair("f(x)", xs, ys)}\n\nWhat does the data suggest about the concavity of $f$ on $[1,4]$?`,
+        correct,
+        distractors: [
+          `\\text{concave down, because } f \\text{ is increasing}`,
+          `\\text{linear, because the inputs are equally spaced}`,
+          `\\text{concave down, because the increments of } f \\text{ are growing}`,
+        ],
+        explanation: `Successive increases are $1$, $2$, and $3$: the rate of change is itself increasing, which suggests $f'' > 0$ and a concave-up graph.`,
+      };
+    },
+  },
+  {
+    id: "g5-endpoint-extremum",
+    unit: U5,
+    topic: "local-and-global-extrema",
+    difficulty: "medium",
+    manifestation: "local-and-global-extrema:endpoint-extremum",
+    build: (r: RNG) => {
+      const b = ri(r, 2, 5);
+      const correct = `x = ${b}`;
+      return {
+        prompt: `Let $f(x)=x^{2}$ on $[0,${b}]$. Where does $f$ attain its absolute maximum?`,
+        correct,
+        distractors: [`x = 0`, `x = ${frac(b, 2)}`, `\\text{nowhere, since }f\\text{ has no critical point in }(0,${b})`],
+        explanation: `The only critical number is $x=0$, which gives the minimum. Comparing candidate values, the maximum $${b * b}$ occurs at the endpoint $x=${b}$.`,
+      };
+    },
+  },
+  {
+    id: "g5-open-interval",
+    unit: U5,
+    topic: "local-and-global-extrema",
+    difficulty: "hard",
+    manifestation: "local-and-global-extrema:open-interval",
+    build: (r: RNG) => {
+      const b = ri(r, 2, 8);
+      const correct = `\\text{It has an absolute minimum but no absolute maximum.}`;
+      return {
+        prompt: `Consider $f(x)=x^{2}$ on the open interval $(-${b}, ${b})$. Which statement is true?`,
+        correct,
+        distractors: [
+          `\\text{It has both an absolute maximum and an absolute minimum.}`,
+          `\\text{It has an absolute maximum but no absolute minimum.}`,
+          `\\text{It has neither.}`,
+        ],
+        explanation: `The minimum $0$ is attained at $x=0$, but values approach $${b * b}$ without reaching it, so no maximum is attained. The Extreme Value Theorem requires a closed interval.`,
+      };
+    },
+  },
+  {
+    id: "g5-extrema-graph",
+    unit: U5,
+    topic: "local-and-global-extrema",
+    difficulty: "medium",
+    manifestation: "local-and-global-extrema:graph",
+    build: (r: RNG) => {
+      const top = ri(r, 5, 9);
+      const c = ri(r, 2, 4);
+      const pts: Array<[number, number]> = [
+        [0, 2],
+        [c, top],
+        [c + 3, 1],
+      ];
+      const correct = `\\text{maximum } ${top} \\text{ at } x = ${c}, \\text{ minimum } 1 \\text{ at } x = ${c + 3}`;
+      return {
+        prompt: `The graph of the continuous function $f$ on $[0,${c + 3}]$ consists of the line segments shown. Identify the absolute extrema.`,
+        figure: graph("y = f(x)", pts, { xMin: -1, xMax: c + 4, yMin: 0, yMax: top + 2 }),
+        correct,
+        distractors: [
+          `\\text{maximum } ${top} \\text{ at } x = ${c}, \\text{ minimum } 2 \\text{ at } x = 0`,
+          `\\text{maximum } 2 \\text{ at } x = 0, \\text{ minimum } 1 \\text{ at } x = ${c + 3}`,
+          `\\text{no absolute extrema exist}`,
+        ],
+        explanation: `Comparing the peak and both endpoints, the largest value is $${top}$ at $x=${c}$ and the smallest is $1$ at the right endpoint.`,
+      };
+    },
+  },
+  {
+    id: "g5-extrema-context",
+    unit: U5,
+    topic: "local-and-global-extrema",
+    difficulty: "hard",
+    manifestation: "local-and-global-extrema:context",
+    build: (r: RNG) => {
+      const k = ri(r, 2, 6);
+      const b = ri(r, 4, 9);
+      const tMax = b / (2 * k);
+      const hMax = k * tMax * tMax * -1 + b * tMax;
+      const correct = dec(hMax, 3);
+      return {
+        prompt: `A drone's height, in meters, is $h(t) = -${k}t^{2} + ${b}t$ for $t\\ge 0$ seconds. What is its greatest height, in meters?`,
+        correct,
+        distractors: opts(correct, [dec(tMax, 3), dec(b, 3), dec(2 * hMax, 3), `0`]),
+        explanation: `$h'(t) = -${2 * k}t + ${b}$ is zero at $t=${dec(tMax, 3)}$, and $h''<0$, so that critical time gives the maximum height $${correct}$ meters.`,
+      };
+    },
+  },
+  {
+    id: "g5-opt-box",
+    unit: U5,
+    topic: "optimization",
+    difficulty: "hard",
+    manifestation: "optimization:box-volume",
+    calculator: true,
+    build: (r: RNG) => {
+      const s = pick(r, [12, 18, 24, 30] as const);
+      const x = s / 6;
+      const v = x * (s - 2 * x) ** 2;
+      const correct = dec(v, 3);
+      return {
+        prompt: `An open box is made from a $${s}$-inch by $${s}$-inch square sheet by cutting congruent squares of side $x$ from each corner and folding up the sides. What is the greatest possible volume, in cubic inches?`,
+        correct,
+        distractors: opts(correct, [dec(x, 3), dec(s * s, 3), dec(v / 2, 3), dec(2 * v, 3)]),
+        explanation: `The volume is $V(x) = x(${s} - 2x)^{2}$. Solving $V'(x)=0$ on $0<x<${s / 2}$ gives $x=${dec(x, 3)}$, so the maximum volume is $${correct}$ cubic inches.`,
+      };
+    },
+  },
+  {
+    id: "g5-opt-distance",
+    unit: U5,
+    topic: "optimization",
+    difficulty: "hard",
+    manifestation: "optimization:distance",
+    calculator: true,
+    build: (r: RNG) => {
+      const a = ri(r, 2, 8);
+      const d = Math.sqrt(a * a - a + 0.25 + 0) * 0;
+      const xStar = 0.5 * (2 * a - 1) / 2;
+      const dist = Math.sqrt((xStar - a) ** 2 + xStar);
+      const correct = dec(dist, 3);
+      return {
+        prompt: `What is the shortest distance from the point $(${a}, 0)$ to the curve $y=\\sqrt{x}$, for $x\\ge 0$? Give the distance correct to three decimal places.`,
+        correct,
+        distractors: opts(correct, [dec(a, 3), dec(Math.sqrt(a), 3), dec(dist + 1, 3), dec(d + 1, 3)]),
+        explanation: `Minimize $D(x) = (x - ${a})^{2} + x$. Then $D'(x) = 2(x-${a}) + 1 = 0$ gives $x=${dec(xStar, 3)}$, and the distance is $\\sqrt{D(x)} = ${correct}$.`,
+      };
+    },
+  },
+  {
+    id: "g5-opt-cost",
+    unit: U5,
+    topic: "optimization",
+    difficulty: "hard",
+    manifestation: "optimization:cost",
+    calculator: true,
+    build: (r: RNG) => {
+      const A = pick(r, [36, 64, 100, 144] as const);
+      const s = Math.sqrt(A);
+      const per = ri(r, 2, 6);
+      const cost = per * 4 * s;
+      const correct = dec(cost, 3);
+      return {
+        prompt: `A rectangular garden must enclose $${A}$ square meters. Fencing costs $\\$${per}$ per meter. What is the least possible cost, in dollars?`,
+        correct,
+        distractors: opts(correct, [dec(per * A, 3), dec(cost / 2, 3), dec(per * 2 * s, 3), dec(cost + per, 3)]),
+        explanation: `With area fixed, perimeter $P(x) = 2x + \\frac{${2 * A}}{x}$ is minimized at $x=${s}$, the square. The perimeter is $${4 * s}$ meters, costing $${per}\\cdot ${4 * s} = \\$${correct}$.`,
+      };
+    },
+  },
+  {
+    id: "g5-opt-setup",
+    unit: U5,
+    topic: "optimization",
+    difficulty: "medium",
+    manifestation: "optimization:setup",
+    build: (r: RNG) => {
+      const P = pick(r, [20, 40, 60, 80] as const);
+      const correct = `A(x) = x\\left(\\dfrac{${P}}{2} - x\\right)`;
+      return {
+        prompt: `A rectangle has perimeter $${P}$ meters. Which function of one variable should be maximized to find the largest possible area?`,
+        correct,
+        distractors: [
+          `A(x) = x\\left(${P} - x\\right)`,
+          `A(x) = 2x + \\dfrac{${P}}{2}`,
+          `A(x) = x^{2}`,
+        ],
+        explanation: `The constraint $2x + 2y = ${P}$ gives $y = \\frac{${P}}{2} - x$, so the area to maximize is $x\\left(\\frac{${P}}{2} - x\\right)$.`,
+      };
+    },
+  },
+  {
+    id: "g5-opt-justification",
+    unit: U5,
+    topic: "optimization",
+    difficulty: "medium",
+    manifestation: "optimization:justification",
+    build: (r: RNG) => {
+      const c = ri(r, 2, 8);
+      const correct = `A'\\text{ changes from positive to negative at }x=${c}.`;
+      return {
+        prompt: `A quantity $A(x)$ has a single critical number at $x=${c}$ on its domain. Which statement justifies that this critical number gives the maximum?`,
+        correct,
+        distractors: [
+          `A(${c})\\text{ is larger than } A(0).`,
+          `A'(${c}) = 0.`,
+          `A''(${c}) = 0.`,
+        ],
+        explanation: `A sign change of the derivative from positive to negative establishes a maximum. A zero derivative alone locates a candidate, and a zero second derivative is inconclusive.`,
+      };
+    },
+  },
+  {
+    id: "g5-match-graphs",
+    unit: U5,
+    topic: "curve-sketching",
+    difficulty: "hard",
+    manifestation: "curve-sketching:match-graphs",
+    build: (r: RNG) => {
+      const c = ri(r, 2, 4);
+      const pts: Array<[number, number]> = [
+        [0, 4],
+        [c, 0],
+        [c + 3, -4],
+      ];
+      const correct = `f\\text{ is increasing and concave down on }(0,${c}).`;
+      return {
+        prompt: `The graph shown is the graph of $f'$, consisting of line segments. Which statement about $f$ is true?`,
+        figure: graph("y = f'(x)", pts, { xMin: -1, xMax: c + 4, yMin: -5, yMax: 5 }),
+        correct,
+        distractors: [
+          `f\\text{ is increasing and concave up on }(0,${c}).`,
+          `f\\text{ is decreasing and concave down on }(0,${c}).`,
+          `f\\text{ has an inflection point at }x=${c}.`,
+        ],
+        explanation: `On $(0,${c})$ the graph of $f'$ is positive (so $f$ increases) and decreasing (so $f''<0$ and $f$ is concave down). At $x=${c}$, $f'=0$ without a slope change in $f'$, so there is no inflection point.`,
+      };
+    },
+  },
+  {
+    id: "g5-table-behavior",
+    unit: U5,
+    topic: "curve-sketching",
+    difficulty: "medium",
+    manifestation: "curve-sketching:table-behavior",
+    build: (r: RNG) => {
+      const xs = [1, 2, 3, 4];
+      const ys = [`${ri(r, 2, 5)}`, `${ri(r, 2, 5)}`, `-${ri(r, 2, 5)}`, `-${ri(r, 2, 5)}`];
+      const correct = `f\\text{ has a local maximum somewhere in }(2,3).`;
+      return {
+        prompt: `Values of the continuous function $f'$ are given.\n\n${tablePair("f'(x)", xs, ys)}\n\nWhich statement must be true?`,
+        correct,
+        distractors: [
+          `f\\text{ has a local minimum somewhere in }(2,3).`,
+          `f\\text{ is decreasing on }(1,4).`,
+          `f\\text{ has an inflection point at }x=3.`,
+        ],
+        explanation: `$f'$ is positive at $x=2$ and negative at $x=3$, so by continuity it changes sign in between, where $f$ turns from increasing to decreasing.`,
+      };
+    },
+  },
+  {
+    id: "g5-must-be-true",
+    unit: U5,
+    topic: "curve-sketching",
+    difficulty: "hard",
+    manifestation: "curve-sketching:must-be-true",
+    build: (r: RNG) => {
+      const c = ri(r, 2, 4);
+      const pts: Array<[number, number]> = [
+        [0, 1],
+        [c, 3],
+        [c + 3, 1],
+      ];
+      const correct = `f\\text{ is increasing on }(0,${c + 3}).`;
+      return {
+        prompt: `The graph of $f'$ shown consists of line segments and stays positive. Which statement about $f$ must be true on $(0,${c + 3})$?`,
+        figure: graph("y = f'(x)", pts, { xMin: -1, xMax: c + 4, yMin: 0, yMax: 5 }),
+        correct,
+        distractors: [
+          `f\\text{ has a local maximum at }x=${c}.`,
+          `f\\text{ is concave up on }(0,${c + 3}).`,
+          `f\\text{ is positive on }(0,${c + 3}).`,
+        ],
+        explanation: `A positive derivative forces $f$ to increase. The peak of $f'$ marks an inflection point of $f$, concavity changes sign, and nothing is known about the values of $f$ itself.`,
+      };
+    },
+  },
+  {
+    id: "g5-curve-error",
+    unit: U5,
+    topic: "curve-sketching",
+    difficulty: "medium",
+    manifestation: "curve-sketching:error-analysis",
+    build: (r: RNG) => {
+      const c = ri(r, 1, 8);
+      const correct = `\\text{A zero of } f' \\text{ gives an extremum only if } f' \\text{ changes sign there.}`;
+      return {
+        prompt: `A student sees that $f'(${c}) = 0$ and concludes that $f$ has a local extremum at $x=${c}$. Why is this reasoning flawed?`,
+        correct,
+        distractors: [
+          `\\text{A zero of } f' \\text{ always gives an inflection point instead.}`,
+          `f' \\text{ must be undefined at an extremum.}`,
+          `\\text{Extrema can occur only at endpoints.}`,
+        ],
+        explanation: `Functions such as $f(x)=(x-${c})^{3}$ have $f'(${c})=0$ with no extremum, because $f'$ keeps the same sign on both sides.`,
+      };
+    },
+  },
+);
