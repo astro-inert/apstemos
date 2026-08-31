@@ -34,6 +34,7 @@ export type ReasoningType =
   | "must-be-true"
   | "error-analysis"
   | "insufficient-info"
+  | "equivalent-forms"
   | "synthesis";
 
 export type AlgebraicStructure =
