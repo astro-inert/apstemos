@@ -1896,9 +1896,10 @@ GAP_TEMPLATES.push(
         prompt: `To evaluate $\\displaystyle\\lim_{x\\to 0^{+}} ${a}x\\ln x$, what must be done before the rule can be applied?`,
         correct,
         distractors: [
-          `\\text{Apply the rule directly to the product.}`,
-          `\\text{Differentiate } ${a}x \\text{ and } \\ln x \\text{ and multiply the results.}`,
-          `\\text{Substitute } x = 0 \\text{ into the expression.}`,
+          `\\text{Apply the rule directly to the product } ${a}x\\ln x.`,
+          `\\text{Rewrite as } \\dfrac{${a}x}{\\ln x} \\text{ and apply the rule.}`,
+          `\\text{Rewrite as } \\dfrac{\\ln x}{${a}x} \\text{ and apply the rule.}`,
+
         ],
         explanation: `The rule applies only to quotients of the form $0/0$ or $\\infty/\\infty$, so the product must first be written as a quotient.`,
       };
