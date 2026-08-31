@@ -281,15 +281,17 @@ export const UNIT_09_10_TEMPLATES: QuestionTemplate[] = [
       const a = ri(r, 2, 4);
       const p = ri(r, 1, 2);
       const q = p + ri(r, 1, 2);
+      const pTex = p === 1 ? "\\pi" : `${p}\\pi`;
+      const qTex = q === 1 ? "\\pi" : `${q}\\pi`;
       return {
-        prompt: `A curve is traced by $x=${a}\\cos t$, $y=${a}\\sin t$ for $t$ ranging over $[${p}\\pi, ${q}\\pi]$, and the curve happens to retrace part of itself once for $t>${q}\\pi$. Which integral correctly gives the arc length of the curve traced exactly once over the intended interval?`,
-        correct: `\\int_{${p}\\pi}^{${q}\\pi}${a}\\,dt`,
+        prompt: `A curve is traced by $x=${a}\\cos t$, $y=${a}\\sin t$ for $t$ ranging over $[${pTex}, ${qTex}]$, and the curve happens to retrace part of itself once for $t>${qTex}$. Which integral correctly gives the arc length of the curve traced exactly once over the intended interval?`,
+        correct: `\\int_{${pTex}}^{${qTex}}${a}\\,dt`,
         distractors: [
           `\\int_{0}^{2\\pi}${a}\\,dt`,
-          `\\int_{${p}\\pi}^{${q}\\pi}${a}^{2}\\,dt`,
-          `2\\int_{${p}\\pi}^{${q}\\pi}${a}\\,dt`,
+          `\\int_{${pTex}}^{${qTex}}${a}^{2}\\,dt`,
+          `2\\int_{${pTex}}^{${qTex}}${a}\\,dt`,
         ],
-        explanation: `Since $\\sqrt{x'(t)^2+y'(t)^2}=${a}$ is constant, the arc length is simply $\\int_{${p}\\pi}^{${q}\\pi}${a}\\,dt$ over exactly the given parameter interval — using $[0,2\\pi]$ instead would include portions of the curve outside the stated bounds (or repeat them), and squaring the speed is not part of the arc-length formula.`,
+        explanation: `Since $\\sqrt{x'(t)^2+y'(t)^2}=${a}$ is constant, the arc length is simply $\\int_{${pTex}}^{${qTex}}${a}\\,dt$ over exactly the given parameter interval — using $[0,2\\pi]$ instead would include portions of the curve outside the stated bounds (or repeat them), and squaring the speed is not part of the arc-length formula.`,
       };
     },
   },
@@ -366,14 +368,14 @@ export const UNIT_09_10_TEMPLATES: QuestionTemplate[] = [
       const num = drdtheta * sinT + rVal * cosT;
       const den = drdtheta * cosT - rVal * sinT;
       let correct: string;
-      if (den === 0) correct = "\\text{undefined (vertical tangent)}";
+      if (den === 0) correct = "\\text{undefined}";
       else correct = frac(num, den);
       return {
         prompt: `For the polar curve $r=${a}(1+\\cos\\theta)$, find $\\dfrac{dy}{dx}$ at $\\theta=${th}$.`,
         correct,
         distractors: [
           den === 0 ? frac(num, 1) : frac(den, num),
-          drdtheta === 0 ? "0" : `${drdtheta}`,
+          drdtheta === 0 ? "\\text{zero slope}" : `${drdtheta}`,
           frac(rVal, drdtheta === 0 ? 1 : drdtheta),
         ],
         explanation: `With $x=r\\cos\\theta$ and $y=r\\sin\\theta$, $\\frac{dy}{dx}=\\dfrac{\\frac{dr}{d\\theta}\\sin\\theta + r\\cos\\theta}{\\frac{dr}{d\\theta}\\cos\\theta - r\\sin\\theta}$. Here $\\frac{dr}{d\\theta}=-${a}\\sin\\theta$ and at $\\theta=${th}$, $r=${rVal}$, giving the stated result.`,
@@ -1432,12 +1434,15 @@ export const UNIT_09_10_TEMPLATES: QuestionTemplate[] = [
         { name: "\\frac{1}{1+x}", terms: ["1", "-x", "x^{2}"] },
       ];
       const f = pick(r, funcs);
-      const other = funcs.filter((g) => g.name !== f.name);
-      const shuffledOthers = [other[0], other[1], other[2]];
+      const fracPartner: Record<string, string> = { "\\frac{1}{1+x}": "\\frac{1}{1-x}", "\\frac{1}{1-x}": "\\frac{1}{1+x}" };
+      const other = funcs.filter((g) => g.name !== f.name && g.name !== fracPartner[f.name]);
+      const shuffledOthers = fracPartner[f.name]
+        ? [{ name: fracPartner[f.name] }, other[0], other[1]]
+        : [other[0], other[1], other[2]];
       return {
         prompt: `A power series has first three nonzero terms $${f.terms[0]}$, $${f.terms[1]}$, $${f.terms[2]}$ in its Maclaurin expansion. Which function does this series represent?`,
         correct: f.name,
-        distractors: shuffledOthers.map((g) => g.name),
+        distractors: shuffledOthers.map((g) => g!.name),
         explanation: `Comparing these first three terms to the standard Maclaurin series (for $\\sin x$, $\\cos x$, $e^x$, $\\arctan x$, $\\ln(1+x)$, and $\\frac{1}{1+x}$) identifies the series uniquely as that of $${f.name}$.`,
       };
     },
@@ -1459,8 +1464,11 @@ export const UNIT_09_10_TEMPLATES: QuestionTemplate[] = [
         { name: "\\frac{1}{1+x}", gen: "\\sum_{n=0}^{\\infty}(-1)^{n}x^{n}" },
       ];
       const f = pick(r, funcs);
-      const others = funcs.filter((g) => g.name !== f.name);
-      const distractors = [others[0].name, others[1].name, others[2].name];
+      const fracPartner2: Record<string, string> = { "\\frac{1}{1+x}": "\\frac{1}{1-x}", "\\frac{1}{1-x}": "\\frac{1}{1+x}" };
+      const others = funcs.filter((g) => g.name !== f.name && g.name !== fracPartner2[f.name]);
+      const distractors = fracPartner2[f.name]
+        ? [fracPartner2[f.name], others[0].name, others[1].name]
+        : [others[0].name, others[1].name, others[2].name];
       return {
         prompt: `The general term formula $\\displaystyle${f.gen}$ is the Maclaurin series of which function?`,
         correct: f.name,
