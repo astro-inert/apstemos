@@ -28,6 +28,13 @@ const U1 = "unit-1-limits-and-continuity";
 /* Local helpers                                                       */
 /* ------------------------------------------------------------------ */
 
+/** Renders a leading coefficient, omitting an unnecessary factor of 1. */
+function coefTex(k: number): string {
+  if (k === 1) return "";
+  if (k === -1) return "-";
+  return String(k);
+}
+
 /** Picks the first three candidates that differ from the answer and each other. */
 function opts(correct: string, cands: string[]): string[] {
   const out: string[] = [];
