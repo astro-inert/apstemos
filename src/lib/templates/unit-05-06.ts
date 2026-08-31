@@ -1908,14 +1908,16 @@ export const UNIT_05_06_TEMPLATES: QuestionTemplate[] = [
     manifestation: "u-substitution:definite-bounds",
     mistakes: ["mixes-up-trig-antiderivative-pairs"],
     build: (r: RNG) => {
+      const a = ri(r, 2, 6);
       return {
-        prompt: `Evaluate $\\displaystyle\\int_{\\pi/4}^{\\pi/2} \\csc^{2}x\\,dx$.`,
-        correct: `0`,
-        distractors: [`1`, `-1`, `\\dfrac{\\pi}{4}`],
-        explanation: `Since $\\int \\csc^2 x\\,dx = -\\cot x + C$, evaluate: $[-\\cot x]_{\\pi/4}^{\\pi/2} = (-\\cot(\\pi/2)) - (-\\cot(\\pi/4)) = 0 - (-1) = 1$... recompute: $-\\cot(\\pi/2)=0$ and $-\\cot(\\pi/4)=-1$, so the result is $0-(-1)=1$.`,
+        prompt: `Evaluate $\\displaystyle\\int_{\\pi/4}^{\\pi/2} ${coefTex(a)}\\csc^{2}x\\,dx$.`,
+        correct: `${a}`,
+        distractors: [`0`, `-${a}`, `${a}\\left(\\dfrac{\\pi}{4}\\right)`],
+        explanation: `Because $\\int \\csc^{2}x\\,dx = -\\cot x + C$, the definite integral is $${a}\\left[-\\cot x\\right]_{\\pi/4}^{\\pi/2} = ${a}\\left(-\\cot\\frac{\\pi}{2} + \\cot\\frac{\\pi}{4}\\right) = ${a}(0 + 1) = ${a}$. Dropping the minus sign on the antiderivative gives $-${a}$.`,
       };
     },
   },
+
 
   /* ---- tan/cot/sec/csc antiderivatives (3 families) ---- */
   {
