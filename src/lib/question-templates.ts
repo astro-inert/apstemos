@@ -7,10 +7,13 @@
  * College Board text reproduced anywhere.
  */
 
+import type { AlgebraicStructure, Representation, ReasoningType } from "./ced-taxonomy";
+
 export type Difficulty = "easy" | "medium" | "hard";
 
+
 /** An optional diagram rendered alongside the prompt. */
-export type Figure = {
+export type SlopeFieldFigure = {
   kind: "slope-field";
   /** dy/dx = a·x + b·y */
   a: number;
@@ -18,6 +21,23 @@ export type Figure = {
   /** grid half-width, e.g. 3 → x,y ∈ [-3, 3] */
   extent: number;
 };
+
+/**
+ * A piecewise-linear graph, used for graphical manifestations (graphs of f,
+ * f', rate functions, and velocity curves). Points are joined in order.
+ */
+export type PiecewiseGraphFigure = {
+  kind: "piecewise-graph";
+  /** curve label such as "y = f'(x)" */
+  label: string;
+  points: Array<[number, number]>;
+  xMin: number;
+  xMax: number;
+  yMin: number;
+  yMax: number;
+};
+
+export type Figure = SlopeFieldFigure | PiecewiseGraphFigure;
 
 export type BuiltQuestion = {
   prompt: string;
@@ -40,8 +60,19 @@ export type QuestionTemplate = {
   track?: Track;
   calculator?: boolean;
   mistakes?: string[];
+  /**
+   * Taxonomy id from `ced-taxonomy.ts` (`"<topic>:<manifestation>"`). Declares
+   * *which* legitimate AP form of the concept this family tests. Templates
+   * without one are reported as unclassified by the coverage audit.
+   */
+  manifestation?: string;
+  /** Overrides for the manifestation's default classification. */
+  representation?: Representation;
+  reasoning?: ReasoningType;
+  algebra?: AlgebraicStructure;
   build: (r: RNG) => BuiltQuestion;
 };
+
 
 
 /* ------------------------------------------------------------------ */
@@ -1645,7 +1676,9 @@ export function pow(base: string, e: number): string {
 /* ------------------------------------------------------------------ */
 
 import { EXTRA_TEMPLATES } from "./question-templates-extra";
+import { GAP_TEMPLATES } from "./question-templates-gap";
 
-/** Every template in the bank: the original families plus the expanded
- *  CED-coverage families (second and third asked-forms per topic). */
-export const TEMPLATES: QuestionTemplate[] = [...BASE_TEMPLATES, ...EXTRA_TEMPLATES];
+/** Every template in the bank: the original families, the expanded
+ *  CED-coverage families, and the manifestation gap-filling families. */
+export const TEMPLATES: QuestionTemplate[] = [...BASE_TEMPLATES, ...EXTRA_TEMPLATES, ...GAP_TEMPLATES];
+
