@@ -2837,3 +2837,618 @@ GAP_TEMPLATES.push(
     },
   },
 );
+
+/* ------------------------------------------------------------------ */
+/* Unit 6 — Integration and accumulation of change                     */
+/* ------------------------------------------------------------------ */
+
+const U6 = "unit-6-integration-and-accumulation-of-change";
+
+GAP_TEMPLATES.push(
+  {
+    id: "g6-riemann-midpoint",
+    unit: U6,
+    topic: "riemann-sums",
+    difficulty: "medium",
+    manifestation: "riemann-sums:midpoint",
+    build: (r: RNG) => {
+      const k = ri(r, 1, 4);
+      // f(x) = k x^2 on [0,4], 2 subintervals, midpoints 1 and 3
+      const val = 2 * (k * 1 + k * 9);
+      const correct = `${val}`;
+      return {
+        prompt: `Approximate $\\displaystyle\\int_{0}^{4} ${coefTex(k)}x^{2}\\,dx$ using a midpoint Riemann sum with two subintervals of equal width.`,
+        correct,
+        distractors: opts(correct, [`${val / 2}`, `${2 * val}`, `${2 * (k * 0 + k * 4)}`, `${2 * (k * 4 + k * 16)}`]),
+        explanation: `The subintervals are $[0,2]$ and $[2,4]$ with width $2$ and midpoints $1$ and $3$. The sum is $2\\left(${k}(1)^{2}\\right) + 2\\left(${k}(3)^{2}\\right) = ${correct}$.`,
+      };
+    },
+  },
+  {
+    id: "g6-riemann-over-under",
+    unit: U6,
+    topic: "riemann-sums",
+    difficulty: "medium",
+    manifestation: "riemann-sums:over-under",
+    build: (r: RNG) => {
+      const a = ri(r, 1, 3);
+      const b = a + ri(r, 2, 4);
+      const correct = `\\text{An underestimate, because } f \\text{ is increasing on } [${a},${b}].`;
+      return {
+        prompt: `Let $f$ be increasing and concave up on $[${a},${b}]$. A left Riemann sum with equal subintervals is used to approximate $\\displaystyle\\int_{${a}}^{${b}} f(x)\\,dx$. What kind of approximation is it?`,
+        correct,
+        distractors: [
+          `\\text{An overestimate, because } f \\text{ is increasing on } [${a},${b}].`,
+          `\\text{An overestimate, because } f \\text{ is concave up on } [${a},${b}].`,
+          `\\text{Exact, because the subintervals have equal width.}`,
+        ],
+        explanation: `For an increasing function each left endpoint gives the smallest value on its subinterval, so every rectangle sits below the curve and the sum underestimates the integral.`,
+      };
+    },
+  },
+  {
+    id: "g6-riemann-sigma",
+    unit: U6,
+    topic: "riemann-sums",
+    difficulty: "hard",
+    manifestation: "riemann-sums:sigma-translation",
+    build: (r: RNG) => {
+      const n = pick(r, [4, 5, 8, 10] as const);
+      const b = ri(r, 2, 6);
+      const correct = `\\displaystyle\\int_{0}^{${b}} x^{2}\\,dx`;
+      return {
+        prompt: `Which definite integral equals $\\displaystyle\\lim_{n\\to\\infty}\\sum_{i=1}^{n} \\left(\\frac{${b}i}{n}\\right)^{2}\\cdot\\frac{${b}}{n}$?`,
+        correct,
+        distractors: [
+          `\\displaystyle\\int_{0}^{${b}} x\\,dx`,
+          `\\displaystyle\\int_{0}^{${n}} x^{2}\\,dx`,
+          `\\displaystyle\\int_{${b}}^{${b + n}} x^{2}\\,dx`,
+        ],
+        explanation: `Here $\\Delta x = \\frac{${b}}{n}$ and $x_{i} = \\frac{${b}i}{n}$, right endpoints on $[0,${b}]$ with integrand $x^{2}$.`,
+      };
+    },
+  },
+  {
+    id: "g6-riemann-construct",
+    unit: U6,
+    topic: "riemann-sums",
+    difficulty: "medium",
+    manifestation: "riemann-sums:construct-sum",
+    build: (r: RNG) => {
+      const a = ri(r, 0, 2);
+      const b = a + 6;
+      const n = 3;
+      const w = (b - a) / n;
+      const correct = `${w}\\left[f(${a + w}) + f(${a + 2 * w}) + f(${a + 3 * w})\\right]`;
+      return {
+        prompt: `Write the right Riemann sum with $${n}$ equal subintervals for $\\displaystyle\\int_{${a}}^{${b}} f(x)\\,dx$.`,
+        correct,
+        distractors: [
+          `${w}\\left[f(${a}) + f(${a + w}) + f(${a + 2 * w})\\right]`,
+          `${b - a}\\left[f(${a + w}) + f(${a + 2 * w}) + f(${a + 3 * w})\\right]`,
+          `${w}\\left[f(${a}) + f(${a + 3 * w})\\right]`,
+        ],
+        explanation: `The width is $\\frac{${b} - ${a}}{${n}} = ${w}$, and the right endpoints are $${a + w}$, $${a + 2 * w}$, and $${a + 3 * w}$.`,
+      };
+    },
+  },
+  {
+    id: "g6-riemann-graph",
+    unit: U6,
+    topic: "riemann-sums",
+    difficulty: "medium",
+    manifestation: "riemann-sums:from-graph",
+    build: (r: RNG) => {
+      const h = ri(r, 2, 5);
+      const pts: Array<[number, number]> = [
+        [0, 0],
+        [2, h],
+        [4, 0],
+      ];
+      const area = 0.5 * 4 * h;
+      const correct = dec(area, 3);
+      return {
+        prompt: `The graph of $f$ shown consists of two line segments. Find $\\displaystyle\\int_{0}^{4} f(x)\\,dx$ using areas.`,
+        figure: graph("y = f(x)", pts, { xMin: -1, xMax: 5, yMin: -1, yMax: h + 2 }),
+        correct,
+        distractors: opts(correct, [dec(2 * area, 3), dec(area / 2, 3), dec(h, 3), `0`]),
+        explanation: `The region is a triangle with base $4$ and height $${h}$, so the integral equals $\\frac{1}{2}(4)(${h}) = ${correct}$.`,
+      };
+    },
+  },
+  {
+    id: "g6-ftc-both-limits",
+    unit: U6,
+    topic: "fundamental-theorem-of-calculus",
+    difficulty: "hard",
+    manifestation: "fundamental-theorem-of-calculus:both-limits",
+    build: (r: RNG) => {
+      const k = ri(r, 2, 5);
+      const correct = `${2 * k}x\\sin\\left(x^{2}\\right)`;
+      return {
+        prompt: `Let $g(x)=\\displaystyle\\int_{0}^{x^{2}} ${coefTex(k)}\\sin(t)\\,dt$. Find $g'(x)$.`,
+        correct,
+        distractors: [
+          `${coefTex(k)}\\sin\\left(x^{2}\\right)`,
+          `${2 * k}x\\cos\\left(x^{2}\\right)`,
+          `${coefTex(k)}\\sin\\left(x^{2}\\right)\\cdot x`,
+        ],
+        explanation: `By the chain rule with the Fundamental Theorem, $g'(x) = ${coefTex(k)}\\sin\\left(x^{2}\\right)\\cdot \\frac{d}{dx}\\left(x^{2}\\right) = ${correct}$.`,
+      };
+    },
+  },
+  {
+    id: "g6-ftc-net-change",
+    unit: U6,
+    topic: "fundamental-theorem-of-calculus",
+    difficulty: "medium",
+    manifestation: "fundamental-theorem-of-calculus:net-change",
+    build: (r: RNG) => {
+      const start = ri(r, 5, 40);
+      const net = ri(r, 3, 20);
+      const correct = `${start + net}`;
+      return {
+        prompt: `A tank holds $${start}$ liters at time $t=0$ hours, and water flows in at the rate $R(t)$ liters per hour with $\\displaystyle\\int_{0}^{5} R(t)\\,dt = ${net}$. How many liters are in the tank at $t=5$?`,
+        correct,
+        distractors: opts(correct, [`${net}`, `${start}`, `${start - net}`, `${start * net}`]),
+        explanation: `The integral of the rate gives the net change, so the amount is $${start} + ${net} = ${correct}$ liters.`,
+      };
+    },
+  },
+  {
+    id: "g6-ftc-graph",
+    unit: U6,
+    topic: "fundamental-theorem-of-calculus",
+    difficulty: "medium",
+    manifestation: "fundamental-theorem-of-calculus:from-graph",
+    build: (r: RNG) => {
+      const h = ri(r, 2, 4);
+      const pts: Array<[number, number]> = [
+        [0, h],
+        [2, 0],
+        [4, -h],
+      ];
+      const correct = `x = 2`;
+      return {
+        prompt: `Let $g(x)=\\displaystyle\\int_{0}^{x} f(t)\\,dt$, where the graph of $f$ shown consists of line segments. At what value of $x$ in $(0,4)$ does $g$ attain its maximum?`,
+        figure: graph("y = f(t)", pts, { xMin: -1, xMax: 5, yMin: -h - 1, yMax: h + 1 }),
+        correct,
+        distractors: [`x = 0`, `x = 4`, `x = ${h}`],
+        explanation: `$g' = f$ changes from positive to negative at $x=2$, so $g$ increases then decreases and is greatest at $x=2$.`,
+      };
+    },
+  },
+  {
+    id: "g6-ftc-error",
+    unit: U6,
+    topic: "fundamental-theorem-of-calculus",
+    difficulty: "medium",
+    manifestation: "fundamental-theorem-of-calculus:error-analysis",
+    build: (r: RNG) => {
+      const k = ri(r, 2, 6);
+      const correct = `\\text{The derivative of the accumulation is } f, \\text{ not an antiderivative of } f.`;
+      return {
+        prompt: `For $g(x)=\\displaystyle\\int_{${k}}^{x} f(t)\\,dt$, a student writes $g'(x)=F(x)$ where $F$ is an antiderivative of $f$. What is the error?`,
+        correct,
+        distractors: [
+          `\\text{The lower limit } ${k} \\text{ must be } 0.`,
+          `g \\text{ is not differentiable.}`,
+          `g'(x) = f(x) - f(${k}).`,
+        ],
+        explanation: `The Fundamental Theorem gives $g'(x) = f(x)$ directly; differentiating produces the integrand, not another antiderivative.`,
+      };
+    },
+  },
+  {
+    id: "g6-usub-explog",
+    unit: U6,
+    topic: "u-substitution",
+    difficulty: "medium",
+    manifestation: "u-substitution:exponential-log",
+    build: (r: RNG) => {
+      const k = ri(r, 2, 6);
+      const correct = `\\dfrac{1}{${k}}e^{${k}x} + C`;
+      return {
+        prompt: `Evaluate $\\displaystyle\\int e^{${coefTex(k)}x}\\,dx$.`,
+        correct,
+        distractors: [
+          `${coefTex(k)}e^{${k}x} + C`,
+          `e^{${k}x} + C`,
+          `\\dfrac{1}{${k}}e^{${k}x^{2}} + C`,
+        ],
+        explanation: `With $u=${k}x$, $du=${k}\\,dx$, so the integral is $\\frac{1}{${k}}\\int e^{u}\\,du = \\frac{1}{${k}}e^{${k}x} + C$.`,
+      };
+    },
+  },
+  {
+    id: "g6-usub-definite",
+    unit: U6,
+    topic: "u-substitution",
+    difficulty: "hard",
+    manifestation: "u-substitution:definite-bounds",
+    build: (r: RNG) => {
+      const b = ri(r, 1, 3);
+      // ∫_0^b 2x (x^2+1)^2 dx = [ (x^2+1)^3 /3 ]
+      const val = ((b * b + 1) ** 3 - 1) / 3;
+      const correct = dec(val, 3);
+      return {
+        prompt: `Evaluate $\\displaystyle\\int_{0}^{${b}} 2x\\left(x^{2}+1\\right)^{2}\\,dx$.`,
+        correct,
+        distractors: opts(correct, [dec(val * 3, 3), dec(val / 2, 3), dec(((b * b + 1) ** 3) / 3, 3), dec(val + 1, 3)]),
+        explanation: `Let $u=x^{2}+1$, so $du=2x\\,dx$ and the bounds become $u=1$ to $u=${b * b + 1}$. Then the integral is $\\left[\\frac{u^{3}}{3}\\right]_{1}^{${b * b + 1}} = ${correct}$.`,
+      };
+    },
+  },
+  {
+    id: "g6-usub-choose-u",
+    unit: U6,
+    topic: "u-substitution",
+    difficulty: "medium",
+    manifestation: "u-substitution:choose-u",
+    build: (r: RNG) => {
+      const k = ri(r, 2, 7);
+      const correct = `u = x^{3} + ${k}`;
+      return {
+        prompt: `Which substitution best evaluates $\\displaystyle\\int \\frac{x^{2}}{x^{3} + ${k}}\\,dx$?`,
+        correct,
+        distractors: [`u = x^{2}`, `u = x^{3}`, `u = \\dfrac{1}{x^{3} + ${k}}`],
+        explanation: `With $u = x^{3} + ${k}$, $du = 3x^{2}\\,dx$ matches the numerator up to a constant, giving $\\frac{1}{3}\\ln\\left|x^{3}+${k}\\right| + C$.`,
+      };
+    },
+  },
+  {
+    id: "g6-usub-not-applicable",
+    unit: U6,
+    topic: "u-substitution",
+    difficulty: "medium",
+    manifestation: "u-substitution:not-applicable",
+    build: (r: RNG) => {
+      const k = ri(r, 2, 6);
+      const correct = `\\displaystyle\\int x\\cos(x)\\,dx`;
+      return {
+        prompt: `For which integral does a single $u$-substitution fail to finish the problem?`,
+        correct,
+        distractors: [
+          `\\displaystyle\\int x\\cos\\left(x^{2}\\right)\\,dx`,
+          `\\displaystyle\\int \\frac{${coefTex(k)}}{${k}x + 1}\\,dx`,
+          `\\displaystyle\\int \\left(x + ${k}\\right)^{5}\\,dx`,
+        ],
+        explanation: `In $\\int x\\cos(x)\\,dx$ the factor $x$ is not the derivative of the cosine's argument, so substitution leaves an $x$ behind; integration by parts is required.`,
+      };
+    },
+  },
+  {
+    id: "g6-ibp-poly-trig",
+    unit: U6,
+    topic: "integration-by-parts",
+    difficulty: "hard",
+    track: "bc",
+    manifestation: "integration-by-parts:polynomial-trig",
+    build: (r: RNG) => {
+      const k = ri(r, 1, 5);
+      const correct = `${coefTex(k)}\\left(x\\sin(x) + \\cos(x)\\right) + C`;
+      return {
+        prompt: `Evaluate $\\displaystyle\\int ${coefTex(k)}x\\cos(x)\\,dx$.`,
+        correct,
+        distractors: [
+          `${coefTex(k)}\\left(x\\sin(x) - \\cos(x)\\right) + C`,
+          `${coefTex(k)}\\left(x\\cos(x) + \\sin(x)\\right) + C`,
+          `\\dfrac{${k}x^{2}\\sin(x)}{2} + C`,
+        ],
+        explanation: `Take $u=x$ and $dv=\\cos(x)\\,dx$: the result is $x\\sin(x) - \\int \\sin(x)\\,dx = x\\sin(x) + \\cos(x)$, scaled by $${k}$.`,
+      };
+    },
+  },
+  {
+    id: "g6-ibp-repeated",
+    unit: U6,
+    topic: "integration-by-parts",
+    difficulty: "hard",
+    track: "bc",
+    manifestation: "integration-by-parts:repeated",
+    build: (r: RNG) => {
+      const correct = `\\text{two}`;
+      return {
+        prompt: `How many applications of integration by parts are needed to evaluate $\\displaystyle\\int x^{2}e^{x}\\,dx$?`,
+        correct,
+        distractors: [`\\text{one}`, `\\text{three}`, `\\text{none; substitution suffices}`],
+        explanation: `Each application lowers the power of $x$ by one, so $x^{2}$ requires two rounds before the polynomial factor disappears.`,
+      };
+    },
+  },
+  {
+    id: "g6-ibp-choose-parts",
+    unit: U6,
+    topic: "integration-by-parts",
+    difficulty: "medium",
+    track: "bc",
+    manifestation: "integration-by-parts:choose-parts",
+    build: (r: RNG) => {
+      const correct = `u = \\ln(x),\\; dv = x\\,dx`;
+      return {
+        prompt: `Which choice of parts evaluates $\\displaystyle\\int x\\ln(x)\\,dx$ most directly?`,
+        correct,
+        distractors: [
+          `u = x,\\; dv = \\ln(x)\\,dx`,
+          `u = x\\ln(x),\\; dv = dx`,
+          `u = \\dfrac{1}{x},\\; dv = x\\,dx`,
+        ],
+        explanation: `Choosing $u=\\ln(x)$ makes $du=\\frac{1}{x}\\,dx$, which cancels against $v=\\frac{x^{2}}{2}$ and leaves an elementary integral.`,
+      };
+    },
+  },
+  {
+    id: "g6-ibp-definite",
+    unit: U6,
+    topic: "integration-by-parts",
+    difficulty: "hard",
+    track: "bc",
+    manifestation: "integration-by-parts:definite",
+    build: (r: RNG) => {
+      const b = ri(r, 1, 3);
+      const val = b * Math.exp(b) - Math.exp(b) + 1;
+      const correct = dec(val, 3);
+      return {
+        prompt: `Evaluate $\\displaystyle\\int_{0}^{${b}} xe^{x}\\,dx$.`,
+        correct,
+        distractors: opts(correct, [dec(b * Math.exp(b), 3), dec(Math.exp(b) - 1, 3), dec(val + 1, 3), dec(val / 2, 3)]),
+        explanation: `Parts with $u=x$, $dv=e^{x}\\,dx$ gives $\\left[xe^{x} - e^{x}\\right]_{0}^{${b}} = ${correct}$.`,
+      };
+    },
+  },
+  {
+    id: "g6-pf-setup",
+    unit: U6,
+    topic: "partial-fractions",
+    difficulty: "medium",
+    track: "bc",
+    manifestation: "partial-fractions:setup",
+    build: (r: RNG) => {
+      const a = ri(r, 1, 4);
+      const b = a + ri(r, 1, 4);
+      const correct = `\\dfrac{A}{x - ${a}} + \\dfrac{B}{x - ${b}}`;
+      return {
+        prompt: `What is the correct partial fraction form for $\\dfrac{1}{\\left(x - ${a}\\right)\\left(x - ${b}\\right)}$?`,
+        correct,
+        distractors: [
+          `\\dfrac{A}{x - ${a}} + \\dfrac{Bx + C}{x - ${b}}`,
+          `\\dfrac{Ax + B}{\\left(x - ${a}\\right)\\left(x - ${b}\\right)}`,
+          `\\dfrac{A}{\\left(x - ${a}\\right)\\left(x - ${b}\\right)}`,
+        ],
+        explanation: `Each distinct linear factor contributes a single constant numerator, giving $\\frac{A}{x-${a}} + \\frac{B}{x-${b}}$.`,
+      };
+    },
+  },
+  {
+    id: "g6-pf-long-division",
+    unit: U6,
+    topic: "partial-fractions",
+    difficulty: "hard",
+    track: "bc",
+    manifestation: "partial-fractions:long-division",
+    build: (r: RNG) => {
+      const a = ri(r, 1, 6);
+      const correct = `1 + \\dfrac{${a}}{x - ${a}}`;
+      return {
+        prompt: `Rewrite $\\dfrac{x}{x - ${a}}$ in a form suitable for integration.`,
+        correct,
+        distractors: [
+          `\\dfrac{${a}}{x - ${a}}`,
+          `1 - \\dfrac{${a}}{x - ${a}}`,
+          `x - \\dfrac{${a}}{x - ${a}}`,
+        ],
+        explanation: `Because the degrees match, divide first: $\\frac{x}{x-${a}} = \\frac{(x - ${a}) + ${a}}{x - ${a}} = 1 + \\frac{${a}}{x-${a}}$.`,
+      };
+    },
+  },
+  {
+    id: "g6-pf-logistic-link",
+    unit: U6,
+    topic: "partial-fractions",
+    difficulty: "hard",
+    track: "bc",
+    manifestation: "partial-fractions:logistic-link",
+    build: (r: RNG) => {
+      const M = pick(r, [100, 200, 500, 1000] as const);
+      const correct = `\\dfrac{1}{P} + \\dfrac{1}{${M} - P}`;
+      return {
+        prompt: `Separating the logistic equation $\\dfrac{dP}{dt} = kP\\left(1 - \\dfrac{P}{${M}}\\right)$ requires integrating $\\dfrac{${M}}{P\\left(${M} - P\\right)}$. Which decomposition is correct?`,
+        correct,
+        distractors: [
+          `\\dfrac{1}{P} - \\dfrac{1}{${M} - P}`,
+          `\\dfrac{${M}}{P} + \\dfrac{${M}}{${M} - P}`,
+          `\\dfrac{1}{P\\left(${M} - P\\right)}`,
+        ],
+        explanation: `Writing $\\frac{${M}}{P(${M}-P)} = \\frac{A}{P} + \\frac{B}{${M}-P}$ and clearing denominators gives $A=B=1$.`,
+      };
+    },
+  },
+  {
+    id: "g6-improper-unbounded-integrand",
+    unit: U6,
+    topic: "improper-integrals",
+    difficulty: "hard",
+    track: "bc",
+    manifestation: "improper-integrals:unbounded-integrand",
+    build: (r: RNG) => {
+      const b = ri(r, 1, 6);
+      const correct = `${dec(2 * Math.sqrt(b), 3)}`;
+      return {
+        prompt: `Evaluate $\\displaystyle\\int_{0}^{${b}} \\frac{1}{\\sqrt{x}}\\,dx$, or state that it diverges.`,
+        correct,
+        distractors: opts(correct, [`${dec(Math.sqrt(b), 3)}`, `\\text{divergent}`, `${dec(Math.sqrt(b) / 2, 3)}`, `${dec(4 * Math.sqrt(b), 3)}`]),
+        explanation: `The integrand is unbounded at $0$, so use a limit: $\\lim_{a\\to 0^{+}} \\left[2\\sqrt{x}\\right]_{a}^{${b}} = 2\\sqrt{${b}} = ${correct}$.`,
+      };
+    },
+  },
+  {
+    id: "g6-improper-p-integral",
+    unit: U6,
+    topic: "improper-integrals",
+    difficulty: "medium",
+    track: "bc",
+    manifestation: "improper-integrals:p-integral",
+    build: (r: RNG) => {
+      const p = pick(r, [2, 3, 4] as const);
+      const correct = `\\dfrac{1}{${p - 1}}`;
+      return {
+        prompt: `Evaluate $\\displaystyle\\int_{1}^{\\infty} \\frac{1}{x^{${p}}}\\,dx$, or state that it diverges.`,
+        correct,
+        distractors: [`\\dfrac{1}{${p}}`, `\\text{divergent}`, `\\dfrac{1}{${p + 1}}`],
+        explanation: `Since $${p} > 1$, the integral converges to $\\frac{1}{${p} - 1} = \\frac{1}{${p - 1}}$.`,
+      };
+    },
+  },
+  {
+    id: "g6-improper-limit-notation",
+    unit: U6,
+    topic: "improper-integrals",
+    difficulty: "medium",
+    track: "bc",
+    manifestation: "improper-integrals:limit-notation",
+    build: (r: RNG) => {
+      const a = ri(r, 1, 5);
+      const correct = `\\displaystyle\\lim_{b\\to\\infty}\\int_{${a}}^{b} f(x)\\,dx`;
+      return {
+        prompt: `Which expression correctly defines $\\displaystyle\\int_{${a}}^{\\infty} f(x)\\,dx$?`,
+        correct,
+        distractors: [
+          `\\displaystyle\\int_{${a}}^{\\infty} f(x)\\,dx \\text{ evaluated by substituting } \\infty`,
+          `\\displaystyle\\lim_{b\\to\\infty}\\int_{b}^{\\infty} f(x)\\,dx`,
+          `\\displaystyle\\lim_{a\\to\\infty}\\int_{${a}}^{a} f(x)\\,dx`,
+        ],
+        explanation: `An infinite limit of integration is replaced by a finite bound and a limit is taken as that bound grows without bound.`,
+      };
+    },
+  },
+  {
+    id: "g6-improper-compare",
+    unit: U6,
+    topic: "improper-integrals",
+    difficulty: "hard",
+    track: "bc",
+    manifestation: "improper-integrals:compare",
+    build: (r: RNG) => {
+      const correct = `\\displaystyle\\int_{1}^{\\infty} \\frac{1}{x}\\,dx`;
+      return {
+        prompt: `Which of these improper integrals diverges?`,
+        correct,
+        distractors: [
+          `\\displaystyle\\int_{1}^{\\infty} \\frac{1}{x^{2}}\\,dx`,
+          `\\displaystyle\\int_{1}^{\\infty} e^{-x}\\,dx`,
+          `\\displaystyle\\int_{1}^{\\infty} \\frac{1}{x^{3}}\\,dx`,
+        ],
+        explanation: `The integral of $\\frac{1}{x}$ grows like $\\ln(b)$, which is unbounded, while the other integrands decay fast enough to converge.`,
+      };
+    },
+  },
+  {
+    id: "g6-accum-graph-eval",
+    unit: U6,
+    topic: "accumulation-functions",
+    difficulty: "medium",
+    manifestation: "accumulation-functions:graph-evaluation",
+    build: (r: RNG) => {
+      const h = ri(r, 2, 5);
+      const pts: Array<[number, number]> = [
+        [0, h],
+        [3, h],
+        [3, -h],
+        [6, -h],
+      ];
+      const correct = `${0}`;
+      return {
+        prompt: `Let $g(x)=\\displaystyle\\int_{0}^{x} f(t)\\,dt$, where the graph of $f$ shown is piecewise constant. Find $g(6)$.`,
+        figure: graph("y = f(t)", pts, { xMin: -1, xMax: 7, yMin: -h - 1, yMax: h + 1 }),
+        correct,
+        distractors: opts(correct, [`${3 * h}`, `${-3 * h}`, `${6 * h}`, `${h}`]),
+        explanation: `The signed area is $3(${h})$ on $[0,3]$ and $-3(${h})$ on $[3,6]$, which cancel, so $g(6)=0$.`,
+      };
+    },
+  },
+  {
+    id: "g6-accum-extrema",
+    unit: U6,
+    topic: "accumulation-functions",
+    difficulty: "hard",
+    manifestation: "accumulation-functions:extrema",
+    build: (r: RNG) => {
+      const c = ri(r, 2, 5);
+      const correct = `\\text{where } f \\text{ changes from negative to positive}`;
+      return {
+        prompt: `Let $g(x)=\\displaystyle\\int_{${c}}^{x} f(t)\\,dt$ for a continuous $f$. Where does $g$ have a local minimum?`,
+        correct,
+        distractors: [
+          `\\text{where } f \\text{ changes from positive to negative}`,
+          `\\text{where } f \\text{ has a minimum}`,
+          `\\text{at } x = ${c}, \\text{ since } g(${c}) = 0`,
+        ],
+        explanation: `Because $g' = f$, a local minimum of $g$ occurs where $f$ crosses from negative to positive.`,
+      };
+    },
+  },
+  {
+    id: "g6-accum-concavity",
+    unit: U6,
+    topic: "accumulation-functions",
+    difficulty: "hard",
+    manifestation: "accumulation-functions:concavity",
+    build: (r: RNG) => {
+      const correct = `\\text{where } f \\text{ is increasing}`;
+      return {
+        prompt: `Let $g(x)=\\displaystyle\\int_{0}^{x} f(t)\\,dt$ for a differentiable $f$. On what set is the graph of $g$ concave up?`,
+        correct,
+        distractors: [
+          `\\text{where } f \\text{ is positive}`,
+          `\\text{where } f \\text{ is decreasing}`,
+          `\\text{where } f \\text{ is concave up}`,
+        ],
+        explanation: `$g'' = f'$, so $g$ is concave up exactly where $f$ is increasing.`,
+      };
+    },
+  },
+  {
+    id: "g6-accum-table-rate",
+    unit: U6,
+    topic: "accumulation-functions",
+    difficulty: "medium",
+    manifestation: "accumulation-functions:table-rate",
+    calculator: true,
+    build: (r: RNG) => {
+      const xs = [0, 2, 4, 6];
+      const a = ri(r, 2, 6);
+      const b = a + ri(r, 1, 5);
+      const c = b + ri(r, 1, 5);
+      const d = c + ri(r, 1, 5);
+      const trap = 2 * ((a + b) / 2 + (b + c) / 2 + (c + d) / 2);
+      const correct = dec(trap, 3);
+      return {
+        prompt: `Water flows into a tank at the rate $R(t)$ liters per hour, sampled below.\n\n${tablePair("R(t)", xs, [`${a}`, `${b}`, `${c}`, `${d}`])}\n\nUse a trapezoidal sum with the three subintervals to approximate the liters added over $0\\le t\\le 6$.`,
+        correct,
+        distractors: opts(correct, [dec(trap / 2, 3), dec(2 * (a + b + c), 3), dec(2 * (b + c + d), 3), dec(a + b + c + d, 3)]),
+        explanation: `Each subinterval has width $2$, so the sum is $2\\left(\\frac{${a}+${b}}{2} + \\frac{${b}+${c}}{2} + \\frac{${c}+${d}}{2}\\right) = ${correct}$ liters.`,
+      };
+    },
+  },
+  {
+    id: "g6-accum-must-be-true",
+    unit: U6,
+    topic: "accumulation-functions",
+    difficulty: "hard",
+    manifestation: "accumulation-functions:must-be-true",
+    build: (r: RNG) => {
+      const c = ri(r, 1, 6);
+      const correct = `g(${c}) = 0`;
+      return {
+        prompt: `Let $g(x)=\\displaystyle\\int_{${c}}^{x} f(t)\\,dt$, where $f$ is continuous and positive. Which statement must be true?`,
+        correct,
+        distractors: [
+          `g(x) > 0 \\text{ for all } x`,
+          `g \\text{ is concave up for all } x`,
+          `g(${c}) = f(${c})`,
+        ],
+        explanation: `An integral over a degenerate interval is zero, so $g(${c})=0$. Since $g'=f>0$, $g$ increases and is negative for $x<${c}$; concavity depends on $f'$.`,
+      };
+    },
+  },
+);
