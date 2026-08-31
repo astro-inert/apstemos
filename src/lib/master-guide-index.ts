@@ -165,6 +165,6 @@ export const GUIDE_ENTRIES: GuideEntry[] = [
   { id: "abs-cond", page: 10, label: "Absolute vs conditional convergence", topics: ["alternating-series-test", "comparison-tests"], match: /absolutely|conditionally/i },
   { id: "radius", page: 10, label: "Radius of convergence", topics: ["ratio-test", "power-series-operations"], match: /radius/i },
   { id: "interval", page: 10, label: "Interval of convergence with endpoint checks", topics: ["ratio-test", "power-series-operations"], match: /interval of convergence|endpoint/i },
-].map((e) => ({ ...e, min: e.min ?? MIN }));
+].map((e) => ({ ...e, min: (e as { min?: number }).min ?? MIN }));
 
 export const GUIDE_ENTRY_COUNT = GUIDE_ENTRIES.length;
