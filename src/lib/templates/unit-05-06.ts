@@ -415,7 +415,7 @@ export const UNIT_05_06_TEMPLATES: QuestionTemplate[] = [
         [c + 0.5, 0.2],
         [c + 3, 4],
       ];
-      const correct = `\\text{The test is inconclusive because $f'$ touches zero without changing sign or slope near $x=${c}$.}`;
+      const correct = `\\text{The test is inconclusive at $x=${c}$.}`;
       return {
         prompt: `The graph of $f'$ shown touches the $x$-axis at $x=${c}$ but stays non-negative on both sides, flattening out right at that point ($f''(${c})=0$ as well). What can be concluded using the Second Derivative Test at $x=${c}$?`,
         figure: pwGraph(pts, { xMin: c - 4, xMax: c + 4, yMin: -1, yMax: 5 }, "y = f'(x)"),
@@ -423,7 +423,7 @@ export const UNIT_05_06_TEMPLATES: QuestionTemplate[] = [
         distractors: [
           `\\text{$f$ has a local maximum at $x=${c}$.}`,
           `\\text{$f$ has a local minimum at $x=${c}$.}`,
-          `\\text{$f$ is concave up at $x=${c}$.}`,
+          `\\text{$f$ has an inflection point at $x=${c}$.}`,
         ],
         explanation: `Because $f''(${c})=0$ as well, the Second Derivative Test gives no information; here $f'$ does not change sign at $x=${c}$, so it is neither a maximum nor a minimum, and the test result is inconclusive.`,
       };
