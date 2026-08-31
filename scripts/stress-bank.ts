@@ -86,7 +86,10 @@ for (const key of keys) {
     const o = others.map(shape);
     if (a.text && o.every((s) => !s.text)) add(key, "obvious-only-text-answer", answer.text);
     if (!a.text && o.every((s) => s.text)) add(key, "obvious-only-math-answer", answer.text);
-    if (a.frac && o.every((s) => !s.frac)) add(key, "obvious-only-fraction-answer", answer.text);
+    // The fraction heuristic only makes sense when all four options are short,
+    // pure-math expressions; prose options routinely contain a fraction.
+    const pureMath = [answer.text, ...others].every((t) => !t.includes("\\text{") && t.replace(/\s+/g, "").length < 40);
+    if (pureMath && a.frac && o.every((s) => !s.frac)) add(key, "obvious-only-fraction-answer", answer.text);
     const maxOther = Math.max(...o.map((s) => s.len));
     if (a.len > 2.2 * maxOther + 4) add(key, "obvious-longest-answer", `${a.len} vs ${maxOther}`);
     positions.set(q.answer_label, (positions.get(q.answer_label) ?? 0) + 1);
@@ -108,8 +111,12 @@ const built = keys.map((k) => ({ key: k, q: buildQuestion(k)! })).filter((x) => 
 // Figures are mandatory for graphical and tabular items, and a tabular item
 // must actually carry a table.
 for (const { key, q } of built) {
-  if ((q.representation === "graphical" || q.representation === "tabular") && !q.figure) {
-    add(key, "missing-figure", `${q.representation} item without a figure (${q.manifestation})`);
+  const inlineTable = /\|.*\|/.test(q.prompt);
+  if (q.representation === "graphical" && !q.figure) {
+    add(key, "missing-figure", `graphical item without a figure (${q.manifestation})`);
+  }
+  if (q.representation === "tabular" && !q.figure && !inlineTable) {
+    add(key, "missing-figure", `tabular item with neither a figure nor an inline table (${q.manifestation})`);
   }
   if (q.representation === "tabular" && q.figure && q.figure.kind !== "table") {
     add(key, "wrong-figure-kind", `tabular item rendered as ${q.figure.kind}`);
