@@ -837,7 +837,7 @@ export const UNIT_03_04_TEMPLATES: QuestionTemplate[] = [
         caption: "Selected values of f and f'",
       };
       // choose target index so f(target)=fVals[idx], want (f^-1)'(fVals[idx]) = 1/fpVals[idx]
-      const idx = 2;
+      const idx = ri(r, 1, 3);
       const correct = frac(1, fpVals[idx]);
       return {
         prompt: `The table gives values of a differentiable, invertible function $f$ and its derivative. Using the table, find $(f^{-1})'(${fVals[idx]})$.`,
