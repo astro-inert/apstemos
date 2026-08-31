@@ -3475,18 +3475,18 @@ GAP_TEMPLATES.push(
     difficulty: "medium",
     manifestation: "slope-fields:solution-curve",
     build: (r: RNG) => {
-      const y0 = ri(r, 1, 4);
-      const correct = `\\text{It increases and its slopes grow steeper as } x \\text{ increases.}`;
+      const y0 = ri(r, 1, 3);
+      const correct = `\\text{It increases, and its slopes grow steeper as } x \\text{ increases.}`;
       return {
-        prompt: `A slope field for $\\dfrac{dy}{dx} = xy$ is shown. Describe the solution curve through $(1, ${y0})$ for $x > 1$.`,
-        figure: { kind: "slope-field", expr: "xy", label: "dy/dx = xy" } as Figure,
+        prompt: `A slope field for $\\dfrac{dy}{dx} = x + y$ is shown. Describe the solution curve through $(1, ${y0})$ for $x > 1$.`,
+        figure: { kind: "slope-field", a: 1, b: 1, extent: 3 },
         correct,
         distractors: [
           `\\text{It decreases toward } y = 0.`,
-          `\\text{It is a horizontal line through } y = ${y0}.`,
+          `\\text{It is the horizontal line } y = ${y0}.`,
           `\\text{It increases with slopes that flatten as } x \\text{ increases.}`,
         ],
-        explanation: `With $x>0$ and $y>0$ the slope $xy$ is positive and grows as both $x$ and $y$ grow, so the curve rises with increasingly steep slopes.`,
+        explanation: `At $(1,${y0})$ the slope is $${1 + y0} > 0$, so $y$ grows; as both $x$ and $y$ increase, the slope $x + y$ increases as well, making the curve steeper.`,
       };
     },
   },
@@ -3514,17 +3514,18 @@ GAP_TEMPLATES.push(
     difficulty: "hard",
     manifestation: "slope-fields:impossible-curve",
     build: (r: RNG) => {
-      const correct = `\\text{a curve with a horizontal tangent at a point where } x \\ne 0 \\text{ and } y \\ne 0`;
+      void r;
+      const correct = `\\text{a curve with a horizontal tangent at a point where } y \\ne -x`;
       return {
-        prompt: `For $\\dfrac{dy}{dx} = xy$, which of the following cannot be part of a solution curve?`,
-        figure: { kind: "slope-field", expr: "xy", label: "dy/dx = xy" } as Figure,
+        prompt: `The slope field for $\\dfrac{dy}{dx} = x + y$ is shown. Which of the following cannot occur on a solution curve?`,
+        figure: { kind: "slope-field", a: 1, b: 1, extent: 3 },
         correct,
         distractors: [
-          `\\text{the horizontal line } y = 0`,
-          `\\text{a curve with a horizontal tangent where } x = 0`,
-          `\\text{a curve rising steeply in the first quadrant}`,
+          `\\text{a horizontal tangent at } (2, -2)`,
+          `\\text{a steeply rising arc in the first quadrant}`,
+          `\\text{a decreasing arc in the third quadrant}`,
         ],
-        explanation: `The slope is zero only when $x=0$ or $y=0$, so a horizontal tangent away from both axes is impossible.`,
+        explanation: `The slope is zero exactly when $x + y = 0$, so a horizontal tangent can occur only on the line $y = -x$.`,
       };
     },
   },
