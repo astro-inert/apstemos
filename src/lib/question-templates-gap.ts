@@ -3997,9 +3997,8 @@ GAP_TEMPLATES.push(
     difficulty: "medium",
     manifestation: "area-between-curves:signed-vs-geometric",
     build: (r: RNG) => {
-      const b = pick(r, [Math.PI] as const);
-      void b;
-      const correct = `\\text{The integral is } 0, \\text{ but the geometric area is } 2.`;
+      void r;
+      const correct = `\\text{The integral is } 0, \\text{ but the geometric area is } 4.`;
       return {
         prompt: `Compare $\\displaystyle\\int_{0}^{2\\pi} \\sin(x)\\,dx$ with the total area between the graph of $\\sin(x)$ and the $x$-axis on $[0,2\\pi]$.`,
         correct,
@@ -4008,7 +4007,7 @@ GAP_TEMPLATES.push(
           `\\text{Both equal } 4.`,
           `\\text{The integral is } 4, \\text{ but the geometric area is } 0.`,
         ],
-        explanation: `The positive and negative signed areas cancel in the integral, while the geometric area adds their magnitudes: $2 + 2 = 4$. Wait: each hump has area $2$, so the total area is $4$ and the integral is $0$.`,
+        explanation: `Each hump has area $2$. The signed areas cancel, so the integral is $0$, while the geometric area adds the magnitudes: $2 + 2 = 4$.`,
       };
     },
   },
