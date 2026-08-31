@@ -541,8 +541,8 @@ export const UNIT_07_08_TEMPLATES: QuestionTemplate[] = [
       return {
         prompt: `The graph of $f(x)=\\sqrt{${R}^{2}-x^{2}}$ is a semicircle of radius ${R} on $[-${R},${R}]$. What is the average value of $f$ on this interval?`,
         correct: piFrac(R, 4),
-        distractors: [piFrac(R, 2), `${R}`, piFrac(R * R, 2)],
-        explanation: `The average value is $\\dfrac{1}{2${R}}\\int_{-${R}}^{${R}}f(x)\\,dx=\\dfrac{1}{2${R}}\\cdot\\dfrac{\\pi ${R}^{2}}{2}=${piFrac(R, 4)}$. Using the diameter incorrectly or reporting the area instead of the average gives the other choices.`,
+        distractors: [piFrac(R, 2), piFrac(R, 8), piFrac(R * R, 2)],
+        explanation: `The average value is $\\dfrac{1}{2${R}}\\int_{-${R}}^{${R}}f(x)\\,dx=\\dfrac{1}{2${R}}\\cdot\\dfrac{\\pi ${R}^{2}}{2}=${piFrac(R, 4)}$. Dividing by the radius instead of the diameter, or reporting the area instead of the average, gives the other choices.`,
         figure: {
           kind: "graph",
           curves: [{ points: pts, smooth: true }],
