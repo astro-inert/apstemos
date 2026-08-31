@@ -99,6 +99,56 @@ for (const [label, n] of positions) {
   if (share > 0.32 || share < 0.18) add("(bank)", "answer-position-skew", `${label}: ${(share * 100).toFixed(1)}%`);
 }
 
+/* ------------------------------------------------------------------ */
+/* Bank-level structural checks                                        */
+/* ------------------------------------------------------------------ */
+
+const built = keys.map((k) => ({ key: k, q: buildQuestion(k)! })).filter((x) => x.q);
+
+// Figures are mandatory for graphical and tabular items, and a tabular item
+// must actually carry a table.
+for (const { key, q } of built) {
+  if ((q.representation === "graphical" || q.representation === "tabular") && !q.figure) {
+    add(key, "missing-figure", `${q.representation} item without a figure (${q.manifestation})`);
+  }
+  if (q.representation === "tabular" && q.figure && q.figure.kind !== "table") {
+    add(key, "wrong-figure-kind", `tabular item rendered as ${q.figure.kind}`);
+  }
+}
+
+/** Collapses numbers and whitespace so two variants of one skeleton collide. */
+const skeleton = (s: string) => s.replace(/-?\d+(\.\d+)?/g, "#").replace(/\s+/g, " ").trim();
+
+// Near-duplicate prompts across the whole bank (same skeleton AND same answer set).
+const nearDupes = new Map<string, string[]>();
+for (const { key, q } of built) {
+  const fp = `${skeleton(q.prompt)}||${q.choices.map((c) => c.text.replace(/\s+/g, "")).sort().join("~")}`;
+  nearDupes.set(fp, [...(nearDupes.get(fp) ?? []), key]);
+}
+for (const [, group] of nearDupes) {
+  if (group.length > 1) add(group[1]!, "near-duplicate", `same prompt skeleton and answer set as ${group[0]}`);
+}
+
+// Per-manifestation depth: every manifestation present in the bank needs >= 3 items.
+const perManifestation = new Map<string, number>();
+for (const { q } of built) perManifestation.set(q.manifestation, (perManifestation.get(q.manifestation) ?? 0) + 1);
+for (const [m, n] of perManifestation) {
+  if (n < 3) add("(bank)", "thin-manifestation", `${m}: ${n}`);
+}
+
+// Reasoning balance: pure computation must not dominate the bank.
+const compute = built.filter((b) => b.q.reasoning === "computation").length;
+if (compute / built.length > 0.32) {
+  add("(bank)", "computation-heavy", `${((compute / built.length) * 100).toFixed(1)}% computation`);
+}
+
+// Representation floors.
+const repShare = (name: string) => built.filter((b) => b.q.representation === name).length / built.length;
+for (const [name, floor] of [["graphical", 0.12], ["tabular", 0.08], ["verbal", 0.06], ["contextual", 0.12]] as const) {
+  const share = repShare(name);
+  if (share < floor) add("(bank)", "representation-floor", `${name}: ${(share * 100).toFixed(1)}% < ${(floor * 100).toFixed(0)}%`);
+}
+
 const byKind = new Map<string, Issue[]>();
 for (const i of issues) byKind.set(i.kind, [...(byKind.get(i.kind) ?? []), i]);
 
@@ -109,3 +159,4 @@ for (const [kind, list] of [...byKind.entries()].sort((a, b) => b[1].length - a[
   for (const i of list.slice(0, 8)) console.log(`   ${i.key} :: ${i.detail}`);
 }
 if (issues.length) process.exitCode = 1;
+
