@@ -3459,3 +3459,378 @@ GAP_TEMPLATES.push(
     },
   },
 );
+
+/* ------------------------------------------------------------------ */
+/* Unit 7 — Differential equations                                     */
+/* ------------------------------------------------------------------ */
+
+const U7 = "unit-7-differential-equations";
+
+GAP_TEMPLATES.push(
+  {
+    id: "g7-slope-solution-curve",
+    unit: U7,
+    topic: "slope-fields",
+    difficulty: "medium",
+    manifestation: "slope-fields:solution-curve",
+    build: (r: RNG) => {
+      const y0 = ri(r, 1, 4);
+      const correct = `\\text{It increases and its slopes grow steeper as } x \\text{ increases.}`;
+      return {
+        prompt: `A slope field for $\\dfrac{dy}{dx} = xy$ is shown. Describe the solution curve through $(1, ${y0})$ for $x > 1$.`,
+        figure: { kind: "slope-field", expr: "xy", label: "dy/dx = xy" } as Figure,
+        correct,
+        distractors: [
+          `\\text{It decreases toward } y = 0.`,
+          `\\text{It is a horizontal line through } y = ${y0}.`,
+          `\\text{It increases with slopes that flatten as } x \\text{ increases.}`,
+        ],
+        explanation: `With $x>0$ and $y>0$ the slope $xy$ is positive and grows as both $x$ and $y$ grow, so the curve rises with increasingly steep slopes.`,
+      };
+    },
+  },
+  {
+    id: "g7-slope-equilibrium",
+    unit: U7,
+    topic: "slope-fields",
+    difficulty: "medium",
+    manifestation: "slope-fields:equilibrium",
+    build: (r: RNG) => {
+      const a = ri(r, 2, 8);
+      const correct = `y = ${a}`;
+      return {
+        prompt: `Which equilibrium solution does the differential equation $\\dfrac{dy}{dx} = y - ${a}$ have?`,
+        correct,
+        distractors: [`y = 0`, `y = -${a}`, `x = ${a}`],
+        explanation: `An equilibrium solution is a constant solution, so set $y - ${a} = 0$ to get $y = ${a}$.`,
+      };
+    },
+  },
+  {
+    id: "g7-slope-impossible",
+    unit: U7,
+    topic: "slope-fields",
+    difficulty: "hard",
+    manifestation: "slope-fields:impossible-curve",
+    build: (r: RNG) => {
+      const correct = `\\text{a curve with a horizontal tangent at a point where } x \\ne 0 \\text{ and } y \\ne 0`;
+      return {
+        prompt: `For $\\dfrac{dy}{dx} = xy$, which of the following cannot be part of a solution curve?`,
+        figure: { kind: "slope-field", expr: "xy", label: "dy/dx = xy" } as Figure,
+        correct,
+        distractors: [
+          `\\text{the horizontal line } y = 0`,
+          `\\text{a curve with a horizontal tangent where } x = 0`,
+          `\\text{a curve rising steeply in the first quadrant}`,
+        ],
+        explanation: `The slope is zero only when $x=0$ or $y=0$, so a horizontal tangent away from both axes is impossible.`,
+      };
+    },
+  },
+  {
+    id: "g7-sep-verify",
+    unit: U7,
+    topic: "separable-differential-equations",
+    difficulty: "medium",
+    manifestation: "separable-differential-equations:verify",
+    build: (r: RNG) => {
+      const k = ri(r, 2, 5);
+      const correct = `y = e^{${k}x}`;
+      return {
+        prompt: `Which function is a solution of $\\dfrac{dy}{dx} = ${coefTex(k)}y$?`,
+        correct,
+        distractors: [`y = ${coefTex(k)}x`, `y = e^{x} + ${k}`, `y = x^{${k}}`],
+        explanation: `Differentiating $y=e^{${k}x}$ gives $\\frac{dy}{dx} = ${k}e^{${k}x} = ${k}y$, matching the equation.`,
+      };
+    },
+  },
+  {
+    id: "g7-sep-model",
+    unit: U7,
+    topic: "separable-differential-equations",
+    difficulty: "medium",
+    manifestation: "separable-differential-equations:model",
+    build: (r: RNG) => {
+      const A = ri(r, 20, 90);
+      const correct = `\\dfrac{dT}{dt} = k\\left(T - ${A}\\right)`;
+      return {
+        prompt: `An object's temperature $T$ changes at a rate proportional to the difference between $T$ and the surrounding temperature $${A}$ degrees. Which equation models this?`,
+        correct,
+        distractors: [
+          `\\dfrac{dT}{dt} = kT - ${A}`,
+          `\\dfrac{dT}{dt} = \\dfrac{k}{T - ${A}}`,
+          `\\dfrac{dT}{dt} = k\\left(${A} - t\\right)`,
+        ],
+        explanation: `"Proportional to the difference" means the rate equals a constant times $\\left(T - ${A}\\right)$.`,
+      };
+    },
+  },
+  {
+    id: "g7-sep-domain",
+    unit: U7,
+    topic: "separable-differential-equations",
+    difficulty: "hard",
+    manifestation: "separable-differential-equations:domain",
+    build: (r: RNG) => {
+      const c = ri(r, 1, 5);
+      const correct = `x < ${c}`;
+      return {
+        prompt: `A solution of a separable equation is $y = \\dfrac{1}{${c} - x}$ with initial condition given at $x = 0$. On what interval is this solution valid?`,
+        correct,
+        distractors: [`x > ${c}`, `x \\ne ${c}`, `\\text{all real } x`],
+        explanation: `The solution must be continuous on an interval containing the initial value $x=0$, and it breaks at $x=${c}$, so the interval of validity is $x < ${c}$.`,
+      };
+    },
+  },
+  {
+    id: "g7-sep-separability",
+    unit: U7,
+    topic: "separable-differential-equations",
+    difficulty: "medium",
+    manifestation: "separable-differential-equations:separability",
+    build: (r: RNG) => {
+      const k = ri(r, 2, 6);
+      const correct = `\\dfrac{dy}{dx} = ${coefTex(k)}xy^{2}`;
+      return {
+        prompt: `Which differential equation is separable?`,
+        correct,
+        distractors: [
+          `\\dfrac{dy}{dx} = x + y`,
+          `\\dfrac{dy}{dx} = \\dfrac{x + y}{x}`,
+          `\\dfrac{dy}{dx} = \\sin(x + y)`,
+        ],
+        explanation: `Only the product form factors as a function of $x$ times a function of $y$, allowing the variables to be separated.`,
+      };
+    },
+  },
+  {
+    id: "g7-exp-from-data",
+    unit: U7,
+    topic: "exponential-growth-and-decay",
+    difficulty: "hard",
+    calculator: true,
+    manifestation: "exponential-growth-and-decay:from-data",
+    build: (r: RNG) => {
+      const P0 = pick(r, [50, 80, 120, 200] as const);
+      const mult = pick(r, [2, 3, 4] as const);
+      const t1 = pick(r, [4, 5, 10] as const);
+      const k = Math.log(mult) / t1;
+      const correct = dec(k, 4);
+      const body = tablePair("P(t)", [0, t1], [`${P0}`, `${P0 * mult}`]);
+      return {
+        prompt: `A population grows according to $P(t) = P_{0}e^{kt}$, with the values shown.\n\n${body}\n\nFind $k$.`,
+        correct,
+        distractors: opts(correct, [dec(mult / t1, 4), dec(Math.log(mult), 4), dec(k * 2, 4), dec(1 / k, 4)]),
+        explanation: `From $${P0 * mult} = ${P0}e^{${t1}k}$ we get $e^{${t1}k} = ${mult}$, so $k = \\frac{\\ln(${mult})}{${t1}} = ${correct}$.`,
+      };
+    },
+  },
+  {
+    id: "g7-exp-interpret-k",
+    unit: U7,
+    topic: "exponential-growth-and-decay",
+    difficulty: "medium",
+    manifestation: "exponential-growth-and-decay:interpret-constant",
+    build: (r: RNG) => {
+      const pct = pick(r, [3, 5, 8, 12] as const);
+      const correct = `\\text{The quantity decays at a continuous rate of } ${pct}\\% \\text{ per year.}`;
+      return {
+        prompt: `A quantity satisfies $\\dfrac{dA}{dt} = -0.${pct < 10 ? "0" + pct : pct}A$, where $t$ is in years. What does the constant mean?`,
+        correct,
+        distractors: [
+          `\\text{The quantity decreases by } ${pct} \\text{ units each year.}`,
+          `\\text{The quantity grows at a continuous rate of } ${pct}\\% \\text{ per year.}`,
+          `\\text{The quantity halves every } ${pct} \\text{ years.}`,
+        ],
+        explanation: `The equation says the rate of change is $-0.${pct < 10 ? "0" + pct : pct}$ times the amount present, a continuous percentage decay rate, not a fixed number of units.`,
+      };
+    },
+  },
+  {
+    id: "g7-exp-compare",
+    unit: U7,
+    topic: "exponential-growth-and-decay",
+    difficulty: "hard",
+    manifestation: "exponential-growth-and-decay:compare-models",
+    build: (r: RNG) => {
+      const a = ri(r, 2, 4);
+      const b = a + ri(r, 1, 3);
+      const A0 = pick(r, [100, 200, 400] as const);
+      const B0 = A0 / 2;
+      const correct = `B \\text{ eventually exceeds } A, \\text{ because it has the larger growth constant.}`;
+      return {
+        prompt: `Two populations satisfy $A(t) = ${A0}e^{0.0${a}t}$ and $B(t) = ${B0}e^{0.0${b}t}$. Which statement is true for large $t$?`,
+        correct,
+        distractors: [
+          `A \\text{ always exceeds } B, \\text{ because it starts larger.}`,
+          `\\text{The two populations stay in the same ratio.}`,
+          `B \\text{ never catches } A, \\text{ because } ${B0} < ${A0}.`,
+        ],
+        explanation: `The ratio $\\frac{B}{A} = \\frac{${B0}}{${A0}}e^{0.0${b - a}t}$ grows without bound, so the larger exponent wins regardless of the starting values.`,
+      };
+    },
+  },
+  {
+    id: "g7-euler-one-step",
+    unit: U7,
+    topic: "eulers-method",
+    difficulty: "medium",
+    track: "bc",
+    manifestation: "eulers-method:one-step",
+    build: (r: RNG) => {
+      const y0 = ri(r, 1, 5);
+      const h = pick(r, [0.1, 0.2, 0.5] as const);
+      const x0 = ri(r, 1, 3);
+      const slope = x0 + y0;
+      const y1 = y0 + h * slope;
+      const correct = dec(y1, 3);
+      return {
+        prompt: `Let $\\dfrac{dy}{dx} = x + y$ with $y(${x0}) = ${y0}$. Use one step of Euler's method with step size $${h}$ to approximate $y(${dec(x0 + h, 2)})$.`,
+        correct,
+        distractors: opts(correct, [dec(y0 + slope, 3), dec(y0 + h, 3), dec(y0 + h * y0, 3), dec(y0 + 2 * h * slope, 3)]),
+        explanation: `The slope at $(${x0},${y0})$ is $${slope}$, so the update is $${y0} + ${h}(${slope}) = ${correct}$.`,
+      };
+    },
+  },
+  {
+    id: "g7-euler-step-size",
+    unit: U7,
+    topic: "eulers-method",
+    difficulty: "medium",
+    track: "bc",
+    manifestation: "eulers-method:step-size",
+    build: (r: RNG) => {
+      const correct = `\\text{The approximation generally becomes more accurate.}`;
+      return {
+        prompt: `In Euler's method, what is the effect of halving the step size while keeping the same target $x$-value?`,
+        correct,
+        distractors: [
+          `\\text{The approximation becomes exact.}`,
+          `\\text{The approximation generally becomes less accurate.}`,
+          `\\text{The approximation is unchanged.}`,
+        ],
+        explanation: `Smaller steps follow the curve more closely, reducing accumulated error, though the result is still an approximation.`,
+      };
+    },
+  },
+  {
+    id: "g7-euler-over-under",
+    unit: U7,
+    topic: "eulers-method",
+    difficulty: "hard",
+    track: "bc",
+    manifestation: "eulers-method:over-under",
+    build: (r: RNG) => {
+      const correct = `\\text{An underestimate, because the solution is concave up.}`;
+      return {
+        prompt: `A solution curve of a differential equation is concave up on the interval used. How does an Euler's method approximation compare with the true value?`,
+        correct,
+        distractors: [
+          `\\text{An overestimate, because the solution is concave up.}`,
+          `\\text{Exact, because the tangent line matches the curve.}`,
+          `\\text{It cannot be determined from concavity.}`,
+        ],
+        explanation: `Each Euler step follows a tangent line, and tangent lines lie below a concave-up curve, so the approximation underestimates.`,
+      };
+    },
+  },
+  {
+    id: "g7-euler-formula-error",
+    unit: U7,
+    topic: "eulers-method",
+    difficulty: "medium",
+    track: "bc",
+    manifestation: "eulers-method:formula-error",
+    build: (r: RNG) => {
+      const correct = `y_{n+1} = y_{n} + h\\cdot f\\left(x_{n}, y_{n}\\right)`;
+      return {
+        prompt: `Which statement of the Euler update is correct for $\\dfrac{dy}{dx} = f(x,y)$ with step size $h$?`,
+        correct,
+        distractors: [
+          `y_{n+1} = y_{n} + f\\left(x_{n}, y_{n}\\right)`,
+          `y_{n+1} = y_{n} + h\\cdot f\\left(x_{n+1}, y_{n+1}\\right)`,
+          `y_{n+1} = h\\cdot f\\left(x_{n}, y_{n}\\right)`,
+        ],
+        explanation: `The change in $y$ is the slope at the current point times the step size, so the increment is $h\\cdot f(x_{n}, y_{n})$.`,
+      };
+    },
+  },
+  {
+    id: "g7-logistic-capacity",
+    unit: U7,
+    topic: "logistic-growth",
+    difficulty: "medium",
+    track: "bc",
+    manifestation: "logistic-growth:carrying-capacity",
+    build: (r: RNG) => {
+      const M = pick(r, [400, 600, 900, 1200] as const);
+      const k = pick(r, [0.02, 0.05, 0.1] as const);
+      const correct = `${M}`;
+      return {
+        prompt: `A population satisfies $\\dfrac{dP}{dt} = ${k}P\\left(1 - \\dfrac{P}{${M}}\\right)$. What is the carrying capacity?`,
+        correct,
+        distractors: opts(correct, [`${M / 2}`, `${2 * M}`, `${Math.round(k * M)}`, `0`]),
+        explanation: `The logistic form $kP\\left(1 - \\frac{P}{M}\\right)$ has carrying capacity $M = ${M}$, the nonzero equilibrium value.`,
+      };
+    },
+  },
+  {
+    id: "g7-logistic-long-term",
+    unit: U7,
+    topic: "logistic-growth",
+    difficulty: "medium",
+    track: "bc",
+    manifestation: "logistic-growth:long-term",
+    build: (r: RNG) => {
+      const M = pick(r, [500, 800, 1000] as const);
+      const P0 = M / 4;
+      const correct = `P \\to ${M}`;
+      return {
+        prompt: `A population with $P(0) = ${P0}$ satisfies $\\dfrac{dP}{dt} = 0.03P\\left(1 - \\dfrac{P}{${M}}\\right)$. What happens as $t\\to\\infty$?`,
+        correct,
+        distractors: [`P \\to ${M / 2}`, `P \\to \\infty`, `P \\to ${P0}`],
+        explanation: `Starting below the carrying capacity, the population increases and approaches $${M}$ without exceeding it. Half the capacity is where growth is fastest, not the limit.`,
+      };
+    },
+  },
+  {
+    id: "g7-logistic-from-context",
+    unit: U7,
+    topic: "logistic-growth",
+    difficulty: "hard",
+    track: "bc",
+    manifestation: "logistic-growth:from-context",
+    build: (r: RNG) => {
+      const M = pick(r, [250, 600, 1500] as const);
+      const correct = `\\dfrac{dP}{dt} = kP\\left(1 - \\dfrac{P}{${M}}\\right)`;
+      return {
+        prompt: `A fish population grows at a rate jointly proportional to the current population and to the remaining room below the maximum sustainable level of $${M}$ fish. Which model fits?`,
+        correct,
+        distractors: [
+          `\\dfrac{dP}{dt} = kP`,
+          `\\dfrac{dP}{dt} = k\\left(${M} - P\\right)`,
+          `\\dfrac{dP}{dt} = \\dfrac{kP}{${M} - P}`,
+        ],
+        explanation: `"Jointly proportional to $P$ and to the remaining room" produces the logistic product $kP\\left(1 - \\frac{P}{${M}}\\right)$.`,
+      };
+    },
+  },
+  {
+    id: "g7-logistic-graph-shape",
+    unit: U7,
+    topic: "logistic-growth",
+    difficulty: "medium",
+    track: "bc",
+    manifestation: "logistic-growth:graph-shape",
+    build: (r: RNG) => {
+      const M = pick(r, [200, 400, 1000] as const);
+      const correct = `P = ${M / 2}`;
+      return {
+        prompt: `For a logistic model with carrying capacity $${M}$ and an initial value below it, at what population is the growth rate greatest?`,
+        correct,
+        distractors: opts(correct, [`${M}`, `${M / 4}`, `0`, `${Math.round(0.75 * M)}`]),
+        explanation: `The growth rate $kP\\left(1 - \\frac{P}{${M}}\\right)$ is a downward parabola in $P$ with maximum at half the carrying capacity, which is also the inflection point of the solution curve.`,
+      };
+    },
+  },
+);
