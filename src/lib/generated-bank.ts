@@ -1,4 +1,12 @@
 import {
+  getManifestation,
+  structuralSignature as taxonomySignature,
+  type AlgebraicStructure,
+  type ReasoningType,
+  type Representation,
+} from "./ced-taxonomy";
+import { TEMPLATE_MANIFESTATION } from "./template-classification";
+import {
   TEMPLATES,
   makeRng,
   shuffle,
@@ -8,6 +16,32 @@ import {
   type QuestionTemplate,
   type Track,
 } from "./question-templates";
+
+/** Taxonomy classification for a template, with sensible fallbacks. */
+export function templateTaxonomy(t: QuestionTemplate) {
+  const id = t.manifestation ?? TEMPLATE_MANIFESTATION[t.id];
+  const m = id ? getManifestation(id) : undefined;
+  const representation: Representation = t.representation ?? m?.representation ?? "symbolic";
+  const reasoning: ReasoningType = t.reasoning ?? m?.reasoning ?? "computation";
+  const algebra: AlgebraicStructure = t.algebra ?? m?.algebra ?? "plain";
+
+  return {
+    manifestation: id ?? `${t.topic}:unclassified`,
+    ced_topic: m?.ced ?? "unmapped",
+    representation,
+    reasoning,
+    algebra,
+    signature: taxonomySignature({
+      topic: t.topic,
+      manifestation: id,
+
+      representation,
+      reasoning,
+      algebra,
+    }),
+  };
+}
+
 
 /** Topics that only appear on the BC exam. */
 const BC_ONLY_TOPICS = new Set([
@@ -36,8 +70,14 @@ function inTrack(t: QuestionTemplate, track?: "AB" | "BC"): boolean {
   return tt === "both" || tt === track;
 }
 
-/** Variants generated per template. 60 templates × 30 variants = 1,800 original questions. */
-export const VARIANTS_PER_TEMPLATE = 27;
+/**
+ * Variant budget. Coverage, not volume, defines this bank: a manifestation gets
+ * at most `MAX_VARIANTS_PER_MANIFESTATION` questions no matter how many template
+ * families implement it, so no single form of a concept can be over-farmed while
+ * thinner forms stay thin.
+ */
+export const VARIANTS_PER_TEMPLATE = 18;
+export const MAX_VARIANTS_PER_MANIFESTATION = 36;
 
 export type GeneratedChoice = { label: string; text: string };
 
@@ -49,6 +89,13 @@ export type GeneratedQuestion = {
   type: "MCQ";
   unit_slug: string;
   topic_slug: string;
+  /** internal CED topic label, from the taxonomy */
+  ced_topic: string;
+  manifestation: string;
+  representation: Representation;
+  reasoning: ReasoningType;
+  algebra: AlgebraicStructure;
+  structural_signature: string;
   difficulty: Difficulty;
   track: Track;
   calculator: boolean;
@@ -58,6 +105,7 @@ export type GeneratedQuestion = {
   choices: GeneratedChoice[];
   answer_label: string;
   answer_text: string;
+
   explanation: string;
   common_mistake_codes: string[];
 };
@@ -201,6 +249,8 @@ export function buildQuestion(key: string): GeneratedQuestion | null {
   const choices = ordered.map((text, i) => ({ label: LABELS[i], text, tex: asMath(text) }));
   const answer = choices.find((c) => c.text === built.correct)!;
 
+  const tax = templateTaxonomy(tpl);
+
   return {
     key,
     id: uuidFromKey(key),
@@ -209,6 +259,12 @@ export function buildQuestion(key: string): GeneratedQuestion | null {
     type: "MCQ",
     unit_slug: tpl.unit,
     topic_slug: tpl.topic,
+    ced_topic: tax.ced_topic,
+    manifestation: tax.manifestation,
+    representation: tax.representation,
+    reasoning: tax.reasoning,
+    algebra: tax.algebra,
+    structural_signature: tax.signature,
     track: templateTrack(tpl),
     difficulty: tpl.difficulty,
     calculator: tpl.calculator ?? false,
@@ -234,24 +290,35 @@ let KEY_CACHE: string[] | null = null;
  * only differ by their constants are recognised as the same question, while
  * variants inside a family stay distinct (those are deduplicated by exact text).
  */
-function structuralSignature(prompt: string): string {
+function promptSignature(prompt: string): string {
   return prompt.replace(/-?\d+(\.\d+)?/g, "#").replace(/\s+/g, " ").trim();
 }
 
-/** Distinct generated question keys — duplicates from RNG collisions are dropped. */
+/**
+ * Distinct generated question keys.
+ *
+ * Three filters run here: identical prompt families are dropped, each
+ * manifestation is capped so the bank cannot be padded with one form of a
+ * concept, and exact-duplicate variants inside a family are skipped.
+ */
 function allKeys(): string[] {
   if (KEY_CACHE) return KEY_CACHE;
   const keys: string[] = [];
   const familySignatures = new Set<string>();
+  const perManifestation = new Map<string, number>();
   for (const t of TEMPLATES) {
     const probe = buildQuestion(`${t.id}::0`);
     if (probe) {
-      const sig = `${t.topic}|${structuralSignature(probe.prompt)}`;
+      const sig = `${t.topic}|${promptSignature(probe.prompt)}`;
       if (familySignatures.has(sig)) continue; // same question asked twice — skip the family
       familySignatures.add(sig);
     }
+    const mid = templateTaxonomy(t).manifestation;
+    const used = perManifestation.get(mid) ?? 0;
+    const budget = Math.min(VARIANTS_PER_TEMPLATE, MAX_VARIANTS_PER_MANIFESTATION - used);
+    if (budget <= 0) continue;
     const seen = new Set<string>();
-    for (let v = 0; v < VARIANT_SCAN && seen.size < VARIANTS_PER_TEMPLATE; v++) {
+    for (let v = 0; v < VARIANT_SCAN && seen.size < budget; v++) {
       const key = `${t.id}::${v}`;
       const q = buildQuestion(key);
       if (!q) continue;
@@ -260,10 +327,12 @@ function allKeys(): string[] {
       seen.add(sig);
       keys.push(key);
     }
+    perManifestation.set(mid, used + seen.size);
   }
   KEY_CACHE = keys;
   return keys;
 }
+
 
 export type BankFilter = {
   unit_slug?: string;
