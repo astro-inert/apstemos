@@ -17,6 +17,7 @@ import {
   pick,
   ri,
   term,
+  type Figure,
   type PiecewiseGraphFigure,
   type QuestionTemplate,
   type RNG,
@@ -3129,7 +3130,7 @@ GAP_TEMPLATES.push(
     unit: U6,
     topic: "integration-by-parts",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     manifestation: "integration-by-parts:polynomial-trig",
     build: (r: RNG) => {
       const k = ri(r, 1, 5);
@@ -3151,7 +3152,7 @@ GAP_TEMPLATES.push(
     unit: U6,
     topic: "integration-by-parts",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     manifestation: "integration-by-parts:repeated",
     build: (r: RNG) => {
       const correct = `\\text{two}`;
@@ -3168,7 +3169,7 @@ GAP_TEMPLATES.push(
     unit: U6,
     topic: "integration-by-parts",
     difficulty: "medium",
-    track: "bc",
+    track: "BC",
     manifestation: "integration-by-parts:choose-parts",
     build: (r: RNG) => {
       const correct = `u = \\ln(x),\\; dv = x\\,dx`;
@@ -3189,7 +3190,7 @@ GAP_TEMPLATES.push(
     unit: U6,
     topic: "integration-by-parts",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     manifestation: "integration-by-parts:definite",
     build: (r: RNG) => {
       const b = ri(r, 1, 3);
@@ -3208,7 +3209,7 @@ GAP_TEMPLATES.push(
     unit: U6,
     topic: "partial-fractions",
     difficulty: "medium",
-    track: "bc",
+    track: "BC",
     manifestation: "partial-fractions:setup",
     build: (r: RNG) => {
       const a = ri(r, 1, 4);
@@ -3231,7 +3232,7 @@ GAP_TEMPLATES.push(
     unit: U6,
     topic: "partial-fractions",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     manifestation: "partial-fractions:long-division-first",
     build: (r: RNG) => {
       const a = ri(r, 1, 6);
@@ -3253,7 +3254,7 @@ GAP_TEMPLATES.push(
     unit: U6,
     topic: "partial-fractions",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     manifestation: "partial-fractions:logistic-link",
     build: (r: RNG) => {
       const M = pick(r, [100, 200, 500, 1000] as const);
@@ -3275,7 +3276,7 @@ GAP_TEMPLATES.push(
     unit: U6,
     topic: "improper-integrals",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     manifestation: "improper-integrals:unbounded-integrand",
     build: (r: RNG) => {
       const b = ri(r, 1, 6);
@@ -3293,7 +3294,7 @@ GAP_TEMPLATES.push(
     unit: U6,
     topic: "improper-integrals",
     difficulty: "medium",
-    track: "bc",
+    track: "BC",
     manifestation: "improper-integrals:p-integral",
     build: (r: RNG) => {
       const p = pick(r, [2, 3, 4] as const);
@@ -3311,7 +3312,7 @@ GAP_TEMPLATES.push(
     unit: U6,
     topic: "improper-integrals",
     difficulty: "medium",
-    track: "bc",
+    track: "BC",
     manifestation: "improper-integrals:limit-notation",
     build: (r: RNG) => {
       const a = ri(r, 1, 5);
@@ -3333,7 +3334,7 @@ GAP_TEMPLATES.push(
     unit: U6,
     topic: "improper-integrals",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     manifestation: "improper-integrals:compare",
     build: (r: RNG) => {
       const correct = `\\displaystyle\\int_{1}^{\\infty} \\frac{1}{x}\\,dx`;
@@ -3675,7 +3676,7 @@ GAP_TEMPLATES.push(
     unit: U7,
     topic: "eulers-method",
     difficulty: "medium",
-    track: "bc",
+    track: "BC",
     manifestation: "eulers-method:one-step",
     build: (r: RNG) => {
       const y0 = ri(r, 1, 5);
@@ -3697,7 +3698,7 @@ GAP_TEMPLATES.push(
     unit: U7,
     topic: "eulers-method",
     difficulty: "medium",
-    track: "bc",
+    track: "BC",
     manifestation: "eulers-method:step-size",
     build: (r: RNG) => {
       const correct = `\\text{The approximation generally becomes more accurate.}`;
@@ -3718,7 +3719,7 @@ GAP_TEMPLATES.push(
     unit: U7,
     topic: "eulers-method",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     manifestation: "eulers-method:over-under",
     build: (r: RNG) => {
       const correct = `\\text{An underestimate, because the solution is concave up.}`;
@@ -3739,7 +3740,7 @@ GAP_TEMPLATES.push(
     unit: U7,
     topic: "eulers-method",
     difficulty: "medium",
-    track: "bc",
+    track: "BC",
     manifestation: "eulers-method:formula-error",
     build: (r: RNG) => {
       const correct = `y_{n+1} = y_{n} + h\\cdot f\\left(x_{n}, y_{n}\\right)`;
@@ -3760,7 +3761,7 @@ GAP_TEMPLATES.push(
     unit: U7,
     topic: "logistic-growth",
     difficulty: "medium",
-    track: "bc",
+    track: "BC",
     manifestation: "logistic-growth:carrying-capacity",
     build: (r: RNG) => {
       const M = pick(r, [400, 600, 900, 1200] as const);
@@ -3779,7 +3780,7 @@ GAP_TEMPLATES.push(
     unit: U7,
     topic: "logistic-growth",
     difficulty: "medium",
-    track: "bc",
+    track: "BC",
     manifestation: "logistic-growth:long-term",
     build: (r: RNG) => {
       const M = pick(r, [500, 800, 1000] as const);
@@ -3798,7 +3799,7 @@ GAP_TEMPLATES.push(
     unit: U7,
     topic: "logistic-growth",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     manifestation: "logistic-growth:from-context",
     build: (r: RNG) => {
       const M = pick(r, [250, 600, 1500] as const);
@@ -3820,7 +3821,7 @@ GAP_TEMPLATES.push(
     unit: U7,
     topic: "logistic-growth",
     difficulty: "medium",
-    track: "bc",
+    track: "BC",
     manifestation: "logistic-growth:graph-shape",
     build: (r: RNG) => {
       const M = pick(r, [200, 400, 1000] as const);
@@ -4167,7 +4168,7 @@ GAP_TEMPLATES.push(
     unit: U8,
     topic: "arc-length",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     calculator: true,
     manifestation: "arc-length:compute",
     build: (r: RNG) => {
@@ -4188,7 +4189,7 @@ GAP_TEMPLATES.push(
     unit: U8,
     topic: "arc-length",
     difficulty: "medium",
-    track: "bc",
+    track: "BC",
     manifestation: "arc-length:compare-chord",
     build: (r: RNG) => {
       const correct = `\\text{The arc length is greater, unless the curve is a straight segment.}`;
@@ -4209,7 +4210,7 @@ GAP_TEMPLATES.push(
     unit: U8,
     topic: "arc-length",
     difficulty: "medium",
-    track: "bc",
+    track: "BC",
     manifestation: "arc-length:context",
     build: (r: RNG) => {
       const correct = `\\text{the length of the path travelled along the curve}`;
@@ -4322,7 +4323,7 @@ GAP_TEMPLATES.push(
     unit: U9,
     topic: "parametric-derivatives",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     manifestation: "parametric-derivatives:tangent-line",
     build: (r: RNG) => {
       const t0 = ri(r, 1, 4);
@@ -4348,7 +4349,7 @@ GAP_TEMPLATES.push(
     unit: U9,
     topic: "parametric-derivatives",
     difficulty: "medium",
-    track: "bc",
+    track: "BC",
     manifestation: "parametric-derivatives:eliminate-parameter",
     build: (r: RNG) => {
       const k = ri(r, 1, 5);
@@ -4366,7 +4367,7 @@ GAP_TEMPLATES.push(
     unit: U9,
     topic: "parametric-derivatives",
     difficulty: "medium",
-    track: "bc",
+    track: "BC",
     manifestation: "parametric-derivatives:error-analysis",
     build: (r: RNG) => {
       void r;
@@ -4388,7 +4389,7 @@ GAP_TEMPLATES.push(
     unit: U9,
     topic: "parametric-arc-length",
     difficulty: "medium",
-    track: "bc",
+    track: "BC",
     manifestation: "parametric-arc-length:setup",
     build: (r: RNG) => {
       const b = ri(r, 1, 5);
@@ -4410,7 +4411,7 @@ GAP_TEMPLATES.push(
     unit: U9,
     topic: "parametric-arc-length",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     manifestation: "parametric-arc-length:distance-vs-displacement",
     build: (r: RNG) => {
       void r;
@@ -4432,7 +4433,7 @@ GAP_TEMPLATES.push(
     unit: U9,
     topic: "parametric-arc-length",
     difficulty: "medium",
-    track: "bc",
+    track: "BC",
     manifestation: "parametric-arc-length:bounds",
     build: (r: RNG) => {
       void r;
@@ -4450,7 +4451,7 @@ GAP_TEMPLATES.push(
     unit: U9,
     topic: "vector-valued-functions",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     manifestation: "vector-valued-functions:position-from-velocity",
     build: (r: RNG) => {
       const x0 = ri(r, 1, 5);
@@ -4474,7 +4475,7 @@ GAP_TEMPLATES.push(
     unit: U9,
     topic: "vector-valued-functions",
     difficulty: "medium",
-    track: "bc",
+    track: "BC",
     manifestation: "vector-valued-functions:component-analysis",
     build: (r: RNG) => {
       const a = ri(r, 1, 5);
@@ -4496,7 +4497,7 @@ GAP_TEMPLATES.push(
     unit: U9,
     topic: "vector-valued-functions",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     calculator: true,
     manifestation: "vector-valued-functions:total-distance",
     build: (r: RNG) => {
@@ -4518,7 +4519,7 @@ GAP_TEMPLATES.push(
     unit: U9,
     topic: "polar-derivatives",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     manifestation: "polar-derivatives:tangent-at-angle",
     build: (r: RNG) => {
       const a = ri(r, 1, 5);
@@ -4536,7 +4537,7 @@ GAP_TEMPLATES.push(
     unit: U9,
     topic: "polar-derivatives",
     difficulty: "medium",
-    track: "bc",
+    track: "BC",
     manifestation: "polar-derivatives:graph-match",
     build: (r: RNG) => {
       const a = ri(r, 2, 6);
@@ -4558,7 +4559,7 @@ GAP_TEMPLATES.push(
     unit: U9,
     topic: "polar-derivatives",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     manifestation: "polar-derivatives:error-analysis",
     build: (r: RNG) => {
       void r;
@@ -4580,7 +4581,7 @@ GAP_TEMPLATES.push(
     unit: U9,
     topic: "polar-area",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     manifestation: "polar-area:between-curves",
     build: (r: RNG) => {
       const a = ri(r, 2, 4);
@@ -4603,7 +4604,7 @@ GAP_TEMPLATES.push(
     unit: U9,
     topic: "polar-area",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     manifestation: "polar-area:bounds",
     build: (r: RNG) => {
       const a = ri(r, 2, 5);
@@ -4621,7 +4622,7 @@ GAP_TEMPLATES.push(
     unit: U9,
     topic: "polar-area",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     calculator: true,
     manifestation: "polar-area:calculator",
     build: (r: RNG) => {
@@ -4650,7 +4651,7 @@ GAP_TEMPLATES.push(
     unit: U10,
     topic: "nth-term-test",
     difficulty: "medium",
-    track: "bc",
+    track: "BC",
     manifestation: "nth-term-test:inconclusive",
     build: (r: RNG) => {
       const p = pick(r, [2, 3] as const);
@@ -4672,7 +4673,7 @@ GAP_TEMPLATES.push(
     unit: U10,
     topic: "nth-term-test",
     difficulty: "medium",
-    track: "bc",
+    track: "BC",
     manifestation: "nth-term-test:sequence-vs-series",
     build: (r: RNG) => {
       void r;
@@ -4694,7 +4695,7 @@ GAP_TEMPLATES.push(
     unit: U10,
     topic: "nth-term-test",
     difficulty: "medium",
-    track: "bc",
+    track: "BC",
     manifestation: "nth-term-test:table-terms",
     build: (r: RNG) => {
       const L = ri(r, 2, 6);
@@ -4718,7 +4719,7 @@ GAP_TEMPLATES.push(
     unit: U10,
     topic: "nth-term-test",
     difficulty: "medium",
-    track: "bc",
+    track: "BC",
     manifestation: "nth-term-test:error-analysis",
     build: (r: RNG) => {
       void r;
@@ -4740,7 +4741,7 @@ GAP_TEMPLATES.push(
     unit: U10,
     topic: "geometric-and-p-series",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     manifestation: "geometric-and-p-series:shifted-index",
     build: (r: RNG) => {
       const d = pick(r, [2, 3, 4, 5] as const);
@@ -4762,7 +4763,7 @@ GAP_TEMPLATES.push(
     unit: U10,
     topic: "geometric-and-p-series",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     manifestation: "geometric-and-p-series:disguised",
     build: (r: RNG) => {
       const d = pick(r, [2, 3, 5] as const);
@@ -4784,7 +4785,7 @@ GAP_TEMPLATES.push(
     unit: U10,
     topic: "geometric-and-p-series",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     manifestation: "geometric-and-p-series:parameter-ratio",
     build: (r: RNG) => {
       const k = ri(r, 2, 6);
@@ -4806,7 +4807,7 @@ GAP_TEMPLATES.push(
     unit: U10,
     topic: "geometric-and-p-series",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     manifestation: "geometric-and-p-series:repeating-context",
     build: (r: RNG) => {
       const h = pick(r, [8, 10, 12, 16] as const);
@@ -4828,7 +4829,7 @@ GAP_TEMPLATES.push(
     unit: U10,
     topic: "comparison-tests",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     manifestation: "comparison-tests:limit-comparison",
     build: (r: RNG) => {
       const k = ri(r, 1, 9);
@@ -4850,7 +4851,7 @@ GAP_TEMPLATES.push(
     unit: U10,
     topic: "comparison-tests",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     manifestation: "comparison-tests:invalid-comparison",
     build: (r: RNG) => {
       void r;
@@ -4872,7 +4873,7 @@ GAP_TEMPLATES.push(
     unit: U10,
     topic: "comparison-tests",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     manifestation: "comparison-tests:integral-test",
     build: (r: RNG) => {
       const p = pick(r, [2, 3] as const);
@@ -4894,7 +4895,7 @@ GAP_TEMPLATES.push(
     unit: U10,
     topic: "ratio-test",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     manifestation: "ratio-test:convergence",
     build: (r: RNG) => {
       const b = pick(r, [2, 3, 4] as const);
@@ -4916,7 +4917,7 @@ GAP_TEMPLATES.push(
     unit: U10,
     topic: "ratio-test",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     manifestation: "ratio-test:interval-endpoints",
     build: (r: RNG) => {
       void r;
@@ -4938,7 +4939,7 @@ GAP_TEMPLATES.push(
     unit: U10,
     topic: "ratio-test",
     difficulty: "medium",
-    track: "bc",
+    track: "BC",
     manifestation: "ratio-test:inconclusive",
     build: (r: RNG) => {
       void r;
@@ -4960,7 +4961,7 @@ GAP_TEMPLATES.push(
     unit: U10,
     topic: "alternating-series-test",
     difficulty: "medium",
-    track: "bc",
+    track: "BC",
     manifestation: "alternating-series-test:convergence",
     build: (r: RNG) => {
       void r;
@@ -4982,7 +4983,7 @@ GAP_TEMPLATES.push(
     unit: U10,
     topic: "alternating-series-test",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     manifestation: "alternating-series-test:hypotheses",
     build: (r: RNG) => {
       void r;
@@ -5004,7 +5005,7 @@ GAP_TEMPLATES.push(
     unit: U10,
     topic: "alternating-series-test",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     manifestation: "alternating-series-test:terms-needed",
     build: (r: RNG) => {
       const p = pick(r, [2, 3, 4] as const); // error tolerance 10^-p
@@ -5023,7 +5024,7 @@ GAP_TEMPLATES.push(
     unit: U10,
     topic: "taylor-and-maclaurin-series",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     manifestation: "taylor-and-maclaurin-series:known-series",
     build: (r: RNG) => {
       const k = ri(r, 2, 5);
@@ -5045,7 +5046,7 @@ GAP_TEMPLATES.push(
     unit: U10,
     topic: "taylor-and-maclaurin-series",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     calculator: true,
     manifestation: "taylor-and-maclaurin-series:polynomial-approx",
     build: (r: RNG) => {
@@ -5065,7 +5066,7 @@ GAP_TEMPLATES.push(
     unit: U10,
     topic: "taylor-and-maclaurin-series",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     manifestation: "taylor-and-maclaurin-series:table-derivatives",
     build: (r: RNG) => {
       const f0 = ri(r, 1, 6);
@@ -5093,7 +5094,7 @@ GAP_TEMPLATES.push(
     unit: U10,
     topic: "taylor-and-maclaurin-series",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     manifestation: "taylor-and-maclaurin-series:center-shift",
     build: (r: RNG) => {
       const c = ri(r, 2, 5);
@@ -5115,7 +5116,7 @@ GAP_TEMPLATES.push(
     unit: U10,
     topic: "taylor-and-maclaurin-series",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     manifestation: "taylor-and-maclaurin-series:identify-function",
     build: (r: RNG) => {
       void r;
@@ -5133,7 +5134,7 @@ GAP_TEMPLATES.push(
     unit: U10,
     topic: "lagrange-error-bound",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     manifestation: "lagrange-error-bound:degree-needed",
     build: (r: RNG) => {
       void r;
@@ -5155,7 +5156,7 @@ GAP_TEMPLATES.push(
     unit: U10,
     topic: "lagrange-error-bound",
     difficulty: "medium",
-    track: "bc",
+    track: "BC",
     manifestation: "lagrange-error-bound:interpret",
     build: (r: RNG) => {
       void r;
@@ -5177,7 +5178,7 @@ GAP_TEMPLATES.push(
     unit: U10,
     topic: "lagrange-error-bound",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     manifestation: "lagrange-error-bound:max-derivative",
     build: (r: RNG) => {
       const n = ri(r, 2, 4);
@@ -5199,7 +5200,7 @@ GAP_TEMPLATES.push(
     unit: U10,
     topic: "lagrange-error-bound",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     manifestation: "lagrange-error-bound:compare-actual",
     build: (r: RNG) => {
       void r;
@@ -5221,7 +5222,7 @@ GAP_TEMPLATES.push(
     unit: U10,
     topic: "power-series-operations",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     manifestation: "power-series-operations:differentiate",
     build: (r: RNG) => {
       void r;
@@ -5243,7 +5244,7 @@ GAP_TEMPLATES.push(
     unit: U10,
     topic: "power-series-operations",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     manifestation: "power-series-operations:integrate",
     build: (r: RNG) => {
       void r;
@@ -5265,7 +5266,7 @@ GAP_TEMPLATES.push(
     unit: U10,
     topic: "power-series-operations",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     manifestation: "power-series-operations:multiply",
     build: (r: RNG) => {
       const p = ri(r, 2, 4);
@@ -5287,7 +5288,7 @@ GAP_TEMPLATES.push(
     unit: U10,
     topic: "power-series-operations",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     manifestation: "power-series-operations:limit-from-series",
     build: (r: RNG) => {
       void r;
