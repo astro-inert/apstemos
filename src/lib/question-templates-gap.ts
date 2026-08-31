@@ -726,3 +726,466 @@ export const GAP_TEMPLATES: QuestionTemplate[] = [
     },
   },
 ];
+
+/* ------------------------------------------------------------------ */
+/* Unit 2 — Differentiation: definition and fundamental properties     */
+/* ------------------------------------------------------------------ */
+
+const U2 = "unit-2-differentiation-definition-and-properties";
+
+const NAMES = ["f", "g", "h", "p", "q"] as const;
+
+GAP_TEMPLATES.push(
+  {
+    id: "g2-equivalent-forms",
+    unit: U2,
+    topic: "definition-of-the-derivative",
+    difficulty: "medium",
+    manifestation: "definition-of-the-derivative:equivalent-forms",
+    build: (r: RNG) => {
+      const a = ri(r, 2, 9);
+      const f = pick(r, NAMES);
+      const correct = `\\displaystyle\\lim_{x\\to ${a}}\\frac{${f}(x) - ${f}(${a})}{x - ${a}}`;
+      return {
+        prompt: `Let $${f}$ be differentiable at $x=${a}$. Which expression is equal to $\\displaystyle\\lim_{h\\to 0}\\frac{${f}(${a}+h) - ${f}(${a})}{h}$?`,
+        correct,
+        distractors: [
+          `\\displaystyle\\lim_{x\\to ${a}}\\frac{${f}(x) - ${f}(${a})}{${a}}`,
+          `\\displaystyle\\lim_{h\\to 0}\\frac{${f}(${a}+h) - ${f}(${a})}{${a}+h}`,
+          `\\dfrac{${f}(${a}) - ${f}(0)}{${a}}`,
+        ],
+        explanation: `Writing $x = ${a}+h$ turns $h\\to 0$ into $x\\to ${a}$ and $h$ into $x-${a}$, giving the point form of the derivative. The other choices divide by the wrong quantity or compute an average rate of change.`,
+      };
+    },
+  },
+  {
+    id: "g2-graph-slope",
+    unit: U2,
+    topic: "definition-of-the-derivative",
+    difficulty: "medium",
+    manifestation: "definition-of-the-derivative:graph-slope",
+    build: (r: RNG) => {
+      const x0 = ri(r, 1, 3);
+      const rise = ri(r, 2, 6);
+      const run = ri(r, 1, 3);
+      const pts: Array<[number, number]> = [
+        [0, 1],
+        [x0, 1 + ri(r, 1, 3)],
+        [x0 + run, 1 + ri(r, 1, 3) + rise],
+      ];
+      const slope = (pts[2][1] - pts[1][1]) / run;
+      const correct = dec(slope, 3);
+      return {
+        prompt: `The graph of $f$ consists of the line segments shown. Find $f'(x)$ for $x$ between $${x0}$ and $${x0 + run}$.`,
+        figure: graph("y = f(x)", pts, { xMin: -1, xMax: x0 + run + 1, yMin: 0, yMax: pts[2][1] + 2 }),
+        correct,
+        distractors: opts(correct, [dec(-slope, 3), dec(slope + 1, 3), dec(run / (rise || 1), 3), `0`]),
+        explanation: `On a line segment the derivative is the segment's slope: $\\frac{${pts[2][1]} - ${pts[1][1]}}{${pts[2][0]} - ${pts[1][0]}} = ${correct}$.`,
+      };
+    },
+  },
+  {
+    id: "g2-average-vs-instant",
+    unit: U2,
+    topic: "definition-of-the-derivative",
+    difficulty: "medium",
+    manifestation: "definition-of-the-derivative:average-vs-instant",
+    build: (r: RNG) => {
+      const a = ri(r, 1, 4);
+      const b = a + ri(r, 2, 5);
+      const k = ri(r, 2, 5);
+      const avg = k * (a + b);
+      const correct = `${avg}`;
+      return {
+        prompt: `A tank's volume, in gallons, is $V(t)=${k}t^{2}$ after $t$ minutes. Find the average rate of change of the volume over $${a}\\le t\\le ${b}$, in gallons per minute.`,
+        correct,
+        distractors: opts(correct, [`${2 * k * a}`, `${2 * k * b}`, `${k * (b - a)}`, `${avg + k}`]),
+        explanation: `The average rate of change is $\\frac{V(${b}) - V(${a})}{${b} - ${a}} = \\frac{${k}(${b * b}) - ${k}(${a * a})}{${b - a}} = ${avg}$. The instantaneous rates $V'(${a})=${2 * k * a}$ and $V'(${b})=${2 * k * b}$ answer a different question.`,
+      };
+    },
+  },
+  {
+    id: "g2-power-polynomial",
+    unit: U2,
+    topic: "power-rule",
+    difficulty: "easy",
+    manifestation: "power-rule:polynomial",
+    build: (r: RNG) => {
+      const a = ri(r, 2, 6);
+      const b = ri(r, 2, 8);
+      const c = ri(r, 1, 9);
+      const correct = `${3 * a}x^{2} ${term(-2 * b, "x")} ${term(c, "")}`;
+      return {
+        prompt: `If $f(x)=${a}x^{3} ${term(-b, "x^{2}")} ${term(c, "x")} + ${ri(r, 2, 9)}$, find $f'(x)$.`,
+        correct,
+        distractors: [
+          `${3 * a}x^{2} ${term(-b, "x")} ${term(c, "")}`,
+          `${a}x^{2} ${term(-2 * b, "x")} ${term(c, "")}`,
+          `${3 * a}x^{2} ${term(-2 * b, "x")}`,
+        ],
+        explanation: `Differentiate term by term: the cubic gives $${3 * a}x^{2}$, the quadratic gives $${term(-2 * b, "x").trim()}$, the linear term gives $${c}$, and the constant gives $0$.`,
+      };
+    },
+  },
+  {
+    id: "g2-radical-rewrite",
+    unit: U2,
+    topic: "power-rule",
+    difficulty: "medium",
+    manifestation: "power-rule:radical-rewrite",
+    build: (r: RNG) => {
+      const a = ri(r, 2, 9);
+      const correct = `\\dfrac{${a}}{3}x^{-\\frac{2}{3}}`;
+      return {
+        prompt: `If $f(x)=${a}\\sqrt[3]{x}$, find $f'(x)$.`,
+        correct,
+        distractors: [
+          `${a}x^{-\\frac{2}{3}}`,
+          `\\dfrac{${a}}{3}x^{\\frac{2}{3}}`,
+          `\\dfrac{${a}}{2}x^{-\\frac{1}{2}}`,
+        ],
+        explanation: `Rewrite as $${a}x^{1/3}$; the power rule gives $${a}\\cdot\\frac{1}{3}x^{-2/3}$.`,
+      };
+    },
+  },
+  {
+    id: "g2-simplify-first",
+    unit: U2,
+    topic: "power-rule",
+    difficulty: "medium",
+    manifestation: "power-rule:simplify-first",
+    build: (r: RNG) => {
+      const a = ri(r, 2, 8);
+      const b = ri(r, 2, 9);
+      const correct = `${a} - ${b}x^{-2}`;
+      return {
+        prompt: `Let $f(x)=\\dfrac{${a}x^{2} + ${b}}{x}$ for $x\\ne 0$. Which is the most efficient first step, and what is $f'(x)$?`,
+        correct,
+        distractors: [
+          `${a} + ${b}x^{-2}`,
+          `\\dfrac{${2 * a}x}{1}`,
+          `\\dfrac{${a}x^{2} - ${b}}{x^{2}}`,
+        ],
+        explanation: `Divide first: $f(x)=${a}x + ${b}x^{-1}$. Then $f'(x)=${a} - ${b}x^{-2}$, avoiding the quotient rule entirely.`,
+      };
+    },
+  },
+  {
+    id: "g2-power-reverse",
+    unit: U2,
+    topic: "power-rule",
+    difficulty: "hard",
+    manifestation: "power-rule:reverse",
+    build: (r: RNG) => {
+      const a = ri(r, 2, 6);
+      const c = ri(r, 1, 9);
+      const correct = `${a}x^{3} ${term(c, "")}`;
+      return {
+        prompt: `A function $f$ satisfies $f'(x)=${3 * a}x^{2}$ and $f(0)=${c}$. Which expression could be $f(x)$?`,
+        correct,
+        distractors: [
+          `${3 * a}x^{3} ${term(c, "")}`,
+          `${a}x^{3}`,
+          `${6 * a}x ${term(c, "")}`,
+        ],
+        explanation: `An antiderivative of $${3 * a}x^{2}$ is $${a}x^{3}$, and the condition $f(0)=${c}$ fixes the constant at $${c}$.`,
+      };
+    },
+  },
+  {
+    id: "g2-pq-table",
+    unit: U2,
+    topic: "product-and-quotient-rules",
+    difficulty: "medium",
+    manifestation: "product-and-quotient-rules:table-values",
+    build: (r: RNG) => {
+      const a = ri(r, 1, 5);
+      const f = ri(r, 2, 8);
+      const fp = ri(r, 1, 6);
+      const g = ri(r, 2, 8);
+      const gp = ri(r, 1, 6);
+      const v = fp * g + f * gp;
+      const correct = `${v}`;
+      const body = table(
+        ["$x$", "$f(x)$", "$f'(x)$", "$g(x)$", "$g'(x)$"],
+        [`$${a}$`, `$${f}$`, `$${fp}$`, `$${g}$`, `$${gp}$`],
+      );
+      return {
+        prompt: `Values of two differentiable functions are given.\n\n${body}\n\nIf $P(x)=f(x)g(x)$, find $P'(${a})$.`,
+        correct,
+        distractors: opts(correct, [`${fp * gp}`, `${f * g}`, `${fp * g - f * gp}`, `${v + f}`]),
+        explanation: `The product rule gives $P'(${a}) = f'(${a})g(${a}) + f(${a})g'(${a}) = ${fp}(${g}) + ${f}(${gp}) = ${v}$.`,
+      };
+    },
+  },
+  {
+    id: "g2-pq-graph",
+    unit: U2,
+    topic: "product-and-quotient-rules",
+    difficulty: "hard",
+    manifestation: "product-and-quotient-rules:graph-values",
+    build: (r: RNG) => {
+      const a = ri(r, 2, 4);
+      const fv = ri(r, 2, 6);
+      const slope = ri(r, 1, 4);
+      const c = ri(r, 2, 6);
+      const v = slope * c;
+      const correct = `${v}`;
+      return {
+        prompt: `The graph of $f$ shown consists of line segments, and $g(x)=${c}$ for all $x$. Find $(fg)'(${a})$.`,
+        figure: graph(
+          "y = f(x)",
+          [
+            [0, fv - slope * a],
+            [a + 2, fv + 2 * slope],
+          ],
+          { xMin: -1, xMax: a + 3, yMin: 0, yMax: fv + 2 * slope + 2 },
+        ),
+        correct,
+        distractors: opts(correct, [`${slope}`, `${c}`, `${fv * c}`, `${v + c}`]),
+        explanation: `Since $g$ is constant, $g'=0$ and $(fg)' = f'g = f'(${a})\\cdot ${c}$. The segment's slope is $${slope}$, so the value is $${v}$.`,
+      };
+    },
+  },
+  {
+    id: "g2-pq-procedure",
+    unit: U2,
+    topic: "product-and-quotient-rules",
+    difficulty: "medium",
+    manifestation: "product-and-quotient-rules:procedure-choice",
+    build: (r: RNG) => {
+      const a = ri(r, 2, 9);
+      const b = ri(r, 2, 9);
+      const correct = `\\text{No product or quotient rule is needed; expand and use the power rule.}`;
+      return {
+        prompt: `Which describes the least amount of work needed to differentiate $f(x)=x^{2}\\left(${a}x + ${b}\\right)$?`,
+        correct,
+        distractors: [
+          `\\text{The quotient rule is required.}`,
+          `\\text{The product rule is the only valid method.}`,
+          `\\text{The chain rule is required.}`,
+        ],
+        explanation: `Expanding gives $${a}x^{3} + ${b}x^{2}$, so the power rule suffices. The product rule is valid but does more work, and no quotient or composition appears.`,
+      };
+    },
+  },
+  {
+    id: "g2-pq-error",
+    unit: U2,
+    topic: "product-and-quotient-rules",
+    difficulty: "hard",
+    manifestation: "product-and-quotient-rules:error-analysis",
+    build: (r: RNG) => {
+      const a = ri(r, 2, 8);
+      const correct = `\\text{The two products in the numerator were added instead of subtracted.}`;
+      return {
+        prompt: `A student differentiates $f(x)=\\dfrac{x^{2}}{x + ${a}}$ and writes $f'(x)=\\dfrac{2x(x+${a}) + x^{2}}{(x+${a})^{2}}$. What is the error?`,
+        correct,
+        distractors: [
+          `\\text{The denominator should not be squared.}`,
+          `\\text{The derivative of } x^{2} \\text{ should be } x.`,
+          `\\text{There is no error.}`,
+        ],
+        explanation: `The quotient rule numerator is $u'v - uv'$, so the correct numerator is $2x(x+${a}) - x^{2}$. The squared denominator and the derivative $2x$ are both correct.`,
+      };
+    },
+  },
+  {
+    id: "g2-rewrite-avoids-quotient",
+    unit: U2,
+    topic: "product-and-quotient-rules",
+    difficulty: "medium",
+    manifestation: "product-and-quotient-rules:rewrite-avoids-quotient",
+    build: (r: RNG) => {
+      const a = ri(r, 2, 9);
+      const b = ri(r, 2, 9);
+      const correct = `${a}x^{-1} + ${b}x^{-3}`;
+      return {
+        prompt: `Rewrite $f(x)=\\dfrac{${a}x^{2} + ${b}}{x^{3}}$ in a form that needs only the power rule.`,
+        correct,
+        distractors: [
+          `${a}x^{-1} + ${b}x^{3}`,
+          `${a}x^{2} + ${b}x^{-3}`,
+          `\\dfrac{${a}}{x} + \\dfrac{${b}}{x^{2}}`,
+        ],
+        explanation: `Divide each numerator term by $x^{3}$: $\\frac{${a}x^{2}}{x^{3}} = ${a}x^{-1}$ and $\\frac{${b}}{x^{3}} = ${b}x^{-3}$.`,
+      };
+    },
+  },
+  {
+    id: "g2-secant-family",
+    unit: U2,
+    topic: "derivatives-of-trig-exp-log",
+    difficulty: "medium",
+    manifestation: "derivatives-of-trig-exp-log:secant-family",
+    build: (r: RNG) => {
+      const a = ri(r, 2, 9);
+      const which = pick(r, ["tan", "sec", "cot", "csc"] as const);
+      const answers = {
+        tan: `${a}\\sec^{2} x`,
+        sec: `${a}\\sec x\\tan x`,
+        cot: `-${a}\\csc^{2} x`,
+        csc: `-${a}\\csc x\\cot x`,
+      } as const;
+      const correct = answers[which];
+      return {
+        prompt: `If $f(x)=${a}\\${which} x$, find $f'(x)$.`,
+        correct,
+        distractors: opts(correct, [answers.tan, answers.sec, answers.cot, answers.csc]),
+        explanation: `The standard derivative gives $f'(x)=${correct}$.`,
+      };
+    },
+  },
+  {
+    id: "g2-combined-elementary",
+    unit: U2,
+    topic: "derivatives-of-trig-exp-log",
+    difficulty: "easy",
+    manifestation: "derivatives-of-trig-exp-log:combined",
+    build: (r: RNG) => {
+      const a = ri(r, 2, 9);
+      const b = ri(r, 2, 9);
+      const correct = `${a}\\cos x + \\dfrac{${b}}{x}`;
+      return {
+        prompt: `If $f(x)=${a}\\sin x + ${b}\\ln x$ for $x>0$, find $f'(x)$.`,
+        correct,
+        distractors: [
+          `${a}\\cos x + ${b}\\ln x`,
+          `-${a}\\cos x + \\dfrac{${b}}{x}`,
+          `${a}\\cos x + \\dfrac{${b}}{x^{2}}`,
+        ],
+        explanation: `Differentiate each term: $\\frac{d}{dx}\\sin x = \\cos x$ and $\\frac{d}{dx}\\ln x = \\frac{1}{x}$.`,
+      };
+    },
+  },
+  {
+    id: "g2-special-angle",
+    unit: U2,
+    topic: "derivatives-of-trig-exp-log",
+    difficulty: "medium",
+    manifestation: "derivatives-of-trig-exp-log:evaluate-special-angle",
+    build: (r: RNG) => {
+      const a = ri(r, 2, 9);
+      const correct = `${-a}`;
+      return {
+        prompt: `If $f(x)=${a}\\cos x$, find $f'\\!\\left(\\dfrac{\\pi}{2}\\right)$.`,
+        correct,
+        distractors: opts(correct, [`${a}`, `0`, frac(a, 2), `${2 * a}`]),
+        explanation: `$f'(x) = -${a}\\sin x$, and $\\sin\\frac{\\pi}{2} = 1$, so $f'\\left(\\frac{\\pi}{2}\\right) = ${-a}$.`,
+      };
+    },
+  },
+  {
+    id: "g2-identity-first",
+    unit: U2,
+    topic: "derivatives-of-trig-exp-log",
+    difficulty: "hard",
+    manifestation: "derivatives-of-trig-exp-log:identity-first",
+    build: (r: RNG) => {
+      const a = ri(r, 2, 9);
+      const correct = `${a}\\cos x`;
+      return {
+        prompt: `Let $f(x)=${a}\\dfrac{\\sin x}{\\tan x}\\cdot\\sec x\\cdot\\sin x$ for values where every factor is defined. Simplify first, then find $f'(x)$.`,
+        correct,
+        distractors: [
+          `${a}\\sec^{2} x`,
+          `-${a}\\sin x`,
+          `${a}\\sin x\\cos x`,
+        ],
+        explanation: `Since $\\frac{\\sin x}{\\tan x} = \\cos x$ and $\\cos x\\sec x = 1$, the function simplifies to $${a}\\sin x$, whose derivative is $${a}\\cos x$.`,
+      };
+    },
+  },
+  {
+    id: "g2-match-derivative-graph",
+    unit: U2,
+    topic: "derivatives-of-trig-exp-log",
+    difficulty: "hard",
+    manifestation: "derivatives-of-trig-exp-log:match-derivative",
+    build: (r: RNG) => {
+      const k = ri(r, 2, 5);
+      const correct = `y = ${k}e^{x}`;
+      return {
+        prompt: `The graph shown is increasing everywhere, is always positive, and has slope equal to its own height at every point. Which function has this graph?`,
+        figure: graph(
+          "y = f(x)",
+          [
+            [0, k],
+            [1, Math.round(k * Math.E)],
+            [2, Math.round(k * Math.E * Math.E)],
+          ],
+          { xMin: -1, xMax: 3, yMin: 0, yMax: Math.round(k * 8) },
+        ),
+        correct,
+        distractors: [`y = ${k}\\ln x`, `y = ${k}x^{2}`, `y = ${k}\\sin x`],
+        explanation: `Only exponential functions of base $e$ satisfy $f'=f$. Logarithms, powers, and sine all fail at least one stated property.`,
+      };
+    },
+  },
+  {
+    id: "g2-diff-implication",
+    unit: U2,
+    topic: "differentiability-and-continuity",
+    difficulty: "medium",
+    manifestation: "differentiability-and-continuity:implication",
+    build: (r: RNG) => {
+      const a = ri(r, 1, 9);
+      const correct = `\\text{If } f \\text{ is differentiable at } x=${a}, \\text{ then } f \\text{ is continuous at } x=${a}.`;
+      return {
+        prompt: `Which statement about a function $f$ and the point $x=${a}$ must be true?`,
+        correct,
+        distractors: [
+          `\\text{If } f \\text{ is continuous at } x=${a}, \\text{ then } f \\text{ is differentiable at } x=${a}.`,
+          `\\text{If } f \\text{ is not differentiable at } x=${a}, \\text{ then } f \\text{ is not continuous at } x=${a}.`,
+          `\\text{If } \\lim_{x\\to ${a}} f(x) \\text{ exists, then } f \\text{ is differentiable at } x=${a}.`,
+        ],
+        explanation: `Differentiability implies continuity, but not the reverse: corners and cusps are continuous without being differentiable.`,
+      };
+    },
+  },
+  {
+    id: "g2-diff-counterexample",
+    unit: U2,
+    topic: "differentiability-and-continuity",
+    difficulty: "medium",
+    manifestation: "differentiability-and-continuity:counterexample",
+    build: (r: RNG) => {
+      const a = ri(r, 1, 9);
+      const correct = `f(x) = |x - ${a}|`;
+      return {
+        prompt: `Which function is continuous at $x=${a}$ but not differentiable there?`,
+        correct,
+        distractors: [
+          `f(x) = (x - ${a})^{2}`,
+          `f(x) = \\dfrac{1}{x - ${a}}`,
+          `f(x) = ${a}x + 1`,
+        ],
+        explanation: `The absolute-value function has a corner at $x=${a}$: the one-sided slopes are $-1$ and $1$. The quadratic and the line are differentiable, and the reciprocal is not even defined at $x=${a}$.`,
+      };
+    },
+  },
+  {
+    id: "g2-diff-table-evidence",
+    unit: U2,
+    topic: "differentiability-and-continuity",
+    difficulty: "hard",
+    manifestation: "differentiability-and-continuity:table-evidence",
+    build: (r: RNG) => {
+      const a = ri(r, 2, 6);
+      const xs = [a - 0.1, a, a + 0.1];
+      const v = ri(r, 2, 8);
+      const ys = [`${v - 0.3}`, `${v}`, `${v + 0.3}`];
+      const correct = `\\text{Nothing about differentiability at } x=${a} \\text{ can be concluded.}`;
+      return {
+        prompt: `A function $f$ has the tabulated values shown.\n\n${tablePair("f(x)", xs, ys)}\n\nWhat do these values establish about $f$ at $x=${a}$?`,
+        correct,
+        distractors: [
+          `f \\text{ is differentiable at } x=${a}, \\text{ with } f'(${a})=3.`,
+          `f \\text{ is continuous at } x=${a}.`,
+          `f \\text{ is not differentiable at } x=${a}.`,
+        ],
+        explanation: `Three sampled values cannot establish a limit, continuity, or differentiability; they only suggest a trend. The symmetric difference quotient here estimates a slope but proves nothing.`,
+      };
+    },
+  },
+);
