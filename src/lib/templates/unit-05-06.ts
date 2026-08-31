@@ -1627,17 +1627,17 @@ export const UNIT_05_06_TEMPLATES: QuestionTemplate[] = [
     build: (r: RNG) => {
       const c = ri(r, -1, 3);
       const curve: Array<[number, number]> = [
-        [c - 3, 3],
-        [c, 0],
-        [c + 3, -3],
+        [c - 3, -2],
+        [c, 2],
+        [c + 3, -2],
       ];
       const correct = `x = ${c}`;
       return {
-        prompt: `With $g(x)=\\displaystyle\\int_0^{x} f(t)\\,dt$ and the graph of $f$ shown (a decreasing line crossing zero at $t=${c}$), at what $x$-value does $g$ have an inflection point?`,
-        figure: pwGraph(curve, { xMin: c - 4, xMax: c + 4, yMin: -4, yMax: 4 }, "y = f(t)"),
+        prompt: `With $g(x)=\\displaystyle\\int_0^{x} f(t)\\,dt$ and the graph of $f$ shown (line segments rising to a peak at $t=${c}$ and then falling), at what $x$-value does $g$ have an inflection point?`,
+        figure: pwGraph(curve, { xMin: c - 4, xMax: c + 4, yMin: -3, yMax: 3 }, "y = f(t)"),
         correct,
         distractors: [`x = ${c - 3}`, `x = ${c + 3}`, `\\text{$g$ has no inflection point.}`],
-        explanation: `$g''(x)=f'(x)$; here $f$ is a decreasing line, so $f'$ is negative, meaning $g$ is concave down everywhere and never changes concavity — but since $f$ itself changes sign at $x=${c}$ (a max of $g$, not an inflection), the graph of $g''=f'$ (constant negative) shows no inflection. Reassess: the correct read is that $g$'s inflection points occur where $f$ changes from increasing to decreasing or vice versa; since $f$ is monotonic (a straight line), $g$ has an extremum, not an inflection, at $x=${c}$ — the labeled answer marks where $f$ crosses zero, which is where $g$ changes from increasing to decreasing.`,
+        explanation: `Since $g''(x)=f'(x)$, the concavity of $g$ changes where the slope of $f$ changes sign. The graph of $f$ increases up to $t=${c}$ and decreases afterward, so $g''$ goes from positive to negative at $x=${c}$: that is the inflection point. The endpoints are where $f$ is most negative, not where its slope changes sign.`,
       };
     },
   },
@@ -1651,24 +1651,24 @@ export const UNIT_05_06_TEMPLATES: QuestionTemplate[] = [
       const c = ri(r, 0, 3);
       const curve: Array<[number, number]> = [
         [c - 2, 2],
-        [c, 2],
         [c, -2],
-        [c + 2, -2],
+        [c + 2, 2],
       ];
-      const correct = `\\text{$g$ is concave up on $(${c - 2},${c})$ and concave down on $(${c},${c + 2})$.}`;
+      const correct = `\\text{$g$ is concave down on $(${c - 2},${c})$ and concave up on $(${c},${c + 2})$.}`;
       return {
-        prompt: `Let $g(x)=\\displaystyle\\int_0^{x} f(t)\\,dt$, where $f$ jumps from $2$ to $-2$ at $t=${c}$ (as shown). What does this say about the concavity of $g$?`,
+        prompt: `Let $g(x)=\\displaystyle\\int_0^{x} f(t)\\,dt$, where the graph of $f$ consists of two line segments that fall to a minimum at $t=${c}$ and then rise (as shown). What does this say about the concavity of $g$?`,
         figure: pwGraph(curve, { xMin: c - 3, xMax: c + 3, yMin: -3, yMax: 3 }, "y = f(t)"),
         correct,
         distractors: [
-          `\\text{$g$ is concave down on $(${c - 2},${c})$ and concave up on $(${c},${c + 2})$.}`,
-          `\\text{$g$ is concave up throughout, since $f$ stays bounded.}`,
-          `\\text{Concavity of $g$ is undefined since $f$ is discontinuous.}`,
+          `\\text{$g$ is concave up on $(${c - 2},${c})$ and concave down on $(${c},${c + 2})$.}`,
+          `\\text{$g$ is concave down throughout, since $f$ takes negative values.}`,
+          `\\text{$g$ is concave up throughout, since $f$ returns to its starting value.}`,
         ],
-        explanation: `$g'(x)=f(x)$, so $g$ is increasing where $f>0$ and decreasing where $f<0$; since $f$ is constant $2$ then constant $-2$, $g$ is linear (with slope $2$ then $-2$) on each piece, so it is neither concave up nor down in the strict sense on either open piece other than being a straight line — the key comparison intended here is that $g'$ decreases from $2$ to $-2$ at $t=${c}$, so $g$ transitions from a positive-slope line to a negative-slope line, consistent with a concave-down corner overall; among the given options, the one matching an increasing-then-decreasing $g$ (concave-down behavior at the corner) is selected.`,
+        explanation: `Concavity of $g$ is governed by $g''=f'$. The graph of $f$ has negative slope on $(${c - 2},${c})$, so $g''<0$ and $g$ is concave down there; the slope is positive on $(${c},${c + 2})$, so $g''>0$ and $g$ is concave up there. The sign of $f$ itself controls whether $g$ increases, not its concavity.`,
       };
     },
   },
+
 
   /* ---- accumulation-functions:context-total (3 families) ---- */
   {
