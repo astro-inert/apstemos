@@ -1297,13 +1297,101 @@ export const UNIT_05_06_TEMPLATES: QuestionTemplate[] = [
     difficulty: "hard",
     manifestation: "integration-by-parts:logarithm",
     build: (r: RNG) => {
-      const correct = `e - e + 1 = 1`;
       // simplified: ∫_1^e ln x dx = [x ln x - x] = (e*1 - e) - (0 - 1) = 1
       return {
         prompt: `Evaluate $\\displaystyle\\int_1^{e} \\ln x\\,dx$.`,
         correct: `1`,
         distractors: [`e - 1`, `e`, `0`],
         explanation: `Using $\\int \\ln x\\,dx = x\\ln x - x$, evaluate from $1$ to $e$: $(e\\cdot 1 - e) - (1\\cdot 0 - 1) = 0 - (-1) = 1$.`,
+      };
+    },
+  },
+
+  {
+    id: "n6-ibp-log-scaled-4",
+    unit: U6,
+    topic: "integration-by-parts",
+    difficulty: "medium",
+    manifestation: "integration-by-parts:logarithm",
+    build: (r: RNG) => {
+      const a = ri(r, 2, 7);
+      return {
+        prompt: `Evaluate $\\displaystyle\\int ${a}\\ln x\\,dx$.`,
+        correct: `${a}x\\ln x - ${a}x + C`,
+        distractors: [`${a}x\\ln x + ${a}x + C`, `${a}x\\ln x - x + C`, `\\dfrac{${a}}{x} + C`],
+        explanation: `Factor out the constant: $${a}\\int \\ln x\\,dx$. With $u=\\ln x$ and $dv=dx$, $\\int \\ln x\\,dx = x\\ln x - x$, so the result is $${a}x\\ln x - ${a}x + C$.`,
+      };
+    },
+  },
+  {
+    id: "n6-ibp-log-argument-5",
+    unit: U6,
+    topic: "integration-by-parts",
+    difficulty: "hard",
+    manifestation: "integration-by-parts:logarithm",
+    build: (r: RNG) => {
+      const k = ri(r, 2, 6);
+      return {
+        prompt: `Evaluate $\\displaystyle\\int \\ln(${k}x)\\,dx$.`,
+        correct: `x\\ln(${k}x) - x + C`,
+        distractors: [`x\\ln(${k}x) + x + C`, `${k}x\\ln(${k}x) - ${k}x + C`, `\\dfrac{\\ln(${k}x)}{${k}} + C`],
+        explanation: `Write $\\ln(${k}x)=\\ln ${k} + \\ln x$. Integrating, $x\\ln ${k} + x\\ln x - x = x\\ln(${k}x) - x$, so the antiderivative is $x\\ln(${k}x) - x + C$.`,
+      };
+    },
+  },
+
+  /* ---- riemann-sums:trapezoidal-unequal (2 families) ---- */
+  {
+    id: "n6-trap-unequal-flow-1",
+    unit: U6,
+    topic: "riemann-sums",
+    difficulty: "medium",
+    manifestation: "riemann-sums:trapezoidal-unequal",
+    build: (r: RNG) => {
+      const t = [0, 2, 5, 9];
+      const v = [ri(r, 3, 6), ri(r, 7, 11), ri(r, 12, 16), ri(r, 17, 22)];
+      const trap =
+        ((t[1]! - t[0]!) * (v[0]! + v[1]!)) / 2 +
+        ((t[2]! - t[1]!) * (v[1]! + v[2]!)) / 2 +
+        ((t[3]! - t[2]!) * (v[2]! + v[3]!)) / 2;
+      const fmt = (x: number) => (Number.isInteger(x) ? `${x}` : x.toFixed(1));
+      return {
+        prompt: `Water flows into a tank at rate $R(t)$ liters per minute. Using a trapezoidal sum with the three subintervals given by the table, approximate $\\displaystyle\\int_{0}^{9} R(t)\\,dt$.`,
+        figure: {
+          kind: "table" as const,
+          headers: ["t \\text{ (min)}", ...t.map((x) => `${x}`)],
+          rows: [["R(t)", ...v.map((x) => `${x}`)]],
+        },
+        correct: fmt(trap),
+        distractors: [fmt(trap + (v[3]! - v[0]!)), fmt(trap / 2), fmt(trap - (v[2]! - v[1]!))],
+        explanation: `The widths are $2$, $3$, and $4$. Adding the three trapezoids, $\\tfrac{2}{2}(${v[0]}+${v[1]}) + \\tfrac{3}{2}(${v[1]}+${v[2]}) + \\tfrac{4}{2}(${v[2]}+${v[3]}) = ${fmt(trap)}$ liters.`,
+      };
+    },
+  },
+  {
+    id: "n6-trap-unequal-temp-2",
+    unit: U6,
+    topic: "riemann-sums",
+    difficulty: "hard",
+    manifestation: "riemann-sums:trapezoidal-unequal",
+    build: (r: RNG) => {
+      const x = [1, 3, 4, 8];
+      const f = [ri(r, 2, 5), ri(r, 6, 9), ri(r, 10, 13), ri(r, 14, 18)];
+      const trap =
+        ((x[1]! - x[0]!) * (f[0]! + f[1]!)) / 2 +
+        ((x[2]! - x[1]!) * (f[1]! + f[2]!)) / 2 +
+        ((x[3]! - x[2]!) * (f[2]! + f[3]!)) / 2;
+      const fmt = (n: number) => (Number.isInteger(n) ? `${n}` : n.toFixed(1));
+      return {
+        prompt: `The table gives values of a continuous, increasing function $f$. Which value is the trapezoidal approximation of $\\displaystyle\\int_{1}^{8} f(x)\\,dx$ using the three subintervals shown?`,
+        figure: {
+          kind: "table" as const,
+          headers: ["x", ...x.map((n) => `${n}`)],
+          rows: [["f(x)", ...f.map((n) => `${n}`)]],
+        },
+        correct: fmt(trap),
+        distractors: [fmt(trap + (f[3]! - f[2]!)), fmt(trap - (f[1]! - f[0]!)), fmt((7 * (f[0]! + f[3]!)) / 2)],
+        explanation: `Widths of $2$, $1$, and $4$ give $\\tfrac{2}{2}(${f[0]}+${f[1]}) + \\tfrac{1}{2}(${f[1]}+${f[2]}) + \\tfrac{4}{2}(${f[2]}+${f[3]}) = ${fmt(trap)}$. Using one trapezoid across the whole interval, or mismatching a width, produces the other values.`,
       };
     },
   },
