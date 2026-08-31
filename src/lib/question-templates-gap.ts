@@ -17,6 +17,7 @@ import {
   pick,
   ri,
   term,
+  type Figure,
   type PiecewiseGraphFigure,
   type QuestionTemplate,
   type RNG,
@@ -27,6 +28,13 @@ const U1 = "unit-1-limits-and-continuity";
 /* ------------------------------------------------------------------ */
 /* Local helpers                                                       */
 /* ------------------------------------------------------------------ */
+
+/** Renders a leading coefficient, omitting an unnecessary factor of 1. */
+function coefTex(k: number): string {
+  if (k === 1) return "";
+  if (k === -1) return "-";
+  return String(k);
+}
 
 /** Picks the first three candidates that differ from the answer and each other. */
 function opts(correct: string, cands: string[]): string[] {
@@ -2891,7 +2899,7 @@ GAP_TEMPLATES.push(
     unit: U6,
     topic: "riemann-sums",
     difficulty: "hard",
-    manifestation: "riemann-sums:sigma-translation",
+    manifestation: "riemann-sums:sigma-to-integral",
     build: (r: RNG) => {
       const n = pick(r, [4, 5, 8, 10] as const);
       const b = ri(r, 2, 6);
@@ -2913,7 +2921,7 @@ GAP_TEMPLATES.push(
     unit: U6,
     topic: "riemann-sums",
     difficulty: "medium",
-    manifestation: "riemann-sums:construct-sum",
+    manifestation: "riemann-sums:construct",
     build: (r: RNG) => {
       const a = ri(r, 0, 2);
       const b = a + 6;
@@ -2937,7 +2945,7 @@ GAP_TEMPLATES.push(
     unit: U6,
     topic: "riemann-sums",
     difficulty: "medium",
-    manifestation: "riemann-sums:from-graph",
+    manifestation: "riemann-sums:graph-sum",
     build: (r: RNG) => {
       const h = ri(r, 2, 5);
       const pts: Array<[number, number]> = [
@@ -2961,7 +2969,7 @@ GAP_TEMPLATES.push(
     unit: U6,
     topic: "fundamental-theorem-of-calculus",
     difficulty: "hard",
-    manifestation: "fundamental-theorem-of-calculus:both-limits",
+    manifestation: "fundamental-theorem-of-calculus:ftc1-both-limits",
     build: (r: RNG) => {
       const k = ri(r, 2, 5);
       const correct = `${2 * k}x\\sin\\left(x^{2}\\right)`;
@@ -3000,7 +3008,7 @@ GAP_TEMPLATES.push(
     unit: U6,
     topic: "fundamental-theorem-of-calculus",
     difficulty: "medium",
-    manifestation: "fundamental-theorem-of-calculus:from-graph",
+    manifestation: "fundamental-theorem-of-calculus:graph-area",
     build: (r: RNG) => {
       const h = ri(r, 2, 4);
       const pts: Array<[number, number]> = [
@@ -3044,7 +3052,7 @@ GAP_TEMPLATES.push(
     unit: U6,
     topic: "u-substitution",
     difficulty: "medium",
-    manifestation: "u-substitution:exponential-log",
+    manifestation: "u-substitution:exp-log",
     build: (r: RNG) => {
       const k = ri(r, 2, 6);
       const correct = `\\dfrac{1}{${k}}e^{${k}x} + C`;
@@ -3122,7 +3130,7 @@ GAP_TEMPLATES.push(
     unit: U6,
     topic: "integration-by-parts",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     manifestation: "integration-by-parts:polynomial-trig",
     build: (r: RNG) => {
       const k = ri(r, 1, 5);
@@ -3144,7 +3152,7 @@ GAP_TEMPLATES.push(
     unit: U6,
     topic: "integration-by-parts",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     manifestation: "integration-by-parts:repeated",
     build: (r: RNG) => {
       const correct = `\\text{two}`;
@@ -3161,7 +3169,7 @@ GAP_TEMPLATES.push(
     unit: U6,
     topic: "integration-by-parts",
     difficulty: "medium",
-    track: "bc",
+    track: "BC",
     manifestation: "integration-by-parts:choose-parts",
     build: (r: RNG) => {
       const correct = `u = \\ln(x),\\; dv = x\\,dx`;
@@ -3182,7 +3190,7 @@ GAP_TEMPLATES.push(
     unit: U6,
     topic: "integration-by-parts",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     manifestation: "integration-by-parts:definite",
     build: (r: RNG) => {
       const b = ri(r, 1, 3);
@@ -3201,7 +3209,7 @@ GAP_TEMPLATES.push(
     unit: U6,
     topic: "partial-fractions",
     difficulty: "medium",
-    track: "bc",
+    track: "BC",
     manifestation: "partial-fractions:setup",
     build: (r: RNG) => {
       const a = ri(r, 1, 4);
@@ -3224,8 +3232,8 @@ GAP_TEMPLATES.push(
     unit: U6,
     topic: "partial-fractions",
     difficulty: "hard",
-    track: "bc",
-    manifestation: "partial-fractions:long-division",
+    track: "BC",
+    manifestation: "partial-fractions:long-division-first",
     build: (r: RNG) => {
       const a = ri(r, 1, 6);
       const correct = `1 + \\dfrac{${a}}{x - ${a}}`;
@@ -3246,7 +3254,7 @@ GAP_TEMPLATES.push(
     unit: U6,
     topic: "partial-fractions",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     manifestation: "partial-fractions:logistic-link",
     build: (r: RNG) => {
       const M = pick(r, [100, 200, 500, 1000] as const);
@@ -3268,7 +3276,7 @@ GAP_TEMPLATES.push(
     unit: U6,
     topic: "improper-integrals",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     manifestation: "improper-integrals:unbounded-integrand",
     build: (r: RNG) => {
       const b = ri(r, 1, 6);
@@ -3286,7 +3294,7 @@ GAP_TEMPLATES.push(
     unit: U6,
     topic: "improper-integrals",
     difficulty: "medium",
-    track: "bc",
+    track: "BC",
     manifestation: "improper-integrals:p-integral",
     build: (r: RNG) => {
       const p = pick(r, [2, 3, 4] as const);
@@ -3304,7 +3312,7 @@ GAP_TEMPLATES.push(
     unit: U6,
     topic: "improper-integrals",
     difficulty: "medium",
-    track: "bc",
+    track: "BC",
     manifestation: "improper-integrals:limit-notation",
     build: (r: RNG) => {
       const a = ri(r, 1, 5);
@@ -3326,7 +3334,7 @@ GAP_TEMPLATES.push(
     unit: U6,
     topic: "improper-integrals",
     difficulty: "hard",
-    track: "bc",
+    track: "BC",
     manifestation: "improper-integrals:compare",
     build: (r: RNG) => {
       const correct = `\\displaystyle\\int_{1}^{\\infty} \\frac{1}{x}\\,dx`;
@@ -3347,7 +3355,7 @@ GAP_TEMPLATES.push(
     unit: U6,
     topic: "accumulation-functions",
     difficulty: "medium",
-    manifestation: "accumulation-functions:graph-evaluation",
+    manifestation: "accumulation-functions:evaluate-from-graph",
     build: (r: RNG) => {
       const h = ri(r, 2, 5);
       const pts: Array<[number, number]> = [
@@ -3448,6 +3456,1849 @@ GAP_TEMPLATES.push(
           `g(${c}) = f(${c})`,
         ],
         explanation: `An integral over a degenerate interval is zero, so $g(${c})=0$. Since $g'=f>0$, $g$ increases and is negative for $x<${c}$; concavity depends on $f'$.`,
+      };
+    },
+  },
+);
+
+/* ------------------------------------------------------------------ */
+/* Unit 7 — Differential equations                                     */
+/* ------------------------------------------------------------------ */
+
+const U7 = "unit-7-differential-equations";
+
+GAP_TEMPLATES.push(
+  {
+    id: "g7-slope-solution-curve",
+    unit: U7,
+    topic: "slope-fields",
+    difficulty: "medium",
+    manifestation: "slope-fields:solution-curve",
+    build: (r: RNG) => {
+      const y0 = ri(r, 1, 3);
+      const correct = `\\text{It increases, and its slopes grow steeper as } x \\text{ increases.}`;
+      return {
+        prompt: `A slope field for $\\dfrac{dy}{dx} = x + y$ is shown. Describe the solution curve through $(1, ${y0})$ for $x > 1$.`,
+        figure: { kind: "slope-field", a: 1, b: 1, extent: 3 },
+        correct,
+        distractors: [
+          `\\text{It decreases toward } y = 0.`,
+          `\\text{It is the horizontal line } y = ${y0}.`,
+          `\\text{It increases with slopes that flatten as } x \\text{ increases.}`,
+        ],
+        explanation: `At $(1,${y0})$ the slope is $${1 + y0} > 0$, so $y$ grows; as both $x$ and $y$ increase, the slope $x + y$ increases as well, making the curve steeper.`,
+      };
+    },
+  },
+  {
+    id: "g7-slope-equilibrium",
+    unit: U7,
+    topic: "slope-fields",
+    difficulty: "medium",
+    manifestation: "slope-fields:equilibrium",
+    build: (r: RNG) => {
+      const a = ri(r, 2, 8);
+      const correct = `y = ${a}`;
+      return {
+        prompt: `Which equilibrium solution does the differential equation $\\dfrac{dy}{dx} = y - ${a}$ have?`,
+        correct,
+        distractors: [`y = 0`, `y = -${a}`, `x = ${a}`],
+        explanation: `An equilibrium solution is a constant solution, so set $y - ${a} = 0$ to get $y = ${a}$.`,
+      };
+    },
+  },
+  {
+    id: "g7-slope-impossible",
+    unit: U7,
+    topic: "slope-fields",
+    difficulty: "hard",
+    manifestation: "slope-fields:impossible-curve",
+    build: (r: RNG) => {
+      void r;
+      const correct = `\\text{a curve with a horizontal tangent at a point where } y \\ne -x`;
+      return {
+        prompt: `The slope field for $\\dfrac{dy}{dx} = x + y$ is shown. Which of the following cannot occur on a solution curve?`,
+        figure: { kind: "slope-field", a: 1, b: 1, extent: 3 },
+        correct,
+        distractors: [
+          `\\text{a horizontal tangent at } (2, -2)`,
+          `\\text{a steeply rising arc in the first quadrant}`,
+          `\\text{a decreasing arc in the third quadrant}`,
+        ],
+        explanation: `The slope is zero exactly when $x + y = 0$, so a horizontal tangent can occur only on the line $y = -x$.`,
+      };
+    },
+  },
+  {
+    id: "g7-sep-verify",
+    unit: U7,
+    topic: "separable-differential-equations",
+    difficulty: "medium",
+    manifestation: "separable-differential-equations:verify",
+    build: (r: RNG) => {
+      const k = ri(r, 2, 5);
+      const correct = `y = e^{${k}x}`;
+      return {
+        prompt: `Which function is a solution of $\\dfrac{dy}{dx} = ${coefTex(k)}y$?`,
+        correct,
+        distractors: [`y = ${coefTex(k)}x`, `y = e^{x} + ${k}`, `y = x^{${k}}`],
+        explanation: `Differentiating $y=e^{${k}x}$ gives $\\frac{dy}{dx} = ${k}e^{${k}x} = ${k}y$, matching the equation.`,
+      };
+    },
+  },
+  {
+    id: "g7-sep-model",
+    unit: U7,
+    topic: "separable-differential-equations",
+    difficulty: "medium",
+    manifestation: "separable-differential-equations:model",
+    build: (r: RNG) => {
+      const A = ri(r, 20, 90);
+      const correct = `\\dfrac{dT}{dt} = k\\left(T - ${A}\\right)`;
+      return {
+        prompt: `An object's temperature $T$ changes at a rate proportional to the difference between $T$ and the surrounding temperature $${A}$ degrees. Which equation models this?`,
+        correct,
+        distractors: [
+          `\\dfrac{dT}{dt} = kT - ${A}`,
+          `\\dfrac{dT}{dt} = \\dfrac{k}{T - ${A}}`,
+          `\\dfrac{dT}{dt} = k\\left(${A} - t\\right)`,
+        ],
+        explanation: `"Proportional to the difference" means the rate equals a constant times $\\left(T - ${A}\\right)$.`,
+      };
+    },
+  },
+  {
+    id: "g7-sep-domain",
+    unit: U7,
+    topic: "separable-differential-equations",
+    difficulty: "hard",
+    manifestation: "separable-differential-equations:domain",
+    build: (r: RNG) => {
+      const c = ri(r, 1, 5);
+      const correct = `x < ${c}`;
+      return {
+        prompt: `A solution of a separable equation is $y = \\dfrac{1}{${c} - x}$ with initial condition given at $x = 0$. On what interval is this solution valid?`,
+        correct,
+        distractors: [`x > ${c}`, `x \\ne ${c}`, `\\text{all real } x`],
+        explanation: `The solution must be continuous on an interval containing the initial value $x=0$, and it breaks at $x=${c}$, so the interval of validity is $x < ${c}$.`,
+      };
+    },
+  },
+  {
+    id: "g7-sep-separability",
+    unit: U7,
+    topic: "separable-differential-equations",
+    difficulty: "medium",
+    manifestation: "separable-differential-equations:separability",
+    build: (r: RNG) => {
+      const k = ri(r, 2, 6);
+      const correct = `\\dfrac{dy}{dx} = ${coefTex(k)}xy^{2}`;
+      return {
+        prompt: `Which differential equation is separable?`,
+        correct,
+        distractors: [
+          `\\dfrac{dy}{dx} = x + y`,
+          `\\dfrac{dy}{dx} = \\dfrac{x + y}{x}`,
+          `\\dfrac{dy}{dx} = \\sin(x + y)`,
+        ],
+        explanation: `Only the product form factors as a function of $x$ times a function of $y$, allowing the variables to be separated.`,
+      };
+    },
+  },
+  {
+    id: "g7-exp-from-data",
+    unit: U7,
+    topic: "exponential-growth-and-decay",
+    difficulty: "hard",
+    calculator: true,
+    manifestation: "exponential-growth-and-decay:from-data",
+    build: (r: RNG) => {
+      const P0 = pick(r, [50, 80, 120, 200] as const);
+      const mult = pick(r, [2, 3, 4] as const);
+      const t1 = pick(r, [4, 5, 10] as const);
+      const k = Math.log(mult) / t1;
+      const correct = dec(k, 4);
+      const body = tablePair("P(t)", [0, t1], [`${P0}`, `${P0 * mult}`]);
+      return {
+        prompt: `A population grows according to $P(t) = P_{0}e^{kt}$, with the values shown.\n\n${body}\n\nFind $k$.`,
+        correct,
+        distractors: opts(correct, [dec(mult / t1, 4), dec(Math.log(mult), 4), dec(k * 2, 4), dec(1 / k, 4)]),
+        explanation: `From $${P0 * mult} = ${P0}e^{${t1}k}$ we get $e^{${t1}k} = ${mult}$, so $k = \\frac{\\ln(${mult})}{${t1}} = ${correct}$.`,
+      };
+    },
+  },
+  {
+    id: "g7-exp-interpret-k",
+    unit: U7,
+    topic: "exponential-growth-and-decay",
+    difficulty: "medium",
+    manifestation: "exponential-growth-and-decay:interpret-constant",
+    build: (r: RNG) => {
+      const pct = pick(r, [3, 5, 8, 12] as const);
+      const correct = `\\text{The quantity decays at a continuous rate of } ${pct}\\% \\text{ per year.}`;
+      return {
+        prompt: `A quantity satisfies $\\dfrac{dA}{dt} = -0.${pct < 10 ? "0" + pct : pct}A$, where $t$ is in years. What does the constant mean?`,
+        correct,
+        distractors: [
+          `\\text{The quantity decreases by } ${pct} \\text{ units each year.}`,
+          `\\text{The quantity grows at a continuous rate of } ${pct}\\% \\text{ per year.}`,
+          `\\text{The quantity halves every } ${pct} \\text{ years.}`,
+        ],
+        explanation: `The equation says the rate of change is $-0.${pct < 10 ? "0" + pct : pct}$ times the amount present, a continuous percentage decay rate, not a fixed number of units.`,
+      };
+    },
+  },
+  {
+    id: "g7-exp-compare",
+    unit: U7,
+    topic: "exponential-growth-and-decay",
+    difficulty: "hard",
+    manifestation: "exponential-growth-and-decay:compare-models",
+    build: (r: RNG) => {
+      const a = ri(r, 2, 4);
+      const b = a + ri(r, 1, 3);
+      const A0 = pick(r, [100, 200, 400] as const);
+      const B0 = A0 / 2;
+      const correct = `B \\text{ eventually exceeds } A, \\text{ because it has the larger growth constant.}`;
+      return {
+        prompt: `Two populations satisfy $A(t) = ${A0}e^{0.0${a}t}$ and $B(t) = ${B0}e^{0.0${b}t}$. Which statement is true for large $t$?`,
+        correct,
+        distractors: [
+          `A \\text{ always exceeds } B, \\text{ because it starts larger.}`,
+          `\\text{The two populations stay in the same ratio.}`,
+          `B \\text{ never catches } A, \\text{ because } ${B0} < ${A0}.`,
+        ],
+        explanation: `The ratio $\\frac{B}{A} = \\frac{${B0}}{${A0}}e^{0.0${b - a}t}$ grows without bound, so the larger exponent wins regardless of the starting values.`,
+      };
+    },
+  },
+  {
+    id: "g7-euler-one-step",
+    unit: U7,
+    topic: "eulers-method",
+    difficulty: "medium",
+    track: "BC",
+    manifestation: "eulers-method:one-step",
+    build: (r: RNG) => {
+      const y0 = ri(r, 1, 5);
+      const h = pick(r, [0.1, 0.2, 0.5] as const);
+      const x0 = ri(r, 1, 3);
+      const slope = x0 + y0;
+      const y1 = y0 + h * slope;
+      const correct = dec(y1, 3);
+      return {
+        prompt: `Let $\\dfrac{dy}{dx} = x + y$ with $y(${x0}) = ${y0}$. Use one step of Euler's method with step size $${h}$ to approximate $y(${dec(x0 + h, 2)})$.`,
+        correct,
+        distractors: opts(correct, [dec(y0 + slope, 3), dec(y0 + h, 3), dec(y0 + h * y0, 3), dec(y0 + 2 * h * slope, 3)]),
+        explanation: `The slope at $(${x0},${y0})$ is $${slope}$, so the update is $${y0} + ${h}(${slope}) = ${correct}$.`,
+      };
+    },
+  },
+  {
+    id: "g7-euler-step-size",
+    unit: U7,
+    topic: "eulers-method",
+    difficulty: "medium",
+    track: "BC",
+    manifestation: "eulers-method:step-size",
+    build: (r: RNG) => {
+      const correct = `\\text{The approximation generally becomes more accurate.}`;
+      return {
+        prompt: `In Euler's method, what is the effect of halving the step size while keeping the same target $x$-value?`,
+        correct,
+        distractors: [
+          `\\text{The approximation becomes exact.}`,
+          `\\text{The approximation generally becomes less accurate.}`,
+          `\\text{The approximation is unchanged.}`,
+        ],
+        explanation: `Smaller steps follow the curve more closely, reducing accumulated error, though the result is still an approximation.`,
+      };
+    },
+  },
+  {
+    id: "g7-euler-over-under",
+    unit: U7,
+    topic: "eulers-method",
+    difficulty: "hard",
+    track: "BC",
+    manifestation: "eulers-method:over-under",
+    build: (r: RNG) => {
+      const correct = `\\text{An underestimate, because the solution is concave up.}`;
+      return {
+        prompt: `A solution curve of a differential equation is concave up on the interval used. How does an Euler's method approximation compare with the true value?`,
+        correct,
+        distractors: [
+          `\\text{An overestimate, because the solution is concave up.}`,
+          `\\text{Exact, because the tangent line matches the curve.}`,
+          `\\text{It cannot be determined from concavity.}`,
+        ],
+        explanation: `Each Euler step follows a tangent line, and tangent lines lie below a concave-up curve, so the approximation underestimates.`,
+      };
+    },
+  },
+  {
+    id: "g7-euler-formula-error",
+    unit: U7,
+    topic: "eulers-method",
+    difficulty: "medium",
+    track: "BC",
+    manifestation: "eulers-method:formula-error",
+    build: (r: RNG) => {
+      const correct = `y_{n+1} = y_{n} + h\\cdot f\\left(x_{n}, y_{n}\\right)`;
+      return {
+        prompt: `Which statement of the Euler update is correct for $\\dfrac{dy}{dx} = f(x,y)$ with step size $h$?`,
+        correct,
+        distractors: [
+          `y_{n+1} = y_{n} + f\\left(x_{n}, y_{n}\\right)`,
+          `y_{n+1} = y_{n} + h\\cdot f\\left(x_{n+1}, y_{n+1}\\right)`,
+          `y_{n+1} = h\\cdot f\\left(x_{n}, y_{n}\\right)`,
+        ],
+        explanation: `The change in $y$ is the slope at the current point times the step size, so the increment is $h\\cdot f(x_{n}, y_{n})$.`,
+      };
+    },
+  },
+  {
+    id: "g7-logistic-capacity",
+    unit: U7,
+    topic: "logistic-growth",
+    difficulty: "medium",
+    track: "BC",
+    manifestation: "logistic-growth:carrying-capacity",
+    build: (r: RNG) => {
+      const M = pick(r, [400, 600, 900, 1200] as const);
+      const k = pick(r, [0.02, 0.05, 0.1] as const);
+      const correct = `${M}`;
+      return {
+        prompt: `A population satisfies $\\dfrac{dP}{dt} = ${k}P\\left(1 - \\dfrac{P}{${M}}\\right)$. What is the carrying capacity?`,
+        correct,
+        distractors: opts(correct, [`${M / 2}`, `${2 * M}`, `${Math.round(k * M)}`, `0`]),
+        explanation: `The logistic form $kP\\left(1 - \\frac{P}{M}\\right)$ has carrying capacity $M = ${M}$, the nonzero equilibrium value.`,
+      };
+    },
+  },
+  {
+    id: "g7-logistic-long-term",
+    unit: U7,
+    topic: "logistic-growth",
+    difficulty: "medium",
+    track: "BC",
+    manifestation: "logistic-growth:long-term",
+    build: (r: RNG) => {
+      const M = pick(r, [500, 800, 1000] as const);
+      const P0 = M / 4;
+      const correct = `P \\to ${M}`;
+      return {
+        prompt: `A population with $P(0) = ${P0}$ satisfies $\\dfrac{dP}{dt} = 0.03P\\left(1 - \\dfrac{P}{${M}}\\right)$. What happens as $t\\to\\infty$?`,
+        correct,
+        distractors: [`P \\to ${M / 2}`, `P \\to \\infty`, `P \\to ${P0}`],
+        explanation: `Starting below the carrying capacity, the population increases and approaches $${M}$ without exceeding it. Half the capacity is where growth is fastest, not the limit.`,
+      };
+    },
+  },
+  {
+    id: "g7-logistic-from-context",
+    unit: U7,
+    topic: "logistic-growth",
+    difficulty: "hard",
+    track: "BC",
+    manifestation: "logistic-growth:from-context",
+    build: (r: RNG) => {
+      const M = pick(r, [250, 600, 1500] as const);
+      const correct = `\\dfrac{dP}{dt} = kP\\left(1 - \\dfrac{P}{${M}}\\right)`;
+      return {
+        prompt: `A fish population grows at a rate jointly proportional to the current population and to the remaining room below the maximum sustainable level of $${M}$ fish. Which model fits?`,
+        correct,
+        distractors: [
+          `\\dfrac{dP}{dt} = kP`,
+          `\\dfrac{dP}{dt} = k\\left(${M} - P\\right)`,
+          `\\dfrac{dP}{dt} = \\dfrac{kP}{${M} - P}`,
+        ],
+        explanation: `"Jointly proportional to $P$ and to the remaining room" produces the logistic product $kP\\left(1 - \\frac{P}{${M}}\\right)$.`,
+      };
+    },
+  },
+  {
+    id: "g7-logistic-graph-shape",
+    unit: U7,
+    topic: "logistic-growth",
+    difficulty: "medium",
+    track: "BC",
+    manifestation: "logistic-growth:graph-shape",
+    build: (r: RNG) => {
+      const M = pick(r, [200, 400, 1000] as const);
+      const correct = `P = ${M / 2}`;
+      return {
+        prompt: `For a logistic model with carrying capacity $${M}$ and an initial value below it, at what population is the growth rate greatest?`,
+        correct,
+        distractors: opts(correct, [`${M}`, `${M / 4}`, `0`, `${Math.round(0.75 * M)}`]),
+        explanation: `The growth rate $kP\\left(1 - \\frac{P}{${M}}\\right)$ is a downward parabola in $P$ with maximum at half the carrying capacity, which is also the inflection point of the solution curve.`,
+      };
+    },
+  },
+);
+
+/* ------------------------------------------------------------------ */
+/* Unit 8 — Applications of integration                                */
+/* ------------------------------------------------------------------ */
+
+const U8 = "unit-8-applications-of-integration";
+
+GAP_TEMPLATES.push(
+  {
+    id: "g8-avg-graph",
+    unit: U8,
+    topic: "average-value",
+    difficulty: "medium",
+    manifestation: "average-value:graph",
+    build: (r: RNG) => {
+      const h = ri(r, 2, 6);
+      const pts: Array<[number, number]> = [
+        [0, 0],
+        [2, h],
+        [4, 0],
+      ];
+      const avg = (0.5 * 4 * h) / 4;
+      const correct = dec(avg, 3);
+      return {
+        prompt: `The graph of $f$ shown consists of two line segments. Find the average value of $f$ on $[0,4]$.`,
+        figure: graph("y = f(x)", pts, { xMin: -1, xMax: 5, yMin: -1, yMax: h + 2 }),
+        correct,
+        distractors: opts(correct, [dec(h, 3), dec(2 * avg, 3), dec(avg / 2, 3), dec(4 * avg, 3)]),
+        explanation: `The area is $\\frac{1}{2}(4)(${h}) = ${dec(2 * h, 3)}$, so the average value is $\\frac{1}{4}\\cdot ${dec(2 * h, 3)} = ${correct}$.`,
+      };
+    },
+  },
+  {
+    id: "g8-avg-table",
+    unit: U8,
+    topic: "average-value",
+    difficulty: "medium",
+    calculator: true,
+    manifestation: "average-value:table",
+    build: (r: RNG) => {
+      const xs = [0, 2, 4];
+      const a = ri(r, 2, 6);
+      const b = a + ri(r, 1, 4);
+      const c = b + ri(r, 1, 4);
+      const trap = 2 * ((a + b) / 2 + (b + c) / 2);
+      const avg = trap / 4;
+      const correct = dec(avg, 3);
+      return {
+        prompt: `Values of the continuous function $f$ are given.\n\n${tablePair("f(x)", xs, [`${a}`, `${b}`, `${c}`])}\n\nUse a trapezoidal sum with the two subintervals to approximate the average value of $f$ on $[0,4]$.`,
+        correct,
+        distractors: opts(correct, [dec(trap, 3), dec((a + b + c) / 3, 3), dec(avg / 2, 3), dec(2 * avg, 3)]),
+        explanation: `The trapezoidal estimate of the integral is $${dec(trap, 3)}$, and dividing by the length $4$ gives an average value of $${correct}$.`,
+      };
+    },
+  },
+  {
+    id: "g8-avg-context-units",
+    unit: U8,
+    topic: "average-value",
+    difficulty: "medium",
+    manifestation: "average-value:context-units",
+    build: (r: RNG) => {
+      const T = pick(r, [4, 6, 8] as const);
+      const correct = `\\text{the average speed, in meters per second, over the } ${T} \\text{ seconds}`;
+      return {
+        prompt: `A particle moves with speed $v(t)$ meters per second. What does $\\dfrac{1}{${T}}\\displaystyle\\int_{0}^{${T}} v(t)\\,dt$ represent?`,
+        correct,
+        distractors: [
+          `\\text{the total distance travelled, in meters}`,
+          `\\text{the acceleration, in meters per second squared}`,
+          `\\text{the change in speed, in meters per second}`,
+        ],
+        explanation: `The integral gives distance in meters; dividing by the elapsed time gives an average speed in meters per second.`,
+      };
+    },
+  },
+  {
+    id: "g8-avg-reverse",
+    unit: U8,
+    topic: "average-value",
+    difficulty: "hard",
+    manifestation: "average-value:reverse",
+    build: (r: RNG) => {
+      const target = pick(r, [3, 12, 27, 48] as const);
+      const b = Math.sqrt(3 * target);
+      const correct = dec(b, 3);
+      return {
+        prompt: `For what positive value of $b$ does $f(x)=x^{2}$ have average value $${target}$ on $[0,b]$?`,
+        correct,
+        distractors: opts(correct, [dec(target, 3), dec(Math.sqrt(target), 3), dec(3 * target, 3), dec(b / 3, 3)]),
+        explanation: `The average value is $\\frac{1}{b}\\cdot\\frac{b^{3}}{3} = \\frac{b^{2}}{3}$. Setting this equal to $${target}$ gives $b = \\sqrt{${3 * target}} = ${correct}$.`,
+      };
+    },
+  },
+  {
+    id: "g8-area-dy-setup",
+    unit: U8,
+    topic: "area-between-curves",
+    difficulty: "hard",
+    manifestation: "area-between-curves:dy-setup",
+    build: (r: RNG) => {
+      const b = pick(r, [2, 3, 4] as const);
+      const correct = `\\displaystyle\\int_{0}^{${b}} y^{2}\\,dy`;
+      return {
+        prompt: `Set up the area of the region bounded by $x = y^{2}$, the $y$-axis, and $y = ${b}$ as an integral with respect to $y$.`,
+        correct,
+        distractors: [
+          `\\displaystyle\\int_{0}^{${b}} \\sqrt{y}\\,dy`,
+          `\\displaystyle\\int_{0}^{${b * b}} y^{2}\\,dy`,
+          `\\displaystyle\\int_{0}^{${b}} \\left(${b} - y^{2}\\right)\\,dy`,
+        ],
+        explanation: `Horizontal strips have length $x = y^{2}$ measured from the $y$-axis, and $y$ runs from $0$ to $${b}$.`,
+      };
+    },
+  },
+  {
+    id: "g8-area-switching-top",
+    unit: U8,
+    topic: "area-between-curves",
+    difficulty: "hard",
+    manifestation: "area-between-curves:switching-top",
+    build: (r: RNG) => {
+      const correct = `\\displaystyle\\int_{0}^{1}\\left(\\sqrt{x} - x^{2}\\right)dx + \\int_{1}^{2}\\left(x^{2} - \\sqrt{x}\\right)dx`;
+      return {
+        prompt: `Which expression gives the total area of the regions between $y=\\sqrt{x}$ and $y=x^{2}$ for $0\\le x\\le 2$?`,
+        correct,
+        distractors: [
+          `\\displaystyle\\int_{0}^{2}\\left(\\sqrt{x} - x^{2}\\right)dx`,
+          `\\displaystyle\\int_{0}^{2}\\left(x^{2} - \\sqrt{x}\\right)dx`,
+          `\\displaystyle\\int_{0}^{1}\\left(x^{2} - \\sqrt{x}\\right)dx + \\int_{1}^{2}\\left(\\sqrt{x} - x^{2}\\right)dx`,
+        ],
+        explanation: `The curves cross at $x=1$: $\\sqrt{x}$ is on top before the crossing and $x^{2}$ is on top after, so the integral must be split with the correct order on each piece.`,
+      };
+    },
+  },
+  {
+    id: "g8-area-setup-only",
+    unit: U8,
+    topic: "area-between-curves",
+    difficulty: "medium",
+    manifestation: "area-between-curves:setup-only",
+    build: (r: RNG) => {
+      const m = ri(r, 1, 4);
+      const correct = `\\displaystyle\\int_{0}^{${m}}\\left(${coefTex(m)}x - x^{2}\\right)dx`;
+      return {
+        prompt: `Which integral gives the area of the region enclosed by $y = ${coefTex(m)}x$ and $y = x^{2}$?`,
+        correct,
+        distractors: [
+          `\\displaystyle\\int_{0}^{${m}}\\left(x^{2} - ${coefTex(m)}x\\right)dx`,
+          `\\displaystyle\\int_{0}^{${m}}\\left(${coefTex(m)}x + x^{2}\\right)dx`,
+          `\\displaystyle\\int_{0}^{${m * m}}\\left(${coefTex(m)}x - x^{2}\\right)dx`,
+        ],
+        explanation: `The curves meet where $${coefTex(m)}x = x^{2}$, at $x=0$ and $x=${m}$, and the line is above the parabola between them.`,
+      };
+    },
+  },
+  {
+    id: "g8-area-signed-vs-geometric",
+    unit: U8,
+    topic: "area-between-curves",
+    difficulty: "medium",
+    manifestation: "area-between-curves:signed-vs-geometric",
+    build: (r: RNG) => {
+      void r;
+      const correct = `\\text{The integral is } 0, \\text{ but the geometric area is } 4.`;
+      return {
+        prompt: `Compare $\\displaystyle\\int_{0}^{2\\pi} \\sin(x)\\,dx$ with the total area between the graph of $\\sin(x)$ and the $x$-axis on $[0,2\\pi]$.`,
+        correct,
+        distractors: [
+          `\\text{Both equal } 0.`,
+          `\\text{Both equal } 4.`,
+          `\\text{The integral is } 4, \\text{ but the geometric area is } 0.`,
+        ],
+        explanation: `Each hump has area $2$. The signed areas cancel, so the integral is $0$, while the geometric area adds the magnitudes: $2 + 2 = 4$.`,
+      };
+    },
+  },
+  {
+    id: "g8-washer",
+    unit: U8,
+    topic: "volume-disks-and-washers",
+    difficulty: "hard",
+    manifestation: "volume-disks-and-washers:washer",
+    build: (r: RNG) => {
+      const correct = `\\pi\\displaystyle\\int_{0}^{1}\\left(x - x^{4}\\right)dx`;
+      return {
+        prompt: `The region between $y=\\sqrt{x}$ and $y=x^{2}$ for $0\\le x\\le 1$ is revolved about the $x$-axis. Which integral gives the volume?`,
+        correct,
+        distractors: [
+          `\\pi\\displaystyle\\int_{0}^{1}\\left(\\sqrt{x} - x^{2}\\right)^{2}dx`,
+          `\\pi\\displaystyle\\int_{0}^{1}\\left(x^{4} - x\\right)dx`,
+          `2\\pi\\displaystyle\\int_{0}^{1}\\left(x - x^{4}\\right)dx`,
+        ],
+        explanation: `A washer has outer radius $\\sqrt{x}$ and inner radius $x^{2}$, so the integrand is $\\pi\\left(x - x^{4}\\right)$; squaring the difference of radii is a common error.`,
+      };
+    },
+  },
+  {
+    id: "g8-shifted-axis",
+    unit: U8,
+    topic: "volume-disks-and-washers",
+    difficulty: "hard",
+    manifestation: "volume-disks-and-washers:shifted-axis",
+    build: (r: RNG) => {
+      const c = ri(r, 1, 4);
+      const correct = `\\pi\\displaystyle\\int_{0}^{1}\\left(\\sqrt{x} + ${c}\\right)^{2} - ${c}^{2}\\,dx`;
+      return {
+        prompt: `The region between $y=\\sqrt{x}$ and the $x$-axis for $0\\le x\\le 1$ is revolved about the line $y=-${c}$. Which integral gives the volume?`,
+        correct,
+        distractors: [
+          `\\pi\\displaystyle\\int_{0}^{1}\\left(\\sqrt{x} + ${c}\\right)^{2}dx`,
+          `\\pi\\displaystyle\\int_{0}^{1}\\left(\\sqrt{x} - ${c}\\right)^{2}dx`,
+          `\\pi\\displaystyle\\int_{0}^{1}\\left(x + ${c}^{2}\\right)dx`,
+        ],
+        explanation: `Distances are measured from $y=-${c}$: the outer radius is $\\sqrt{x}+${c}$ and the inner radius is $${c}$, so the hole must be subtracted.`,
+      };
+    },
+  },
+  {
+    id: "g8-about-y",
+    unit: U8,
+    topic: "volume-disks-and-washers",
+    difficulty: "hard",
+    manifestation: "volume-disks-and-washers:about-y",
+    build: (r: RNG) => {
+      const b = pick(r, [1, 2, 3] as const);
+      const correct = `\\pi\\displaystyle\\int_{0}^{${b}} y^{4}\\,dy`;
+      return {
+        prompt: `The region bounded by $x=y^{2}$, the $y$-axis, and $y=${b}$ is revolved about the $y$-axis. Which integral gives the volume?`,
+        correct,
+        distractors: [
+          `\\pi\\displaystyle\\int_{0}^{${b}} y^{2}\\,dy`,
+          `\\pi\\displaystyle\\int_{0}^{${b}} x^{4}\\,dx`,
+          `2\\pi\\displaystyle\\int_{0}^{${b}} y^{4}\\,dy`,
+        ],
+        explanation: `Revolving about a vertical axis uses horizontal disks of radius $x=y^{2}$, so the integrand is $\\pi\\left(y^{2}\\right)^{2} = \\pi y^{4}$ with respect to $y$.`,
+      };
+    },
+  },
+  {
+    id: "g8-cross-triangle",
+    unit: U8,
+    topic: "volume-known-cross-sections",
+    difficulty: "hard",
+    manifestation: "volume-known-cross-sections:triangle",
+    build: (r: RNG) => {
+      const b = pick(r, [2, 3, 4] as const);
+      const correct = `\\dfrac{\\sqrt{3}}{4}\\displaystyle\\int_{0}^{${b}} x^{2}\\,dx`;
+      return {
+        prompt: `A solid has base the region between $y=x$ and the $x$-axis for $0\\le x\\le ${b}$. Cross sections perpendicular to the $x$-axis are equilateral triangles. Which integral gives the volume?`,
+        correct,
+        distractors: [
+          `\\displaystyle\\int_{0}^{${b}} x^{2}\\,dx`,
+          `\\dfrac{1}{2}\\displaystyle\\int_{0}^{${b}} x^{2}\\,dx`,
+          `\\dfrac{\\sqrt{3}}{4}\\displaystyle\\int_{0}^{${b}} x\\,dx`,
+        ],
+        explanation: `The side length equals the height of the region, $x$, and an equilateral triangle of side $s$ has area $\\frac{\\sqrt{3}}{4}s^{2}$.`,
+      };
+    },
+  },
+  {
+    id: "g8-cross-semicircle",
+    unit: U8,
+    topic: "volume-known-cross-sections",
+    difficulty: "hard",
+    manifestation: "volume-known-cross-sections:semicircle",
+    build: (r: RNG) => {
+      const b = pick(r, [2, 4, 6] as const);
+      const correct = `\\dfrac{\\pi}{8}\\displaystyle\\int_{0}^{${b}} x^{2}\\,dx`;
+      return {
+        prompt: `A solid has base the region between $y=x$ and the $x$-axis for $0\\le x\\le ${b}$. Cross sections perpendicular to the $x$-axis are semicircles with diameter in the base. Which integral gives the volume?`,
+        correct,
+        distractors: [
+          `\\dfrac{\\pi}{2}\\displaystyle\\int_{0}^{${b}} x^{2}\\,dx`,
+          `\\dfrac{\\pi}{4}\\displaystyle\\int_{0}^{${b}} x^{2}\\,dx`,
+          `\\pi\\displaystyle\\int_{0}^{${b}} x^{2}\\,dx`,
+        ],
+        explanation: `With diameter $x$, the radius is $\\frac{x}{2}$ and the semicircular area is $\\frac{1}{2}\\pi\\left(\\frac{x}{2}\\right)^{2} = \\frac{\\pi}{8}x^{2}$.`,
+      };
+    },
+  },
+  {
+    id: "g8-cross-perp-y",
+    unit: U8,
+    topic: "volume-known-cross-sections",
+    difficulty: "hard",
+    manifestation: "volume-known-cross-sections:perpendicular-y",
+    build: (r: RNG) => {
+      const b = pick(r, [1, 2, 3] as const);
+      const correct = `\\displaystyle\\int_{0}^{${b}} y^{4}\\,dy`;
+      return {
+        prompt: `A solid has base the region bounded by $x=y^{2}$, the $y$-axis, and $y=${b}$. Cross sections perpendicular to the $y$-axis are squares. Which integral gives the volume?`,
+        correct,
+        distractors: [
+          `\\displaystyle\\int_{0}^{${b}} y^{2}\\,dy`,
+          `\\displaystyle\\int_{0}^{${b}} x^{4}\\,dx`,
+          `\\pi\\displaystyle\\int_{0}^{${b}} y^{4}\\,dy`,
+        ],
+        explanation: `Cross sections perpendicular to the $y$-axis have side $x = y^{2}$, so the area is $\\left(y^{2}\\right)^{2}$ and the variable of integration is $y$. No factor of $\\pi$ appears for squares.`,
+      };
+    },
+  },
+  {
+    id: "g8-cross-setup-only",
+    unit: U8,
+    topic: "volume-known-cross-sections",
+    difficulty: "medium",
+    manifestation: "volume-known-cross-sections:setup-only",
+    build: (r: RNG) => {
+      const h = ri(r, 2, 5);
+      const pts: Array<[number, number]> = [
+        [0, h],
+        [4, 0],
+      ];
+      const correct = `\\displaystyle\\int_{0}^{4}\\left(${h} - \\dfrac{${h}}{4}x\\right)^{2}dx`;
+      return {
+        prompt: `The base of a solid is the region under the segment shown and above the $x$-axis on $[0,4]$. Cross sections perpendicular to the $x$-axis are squares. Which integral gives the volume?`,
+        figure: graph("y = f(x)", pts, { xMin: -1, xMax: 5, yMin: -1, yMax: h + 2 }),
+        correct,
+        distractors: [
+          `\\displaystyle\\int_{0}^{4}\\left(${h} - \\dfrac{${h}}{4}x\\right)dx`,
+          `\\pi\\displaystyle\\int_{0}^{4}\\left(${h} - \\dfrac{${h}}{4}x\\right)^{2}dx`,
+          `\\displaystyle\\int_{0}^{${h}}\\left(${h} - \\dfrac{${h}}{4}x\\right)^{2}dx`,
+        ],
+        explanation: `The segment is $y = ${h} - \\frac{${h}}{4}x$, the side of each square, so the integrand is its square and $x$ runs from $0$ to $4$.`,
+      };
+    },
+  },
+  {
+    id: "g8-arc-compute",
+    unit: U8,
+    topic: "arc-length",
+    difficulty: "hard",
+    track: "BC",
+    calculator: true,
+    manifestation: "arc-length:compute",
+    build: (r: RNG) => {
+      const m = ri(r, 2, 5);
+      const b = ri(r, 2, 6);
+      const len = b * Math.sqrt(1 + m * m);
+      const correct = dec(len, 3);
+      return {
+        prompt: `Find the length of the graph of $y = ${coefTex(m)}x$ from $x=0$ to $x=${b}$.`,
+        correct,
+        distractors: opts(correct, [dec(b, 3), dec(m * b, 3), dec(b * (1 + m * m), 3), dec(len / 2, 3)]),
+        explanation: `The arc length integral gives $\\int_{0}^{${b}}\\sqrt{1 + ${m * m}}\\,dx = ${b}\\sqrt{${1 + m * m}} = ${correct}$.`,
+      };
+    },
+  },
+  {
+    id: "g8-arc-compare-chord",
+    unit: U8,
+    topic: "arc-length",
+    difficulty: "medium",
+    track: "BC",
+    manifestation: "arc-length:compare-chord",
+    build: (r: RNG) => {
+      const correct = `\\text{The arc length is greater, unless the curve is a straight segment.}`;
+      return {
+        prompt: `How does the arc length of a smooth curve between two points compare with the straight-line distance between them?`,
+        correct,
+        distractors: [
+          `\\text{The arc length is smaller.}`,
+          `\\text{They are always equal.}`,
+          `\\text{The comparison depends on the concavity.}`,
+        ],
+        explanation: `The straight segment is the shortest path between the endpoints, so any curved path is longer, with equality only for the segment itself.`,
+      };
+    },
+  },
+  {
+    id: "g8-arc-context",
+    unit: U8,
+    topic: "arc-length",
+    difficulty: "medium",
+    track: "BC",
+    manifestation: "arc-length:context",
+    build: (r: RNG) => {
+      const correct = `\\text{the length of the path travelled along the curve}`;
+      return {
+        prompt: `A hiker's route follows the graph of a smooth function. What does $\\displaystyle\\int_{a}^{b}\\sqrt{1 + \\left(f'(x)\\right)^{2}}\\,dx$ represent?`,
+        correct,
+        distractors: [
+          `\\text{the horizontal distance covered}`,
+          `\\text{the net change in elevation}`,
+          `\\text{the average steepness of the route}`,
+        ],
+        explanation: `That integral accumulates the arc length element, giving the total distance travelled along the curve rather than a horizontal or vertical change.`,
+      };
+    },
+  },
+  {
+    id: "g8-accum-max-amount",
+    unit: U8,
+    topic: "accumulation-in-context",
+    difficulty: "hard",
+    manifestation: "accumulation-in-context:max-amount",
+    build: (r: RNG) => {
+      const t = ri(r, 2, 6);
+      const correct = `\\text{at } t = ${t}, \\text{ where the inflow rate equals the outflow rate}`;
+      return {
+        prompt: `Water enters a tank at rate $I(t)$ and leaves at rate $O(t)$, with $I(t) > O(t)$ for $t < ${t}$ and $I(t) < O(t)$ for $t > ${t}$. When is the amount of water greatest?`,
+        correct,
+        distractors: [
+          `\\text{at } t = 0`,
+          `\\text{when } I \\text{ is greatest}`,
+          `\\text{at the end of the time interval}`,
+        ],
+        explanation: `The net rate $I - O$ changes from positive to negative at $t=${t}$, so the accumulated amount rises then falls and is greatest there.`,
+      };
+    },
+  },
+  {
+    id: "g8-accum-graph-rate",
+    unit: U8,
+    topic: "accumulation-in-context",
+    difficulty: "medium",
+    manifestation: "accumulation-in-context:graph-rate",
+    build: (r: RNG) => {
+      const h = ri(r, 2, 6);
+      const pts: Array<[number, number]> = [
+        [0, 0],
+        [3, h],
+        [6, 0],
+      ];
+      const total = 0.5 * 6 * h;
+      const correct = dec(total, 3);
+      return {
+        prompt: `Sand is added to a pile at the rate $R(t)$ tons per hour, whose graph consists of the two segments shown. How many tons are added over $0\\le t\\le 6$?`,
+        figure: graph("y = R(t)", pts, { xMin: -1, xMax: 7, yMin: -1, yMax: h + 2 }),
+        correct,
+        distractors: opts(correct, [dec(h, 3), dec(total / 2, 3), dec(2 * total, 3), dec(6 * h, 3)]),
+        explanation: `The amount added is the area under the rate graph: a triangle with base $6$ and height $${h}$, so $\\frac{1}{2}(6)(${h}) = ${correct}$ tons.`,
+      };
+    },
+  },
+  {
+    id: "g8-accum-table-rate",
+    unit: U8,
+    topic: "accumulation-in-context",
+    difficulty: "medium",
+    calculator: true,
+    manifestation: "accumulation-in-context:table-rate",
+    build: (r: RNG) => {
+      const xs = [0, 3, 6];
+      const a = ri(r, 2, 8);
+      const b = a + ri(r, 1, 5);
+      const c = b + ri(r, 1, 5);
+      const left = 3 * (a + b);
+      const correct = dec(left, 3);
+      return {
+        prompt: `Oil flows from a well at the rate $R(t)$ barrels per hour, sampled below.\n\n${tablePair("R(t)", xs, [`${a}`, `${b}`, `${c}`])}\n\nUse a left Riemann sum with the two subintervals to approximate the barrels produced over $0\\le t\\le 6$.`,
+        correct,
+        distractors: opts(correct, [dec(3 * (b + c), 3), dec(a + b, 3), dec(6 * a, 3), dec(left / 2, 3)]),
+        explanation: `Each subinterval has width $3$, and the left endpoints give rates $${a}$ and $${b}$, so the estimate is $3(${a}) + 3(${b}) = ${correct}$ barrels.`,
+      };
+    },
+  },
+  {
+    id: "g8-accum-units",
+    unit: U8,
+    topic: "accumulation-in-context",
+    difficulty: "medium",
+    manifestation: "accumulation-in-context:units",
+    build: (r: RNG) => {
+      const correct = `\\text{gallons}`;
+      return {
+        prompt: `Fuel is consumed at the rate $C(t)$ gallons per minute. What are the units of $\\displaystyle\\int_{0}^{20} C(t)\\,dt$?`,
+        correct,
+        distractors: [`\\text{gallons per minute}`, `\\text{minutes}`, `\\text{gallons per minute squared}`],
+        explanation: `Integrating a rate in gallons per minute with respect to minutes multiplies out the time unit, leaving gallons.`,
+      };
+    },
+  },
+);
+
+/* ------------------------------------------------------------------ */
+/* Unit 9 — Parametric, polar, and vector-valued functions (BC)        */
+/* ------------------------------------------------------------------ */
+
+const U9 = "unit-9-parametric-polar-vector";
+
+GAP_TEMPLATES.push(
+  {
+    id: "g9-param-tangent-line",
+    unit: U9,
+    topic: "parametric-derivatives",
+    difficulty: "hard",
+    track: "BC",
+    manifestation: "parametric-derivatives:tangent-line",
+    build: (r: RNG) => {
+      const t0 = ri(r, 1, 4);
+      // x = t^2, y = t^3 ; dy/dx = 3t/2
+      const slope = (3 * t0) / 2;
+      const x0 = t0 * t0;
+      const y0 = t0 ** 3;
+      const correct = `y - ${y0} = ${dec(slope, 3)}\\left(x - ${x0}\\right)`;
+      return {
+        prompt: `A curve is given by $x = t^{2}$ and $y = t^{3}$. Find an equation of the tangent line at $t = ${t0}$.`,
+        correct,
+        distractors: [
+          `y - ${y0} = ${dec(3 * t0 * t0, 3)}\\left(x - ${x0}\\right)`,
+          `y - ${x0} = ${dec(slope, 3)}\\left(x - ${y0}\\right)`,
+          `y - ${y0} = ${dec(2 * t0, 3)}\\left(x - ${x0}\\right)`,
+        ],
+        explanation: `$\\frac{dy}{dx} = \\frac{3t^{2}}{2t} = \\frac{3t}{2}$, which is $${dec(slope, 3)}$ at $t=${t0}$, and the point is $(${x0}, ${y0})$.`,
+      };
+    },
+  },
+  {
+    id: "g9-param-eliminate",
+    unit: U9,
+    topic: "parametric-derivatives",
+    difficulty: "medium",
+    track: "BC",
+    manifestation: "parametric-derivatives:eliminate-parameter",
+    build: (r: RNG) => {
+      const k = ri(r, 1, 5);
+      const correct = `y = x^{2} + ${k}`;
+      return {
+        prompt: `Eliminate the parameter for $x = t$, $y = t^{2} + ${k}$.`,
+        correct,
+        distractors: [`y = x + ${k}`, `y = \\left(x + ${k}\\right)^{2}`, `x = y^{2} + ${k}`],
+        explanation: `Since $x=t$, substituting gives $y = x^{2} + ${k}$.`,
+      };
+    },
+  },
+  {
+    id: "g9-param-error",
+    unit: U9,
+    topic: "parametric-derivatives",
+    difficulty: "medium",
+    track: "BC",
+    manifestation: "parametric-derivatives:error-analysis",
+    build: (r: RNG) => {
+      void r;
+      const correct = `\\dfrac{dy}{dx} = \\dfrac{dy/dt}{dx/dt}`;
+      return {
+        prompt: `Which formula correctly gives the slope of a parametric curve?`,
+        correct,
+        distractors: [
+          `\\dfrac{dy}{dx} = \\dfrac{dx/dt}{dy/dt}`,
+          `\\dfrac{dy}{dx} = \\dfrac{dy}{dt}\\cdot\\dfrac{dx}{dt}`,
+          `\\dfrac{dy}{dx} = \\dfrac{dy}{dt} - \\dfrac{dx}{dt}`,
+        ],
+        explanation: `The chain rule gives $\\frac{dy}{dt} = \\frac{dy}{dx}\\cdot\\frac{dx}{dt}$, so the slope is the quotient of the $t$-derivatives with $dy/dt$ on top.`,
+      };
+    },
+  },
+  {
+    id: "g9-param-arc-setup",
+    unit: U9,
+    topic: "parametric-arc-length",
+    difficulty: "medium",
+    track: "BC",
+    manifestation: "parametric-arc-length:setup",
+    build: (r: RNG) => {
+      const b = ri(r, 1, 5);
+      const correct = `\\displaystyle\\int_{0}^{${b}}\\sqrt{4t^{2} + 9t^{4}}\\,dt`;
+      return {
+        prompt: `For $x = t^{2}$ and $y = t^{3}$, which integral gives the length of the curve for $0\\le t\\le ${b}$?`,
+        correct,
+        distractors: [
+          `\\displaystyle\\int_{0}^{${b}}\\sqrt{2t + 3t^{2}}\\,dt`,
+          `\\displaystyle\\int_{0}^{${b}}\\left(2t + 3t^{2}\\right)dt`,
+          `\\displaystyle\\int_{0}^{${b}}\\sqrt{1 + 9t^{4}}\\,dt`,
+        ],
+        explanation: `With $\\frac{dx}{dt} = 2t$ and $\\frac{dy}{dt} = 3t^{2}$, the arc length integrand is $\\sqrt{(2t)^{2} + \\left(3t^{2}\\right)^{2}}$.`,
+      };
+    },
+  },
+  {
+    id: "g9-param-distance-vs-displacement",
+    unit: U9,
+    topic: "parametric-arc-length",
+    difficulty: "hard",
+    track: "BC",
+    manifestation: "parametric-arc-length:distance-vs-displacement",
+    build: (r: RNG) => {
+      void r;
+      const correct = `\\text{Distance is the integral of speed; displacement is the change in position.}`;
+      return {
+        prompt: `For a particle moving along a parametric path, how do total distance travelled and displacement differ?`,
+        correct,
+        distractors: [
+          `\\text{They are always equal.}`,
+          `\\text{Displacement is the integral of speed; distance is the change in position.}`,
+          `\\text{Distance is always smaller than the magnitude of displacement.}`,
+        ],
+        explanation: `Distance accumulates $\\sqrt{(dx/dt)^{2} + (dy/dt)^{2}}$, which is never negative, while displacement is the vector difference of the endpoints and can be smaller in magnitude.`,
+      };
+    },
+  },
+  {
+    id: "g9-param-bounds",
+    unit: U9,
+    topic: "parametric-arc-length",
+    difficulty: "medium",
+    track: "BC",
+    manifestation: "parametric-arc-length:bounds",
+    build: (r: RNG) => {
+      void r;
+      const correct = `0 \\le t \\le 2\\pi`;
+      return {
+        prompt: `The circle $x = \\cos(t)$, $y = \\sin(t)$ is traced once. Which parameter interval should be used for its arc length?`,
+        correct,
+        distractors: [`0 \\le t \\le \\pi`, `0 \\le t \\le 4\\pi`, `-1 \\le t \\le 1`],
+        explanation: `One full trip around the circle takes $t$ from $0$ to $2\\pi$; a larger interval retraces the curve and doubles the computed length.`,
+      };
+    },
+  },
+  {
+    id: "g9-vector-position-from-velocity",
+    unit: U9,
+    topic: "vector-valued-functions",
+    difficulty: "hard",
+    track: "BC",
+    manifestation: "vector-valued-functions:position-from-velocity",
+    build: (r: RNG) => {
+      const x0 = ri(r, 1, 5);
+      const y0 = ri(r, 1, 5);
+      const k = ri(r, 2, 5);
+      const correct = `\\left\\langle ${x0} + \\dfrac{t^{2}}{2},\\; ${y0} + ${k}t \\right\\rangle`;
+      return {
+        prompt: `A particle has velocity $\\left\\langle t, ${k} \\right\\rangle$ and position $\\left\\langle ${x0}, ${y0} \\right\\rangle$ at $t=0$. Find its position at time $t$.`,
+        correct,
+        distractors: [
+          `\\left\\langle ${x0} + t,\\; ${y0} + ${k} \\right\\rangle`,
+          `\\left\\langle \\dfrac{t^{2}}{2},\\; ${k}t \\right\\rangle`,
+          `\\left\\langle ${x0} + t^{2},\\; ${y0} + ${k}t \\right\\rangle`,
+        ],
+        explanation: `Integrate each component and use the initial position as the constant: $x = ${x0} + \\frac{t^{2}}{2}$ and $y = ${y0} + ${k}t$.`,
+      };
+    },
+  },
+  {
+    id: "g9-vector-components",
+    unit: U9,
+    topic: "vector-valued-functions",
+    difficulty: "medium",
+    track: "BC",
+    manifestation: "vector-valued-functions:component-analysis",
+    build: (r: RNG) => {
+      const a = ri(r, 1, 5);
+      const correct = `\\text{It moves left when } t < ${a} \\text{ and right when } t > ${a}.`;
+      return {
+        prompt: `A particle has velocity $\\left\\langle t - ${a},\\; t^{2} + 1 \\right\\rangle$. Describe its horizontal motion.`,
+        correct,
+        distractors: [
+          `\\text{It moves right for all } t.`,
+          `\\text{It moves left for all } t.`,
+          `\\text{It is at rest at } t = ${a}, \\text{ then moves down.}`,
+        ],
+        explanation: `The horizontal velocity $t - ${a}$ is negative before $t=${a}$ and positive afterward, so the particle moves left then right. The vertical component is always positive.`,
+      };
+    },
+  },
+  {
+    id: "g9-vector-total-distance",
+    unit: U9,
+    topic: "vector-valued-functions",
+    difficulty: "hard",
+    track: "BC",
+    calculator: true,
+    manifestation: "vector-valued-functions:total-distance",
+    build: (r: RNG) => {
+      const b = ri(r, 1, 4);
+      const k = ri(r, 2, 5);
+      const speed = Math.sqrt(1 + k * k);
+      const total = b * speed;
+      const correct = dec(total, 3);
+      return {
+        prompt: `A particle has velocity $\\left\\langle 1, ${k} \\right\\rangle$ for $0\\le t\\le ${b}$. Find the total distance travelled.`,
+        correct,
+        distractors: opts(correct, [dec(b, 3), dec(k * b, 3), dec(b * (1 + k), 3), dec(total / 2, 3)]),
+        explanation: `The speed is $\\sqrt{1 + ${k * k}} = ${dec(speed, 3)}$, constant, so the distance is $${b}\\cdot ${dec(speed, 3)} = ${correct}$.`,
+      };
+    },
+  },
+  {
+    id: "g9-polar-tangent-angle",
+    unit: U9,
+    topic: "polar-derivatives",
+    difficulty: "hard",
+    track: "BC",
+    manifestation: "polar-derivatives:tangent-at-angle",
+    build: (r: RNG) => {
+      const a = ri(r, 1, 5);
+      const correct = `\\text{horizontal}`;
+      return {
+        prompt: `For the circle $r = ${a}$, what is the tangent line at $\\theta = \\dfrac{\\pi}{2}$?`,
+        correct,
+        distractors: [`\\text{vertical}`, `\\text{of slope } 1`, `\\text{undefined, since } r \\text{ is constant}`],
+        explanation: `At $\\theta = \\frac{\\pi}{2}$ the point is the top of the circle of radius $${a}$, where the tangent line is horizontal.`,
+      };
+    },
+  },
+  {
+    id: "g9-polar-graph-match",
+    unit: U9,
+    topic: "polar-derivatives",
+    difficulty: "medium",
+    track: "BC",
+    manifestation: "polar-derivatives:graph-match",
+    build: (r: RNG) => {
+      const a = ri(r, 2, 6);
+      const correct = `\\text{a circle of radius } ${a} \\text{ centered at the origin}`;
+      return {
+        prompt: `Which curve is described by $r = ${a}$?`,
+        correct,
+        distractors: [
+          `\\text{a circle of radius } ${a} \\text{ centered at } (${a}, 0)`,
+          `\\text{a vertical line } x = ${a}`,
+          `\\text{a spiral through the origin}`,
+        ],
+        explanation: `A constant radius means every point is $${a}$ units from the origin, which is a circle centered at the origin.`,
+      };
+    },
+  },
+  {
+    id: "g9-polar-error",
+    unit: U9,
+    topic: "polar-derivatives",
+    difficulty: "hard",
+    track: "BC",
+    manifestation: "polar-derivatives:error-analysis",
+    build: (r: RNG) => {
+      void r;
+      const correct = `\\dfrac{dr}{d\\theta} \\text{ is not the slope; the slope requires } \\dfrac{dy/d\\theta}{dx/d\\theta}.`;
+      return {
+        prompt: `A student computes $\\dfrac{dr}{d\\theta}$ and reports it as the slope of a polar curve. What is the error?`,
+        correct,
+        distractors: [
+          `\\dfrac{dr}{d\\theta} \\text{ must be squared first.}`,
+          `\\text{The slope of a polar curve is always } \\tan(\\theta).`,
+          `\\text{Polar curves have no tangent lines.}`,
+        ],
+        explanation: `The slope is measured in the $xy$-plane, so convert with $x = r\\cos\\theta$ and $y = r\\sin\\theta$ and take the quotient of their $\\theta$-derivatives.`,
+      };
+    },
+  },
+  {
+    id: "g9-polar-area-between",
+    unit: U9,
+    topic: "polar-area",
+    difficulty: "hard",
+    track: "BC",
+    manifestation: "polar-area:between-curves",
+    build: (r: RNG) => {
+      const a = ri(r, 2, 4);
+      const b = a + ri(r, 1, 3);
+      const correct = `\\dfrac{1}{2}\\displaystyle\\int_{0}^{2\\pi}\\left(${b}^{2} - ${a}^{2}\\right)d\\theta`;
+      return {
+        prompt: `Which integral gives the area of the ring between the polar circles $r = ${a}$ and $r = ${b}$?`,
+        correct,
+        distractors: [
+          `\\dfrac{1}{2}\\displaystyle\\int_{0}^{2\\pi}\\left(${b} - ${a}\\right)^{2}d\\theta`,
+          `\\displaystyle\\int_{0}^{2\\pi}\\left(${b}^{2} - ${a}^{2}\\right)d\\theta`,
+          `\\dfrac{1}{2}\\displaystyle\\int_{0}^{\\pi}\\left(${b}^{2} - ${a}^{2}\\right)d\\theta`,
+        ],
+        explanation: `Polar area uses $\\frac{1}{2}\\int r^{2}\\,d\\theta$, and the region between two curves subtracts the squares of the radii over a full revolution.`,
+      };
+    },
+  },
+  {
+    id: "g9-polar-bounds",
+    unit: U9,
+    topic: "polar-area",
+    difficulty: "hard",
+    track: "BC",
+    manifestation: "polar-area:bounds",
+    build: (r: RNG) => {
+      const a = ri(r, 2, 5);
+      const correct = `0 \\le \\theta \\le \\pi`;
+      return {
+        prompt: `The curve $r = ${a}\\sin(\\theta)$ traces a full circle exactly once on which interval?`,
+        correct,
+        distractors: [`0 \\le \\theta \\le 2\\pi`, `0 \\le \\theta \\le \\dfrac{\\pi}{2}`, `-\\pi \\le \\theta \\le \\pi`],
+        explanation: `$r = ${a}\\sin(\\theta)$ completes the circle as $\\theta$ goes from $0$ to $\\pi$; continuing to $2\\pi$ retraces it and doubles a computed area.`,
+      };
+    },
+  },
+  {
+    id: "g9-polar-calculator",
+    unit: U9,
+    topic: "polar-area",
+    difficulty: "hard",
+    track: "BC",
+    calculator: true,
+    manifestation: "polar-area:calculator",
+    build: (r: RNG) => {
+      const a = ri(r, 2, 6);
+      const area = (Math.PI * a * a) / 4;
+      const correct = dec(area, 3);
+      return {
+        prompt: `Find the area enclosed by $r = ${a}\\sin(\\theta)$, correct to three decimal places.`,
+        correct,
+        distractors: opts(correct, [dec(4 * area, 3), dec(2 * area, 3), dec(area / 2, 3), dec(Math.PI * a, 3)]),
+        explanation: `The curve is a circle of radius $\\frac{${a}}{2}$, so $\\frac{1}{2}\\int_{0}^{\\pi}\\left(${a}\\sin\\theta\\right)^{2}d\\theta = \\pi\\left(\\frac{${a}}{2}\\right)^{2} = ${correct}$.`,
+      };
+    },
+  },
+);
+
+/* ------------------------------------------------------------------ */
+/* Unit 10 — Infinite sequences and series (BC)                        */
+/* ------------------------------------------------------------------ */
+
+const U10 = "unit-10-infinite-sequences-and-series";
+
+GAP_TEMPLATES.push(
+  {
+    id: "g10-nth-inconclusive",
+    unit: U10,
+    topic: "nth-term-test",
+    difficulty: "medium",
+    track: "BC",
+    manifestation: "nth-term-test:inconclusive",
+    build: (r: RNG) => {
+      const p = pick(r, [2, 3] as const);
+      const correct = `\\text{Terms tending to } 0 \\text{ does not guarantee that the series converges.}`;
+      return {
+        prompt: `The terms of $\\displaystyle\\sum_{n=1}^{\\infty} \\frac{1}{n^{${p}}}$ tend to $0$. Why does the nth-term test fail to settle convergence?`,
+        correct,
+        distractors: [
+          `\\text{The test applies only to alternating series.}`,
+          `\\text{The terms must be increasing for the test to apply.}`,
+          `\\text{The test proves divergence whenever the terms tend to } 0.`,
+        ],
+        explanation: `The nth-term test can only prove divergence, when the terms fail to approach $0$. The harmonic series shows that vanishing terms are not sufficient for convergence.`,
+      };
+    },
+  },
+  {
+    id: "g10-nth-sequence-vs-series",
+    unit: U10,
+    topic: "nth-term-test",
+    difficulty: "medium",
+    track: "BC",
+    manifestation: "nth-term-test:sequence-vs-series",
+    build: (r: RNG) => {
+      void r;
+      const correct = `\\text{The sequence converges to } 0, \\text{ but the series diverges.}`;
+      return {
+        prompt: `Consider $a_{n} = \\dfrac{1}{n}$. Which statement is true?`,
+        correct,
+        distractors: [
+          `\\text{Both the sequence and the series converge.}`,
+          `\\text{Both diverge.}`,
+          `\\text{The sequence diverges, but the series converges.}`,
+        ],
+        explanation: `The terms approach $0$, so the sequence converges, while the harmonic series of those terms grows without bound.`,
+      };
+    },
+  },
+  {
+    id: "g10-nth-table-terms",
+    unit: U10,
+    topic: "nth-term-test",
+    difficulty: "medium",
+    track: "BC",
+    manifestation: "nth-term-test:table-terms",
+    build: (r: RNG) => {
+      const L = ri(r, 2, 6);
+      const ns = [10, 100, 1000];
+      const vals = [`${dec(L - 0.4, 2)}`, `${dec(L - 0.05, 2)}`, `${dec(L - 0.005, 3)}`];
+      const correct = `\\text{The series diverges, because the terms approach } ${L}.`;
+      return {
+        prompt: `Terms of a positive series are sampled below.\n\n${tablePair("a_n", ns, vals)}\n\nWhat does the nth-term test conclude?`,
+        correct,
+        distractors: [
+          `\\text{The series converges, because the terms level off.}`,
+          `\\text{The series converges to } ${L}.`,
+          `\\text{No conclusion is possible.}`,
+        ],
+        explanation: `The samples suggest $a_{n}\\to ${L}\\ne 0$, so the terms do not vanish and the series must diverge.`,
+      };
+    },
+  },
+  {
+    id: "g10-nth-error",
+    unit: U10,
+    topic: "nth-term-test",
+    difficulty: "medium",
+    track: "BC",
+    manifestation: "nth-term-test:error-analysis",
+    build: (r: RNG) => {
+      void r;
+      const correct = `\\text{The test can prove divergence only, never convergence.}`;
+      return {
+        prompt: `A student writes: "Since $a_{n}\\to 0$, the nth-term test shows the series converges." What is wrong?`,
+        correct,
+        distractors: [
+          `\\text{The limit should be computed for } a_{n+1}.`,
+          `\\text{The test requires the terms to be positive.}`,
+          `\\text{Nothing is wrong; the reasoning is valid.}`,
+        ],
+        explanation: `The nth-term test is one-directional: a nonzero limit forces divergence, but a zero limit leaves the question open.`,
+      };
+    },
+  },
+  {
+    id: "g10-geo-shifted-index",
+    unit: U10,
+    topic: "geometric-and-p-series",
+    difficulty: "hard",
+    track: "BC",
+    manifestation: "geometric-and-p-series:shifted-index",
+    build: (r: RNG) => {
+      const d = pick(r, [2, 3, 4, 5] as const);
+      // sum_{n=2}^inf (1/d)^n = (1/d^2)/(1 - 1/d)
+      const num = 1;
+      const val = (1 / (d * d)) / (1 - 1 / d);
+      const correct = frac(num, d * (d - 1));
+      void val;
+      return {
+        prompt: `Evaluate $\\displaystyle\\sum_{n=2}^{\\infty} \\left(\\frac{1}{${d}}\\right)^{n}$.`,
+        correct,
+        distractors: [frac(1, d - 1), frac(1, d), frac(1, d * d)],
+        explanation: `The first term is $\\frac{1}{${d * d}}$ with ratio $\\frac{1}{${d}}$, so the sum is $\\frac{1/${d * d}}{1 - 1/${d}} = ${correct}$.`,
+      };
+    },
+  },
+  {
+    id: "g10-geo-disguised",
+    unit: U10,
+    topic: "geometric-and-p-series",
+    difficulty: "hard",
+    track: "BC",
+    manifestation: "geometric-and-p-series:disguised",
+    build: (r: RNG) => {
+      const d = pick(r, [2, 3, 5] as const);
+      const correct = `\\text{geometric with ratio } \\dfrac{${d}}{${d + 1}}`;
+      return {
+        prompt: `Identify the structure of $\\displaystyle\\sum_{n=0}^{\\infty} \\frac{${d}^{n}}{${d + 1}^{n}}$.`,
+        correct,
+        distractors: [
+          `p\\text{-series with } p = ${d}`,
+          `\\text{geometric with ratio } ${d}`,
+          `\\text{neither geometric nor a } p\\text{-series}`,
+        ],
+        explanation: `Writing the terms as $\\left(\\frac{${d}}{${d + 1}}\\right)^{n}$ exposes a geometric series with ratio less than $1$.`,
+      };
+    },
+  },
+  {
+    id: "g10-geo-parameter",
+    unit: U10,
+    topic: "geometric-and-p-series",
+    difficulty: "hard",
+    track: "BC",
+    manifestation: "geometric-and-p-series:parameter-ratio",
+    build: (r: RNG) => {
+      const k = ri(r, 2, 6);
+      const correct = `\\left|x\\right| < \\dfrac{1}{${k}}`;
+      return {
+        prompt: `For which values of $x$ does $\\displaystyle\\sum_{n=0}^{\\infty} \\left(${coefTex(k)}x\\right)^{n}$ converge?`,
+        correct,
+        distractors: [
+          `\\left|x\\right| < ${k}`,
+          `\\left|x\\right| \\le \\dfrac{1}{${k}}`,
+          `\\text{all real } x`,
+        ],
+        explanation: `A geometric series converges exactly when the ratio satisfies $\\left|${k}x\\right| < 1$, that is $\\left|x\\right| < \\frac{1}{${k}}$; the endpoints give ratio $1$ in magnitude and diverge.`,
+      };
+    },
+  },
+  {
+    id: "g10-geo-context",
+    unit: U10,
+    topic: "geometric-and-p-series",
+    difficulty: "hard",
+    track: "BC",
+    manifestation: "geometric-and-p-series:repeating-context",
+    build: (r: RNG) => {
+      const h = pick(r, [8, 10, 12, 16] as const);
+      const p = pick(r, [2, 4] as const); // rebounds to 1/p of previous height
+      const total = h + (2 * h) / (p - 1) * 1 / 1 * (1 / 1) * (1 / 1) * (1 / 1) * (1 / 1) * (1 / 1) * (1 / 1) * (1 / 1) * (1 / 1) * (1 / 1) * (1 / 1) * (1 / 1);
+      const totalCorrect = h + (2 * h / p) / (1 - 1 / p);
+      void total;
+      const correct = dec(totalCorrect, 3);
+      return {
+        prompt: `A ball dropped from $${h}$ feet rebounds to $\\dfrac{1}{${p}}$ of its previous height each bounce. Find the total vertical distance it travels.`,
+        correct,
+        distractors: opts(correct, [dec(h, 3), dec(2 * h, 3), dec(totalCorrect - h, 3), dec(h * p, 3)]),
+        explanation: `After the initial $${h}$-foot drop, each bounce contributes twice its height, giving the geometric sum $\\frac{2\\cdot ${h}/${p}}{1 - 1/${p}}$. The total is $${correct}$ feet.`,
+      };
+    },
+  },
+  {
+    id: "g10-limit-comparison",
+    unit: U10,
+    topic: "comparison-tests",
+    difficulty: "hard",
+    track: "BC",
+    manifestation: "comparison-tests:limit-comparison",
+    build: (r: RNG) => {
+      const k = ri(r, 1, 9);
+      const correct = `\\text{It diverges, by comparison with } \\displaystyle\\sum \\frac{1}{n}.`;
+      return {
+        prompt: `Use the limit comparison test on $\\displaystyle\\sum_{n=1}^{\\infty} \\frac{n}{n^{2} + ${k}}$.`,
+        correct,
+        distractors: [
+          `\\text{It converges, by comparison with } \\displaystyle\\sum \\frac{1}{n^{2}}.`,
+          `\\text{It converges, by comparison with } \\displaystyle\\sum \\frac{1}{n}.`,
+          `\\text{The test is inconclusive.}`,
+        ],
+        explanation: `Comparing with $\\frac{1}{n}$ gives $\\lim_{n\\to\\infty}\\frac{n^{2}}{n^{2}+${k}} = 1$, a positive finite limit, so both series behave alike and the harmonic series diverges.`,
+      };
+    },
+  },
+  {
+    id: "g10-invalid-comparison",
+    unit: U10,
+    topic: "comparison-tests",
+    difficulty: "hard",
+    track: "BC",
+    manifestation: "comparison-tests:invalid-comparison",
+    build: (r: RNG) => {
+      void r;
+      const correct = `\\text{Being smaller than the terms of a divergent series proves nothing.}`;
+      return {
+        prompt: `A student argues that $\\displaystyle\\sum \\frac{1}{n^{2}}$ diverges because $\\frac{1}{n^{2}} < \\frac{1}{n}$ and $\\displaystyle\\sum \\frac{1}{n}$ diverges. What is wrong?`,
+        correct,
+        distractors: [
+          `\\text{The inequality is reversed.}`,
+          `\\text{The comparison test needs alternating terms.}`,
+          `\\text{Nothing; the conclusion is correct.}`,
+        ],
+        explanation: `A useful comparison requires terms larger than a divergent series or smaller than a convergent one. Here $\\sum\\frac{1}{n^{2}}$ in fact converges as a $p$-series with $p=2$.`,
+      };
+    },
+  },
+  {
+    id: "g10-integral-test",
+    unit: U10,
+    topic: "comparison-tests",
+    difficulty: "hard",
+    track: "BC",
+    manifestation: "comparison-tests:integral-test",
+    build: (r: RNG) => {
+      const p = pick(r, [2, 3] as const);
+      const correct = `\\text{It converges, because } \\displaystyle\\int_{1}^{\\infty} \\frac{1}{x^{${p}}}\\,dx \\text{ converges.}`;
+      return {
+        prompt: `Apply the integral test to $\\displaystyle\\sum_{n=1}^{\\infty} \\frac{1}{n^{${p}}}$.`,
+        correct,
+        distractors: [
+          `\\text{It diverges, because } \\displaystyle\\int_{1}^{\\infty} \\frac{1}{x^{${p}}}\\,dx \\text{ diverges.}`,
+          `\\text{The sum equals the value of the integral.}`,
+          `\\text{The test does not apply, because the terms are not decreasing.}`,
+        ],
+        explanation: `The function $\\frac{1}{x^{${p}}}$ is positive, continuous, and decreasing on $[1,\\infty)$, and its improper integral converges, so the series converges — though the sum need not equal the integral.`,
+      };
+    },
+  },
+  {
+    id: "g10-ratio-convergence",
+    unit: U10,
+    topic: "ratio-test",
+    difficulty: "hard",
+    track: "BC",
+    manifestation: "ratio-test:convergence",
+    build: (r: RNG) => {
+      const b = pick(r, [2, 3, 4] as const);
+      const correct = `\\text{It converges, because the ratio limit is } 0.`;
+      return {
+        prompt: `Use the ratio test on $\\displaystyle\\sum_{n=1}^{\\infty} \\frac{${b}^{n}}{n!}$.`,
+        correct,
+        distractors: [
+          `\\text{It diverges, because the ratio limit is } ${b}.`,
+          `\\text{The test is inconclusive, because the ratio limit is } 1.`,
+          `\\text{It converges, because the ratio limit is } \\dfrac{1}{${b}}.`,
+        ],
+        explanation: `The ratio is $\\frac{${b}}{n+1}$, whose limit is $0 < 1$, so the series converges absolutely.`,
+      };
+    },
+  },
+  {
+    id: "g10-ratio-endpoints",
+    unit: U10,
+    topic: "ratio-test",
+    difficulty: "hard",
+    track: "BC",
+    manifestation: "ratio-test:interval-endpoints",
+    build: (r: RNG) => {
+      void r;
+      const correct = `\\text{The endpoints must be tested separately with another test.}`;
+      return {
+        prompt: `The ratio test shows a power series converges for $\\left|x\\right| < 1$. What remains to be done to find the interval of convergence?`,
+        correct,
+        distractors: [
+          `\\text{Nothing; the interval is } -1 < x < 1.`,
+          `\\text{The endpoints always converge.}`,
+          `\\text{The endpoints always diverge.}`,
+        ],
+        explanation: `The ratio test is inconclusive when the ratio limit equals $1$, which is exactly what happens at the endpoints, so each must be checked directly.`,
+      };
+    },
+  },
+  {
+    id: "g10-ratio-inconclusive",
+    unit: U10,
+    topic: "ratio-test",
+    difficulty: "medium",
+    track: "BC",
+    manifestation: "ratio-test:inconclusive",
+    build: (r: RNG) => {
+      void r;
+      const correct = `\\text{when the limit of the ratio equals } 1`;
+      return {
+        prompt: `When is the ratio test inconclusive?`,
+        correct,
+        distractors: [
+          `\\text{when the limit of the ratio equals } 0`,
+          `\\text{when the terms alternate in sign}`,
+          `\\text{when the series has factorials}`,
+        ],
+        explanation: `A ratio limit below $1$ gives convergence and above $1$ gives divergence; exactly $1$ gives no information.`,
+      };
+    },
+  },
+  {
+    id: "g10-ast-convergence",
+    unit: U10,
+    topic: "alternating-series-test",
+    difficulty: "medium",
+    track: "BC",
+    manifestation: "alternating-series-test:convergence",
+    build: (r: RNG) => {
+      void r;
+      const correct = `\\text{It converges conditionally.}`;
+      return {
+        prompt: `Classify $\\displaystyle\\sum_{n=1}^{\\infty} \\frac{(-1)^{n}}{n}$.`,
+        correct,
+        distractors: [
+          `\\text{It converges absolutely.}`,
+          `\\text{It diverges.}`,
+          `\\text{It converges to } 0.`,
+        ],
+        explanation: `The alternating series test applies since $\\frac{1}{n}$ decreases to $0$, but the series of absolute values is the divergent harmonic series, so convergence is conditional.`,
+      };
+    },
+  },
+  {
+    id: "g10-ast-hypotheses",
+    unit: U10,
+    topic: "alternating-series-test",
+    difficulty: "hard",
+    track: "BC",
+    manifestation: "alternating-series-test:hypotheses",
+    build: (r: RNG) => {
+      void r;
+      const correct = `\\text{The terms must decrease in magnitude and tend to } 0.`;
+      return {
+        prompt: `Which condition must be verified before concluding convergence from the alternating series test?`,
+        correct,
+        distractors: [
+          `\\text{The terms must be positive.}`,
+          `\\text{The series of absolute values must converge.}`,
+          `\\text{The ratio limit must be less than } 1.`,
+        ],
+        explanation: `The test requires alternating signs together with magnitudes that eventually decrease and approach $0$; absolute convergence is a stronger, separate property.`,
+      };
+    },
+  },
+  {
+    id: "g10-ast-terms-needed",
+    unit: U10,
+    topic: "alternating-series-test",
+    difficulty: "hard",
+    track: "BC",
+    manifestation: "alternating-series-test:terms-needed",
+    build: (r: RNG) => {
+      const p = pick(r, [2, 3, 4] as const); // error tolerance 10^-p
+      const n = Math.pow(10, p);
+      const correct = `${n}`;
+      return {
+        prompt: `For $\\displaystyle\\sum_{n=1}^{\\infty} \\frac{(-1)^{n+1}}{n}$, how many terms guarantee an error less than $10^{-${p}}$ when the partial sum is used?`,
+        correct,
+        distractors: opts(correct, [`${p}`, `${n / 10}`, `${10 * n}`, `${n - 1}`]),
+        explanation: `The alternating series error is at most the first omitted term, $\\frac{1}{n+1}$. Requiring $\\frac{1}{n+1} < 10^{-${p}}$ gives $n > 10^{${p}} - 1$, so $${n}$ terms suffice.`,
+      };
+    },
+  },
+  {
+    id: "g10-taylor-known-series",
+    unit: U10,
+    topic: "taylor-and-maclaurin-series",
+    difficulty: "hard",
+    track: "BC",
+    manifestation: "taylor-and-maclaurin-series:known-series",
+    build: (r: RNG) => {
+      const k = ri(r, 2, 5);
+      const correct = `\\displaystyle\\sum_{n=0}^{\\infty} \\frac{${k}^{n}x^{n}}{n!}`;
+      return {
+        prompt: `Use a known Maclaurin series to expand $e^{${coefTex(k)}x}$.`,
+        correct,
+        distractors: [
+          `\\displaystyle\\sum_{n=0}^{\\infty} \\frac{${k}x^{n}}{n!}`,
+          `\\displaystyle\\sum_{n=0}^{\\infty} \\frac{x^{n}}{${k}^{n}n!}`,
+          `\\displaystyle\\sum_{n=0}^{\\infty} ${k}^{n}x^{n}`,
+        ],
+        explanation: `Substituting $${k}x$ into $e^{u} = \\sum \\frac{u^{n}}{n!}$ gives $\\sum \\frac{(${k}x)^{n}}{n!}$.`,
+      };
+    },
+  },
+  {
+    id: "g10-taylor-approx",
+    unit: U10,
+    topic: "taylor-and-maclaurin-series",
+    difficulty: "hard",
+    track: "BC",
+    calculator: true,
+    manifestation: "taylor-and-maclaurin-series:polynomial-approx",
+    build: (r: RNG) => {
+      const x = pick(r, [0.1, 0.2, 0.5] as const);
+      const val = 1 + x + (x * x) / 2;
+      const correct = dec(val, 4);
+      return {
+        prompt: `Use the second-degree Maclaurin polynomial for $e^{x}$ to approximate $e^{${x}}$.`,
+        correct,
+        distractors: opts(correct, [dec(1 + x, 4), dec(Math.exp(x), 4), dec(1 + x + x * x, 4), dec(val + x, 4)]),
+        explanation: `The polynomial is $1 + x + \\frac{x^{2}}{2}$, which at $x=${x}$ gives $${correct}$.`,
+      };
+    },
+  },
+  {
+    id: "g10-taylor-table",
+    unit: U10,
+    topic: "taylor-and-maclaurin-series",
+    difficulty: "hard",
+    track: "BC",
+    manifestation: "taylor-and-maclaurin-series:table-derivatives",
+    build: (r: RNG) => {
+      const f0 = ri(r, 1, 6);
+      const f1 = ri(r, 1, 6);
+      const f2 = 2 * ri(r, 1, 5);
+      const correct = `${f0} + ${f1}x + ${f2 / 2}x^{2}`;
+      const body = table(
+        ["order", "$0$", "$1$", "$2$"],
+        ["value at $x=0$", `$${f0}$`, `$${f1}$`, `$${f2}$`],
+      );
+      return {
+        prompt: `Derivative values of $f$ at $x=0$ are shown.\n\n${body}\n\nWrite the second-degree Maclaurin polynomial for $f$.`,
+        correct,
+        distractors: [
+          `${f0} + ${f1}x + ${f2}x^{2}`,
+          `${f0} + ${f1}x + ${f2 / 2}x`,
+          `${f1} + ${f2}x + ${f0}x^{2}`,
+        ],
+        explanation: `The polynomial is $f(0) + f'(0)x + \\frac{f''(0)}{2}x^{2} = ${f0} + ${f1}x + ${f2 / 2}x^{2}$.`,
+      };
+    },
+  },
+  {
+    id: "g10-taylor-center-shift",
+    unit: U10,
+    topic: "taylor-and-maclaurin-series",
+    difficulty: "hard",
+    track: "BC",
+    manifestation: "taylor-and-maclaurin-series:center-shift",
+    build: (r: RNG) => {
+      const c = ri(r, 2, 5);
+      const correct = `\\displaystyle\\sum_{n=0}^{\\infty} \\frac{e^{${c}}\\left(x - ${c}\\right)^{n}}{n!}`;
+      return {
+        prompt: `Write the Taylor series for $e^{x}$ centered at $x = ${c}$.`,
+        correct,
+        distractors: [
+          `\\displaystyle\\sum_{n=0}^{\\infty} \\frac{\\left(x - ${c}\\right)^{n}}{n!}`,
+          `\\displaystyle\\sum_{n=0}^{\\infty} \\frac{e^{${c}}x^{n}}{n!}`,
+          `\\displaystyle\\sum_{n=0}^{\\infty} e^{${c}}\\left(x - ${c}\\right)^{n}`,
+        ],
+        explanation: `Every derivative of $e^{x}$ at $x=${c}$ equals $e^{${c}}$, so the coefficients are $\\frac{e^{${c}}}{n!}$ with powers of $\\left(x-${c}\\right)$.`,
+      };
+    },
+  },
+  {
+    id: "g10-taylor-identify",
+    unit: U10,
+    topic: "taylor-and-maclaurin-series",
+    difficulty: "hard",
+    track: "BC",
+    manifestation: "taylor-and-maclaurin-series:identify-function",
+    build: (r: RNG) => {
+      void r;
+      const correct = `\\sin(x)`;
+      return {
+        prompt: `Which function has Maclaurin series $x - \\dfrac{x^{3}}{3!} + \\dfrac{x^{5}}{5!} - \\cdots$?`,
+        correct,
+        distractors: [`\\cos(x)`, `e^{x}`, `\\ln(1 + x)`],
+        explanation: `Odd powers with alternating signs and factorial denominators is the signature of $\\sin(x)$.`,
+      };
+    },
+  },
+  {
+    id: "g10-lagrange-degree",
+    unit: U10,
+    topic: "lagrange-error-bound",
+    difficulty: "hard",
+    track: "BC",
+    manifestation: "lagrange-error-bound:degree-needed",
+    build: (r: RNG) => {
+      void r;
+      const correct = `\\text{Increase } n \\text{ until the bound on the remainder falls below the tolerance.}`;
+      return {
+        prompt: `How is the Lagrange error bound used to decide what degree Taylor polynomial achieves a given accuracy?`,
+        correct,
+        distractors: [
+          `\\text{Set the } (n+1)\\text{st derivative equal to the tolerance.}`,
+          `\\text{Choose } n \\text{ equal to the tolerance's number of decimal places.}`,
+          `\\text{Compute the exact error and solve for } n.`,
+        ],
+        explanation: `The bound $\\frac{M\\left|x-a\\right|^{n+1}}{(n+1)!}$ is tested for increasing $n$ until it falls below the required tolerance.`,
+      };
+    },
+  },
+  {
+    id: "g10-lagrange-interpret",
+    unit: U10,
+    topic: "lagrange-error-bound",
+    difficulty: "medium",
+    track: "BC",
+    manifestation: "lagrange-error-bound:interpret",
+    build: (r: RNG) => {
+      void r;
+      const correct = `\\text{It gives an upper bound on the error, not the exact error.}`;
+      return {
+        prompt: `What does the Lagrange error bound guarantee?`,
+        correct,
+        distractors: [
+          `\\text{It gives the exact error of the approximation.}`,
+          `\\text{It guarantees the series converges.}`,
+          `\\text{It gives a lower bound on the error.}`,
+        ],
+        explanation: `The bound guarantees only that the magnitude of the remainder is no larger than the stated value; the true error is usually smaller.`,
+      };
+    },
+  },
+  {
+    id: "g10-lagrange-max-derivative",
+    unit: U10,
+    topic: "lagrange-error-bound",
+    difficulty: "hard",
+    track: "BC",
+    manifestation: "lagrange-error-bound:max-derivative",
+    build: (r: RNG) => {
+      const n = ri(r, 2, 4);
+      const correct = `\\text{the maximum of } \\left|f^{(${n + 1})}\\right| \\text{ on the interval between } a \\text{ and } x`;
+      return {
+        prompt: `In the Lagrange error bound for a degree-$${n}$ Taylor polynomial, what value should $M$ be?`,
+        correct,
+        distractors: [
+          `\\left|f^{(${n + 1})}(a)\\right|`,
+          `\\text{the maximum of } \\left|f\\right| \\text{ on the interval}`,
+          `\\text{the maximum of } \\left|f^{(${n})}\\right| \\text{ on the interval}`,
+        ],
+        explanation: `The remainder involves the next derivative, so $M$ must bound $\\left|f^{(${n + 1})}\\right|$ across the whole interval, not just at the center.`,
+      };
+    },
+  },
+  {
+    id: "g10-lagrange-compare-actual",
+    unit: U10,
+    topic: "lagrange-error-bound",
+    difficulty: "hard",
+    track: "BC",
+    manifestation: "lagrange-error-bound:compare-actual",
+    build: (r: RNG) => {
+      void r;
+      const correct = `\\text{The actual error is at most the bound, and usually smaller.}`;
+      return {
+        prompt: `How does the actual error of a Taylor approximation compare with the Lagrange error bound?`,
+        correct,
+        distractors: [
+          `\\text{They are always equal.}`,
+          `\\text{The actual error is usually larger.}`,
+          `\\text{No comparison can be made.}`,
+        ],
+        explanation: `The bound replaces the unknown derivative value by its maximum, so it overstates the remainder in general while still being valid.`,
+      };
+    },
+  },
+  {
+    id: "g10-power-differentiate",
+    unit: U10,
+    topic: "power-series-operations",
+    difficulty: "hard",
+    track: "BC",
+    manifestation: "power-series-operations:differentiate",
+    build: (r: RNG) => {
+      void r;
+      const correct = `\\displaystyle\\sum_{n=1}^{\\infty} nx^{n-1}`;
+      return {
+        prompt: `Differentiate $\\displaystyle\\sum_{n=0}^{\\infty} x^{n}$ term by term for $\\left|x\\right| < 1$.`,
+        correct,
+        distractors: [
+          `\\displaystyle\\sum_{n=0}^{\\infty} nx^{n}`,
+          `\\displaystyle\\sum_{n=1}^{\\infty} x^{n-1}`,
+          `\\displaystyle\\sum_{n=0}^{\\infty} \\frac{x^{n+1}}{n+1}`,
+        ],
+        explanation: `Differentiating $x^{n}$ gives $nx^{n-1}$, and the $n=0$ term vanishes, so the index starts at $1$.`,
+      };
+    },
+  },
+  {
+    id: "g10-power-integrate",
+    unit: U10,
+    topic: "power-series-operations",
+    difficulty: "hard",
+    track: "BC",
+    manifestation: "power-series-operations:integrate",
+    build: (r: RNG) => {
+      void r;
+      const correct = `\\displaystyle\\sum_{n=0}^{\\infty} \\frac{x^{n+1}}{n+1} + C`;
+      return {
+        prompt: `Integrate $\\displaystyle\\sum_{n=0}^{\\infty} x^{n}$ term by term for $\\left|x\\right| < 1$.`,
+        correct,
+        distractors: [
+          `\\displaystyle\\sum_{n=0}^{\\infty} \\frac{x^{n}}{n} + C`,
+          `\\displaystyle\\sum_{n=1}^{\\infty} nx^{n-1} + C`,
+          `\\displaystyle\\sum_{n=0}^{\\infty} x^{n+1} + C`,
+        ],
+        explanation: `Integrating $x^{n}$ gives $\\frac{x^{n+1}}{n+1}$, and a constant of integration must be included.`,
+      };
+    },
+  },
+  {
+    id: "g10-power-multiply",
+    unit: U10,
+    topic: "power-series-operations",
+    difficulty: "hard",
+    track: "BC",
+    manifestation: "power-series-operations:multiply",
+    build: (r: RNG) => {
+      const p = ri(r, 2, 4);
+      const correct = `\\displaystyle\\sum_{n=0}^{\\infty} \\frac{x^{${p}n + ${p}}}{n!}`;
+      return {
+        prompt: `Multiply the Maclaurin series for $e^{x^{${p}}}$ by $x^{${p}}$.`,
+        correct,
+        distractors: [
+          `\\displaystyle\\sum_{n=0}^{\\infty} \\frac{x^{${p}n}}{n!}`,
+          `\\displaystyle\\sum_{n=0}^{\\infty} \\frac{${p}x^{n + ${p}}}{n!}`,
+          `\\displaystyle\\sum_{n=0}^{\\infty} \\frac{x^{n + ${p}}}{n!}`,
+        ],
+        explanation: `Since $e^{x^{${p}}} = \\sum \\frac{x^{${p}n}}{n!}$, multiplying by $x^{${p}}$ raises each exponent by $${p}$.`,
+      };
+    },
+  },
+  {
+    id: "g10-power-limit",
+    unit: U10,
+    topic: "power-series-operations",
+    difficulty: "hard",
+    track: "BC",
+    manifestation: "power-series-operations:limit-from-series",
+    build: (r: RNG) => {
+      void r;
+      const correct = `\\dfrac{1}{2}`;
+      return {
+        prompt: `Use a Maclaurin series to evaluate $\\displaystyle\\lim_{x\\to 0} \\frac{1 - \\cos(x)}{x^{2}}$.`,
+        correct,
+        distractors: [`0`, `1`, `\\dfrac{1}{6}`],
+        explanation: `Since $\\cos(x) = 1 - \\frac{x^{2}}{2} + \\frac{x^{4}}{24} - \\cdots$, the quotient is $\\frac{1}{2} - \\frac{x^{2}}{24} + \\cdots$, which tends to $\\frac{1}{2}$.`,
       };
     },
   },
