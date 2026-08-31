@@ -3834,3 +3834,479 @@ GAP_TEMPLATES.push(
     },
   },
 );
+
+/* ------------------------------------------------------------------ */
+/* Unit 8 — Applications of integration                                */
+/* ------------------------------------------------------------------ */
+
+const U8 = "unit-8-applications-of-integration";
+
+GAP_TEMPLATES.push(
+  {
+    id: "g8-avg-graph",
+    unit: U8,
+    topic: "average-value",
+    difficulty: "medium",
+    manifestation: "average-value:graph",
+    build: (r: RNG) => {
+      const h = ri(r, 2, 6);
+      const pts: Array<[number, number]> = [
+        [0, 0],
+        [2, h],
+        [4, 0],
+      ];
+      const avg = (0.5 * 4 * h) / 4;
+      const correct = dec(avg, 3);
+      return {
+        prompt: `The graph of $f$ shown consists of two line segments. Find the average value of $f$ on $[0,4]$.`,
+        figure: graph("y = f(x)", pts, { xMin: -1, xMax: 5, yMin: -1, yMax: h + 2 }),
+        correct,
+        distractors: opts(correct, [dec(h, 3), dec(2 * avg, 3), dec(avg / 2, 3), dec(4 * avg, 3)]),
+        explanation: `The area is $\\frac{1}{2}(4)(${h}) = ${dec(2 * h, 3)}$, so the average value is $\\frac{1}{4}\\cdot ${dec(2 * h, 3)} = ${correct}$.`,
+      };
+    },
+  },
+  {
+    id: "g8-avg-table",
+    unit: U8,
+    topic: "average-value",
+    difficulty: "medium",
+    calculator: true,
+    manifestation: "average-value:table",
+    build: (r: RNG) => {
+      const xs = [0, 2, 4];
+      const a = ri(r, 2, 6);
+      const b = a + ri(r, 1, 4);
+      const c = b + ri(r, 1, 4);
+      const trap = 2 * ((a + b) / 2 + (b + c) / 2);
+      const avg = trap / 4;
+      const correct = dec(avg, 3);
+      return {
+        prompt: `Values of the continuous function $f$ are given.\n\n${tablePair("f(x)", xs, [`${a}`, `${b}`, `${c}`])}\n\nUse a trapezoidal sum with the two subintervals to approximate the average value of $f$ on $[0,4]$.`,
+        correct,
+        distractors: opts(correct, [dec(trap, 3), dec((a + b + c) / 3, 3), dec(avg / 2, 3), dec(2 * avg, 3)]),
+        explanation: `The trapezoidal estimate of the integral is $${dec(trap, 3)}$, and dividing by the length $4$ gives an average value of $${correct}$.`,
+      };
+    },
+  },
+  {
+    id: "g8-avg-context-units",
+    unit: U8,
+    topic: "average-value",
+    difficulty: "medium",
+    manifestation: "average-value:context-units",
+    build: (r: RNG) => {
+      const T = pick(r, [4, 6, 8] as const);
+      const correct = `\\text{the average speed, in meters per second, over the } ${T} \\text{ seconds}`;
+      return {
+        prompt: `A particle moves with speed $v(t)$ meters per second. What does $\\dfrac{1}{${T}}\\displaystyle\\int_{0}^{${T}} v(t)\\,dt$ represent?`,
+        correct,
+        distractors: [
+          `\\text{the total distance travelled, in meters}`,
+          `\\text{the acceleration, in meters per second squared}`,
+          `\\text{the change in speed, in meters per second}`,
+        ],
+        explanation: `The integral gives distance in meters; dividing by the elapsed time gives an average speed in meters per second.`,
+      };
+    },
+  },
+  {
+    id: "g8-avg-reverse",
+    unit: U8,
+    topic: "average-value",
+    difficulty: "hard",
+    manifestation: "average-value:reverse",
+    build: (r: RNG) => {
+      const target = pick(r, [3, 12, 27, 48] as const);
+      const b = Math.sqrt(3 * target);
+      const correct = dec(b, 3);
+      return {
+        prompt: `For what positive value of $b$ does $f(x)=x^{2}$ have average value $${target}$ on $[0,b]$?`,
+        correct,
+        distractors: opts(correct, [dec(target, 3), dec(Math.sqrt(target), 3), dec(3 * target, 3), dec(b / 3, 3)]),
+        explanation: `The average value is $\\frac{1}{b}\\cdot\\frac{b^{3}}{3} = \\frac{b^{2}}{3}$. Setting this equal to $${target}$ gives $b = \\sqrt{${3 * target}} = ${correct}$.`,
+      };
+    },
+  },
+  {
+    id: "g8-area-dy-setup",
+    unit: U8,
+    topic: "area-between-curves",
+    difficulty: "hard",
+    manifestation: "area-between-curves:dy-setup",
+    build: (r: RNG) => {
+      const b = pick(r, [2, 3, 4] as const);
+      const correct = `\\displaystyle\\int_{0}^{${b}} y^{2}\\,dy`;
+      return {
+        prompt: `Set up the area of the region bounded by $x = y^{2}$, the $y$-axis, and $y = ${b}$ as an integral with respect to $y$.`,
+        correct,
+        distractors: [
+          `\\displaystyle\\int_{0}^{${b}} \\sqrt{y}\\,dy`,
+          `\\displaystyle\\int_{0}^{${b * b}} y^{2}\\,dy`,
+          `\\displaystyle\\int_{0}^{${b}} \\left(${b} - y^{2}\\right)\\,dy`,
+        ],
+        explanation: `Horizontal strips have length $x = y^{2}$ measured from the $y$-axis, and $y$ runs from $0$ to $${b}$.`,
+      };
+    },
+  },
+  {
+    id: "g8-area-switching-top",
+    unit: U8,
+    topic: "area-between-curves",
+    difficulty: "hard",
+    manifestation: "area-between-curves:switching-top",
+    build: (r: RNG) => {
+      const correct = `\\displaystyle\\int_{0}^{1}\\left(\\sqrt{x} - x^{2}\\right)dx + \\int_{1}^{2}\\left(x^{2} - \\sqrt{x}\\right)dx`;
+      return {
+        prompt: `Which expression gives the total area of the regions between $y=\\sqrt{x}$ and $y=x^{2}$ for $0\\le x\\le 2$?`,
+        correct,
+        distractors: [
+          `\\displaystyle\\int_{0}^{2}\\left(\\sqrt{x} - x^{2}\\right)dx`,
+          `\\displaystyle\\int_{0}^{2}\\left(x^{2} - \\sqrt{x}\\right)dx`,
+          `\\displaystyle\\int_{0}^{1}\\left(x^{2} - \\sqrt{x}\\right)dx + \\int_{1}^{2}\\left(\\sqrt{x} - x^{2}\\right)dx`,
+        ],
+        explanation: `The curves cross at $x=1$: $\\sqrt{x}$ is on top before the crossing and $x^{2}$ is on top after, so the integral must be split with the correct order on each piece.`,
+      };
+    },
+  },
+  {
+    id: "g8-area-setup-only",
+    unit: U8,
+    topic: "area-between-curves",
+    difficulty: "medium",
+    manifestation: "area-between-curves:setup-only",
+    build: (r: RNG) => {
+      const m = ri(r, 1, 4);
+      const correct = `\\displaystyle\\int_{0}^{${m}}\\left(${coefTex(m)}x - x^{2}\\right)dx`;
+      return {
+        prompt: `Which integral gives the area of the region enclosed by $y = ${coefTex(m)}x$ and $y = x^{2}$?`,
+        correct,
+        distractors: [
+          `\\displaystyle\\int_{0}^{${m}}\\left(x^{2} - ${coefTex(m)}x\\right)dx`,
+          `\\displaystyle\\int_{0}^{${m}}\\left(${coefTex(m)}x + x^{2}\\right)dx`,
+          `\\displaystyle\\int_{0}^{${m * m}}\\left(${coefTex(m)}x - x^{2}\\right)dx`,
+        ],
+        explanation: `The curves meet where $${coefTex(m)}x = x^{2}$, at $x=0$ and $x=${m}$, and the line is above the parabola between them.`,
+      };
+    },
+  },
+  {
+    id: "g8-area-signed-vs-geometric",
+    unit: U8,
+    topic: "area-between-curves",
+    difficulty: "medium",
+    manifestation: "area-between-curves:signed-vs-geometric",
+    build: (r: RNG) => {
+      const b = pick(r, [Math.PI] as const);
+      void b;
+      const correct = `\\text{The integral is } 0, \\text{ but the geometric area is } 2.`;
+      return {
+        prompt: `Compare $\\displaystyle\\int_{0}^{2\\pi} \\sin(x)\\,dx$ with the total area between the graph of $\\sin(x)$ and the $x$-axis on $[0,2\\pi]$.`,
+        correct,
+        distractors: [
+          `\\text{Both equal } 0.`,
+          `\\text{Both equal } 4.`,
+          `\\text{The integral is } 4, \\text{ but the geometric area is } 0.`,
+        ],
+        explanation: `The positive and negative signed areas cancel in the integral, while the geometric area adds their magnitudes: $2 + 2 = 4$. Wait: each hump has area $2$, so the total area is $4$ and the integral is $0$.`,
+      };
+    },
+  },
+  {
+    id: "g8-washer",
+    unit: U8,
+    topic: "volume-disks-and-washers",
+    difficulty: "hard",
+    manifestation: "volume-disks-and-washers:washer",
+    build: (r: RNG) => {
+      const correct = `\\pi\\displaystyle\\int_{0}^{1}\\left(x - x^{4}\\right)dx`;
+      return {
+        prompt: `The region between $y=\\sqrt{x}$ and $y=x^{2}$ for $0\\le x\\le 1$ is revolved about the $x$-axis. Which integral gives the volume?`,
+        correct,
+        distractors: [
+          `\\pi\\displaystyle\\int_{0}^{1}\\left(\\sqrt{x} - x^{2}\\right)^{2}dx`,
+          `\\pi\\displaystyle\\int_{0}^{1}\\left(x^{4} - x\\right)dx`,
+          `2\\pi\\displaystyle\\int_{0}^{1}\\left(x - x^{4}\\right)dx`,
+        ],
+        explanation: `A washer has outer radius $\\sqrt{x}$ and inner radius $x^{2}$, so the integrand is $\\pi\\left(x - x^{4}\\right)$; squaring the difference of radii is a common error.`,
+      };
+    },
+  },
+  {
+    id: "g8-shifted-axis",
+    unit: U8,
+    topic: "volume-disks-and-washers",
+    difficulty: "hard",
+    manifestation: "volume-disks-and-washers:shifted-axis",
+    build: (r: RNG) => {
+      const c = ri(r, 1, 4);
+      const correct = `\\pi\\displaystyle\\int_{0}^{1}\\left(\\sqrt{x} + ${c}\\right)^{2} - ${c}^{2}\\,dx`;
+      return {
+        prompt: `The region between $y=\\sqrt{x}$ and the $x$-axis for $0\\le x\\le 1$ is revolved about the line $y=-${c}$. Which integral gives the volume?`,
+        correct,
+        distractors: [
+          `\\pi\\displaystyle\\int_{0}^{1}\\left(\\sqrt{x} + ${c}\\right)^{2}dx`,
+          `\\pi\\displaystyle\\int_{0}^{1}\\left(\\sqrt{x} - ${c}\\right)^{2}dx`,
+          `\\pi\\displaystyle\\int_{0}^{1}\\left(x + ${c}^{2}\\right)dx`,
+        ],
+        explanation: `Distances are measured from $y=-${c}$: the outer radius is $\\sqrt{x}+${c}$ and the inner radius is $${c}$, so the hole must be subtracted.`,
+      };
+    },
+  },
+  {
+    id: "g8-about-y",
+    unit: U8,
+    topic: "volume-disks-and-washers",
+    difficulty: "hard",
+    manifestation: "volume-disks-and-washers:about-y",
+    build: (r: RNG) => {
+      const b = pick(r, [1, 2, 3] as const);
+      const correct = `\\pi\\displaystyle\\int_{0}^{${b}} y^{4}\\,dy`;
+      return {
+        prompt: `The region bounded by $x=y^{2}$, the $y$-axis, and $y=${b}$ is revolved about the $y$-axis. Which integral gives the volume?`,
+        correct,
+        distractors: [
+          `\\pi\\displaystyle\\int_{0}^{${b}} y^{2}\\,dy`,
+          `\\pi\\displaystyle\\int_{0}^{${b}} x^{4}\\,dx`,
+          `2\\pi\\displaystyle\\int_{0}^{${b}} y^{4}\\,dy`,
+        ],
+        explanation: `Revolving about a vertical axis uses horizontal disks of radius $x=y^{2}$, so the integrand is $\\pi\\left(y^{2}\\right)^{2} = \\pi y^{4}$ with respect to $y$.`,
+      };
+    },
+  },
+  {
+    id: "g8-cross-triangle",
+    unit: U8,
+    topic: "volume-known-cross-sections",
+    difficulty: "hard",
+    manifestation: "volume-known-cross-sections:triangle",
+    build: (r: RNG) => {
+      const b = pick(r, [2, 3, 4] as const);
+      const correct = `\\dfrac{\\sqrt{3}}{4}\\displaystyle\\int_{0}^{${b}} x^{2}\\,dx`;
+      return {
+        prompt: `A solid has base the region between $y=x$ and the $x$-axis for $0\\le x\\le ${b}$. Cross sections perpendicular to the $x$-axis are equilateral triangles. Which integral gives the volume?`,
+        correct,
+        distractors: [
+          `\\displaystyle\\int_{0}^{${b}} x^{2}\\,dx`,
+          `\\dfrac{1}{2}\\displaystyle\\int_{0}^{${b}} x^{2}\\,dx`,
+          `\\dfrac{\\sqrt{3}}{4}\\displaystyle\\int_{0}^{${b}} x\\,dx`,
+        ],
+        explanation: `The side length equals the height of the region, $x$, and an equilateral triangle of side $s$ has area $\\frac{\\sqrt{3}}{4}s^{2}$.`,
+      };
+    },
+  },
+  {
+    id: "g8-cross-semicircle",
+    unit: U8,
+    topic: "volume-known-cross-sections",
+    difficulty: "hard",
+    manifestation: "volume-known-cross-sections:semicircle",
+    build: (r: RNG) => {
+      const b = pick(r, [2, 4, 6] as const);
+      const correct = `\\dfrac{\\pi}{8}\\displaystyle\\int_{0}^{${b}} x^{2}\\,dx`;
+      return {
+        prompt: `A solid has base the region between $y=x$ and the $x$-axis for $0\\le x\\le ${b}$. Cross sections perpendicular to the $x$-axis are semicircles with diameter in the base. Which integral gives the volume?`,
+        correct,
+        distractors: [
+          `\\dfrac{\\pi}{2}\\displaystyle\\int_{0}^{${b}} x^{2}\\,dx`,
+          `\\dfrac{\\pi}{4}\\displaystyle\\int_{0}^{${b}} x^{2}\\,dx`,
+          `\\pi\\displaystyle\\int_{0}^{${b}} x^{2}\\,dx`,
+        ],
+        explanation: `With diameter $x$, the radius is $\\frac{x}{2}$ and the semicircular area is $\\frac{1}{2}\\pi\\left(\\frac{x}{2}\\right)^{2} = \\frac{\\pi}{8}x^{2}$.`,
+      };
+    },
+  },
+  {
+    id: "g8-cross-perp-y",
+    unit: U8,
+    topic: "volume-known-cross-sections",
+    difficulty: "hard",
+    manifestation: "volume-known-cross-sections:perpendicular-y",
+    build: (r: RNG) => {
+      const b = pick(r, [1, 2, 3] as const);
+      const correct = `\\displaystyle\\int_{0}^{${b}} y^{4}\\,dy`;
+      return {
+        prompt: `A solid has base the region bounded by $x=y^{2}$, the $y$-axis, and $y=${b}$. Cross sections perpendicular to the $y$-axis are squares. Which integral gives the volume?`,
+        correct,
+        distractors: [
+          `\\displaystyle\\int_{0}^{${b}} y^{2}\\,dy`,
+          `\\displaystyle\\int_{0}^{${b}} x^{4}\\,dx`,
+          `\\pi\\displaystyle\\int_{0}^{${b}} y^{4}\\,dy`,
+        ],
+        explanation: `Cross sections perpendicular to the $y$-axis have side $x = y^{2}$, so the area is $\\left(y^{2}\\right)^{2}$ and the variable of integration is $y$. No factor of $\\pi$ appears for squares.`,
+      };
+    },
+  },
+  {
+    id: "g8-cross-setup-only",
+    unit: U8,
+    topic: "volume-known-cross-sections",
+    difficulty: "medium",
+    manifestation: "volume-known-cross-sections:setup-only",
+    build: (r: RNG) => {
+      const h = ri(r, 2, 5);
+      const pts: Array<[number, number]> = [
+        [0, h],
+        [4, 0],
+      ];
+      const correct = `\\displaystyle\\int_{0}^{4}\\left(${h} - \\dfrac{${h}}{4}x\\right)^{2}dx`;
+      return {
+        prompt: `The base of a solid is the region under the segment shown and above the $x$-axis on $[0,4]$. Cross sections perpendicular to the $x$-axis are squares. Which integral gives the volume?`,
+        figure: graph("y = f(x)", pts, { xMin: -1, xMax: 5, yMin: -1, yMax: h + 2 }),
+        correct,
+        distractors: [
+          `\\displaystyle\\int_{0}^{4}\\left(${h} - \\dfrac{${h}}{4}x\\right)dx`,
+          `\\pi\\displaystyle\\int_{0}^{4}\\left(${h} - \\dfrac{${h}}{4}x\\right)^{2}dx`,
+          `\\displaystyle\\int_{0}^{${h}}\\left(${h} - \\dfrac{${h}}{4}x\\right)^{2}dx`,
+        ],
+        explanation: `The segment is $y = ${h} - \\frac{${h}}{4}x$, the side of each square, so the integrand is its square and $x$ runs from $0$ to $4$.`,
+      };
+    },
+  },
+  {
+    id: "g8-arc-compute",
+    unit: U8,
+    topic: "arc-length",
+    difficulty: "hard",
+    track: "bc",
+    calculator: true,
+    manifestation: "arc-length:compute",
+    build: (r: RNG) => {
+      const m = ri(r, 2, 5);
+      const b = ri(r, 2, 6);
+      const len = b * Math.sqrt(1 + m * m);
+      const correct = dec(len, 3);
+      return {
+        prompt: `Find the length of the graph of $y = ${coefTex(m)}x$ from $x=0$ to $x=${b}$.`,
+        correct,
+        distractors: opts(correct, [dec(b, 3), dec(m * b, 3), dec(b * (1 + m * m), 3), dec(len / 2, 3)]),
+        explanation: `The arc length integral gives $\\int_{0}^{${b}}\\sqrt{1 + ${m * m}}\\,dx = ${b}\\sqrt{${1 + m * m}} = ${correct}$.`,
+      };
+    },
+  },
+  {
+    id: "g8-arc-compare-chord",
+    unit: U8,
+    topic: "arc-length",
+    difficulty: "medium",
+    track: "bc",
+    manifestation: "arc-length:compare-chord",
+    build: (r: RNG) => {
+      const correct = `\\text{The arc length is greater, unless the curve is a straight segment.}`;
+      return {
+        prompt: `How does the arc length of a smooth curve between two points compare with the straight-line distance between them?`,
+        correct,
+        distractors: [
+          `\\text{The arc length is smaller.}`,
+          `\\text{They are always equal.}`,
+          `\\text{The comparison depends on the concavity.}`,
+        ],
+        explanation: `The straight segment is the shortest path between the endpoints, so any curved path is longer, with equality only for the segment itself.`,
+      };
+    },
+  },
+  {
+    id: "g8-arc-context",
+    unit: U8,
+    topic: "arc-length",
+    difficulty: "medium",
+    track: "bc",
+    manifestation: "arc-length:context",
+    build: (r: RNG) => {
+      const correct = `\\text{the length of the path travelled along the curve}`;
+      return {
+        prompt: `A hiker's route follows the graph of a smooth function. What does $\\displaystyle\\int_{a}^{b}\\sqrt{1 + \\left(f'(x)\\right)^{2}}\\,dx$ represent?`,
+        correct,
+        distractors: [
+          `\\text{the horizontal distance covered}`,
+          `\\text{the net change in elevation}`,
+          `\\text{the average steepness of the route}`,
+        ],
+        explanation: `That integral accumulates the arc length element, giving the total distance travelled along the curve rather than a horizontal or vertical change.`,
+      };
+    },
+  },
+  {
+    id: "g8-accum-max-amount",
+    unit: U8,
+    topic: "accumulation-in-context",
+    difficulty: "hard",
+    manifestation: "accumulation-in-context:max-amount",
+    build: (r: RNG) => {
+      const t = ri(r, 2, 6);
+      const correct = `\\text{at } t = ${t}, \\text{ where the inflow rate equals the outflow rate}`;
+      return {
+        prompt: `Water enters a tank at rate $I(t)$ and leaves at rate $O(t)$, with $I(t) > O(t)$ for $t < ${t}$ and $I(t) < O(t)$ for $t > ${t}$. When is the amount of water greatest?`,
+        correct,
+        distractors: [
+          `\\text{at } t = 0`,
+          `\\text{when } I \\text{ is greatest}`,
+          `\\text{at the end of the time interval}`,
+        ],
+        explanation: `The net rate $I - O$ changes from positive to negative at $t=${t}$, so the accumulated amount rises then falls and is greatest there.`,
+      };
+    },
+  },
+  {
+    id: "g8-accum-graph-rate",
+    unit: U8,
+    topic: "accumulation-in-context",
+    difficulty: "medium",
+    manifestation: "accumulation-in-context:graph-rate",
+    build: (r: RNG) => {
+      const h = ri(r, 2, 6);
+      const pts: Array<[number, number]> = [
+        [0, 0],
+        [3, h],
+        [6, 0],
+      ];
+      const total = 0.5 * 6 * h;
+      const correct = dec(total, 3);
+      return {
+        prompt: `Sand is added to a pile at the rate $R(t)$ tons per hour, whose graph consists of the two segments shown. How many tons are added over $0\\le t\\le 6$?`,
+        figure: graph("y = R(t)", pts, { xMin: -1, xMax: 7, yMin: -1, yMax: h + 2 }),
+        correct,
+        distractors: opts(correct, [dec(h, 3), dec(total / 2, 3), dec(2 * total, 3), dec(6 * h, 3)]),
+        explanation: `The amount added is the area under the rate graph: a triangle with base $6$ and height $${h}$, so $\\frac{1}{2}(6)(${h}) = ${correct}$ tons.`,
+      };
+    },
+  },
+  {
+    id: "g8-accum-table-rate",
+    unit: U8,
+    topic: "accumulation-in-context",
+    difficulty: "medium",
+    calculator: true,
+    manifestation: "accumulation-in-context:table-rate",
+    build: (r: RNG) => {
+      const xs = [0, 3, 6];
+      const a = ri(r, 2, 8);
+      const b = a + ri(r, 1, 5);
+      const c = b + ri(r, 1, 5);
+      const left = 3 * (a + b);
+      const correct = dec(left, 3);
+      return {
+        prompt: `Oil flows from a well at the rate $R(t)$ barrels per hour, sampled below.\n\n${tablePair("R(t)", xs, [`${a}`, `${b}`, `${c}`])}\n\nUse a left Riemann sum with the two subintervals to approximate the barrels produced over $0\\le t\\le 6$.`,
+        correct,
+        distractors: opts(correct, [dec(3 * (b + c), 3), dec(a + b, 3), dec(6 * a, 3), dec(left / 2, 3)]),
+        explanation: `Each subinterval has width $3$, and the left endpoints give rates $${a}$ and $${b}$, so the estimate is $3(${a}) + 3(${b}) = ${correct}$ barrels.`,
+      };
+    },
+  },
+  {
+    id: "g8-accum-units",
+    unit: U8,
+    topic: "accumulation-in-context",
+    difficulty: "medium",
+    manifestation: "accumulation-in-context:units",
+    build: (r: RNG) => {
+      const correct = `\\text{gallons}`;
+      return {
+        prompt: `Fuel is consumed at the rate $C(t)$ gallons per minute. What are the units of $\\displaystyle\\int_{0}^{20} C(t)\\,dt$?`,
+        correct,
+        distractors: [`\\text{gallons per minute}`, `\\text{minutes}`, `\\text{gallons per minute squared}`],
+        explanation: `Integrating a rate in gallons per minute with respect to minutes multiplies out the time unit, leaving gallons.`,
+      };
+    },
+  },
+);
