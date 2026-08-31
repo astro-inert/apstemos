@@ -1403,9 +1403,10 @@ GAP_TEMPLATES.push(
         prompt: `A student differentiates $x^{2} + y^{2} = ${a * a}$ and writes $2x + 2y = 0$. What is the error?`,
         correct,
         distractors: [
-          `\\text{The derivative of } x^{2} \\text{ should be } x.`,
-          `\\text{The right-hand side should differentiate to } ${a}.`,
-          `\\text{The equation should be divided by } 2 \\text{ first.}`,
+          `\\text{The derivative of } x^{2} \\text{ should be } \\dfrac{x}{2}.`,
+          `\\text{The right-hand side should differentiate to } \\dfrac{${a}}{2}.`,
+          `\\text{The } \\dfrac{dy}{dx} \\text{ factor belongs on } x^{2} \\text{ instead.}`,
+
         ],
         explanation: `Since $y$ depends on $x$, $\\frac{d}{dx}y^{2} = 2y\\frac{dy}{dx}$. The correct equation is $2x + 2y\\frac{dy}{dx} = 0$.`,
       };
