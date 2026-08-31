@@ -135,8 +135,18 @@ export const UNIT_05_06_TEMPLATES: QuestionTemplate[] = [
       const drop = ri(r, 2, 6);
       const yB = yA - drop;
       const avg = frac(yB - yA, b - a);
+      const cMid = (a + b) / 2;
       return {
         prompt: `A twice-differentiable function $f$ has $f(${a})=${yA}$ and $f(${b})=${yB}$, and the graph between them is smooth with no corners. A student wants to identify a guaranteed point of horizontal-tangent-relative behavior. What is the value that $f'(c)$ must equal for at least one $c$ in $(${a},${b})$?`,
+        figure: pwGraph(
+          [
+            [a, yA],
+            [cMid, (yA + yB) / 2 + (yA > yB ? 1 : -1)],
+            [b, yB],
+          ],
+          { xMin: a - 1, xMax: b + 1, yMin: Math.min(yA, yB) - 2, yMax: Math.max(yA, yB) + 2 },
+          "y = f(x)",
+        ),
         correct: avg,
         distractors: opts(avg, [frac(yA - yB, b - a), frac(yB - yA, a - b), `${yB - yA}`, `0`]),
         explanation: `By the MVT, $f'(c) = \\dfrac{f(${b})-f(${a})}{${b}-${a}} = ${avg}$ for some $c$ in the interval.`,
