@@ -4637,3 +4637,667 @@ GAP_TEMPLATES.push(
     },
   },
 );
+
+/* ------------------------------------------------------------------ */
+/* Unit 10 — Infinite sequences and series (BC)                        */
+/* ------------------------------------------------------------------ */
+
+const U10 = "unit-10-infinite-sequences-and-series";
+
+GAP_TEMPLATES.push(
+  {
+    id: "g10-nth-inconclusive",
+    unit: U10,
+    topic: "nth-term-test",
+    difficulty: "medium",
+    track: "bc",
+    manifestation: "nth-term-test:inconclusive",
+    build: (r: RNG) => {
+      const p = pick(r, [1, 2] as const);
+      const correct = `\\text{Terms tending to } 0 \\text{ does not guarantee that the series converges.}`;
+      return {
+        prompt: `The terms of $\\displaystyle\\sum_{n=1}^{\\infty} \\frac{1}{n^{${p}}}$ tend to $0$. Why does the nth-term test fail to settle convergence?`,
+        correct,
+        distractors: [
+          `\\text{The test applies only to alternating series.}`,
+          `\\text{The terms must be increasing for the test to apply.}`,
+          `\\text{The test proves divergence whenever the terms tend to } 0.`,
+        ],
+        explanation: `The nth-term test can only prove divergence, when the terms fail to approach $0$. The harmonic series shows that vanishing terms are not sufficient for convergence.`,
+      };
+    },
+  },
+  {
+    id: "g10-nth-sequence-vs-series",
+    unit: U10,
+    topic: "nth-term-test",
+    difficulty: "medium",
+    track: "bc",
+    manifestation: "nth-term-test:sequence-vs-series",
+    build: (r: RNG) => {
+      void r;
+      const correct = `\\text{The sequence converges to } 0, \\text{ but the series diverges.}`;
+      return {
+        prompt: `Consider $a_{n} = \\dfrac{1}{n}$. Which statement is true?`,
+        correct,
+        distractors: [
+          `\\text{Both the sequence and the series converge.}`,
+          `\\text{Both diverge.}`,
+          `\\text{The sequence diverges, but the series converges.}`,
+        ],
+        explanation: `The terms approach $0$, so the sequence converges, while the harmonic series of those terms grows without bound.`,
+      };
+    },
+  },
+  {
+    id: "g10-nth-table-terms",
+    unit: U10,
+    topic: "nth-term-test",
+    difficulty: "medium",
+    track: "bc",
+    manifestation: "nth-term-test:table-terms",
+    build: (r: RNG) => {
+      const L = ri(r, 2, 6);
+      const ns = [10, 100, 1000];
+      const vals = [`${dec(L - 0.4, 2)}`, `${dec(L - 0.05, 2)}`, `${dec(L - 0.005, 3)}`];
+      const correct = `\\text{The series diverges, because the terms approach } ${L}.`;
+      return {
+        prompt: `Terms of a positive series are sampled below.\n\n${tablePair("a_n", ns, vals)}\n\nWhat does the nth-term test conclude?`,
+        correct,
+        distractors: [
+          `\\text{The series converges, because the terms level off.}`,
+          `\\text{The series converges to } ${L}.`,
+          `\\text{No conclusion is possible.}`,
+        ],
+        explanation: `The samples suggest $a_{n}\\to ${L}\\ne 0$, so the terms do not vanish and the series must diverge.`,
+      };
+    },
+  },
+  {
+    id: "g10-nth-error",
+    unit: U10,
+    topic: "nth-term-test",
+    difficulty: "medium",
+    track: "bc",
+    manifestation: "nth-term-test:error-analysis",
+    build: (r: RNG) => {
+      void r;
+      const correct = `\\text{The test can prove divergence only, never convergence.}`;
+      return {
+        prompt: `A student writes: "Since $a_{n}\\to 0$, the nth-term test shows the series converges." What is wrong?`,
+        correct,
+        distractors: [
+          `\\text{The limit should be computed for } a_{n+1}.`,
+          `\\text{The test requires the terms to be positive.}`,
+          `\\text{Nothing is wrong; the reasoning is valid.}`,
+        ],
+        explanation: `The nth-term test is one-directional: a nonzero limit forces divergence, but a zero limit leaves the question open.`,
+      };
+    },
+  },
+  {
+    id: "g10-geo-shifted-index",
+    unit: U10,
+    topic: "geometric-and-p-series",
+    difficulty: "hard",
+    track: "bc",
+    manifestation: "geometric-and-p-series:shifted-index",
+    build: (r: RNG) => {
+      const d = pick(r, [2, 3, 4, 5] as const);
+      // sum_{n=2}^inf (1/d)^n = (1/d^2)/(1 - 1/d)
+      const num = 1;
+      const val = (1 / (d * d)) / (1 - 1 / d);
+      const correct = frac(num, d * (d - 1));
+      void val;
+      return {
+        prompt: `Evaluate $\\displaystyle\\sum_{n=2}^{\\infty} \\left(\\frac{1}{${d}}\\right)^{n}$.`,
+        correct,
+        distractors: [frac(1, d - 1), frac(1, d), frac(1, d * d)],
+        explanation: `The first term is $\\frac{1}{${d * d}}$ with ratio $\\frac{1}{${d}}$, so the sum is $\\frac{1/${d * d}}{1 - 1/${d}} = ${correct}$.`,
+      };
+    },
+  },
+  {
+    id: "g10-geo-disguised",
+    unit: U10,
+    topic: "geometric-and-p-series",
+    difficulty: "hard",
+    track: "bc",
+    manifestation: "geometric-and-p-series:disguised",
+    build: (r: RNG) => {
+      const d = pick(r, [2, 3, 5] as const);
+      const correct = `\\text{geometric with ratio } \\dfrac{${d}}{${d + 1}}`;
+      return {
+        prompt: `Identify the structure of $\\displaystyle\\sum_{n=0}^{\\infty} \\frac{${d}^{n}}{${d + 1}^{n}}$.`,
+        correct,
+        distractors: [
+          `p\\text{-series with } p = ${d}`,
+          `\\text{geometric with ratio } ${d}`,
+          `\\text{neither geometric nor a } p\\text{-series}`,
+        ],
+        explanation: `Writing the terms as $\\left(\\frac{${d}}{${d + 1}}\\right)^{n}$ exposes a geometric series with ratio less than $1$.`,
+      };
+    },
+  },
+  {
+    id: "g10-geo-parameter",
+    unit: U10,
+    topic: "geometric-and-p-series",
+    difficulty: "hard",
+    track: "bc",
+    manifestation: "geometric-and-p-series:parameter-ratio",
+    build: (r: RNG) => {
+      const k = ri(r, 2, 6);
+      const correct = `\\left|x\\right| < \\dfrac{1}{${k}}`;
+      return {
+        prompt: `For which values of $x$ does $\\displaystyle\\sum_{n=0}^{\\infty} \\left(${coefTex(k)}x\\right)^{n}$ converge?`,
+        correct,
+        distractors: [
+          `\\left|x\\right| < ${k}`,
+          `\\left|x\\right| \\le \\dfrac{1}{${k}}`,
+          `\\text{all real } x`,
+        ],
+        explanation: `A geometric series converges exactly when the ratio satisfies $\\left|${k}x\\right| < 1$, that is $\\left|x\\right| < \\frac{1}{${k}}$; the endpoints give ratio $1$ in magnitude and diverge.`,
+      };
+    },
+  },
+  {
+    id: "g10-geo-context",
+    unit: U10,
+    topic: "geometric-and-p-series",
+    difficulty: "hard",
+    track: "bc",
+    manifestation: "geometric-and-p-series:repeating-context",
+    build: (r: RNG) => {
+      const h = pick(r, [8, 10, 12, 16] as const);
+      const p = pick(r, [2, 4] as const); // rebounds to 1/p of previous height
+      const total = h + (2 * h) / (p - 1) * 1 / 1 * (1 / 1) * (1 / 1) * (1 / 1) * (1 / 1) * (1 / 1) * (1 / 1) * (1 / 1) * (1 / 1) * (1 / 1) * (1 / 1) * (1 / 1);
+      const totalCorrect = h + (2 * h / p) / (1 - 1 / p);
+      void total;
+      const correct = dec(totalCorrect, 3);
+      return {
+        prompt: `A ball dropped from $${h}$ feet rebounds to $\\dfrac{1}{${p}}$ of its previous height each bounce. Find the total vertical distance it travels.`,
+        correct,
+        distractors: opts(correct, [dec(h, 3), dec(2 * h, 3), dec(totalCorrect - h, 3), dec(h * p, 3)]),
+        explanation: `After the initial $${h}$-foot drop, each bounce contributes twice its height, giving the geometric sum $\\frac{2\\cdot ${h}/${p}}{1 - 1/${p}}$. The total is $${correct}$ feet.`,
+      };
+    },
+  },
+  {
+    id: "g10-limit-comparison",
+    unit: U10,
+    topic: "comparison-tests",
+    difficulty: "hard",
+    track: "bc",
+    manifestation: "comparison-tests:limit-comparison",
+    build: (r: RNG) => {
+      const k = ri(r, 1, 9);
+      const correct = `\\text{It diverges, by comparison with } \\displaystyle\\sum \\frac{1}{n}.`;
+      return {
+        prompt: `Use the limit comparison test on $\\displaystyle\\sum_{n=1}^{\\infty} \\frac{n}{n^{2} + ${k}}$.`,
+        correct,
+        distractors: [
+          `\\text{It converges, by comparison with } \\displaystyle\\sum \\frac{1}{n^{2}}.`,
+          `\\text{It converges, by comparison with } \\displaystyle\\sum \\frac{1}{n}.`,
+          `\\text{The test is inconclusive.}`,
+        ],
+        explanation: `Comparing with $\\frac{1}{n}$ gives $\\lim_{n\\to\\infty}\\frac{n^{2}}{n^{2}+${k}} = 1$, a positive finite limit, so both series behave alike and the harmonic series diverges.`,
+      };
+    },
+  },
+  {
+    id: "g10-invalid-comparison",
+    unit: U10,
+    topic: "comparison-tests",
+    difficulty: "hard",
+    track: "bc",
+    manifestation: "comparison-tests:invalid-comparison",
+    build: (r: RNG) => {
+      void r;
+      const correct = `\\text{Being smaller than the terms of a divergent series proves nothing.}`;
+      return {
+        prompt: `A student argues that $\\displaystyle\\sum \\frac{1}{n^{2}}$ diverges because $\\frac{1}{n^{2}} < \\frac{1}{n}$ and $\\displaystyle\\sum \\frac{1}{n}$ diverges. What is wrong?`,
+        correct,
+        distractors: [
+          `\\text{The inequality is reversed.}`,
+          `\\text{The comparison test needs alternating terms.}`,
+          `\\text{Nothing; the conclusion is correct.}`,
+        ],
+        explanation: `A useful comparison requires terms larger than a divergent series or smaller than a convergent one. Here $\\sum\\frac{1}{n^{2}}$ in fact converges as a $p$-series with $p=2$.`,
+      };
+    },
+  },
+  {
+    id: "g10-integral-test",
+    unit: U10,
+    topic: "comparison-tests",
+    difficulty: "hard",
+    track: "bc",
+    manifestation: "comparison-tests:integral-test",
+    build: (r: RNG) => {
+      const p = pick(r, [2, 3] as const);
+      const correct = `\\text{It converges, because } \\displaystyle\\int_{1}^{\\infty} \\frac{1}{x^{${p}}}\\,dx \\text{ converges.}`;
+      return {
+        prompt: `Apply the integral test to $\\displaystyle\\sum_{n=1}^{\\infty} \\frac{1}{n^{${p}}}$.`,
+        correct,
+        distractors: [
+          `\\text{It diverges, because } \\displaystyle\\int_{1}^{\\infty} \\frac{1}{x^{${p}}}\\,dx \\text{ diverges.}`,
+          `\\text{The sum equals the value of the integral.}`,
+          `\\text{The test does not apply, because the terms are not decreasing.}`,
+        ],
+        explanation: `The function $\\frac{1}{x^{${p}}}$ is positive, continuous, and decreasing on $[1,\\infty)$, and its improper integral converges, so the series converges — though the sum need not equal the integral.`,
+      };
+    },
+  },
+  {
+    id: "g10-ratio-convergence",
+    unit: U10,
+    topic: "ratio-test",
+    difficulty: "hard",
+    track: "bc",
+    manifestation: "ratio-test:convergence",
+    build: (r: RNG) => {
+      const b = pick(r, [2, 3, 4] as const);
+      const correct = `\\text{It converges, because the ratio limit is } 0.`;
+      return {
+        prompt: `Use the ratio test on $\\displaystyle\\sum_{n=1}^{\\infty} \\frac{${b}^{n}}{n!}$.`,
+        correct,
+        distractors: [
+          `\\text{It diverges, because the ratio limit is } ${b}.`,
+          `\\text{The test is inconclusive, because the ratio limit is } 1.`,
+          `\\text{It converges, because the ratio limit is } \\dfrac{1}{${b}}.`,
+        ],
+        explanation: `The ratio is $\\frac{${b}}{n+1}$, whose limit is $0 < 1$, so the series converges absolutely.`,
+      };
+    },
+  },
+  {
+    id: "g10-ratio-endpoints",
+    unit: U10,
+    topic: "ratio-test",
+    difficulty: "hard",
+    track: "bc",
+    manifestation: "ratio-test:interval-endpoints",
+    build: (r: RNG) => {
+      void r;
+      const correct = `\\text{The endpoints must be tested separately with another test.}`;
+      return {
+        prompt: `The ratio test shows a power series converges for $\\left|x\\right| < 1$. What remains to be done to find the interval of convergence?`,
+        correct,
+        distractors: [
+          `\\text{Nothing; the interval is } -1 < x < 1.`,
+          `\\text{The endpoints always converge.}`,
+          `\\text{The endpoints always diverge.}`,
+        ],
+        explanation: `The ratio test is inconclusive when the ratio limit equals $1$, which is exactly what happens at the endpoints, so each must be checked directly.`,
+      };
+    },
+  },
+  {
+    id: "g10-ratio-inconclusive",
+    unit: U10,
+    topic: "ratio-test",
+    difficulty: "medium",
+    track: "bc",
+    manifestation: "ratio-test:inconclusive",
+    build: (r: RNG) => {
+      void r;
+      const correct = `\\text{when the limit of the ratio equals } 1`;
+      return {
+        prompt: `When is the ratio test inconclusive?`,
+        correct,
+        distractors: [
+          `\\text{when the limit of the ratio equals } 0`,
+          `\\text{when the terms alternate in sign}`,
+          `\\text{when the series has factorials}`,
+        ],
+        explanation: `A ratio limit below $1$ gives convergence and above $1$ gives divergence; exactly $1$ gives no information.`,
+      };
+    },
+  },
+  {
+    id: "g10-ast-convergence",
+    unit: U10,
+    topic: "alternating-series-test",
+    difficulty: "medium",
+    track: "bc",
+    manifestation: "alternating-series-test:convergence",
+    build: (r: RNG) => {
+      void r;
+      const correct = `\\text{It converges conditionally.}`;
+      return {
+        prompt: `Classify $\\displaystyle\\sum_{n=1}^{\\infty} \\frac{(-1)^{n}}{n}$.`,
+        correct,
+        distractors: [
+          `\\text{It converges absolutely.}`,
+          `\\text{It diverges.}`,
+          `\\text{It converges to } 0.`,
+        ],
+        explanation: `The alternating series test applies since $\\frac{1}{n}$ decreases to $0$, but the series of absolute values is the divergent harmonic series, so convergence is conditional.`,
+      };
+    },
+  },
+  {
+    id: "g10-ast-hypotheses",
+    unit: U10,
+    topic: "alternating-series-test",
+    difficulty: "hard",
+    track: "bc",
+    manifestation: "alternating-series-test:hypotheses",
+    build: (r: RNG) => {
+      void r;
+      const correct = `\\text{The terms must decrease in magnitude and tend to } 0.`;
+      return {
+        prompt: `Which condition must be verified before concluding convergence from the alternating series test?`,
+        correct,
+        distractors: [
+          `\\text{The terms must be positive.}`,
+          `\\text{The series of absolute values must converge.}`,
+          `\\text{The ratio limit must be less than } 1.`,
+        ],
+        explanation: `The test requires alternating signs together with magnitudes that eventually decrease and approach $0$; absolute convergence is a stronger, separate property.`,
+      };
+    },
+  },
+  {
+    id: "g10-ast-terms-needed",
+    unit: U10,
+    topic: "alternating-series-test",
+    difficulty: "hard",
+    track: "bc",
+    manifestation: "alternating-series-test:terms-needed",
+    build: (r: RNG) => {
+      const p = pick(r, [2, 3, 4] as const); // error tolerance 10^-p
+      const n = Math.pow(10, p);
+      const correct = `${n}`;
+      return {
+        prompt: `For $\\displaystyle\\sum_{n=1}^{\\infty} \\frac{(-1)^{n+1}}{n}$, how many terms guarantee an error less than $10^{-${p}}$ when the partial sum is used?`,
+        correct,
+        distractors: opts(correct, [`${p}`, `${n / 10}`, `${10 * n}`, `${n - 1}`]),
+        explanation: `The alternating series error is at most the first omitted term, $\\frac{1}{n+1}$. Requiring $\\frac{1}{n+1} < 10^{-${p}}$ gives $n > 10^{${p}} - 1$, so $${n}$ terms suffice.`,
+      };
+    },
+  },
+  {
+    id: "g10-taylor-known-series",
+    unit: U10,
+    topic: "taylor-and-maclaurin-series",
+    difficulty: "hard",
+    track: "bc",
+    manifestation: "taylor-and-maclaurin-series:known-series",
+    build: (r: RNG) => {
+      const k = ri(r, 2, 5);
+      const correct = `\\displaystyle\\sum_{n=0}^{\\infty} \\frac{${k}^{n}x^{n}}{n!}`;
+      return {
+        prompt: `Use a known Maclaurin series to expand $e^{${coefTex(k)}x}$.`,
+        correct,
+        distractors: [
+          `\\displaystyle\\sum_{n=0}^{\\infty} \\frac{${k}x^{n}}{n!}`,
+          `\\displaystyle\\sum_{n=0}^{\\infty} \\frac{x^{n}}{${k}^{n}n!}`,
+          `\\displaystyle\\sum_{n=0}^{\\infty} ${k}^{n}x^{n}`,
+        ],
+        explanation: `Substituting $${k}x$ into $e^{u} = \\sum \\frac{u^{n}}{n!}$ gives $\\sum \\frac{(${k}x)^{n}}{n!}$.`,
+      };
+    },
+  },
+  {
+    id: "g10-taylor-approx",
+    unit: U10,
+    topic: "taylor-and-maclaurin-series",
+    difficulty: "hard",
+    track: "bc",
+    calculator: true,
+    manifestation: "taylor-and-maclaurin-series:polynomial-approx",
+    build: (r: RNG) => {
+      const x = pick(r, [0.1, 0.2, 0.5] as const);
+      const val = 1 + x + (x * x) / 2;
+      const correct = dec(val, 4);
+      return {
+        prompt: `Use the second-degree Maclaurin polynomial for $e^{x}$ to approximate $e^{${x}}$.`,
+        correct,
+        distractors: opts(correct, [dec(1 + x, 4), dec(Math.exp(x), 4), dec(1 + x + x * x, 4), dec(val + x, 4)]),
+        explanation: `The polynomial is $1 + x + \\frac{x^{2}}{2}$, which at $x=${x}$ gives $${correct}$.`,
+      };
+    },
+  },
+  {
+    id: "g10-taylor-table",
+    unit: U10,
+    topic: "taylor-and-maclaurin-series",
+    difficulty: "hard",
+    track: "bc",
+    manifestation: "taylor-and-maclaurin-series:table-derivatives",
+    build: (r: RNG) => {
+      const f0 = ri(r, 1, 6);
+      const f1 = ri(r, 1, 6);
+      const f2 = 2 * ri(r, 1, 5);
+      const correct = `${f0} + ${f1}x + ${f2 / 2}x^{2}`;
+      const body = table(
+        ["order", "$0$", "$1$", "$2$"],
+        ["value at $x=0$", `$${f0}$`, `$${f1}$`, `$${f2}$`],
+      );
+      return {
+        prompt: `Derivative values of $f$ at $x=0$ are shown.\n\n${body}\n\nWrite the second-degree Maclaurin polynomial for $f$.`,
+        correct,
+        distractors: [
+          `${f0} + ${f1}x + ${f2}x^{2}`,
+          `${f0} + ${f1}x + ${f2 / 2}x`,
+          `${f1} + ${f2}x + ${f0}x^{2}`,
+        ],
+        explanation: `The polynomial is $f(0) + f'(0)x + \\frac{f''(0)}{2}x^{2} = ${f0} + ${f1}x + ${f2 / 2}x^{2}$.`,
+      };
+    },
+  },
+  {
+    id: "g10-taylor-center-shift",
+    unit: U10,
+    topic: "taylor-and-maclaurin-series",
+    difficulty: "hard",
+    track: "bc",
+    manifestation: "taylor-and-maclaurin-series:center-shift",
+    build: (r: RNG) => {
+      const c = ri(r, 1, 5);
+      const correct = `\\displaystyle\\sum_{n=0}^{\\infty} \\frac{e^{${c}}\\left(x - ${c}\\right)^{n}}{n!}`;
+      return {
+        prompt: `Write the Taylor series for $e^{x}$ centered at $x = ${c}$.`,
+        correct,
+        distractors: [
+          `\\displaystyle\\sum_{n=0}^{\\infty} \\frac{\\left(x - ${c}\\right)^{n}}{n!}`,
+          `\\displaystyle\\sum_{n=0}^{\\infty} \\frac{e^{${c}}x^{n}}{n!}`,
+          `\\displaystyle\\sum_{n=0}^{\\infty} e^{${c}}\\left(x - ${c}\\right)^{n}`,
+        ],
+        explanation: `Every derivative of $e^{x}$ at $x=${c}$ equals $e^{${c}}$, so the coefficients are $\\frac{e^{${c}}}{n!}$ with powers of $\\left(x-${c}\\right)$.`,
+      };
+    },
+  },
+  {
+    id: "g10-taylor-identify",
+    unit: U10,
+    topic: "taylor-and-maclaurin-series",
+    difficulty: "hard",
+    track: "bc",
+    manifestation: "taylor-and-maclaurin-series:identify-function",
+    build: (r: RNG) => {
+      void r;
+      const correct = `\\sin(x)`;
+      return {
+        prompt: `Which function has Maclaurin series $x - \\dfrac{x^{3}}{3!} + \\dfrac{x^{5}}{5!} - \\cdots$?`,
+        correct,
+        distractors: [`\\cos(x)`, `e^{x}`, `\\ln(1 + x)`],
+        explanation: `Odd powers with alternating signs and factorial denominators is the signature of $\\sin(x)$.`,
+      };
+    },
+  },
+  {
+    id: "g10-lagrange-degree",
+    unit: U10,
+    topic: "lagrange-error-bound",
+    difficulty: "hard",
+    track: "bc",
+    manifestation: "lagrange-error-bound:degree-needed",
+    build: (r: RNG) => {
+      void r;
+      const correct = `\\text{Increase } n \\text{ until } \\dfrac{M\\left|x - a\\right|^{n+1}}{(n+1)!} \\text{ is below the tolerance.}`;
+      return {
+        prompt: `How is the Lagrange error bound used to decide what degree Taylor polynomial achieves a given accuracy?`,
+        correct,
+        distractors: [
+          `\\text{Set the } (n+1)\\text{st derivative equal to the tolerance.}`,
+          `\\text{Choose } n \\text{ equal to the tolerance's number of decimal places.}`,
+          `\\text{Compute the exact error and solve for } n.`,
+        ],
+        explanation: `The bound $\\frac{M\\left|x-a\\right|^{n+1}}{(n+1)!}$ is tested for increasing $n$ until it falls below the required tolerance.`,
+      };
+    },
+  },
+  {
+    id: "g10-lagrange-interpret",
+    unit: U10,
+    topic: "lagrange-error-bound",
+    difficulty: "medium",
+    track: "bc",
+    manifestation: "lagrange-error-bound:interpret",
+    build: (r: RNG) => {
+      void r;
+      const correct = `\\text{It gives an upper bound on the error, not the exact error.}`;
+      return {
+        prompt: `What does the Lagrange error bound guarantee?`,
+        correct,
+        distractors: [
+          `\\text{It gives the exact error of the approximation.}`,
+          `\\text{It guarantees the series converges.}`,
+          `\\text{It gives a lower bound on the error.}`,
+        ],
+        explanation: `The bound guarantees only that the magnitude of the remainder is no larger than the stated value; the true error is usually smaller.`,
+      };
+    },
+  },
+  {
+    id: "g10-lagrange-max-derivative",
+    unit: U10,
+    topic: "lagrange-error-bound",
+    difficulty: "hard",
+    track: "bc",
+    manifestation: "lagrange-error-bound:max-derivative",
+    build: (r: RNG) => {
+      const n = ri(r, 2, 4);
+      const correct = `\\text{the maximum of } \\left|f^{(${n + 1})}\\right| \\text{ on the interval between } a \\text{ and } x`;
+      return {
+        prompt: `In the Lagrange error bound for a degree-$${n}$ Taylor polynomial, what value should $M$ be?`,
+        correct,
+        distractors: [
+          `\\left|f^{(${n + 1})}(a)\\right|`,
+          `\\text{the maximum of } \\left|f\\right| \\text{ on the interval}`,
+          `\\text{the maximum of } \\left|f^{(${n})}\\right| \\text{ on the interval}`,
+        ],
+        explanation: `The remainder involves the next derivative, so $M$ must bound $\\left|f^{(${n + 1})}\\right|$ across the whole interval, not just at the center.`,
+      };
+    },
+  },
+  {
+    id: "g10-lagrange-compare-actual",
+    unit: U10,
+    topic: "lagrange-error-bound",
+    difficulty: "hard",
+    track: "bc",
+    manifestation: "lagrange-error-bound:compare-actual",
+    build: (r: RNG) => {
+      void r;
+      const correct = `\\text{The actual error is at most the bound, and usually smaller.}`;
+      return {
+        prompt: `How does the actual error of a Taylor approximation compare with the Lagrange error bound?`,
+        correct,
+        distractors: [
+          `\\text{They are always equal.}`,
+          `\\text{The actual error is usually larger.}`,
+          `\\text{No comparison can be made.}`,
+        ],
+        explanation: `The bound replaces the unknown derivative value by its maximum, so it overstates the remainder in general while still being valid.`,
+      };
+    },
+  },
+  {
+    id: "g10-power-differentiate",
+    unit: U10,
+    topic: "power-series-operations",
+    difficulty: "hard",
+    track: "bc",
+    manifestation: "power-series-operations:differentiate",
+    build: (r: RNG) => {
+      void r;
+      const correct = `\\displaystyle\\sum_{n=1}^{\\infty} nx^{n-1}`;
+      return {
+        prompt: `Differentiate $\\displaystyle\\sum_{n=0}^{\\infty} x^{n}$ term by term for $\\left|x\\right| < 1$.`,
+        correct,
+        distractors: [
+          `\\displaystyle\\sum_{n=0}^{\\infty} nx^{n}`,
+          `\\displaystyle\\sum_{n=1}^{\\infty} x^{n-1}`,
+          `\\displaystyle\\sum_{n=0}^{\\infty} \\frac{x^{n+1}}{n+1}`,
+        ],
+        explanation: `Differentiating $x^{n}$ gives $nx^{n-1}$, and the $n=0$ term vanishes, so the index starts at $1$.`,
+      };
+    },
+  },
+  {
+    id: "g10-power-integrate",
+    unit: U10,
+    topic: "power-series-operations",
+    difficulty: "hard",
+    track: "bc",
+    manifestation: "power-series-operations:integrate",
+    build: (r: RNG) => {
+      void r;
+      const correct = `\\displaystyle\\sum_{n=0}^{\\infty} \\frac{x^{n+1}}{n+1} + C`;
+      return {
+        prompt: `Integrate $\\displaystyle\\sum_{n=0}^{\\infty} x^{n}$ term by term for $\\left|x\\right| < 1$.`,
+        correct,
+        distractors: [
+          `\\displaystyle\\sum_{n=0}^{\\infty} \\frac{x^{n}}{n} + C`,
+          `\\displaystyle\\sum_{n=1}^{\\infty} nx^{n-1} + C`,
+          `\\displaystyle\\sum_{n=0}^{\\infty} x^{n+1} + C`,
+        ],
+        explanation: `Integrating $x^{n}$ gives $\\frac{x^{n+1}}{n+1}$, and a constant of integration must be included.`,
+      };
+    },
+  },
+  {
+    id: "g10-power-multiply",
+    unit: U10,
+    topic: "power-series-operations",
+    difficulty: "hard",
+    track: "bc",
+    manifestation: "power-series-operations:multiply",
+    build: (r: RNG) => {
+      const p = ri(r, 2, 4);
+      const correct = `\\displaystyle\\sum_{n=0}^{\\infty} \\frac{x^{${p}n + ${p}}}{n!}`;
+      return {
+        prompt: `Multiply the Maclaurin series for $e^{x^{${p}}}$ by $x^{${p}}$.`,
+        correct,
+        distractors: [
+          `\\displaystyle\\sum_{n=0}^{\\infty} \\frac{x^{${p}n}}{n!}`,
+          `\\displaystyle\\sum_{n=0}^{\\infty} \\frac{${p}x^{n + ${p}}}{n!}`,
+          `\\displaystyle\\sum_{n=0}^{\\infty} \\frac{x^{n + ${p}}}{n!}`,
+        ],
+        explanation: `Since $e^{x^{${p}}} = \\sum \\frac{x^{${p}n}}{n!}$, multiplying by $x^{${p}}$ raises each exponent by $${p}$.`,
+      };
+    },
+  },
+  {
+    id: "g10-power-limit",
+    unit: U10,
+    topic: "power-series-operations",
+    difficulty: "hard",
+    track: "bc",
+    manifestation: "power-series-operations:limit-from-series",
+    build: (r: RNG) => {
+      void r;
+      const correct = `\\dfrac{1}{2}`;
+      return {
+        prompt: `Use a Maclaurin series to evaluate $\\displaystyle\\lim_{x\\to 0} \\frac{1 - \\cos(x)}{x^{2}}$.`,
+        correct,
+        distractors: [`0`, `1`, `\\dfrac{1}{6}`],
+        explanation: `Since $\\cos(x) = 1 - \\frac{x^{2}}{2} + \\frac{x^{4}}{24} - \\cdots$, the quotient is $\\frac{1}{2} - \\frac{x^{2}}{24} + \\cdots$, which tends to $\\frac{1}{2}$.`,
+      };
+    },
+  },
+);
