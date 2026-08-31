@@ -2690,10 +2690,10 @@ GAP_TEMPLATES.push(
       const cost = per * 4 * s;
       const correct = dec(cost, 3);
       return {
-        prompt: `A rectangular garden must enclose $${A}$ square meters. Fencing costs $\\$${per}$ per meter. What is the least possible cost, in dollars?`,
+        prompt: `A rectangular garden must enclose $${A}$ square meters. Fencing costs $${per}$ dollars per meter. What is the least possible cost, in dollars?`,
         correct,
         distractors: opts(correct, [dec(per * A, 3), dec(cost / 2, 3), dec(per * 2 * s, 3), dec(cost + per, 3)]),
-        explanation: `With area fixed, perimeter $P(x) = 2x + \\frac{${2 * A}}{x}$ is minimized at $x=${s}$, the square. The perimeter is $${4 * s}$ meters, costing $${per}\\cdot ${4 * s} = \\$${correct}$.`,
+        explanation: `With area fixed, perimeter $P(x) = 2x + \\frac{${2 * A}}{x}$ is minimized at $x=${s}$, the square. The perimeter is $${4 * s}$ meters, costing $${per} \\cdot ${4 * s} = ${correct}$ dollars.`,
       };
     },
   },
