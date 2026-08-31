@@ -595,8 +595,9 @@ export const GAP_TEMPLATES: QuestionTemplate[] = [
       const fa = -ri(r, 2, 8);
       const fb = ri(r, 2, 8);
       const correct = `f\\text{ takes the value }0\\text{ exactly once on }(${a},${b}).`;
+      const body = `A function $f$ is continuous on $[${a},${b}]$ with the values shown. Which conclusion is **not** guaranteed?\n\n${table(["$x$", `$${a}$`, `$${b}$`], ["$f(x)$", `$${fa}$`, `$${fb}$`])}`;
       return {
-        prompt: `A function $f$ is continuous on $[${a},${b}]$ with $f(${a})=${fa}$ and $f(${b})=${fb}$. Which conclusion is **not** guaranteed?`,
+        prompt: body,
         correct,
         distractors: [
           `f\\text{ takes the value }0\\text{ somewhere on }(${a},${b}).`,
@@ -3205,6 +3206,30 @@ GAP_TEMPLATES.push(
     },
   },
   {
+    id: "g6-ibp-logarithm",
+    unit: U6,
+    topic: "integration-by-parts",
+    difficulty: "hard",
+    track: "BC",
+    manifestation: "integration-by-parts:logarithm",
+    build: (r: RNG) => {
+      const b = pick(r, [2, 3, 4] as const);
+      const val = (b * b) / 2 * Math.log(b) - (b * b) / 4 + 1 / 4;
+      const correct = dec(val, 3);
+      return {
+        prompt: `Evaluate $\\displaystyle\\int_{1}^{${b}} x\\ln(x)\\,dx$.`,
+        correct,
+        distractors: opts(correct, [
+          dec((b * b) / 2 * Math.log(b), 3),
+          dec((b * b) / 4 * Math.log(b) - (b * b) / 4 + 1 / 4, 3),
+          dec(val + 0.25, 3),
+          dec(val / 2, 3),
+        ]),
+        explanation: `Take $u=\\ln(x)$, $dv=x\\,dx$. Then $\\int x\\ln(x)\\,dx = \\frac{x^{2}}{2}\\ln(x) - \\frac{x^{2}}{4}$, so evaluating from $1$ to $${b}$ gives $${correct}$.`,
+      };
+    },
+  },
+  {
     id: "g6-pf-setup",
     unit: U6,
     topic: "partial-fractions",
@@ -3382,9 +3407,16 @@ GAP_TEMPLATES.push(
     manifestation: "accumulation-functions:extrema",
     build: (r: RNG) => {
       const c = ri(r, 2, 5);
+      const z = c + 2;
+      const pts: Array<[number, number]> = [
+        [0, -3],
+        [z, 0],
+        [z + 3, 4],
+      ];
       const correct = `\\text{where } f \\text{ changes from negative to positive}`;
       return {
-        prompt: `Let $g(x)=\\displaystyle\\int_{${c}}^{x} f(t)\\,dt$ for a continuous $f$. Where does $g$ have a local minimum?`,
+        prompt: `The graph of a continuous function $f$ is shown. Let $g(x)=\\displaystyle\\int_{${c}}^{x} f(t)\\,dt$. Where does $g$ have a local minimum?`,
+        figure: graph("y = f(t)", pts, { xMin: -1, xMax: z + 4, yMin: -4, yMax: 5 }),
         correct,
         distractors: [
           `\\text{where } f \\text{ changes from positive to negative}`,
@@ -3403,8 +3435,15 @@ GAP_TEMPLATES.push(
     manifestation: "accumulation-functions:concavity",
     build: (r: RNG) => {
       const correct = `\\text{where } f \\text{ is increasing}`;
+      const pts: Array<[number, number]> = [
+        [0, 3],
+        [2, 1],
+        [4, 1],
+        [6, 5],
+      ];
       return {
-        prompt: `Let $g(x)=\\displaystyle\\int_{0}^{x} f(t)\\,dt$ for a differentiable $f$. On what set is the graph of $g$ concave up?`,
+        prompt: `The graph of a differentiable function $f$ is shown. Let $g(x)=\\displaystyle\\int_{0}^{x} f(t)\\,dt$. On what set is the graph of $g$ concave up?`,
+        figure: graph("y = f(t)", pts, { xMin: -1, xMax: 7, yMin: 0, yMax: 6 }),
         correct,
         distractors: [
           `\\text{where } f \\text{ is positive}`,
@@ -3446,9 +3485,15 @@ GAP_TEMPLATES.push(
     manifestation: "accumulation-functions:must-be-true",
     build: (r: RNG) => {
       const c = ri(r, 1, 6);
+      const pts: Array<[number, number]> = [
+        [0, 1],
+        [c, 3],
+        [c + 3, 2],
+      ];
       const correct = `g(${c}) = 0`;
       return {
-        prompt: `Let $g(x)=\\displaystyle\\int_{${c}}^{x} f(t)\\,dt$, where $f$ is continuous and positive. Which statement must be true?`,
+        prompt: `The graph of a continuous, positive function $f$ is shown. Let $g(x)=\\displaystyle\\int_{${c}}^{x} f(t)\\,dt$. Which statement must be true?`,
+        figure: graph("y = f(t)", pts, { xMin: -1, xMax: c + 4, yMin: 0, yMax: 4 }),
         correct,
         distractors: [
           `g(x) > 0 \\text{ for all } x`,
@@ -3498,9 +3543,14 @@ GAP_TEMPLATES.push(
     manifestation: "slope-fields:equilibrium",
     build: (r: RNG) => {
       const a = ri(r, 2, 8);
+      const pts: Array<[number, number]> = [
+        [0, a],
+        [6, a],
+      ];
       const correct = `y = ${a}`;
       return {
         prompt: `Which equilibrium solution does the differential equation $\\dfrac{dy}{dx} = y - ${a}$ have?`,
+        figure: graph("y = a", pts, { xMin: -1, xMax: 7, yMin: 0, yMax: a + 3 }),
         correct,
         distractors: [`y = 0`, `y = -${a}`, `x = ${a}`],
         explanation: `An equilibrium solution is a constant solution, so set $y - ${a} = 0$ to get $y = ${a}$.`,
@@ -3826,9 +3876,22 @@ GAP_TEMPLATES.push(
     manifestation: "logistic-growth:graph-shape",
     build: (r: RNG) => {
       const M = pick(r, [200, 400, 1000] as const);
-      const correct = `P = ${M / 2}`;
+      const half = M / 2;
+      const k = 0.9;
+      const pts: Array<[number, number]> = [];
+      for (let t = -4; t <= 8; t += 0.5) {
+        pts.push([t + 4, M / (1 + 9 * Math.exp(-k * t))]);
+      }
+      const correct = `P = ${half}`;
       return {
-        prompt: `For a logistic model with carrying capacity $${M}$ and an initial value below it, at what population is the growth rate greatest?`,
+        prompt: `For a logistic model with carrying capacity $${M}$ and an initial value below it, the solution curve is shown. At what population is the growth rate greatest?`,
+        figure: {
+          kind: "graph",
+          curves: [{ label: "P(t)", points: pts, smooth: true }],
+          window: { xMin: 0, xMax: 12, yMin: 0, yMax: M + M * 0.1 },
+          hAsymptotes: [M],
+          markers: [{ x: 4, y: half, kind: "closed", label: "inflection" }],
+        },
         correct,
         distractors: opts(correct, [`${M}`, `${M / 4}`, `0`, `${Math.round(0.75 * M)}`]),
         explanation: `The growth rate $kP\\left(1 - \\frac{P}{${M}}\\right)$ is a downward parabola in $P$ with maximum at half the carrying capacity, which is also the inflection point of the solution curve.`,
@@ -3958,9 +4021,23 @@ GAP_TEMPLATES.push(
     difficulty: "hard",
     manifestation: "area-between-curves:switching-top",
     build: (r: RNG) => {
+      const sqrtPts: Array<[number, number]> = [];
+      const parPts: Array<[number, number]> = [];
+      for (let x = 0; x <= 2.001; x += 0.1) {
+        sqrtPts.push([x, Math.sqrt(x)]);
+        parPts.push([x, x * x]);
+      }
       const correct = `\\displaystyle\\int_{0}^{1}\\left(\\sqrt{x} - x^{2}\\right)dx + \\int_{1}^{2}\\left(x^{2} - \\sqrt{x}\\right)dx`;
       return {
-        prompt: `Which expression gives the total area of the regions between $y=\\sqrt{x}$ and $y=x^{2}$ for $0\\le x\\le 2$?`,
+        prompt: `The curves $y=\\sqrt{x}$ and $y=x^{2}$ are shown for $0\\le x\\le 2$. Which expression gives the total area of the regions between them?`,
+        figure: {
+          kind: "graph",
+          curves: [
+            { label: "y = sqrt(x)", points: sqrtPts, smooth: true, tone: 0 },
+            { label: "y = x^2", points: parPts, smooth: true, tone: 1 },
+          ],
+          window: { xMin: -0.5, xMax: 2.5, yMin: -0.5, yMax: 4.2 },
+        },
         correct,
         distractors: [
           `\\displaystyle\\int_{0}^{2}\\left(\\sqrt{x} - x^{2}\\right)dx`,
@@ -3979,9 +4056,23 @@ GAP_TEMPLATES.push(
     manifestation: "area-between-curves:setup-only",
     build: (r: RNG) => {
       const m = ri(r, 1, 4);
+      const linePts: Array<[number, number]> = [
+        [0, 0],
+        [m, m * m],
+      ];
+      const parPts: Array<[number, number]> = [];
+      for (let x = 0; x <= m + 0.001; x += m / 20) parPts.push([x, x * x]);
       const correct = `\\displaystyle\\int_{0}^{${m}}\\left(${coefTex(m)}x - x^{2}\\right)dx`;
       return {
-        prompt: `Which integral gives the area of the region enclosed by $y = ${coefTex(m)}x$ and $y = x^{2}$?`,
+        prompt: `The line $y = ${coefTex(m)}x$ and the parabola $y = x^{2}$ are shown, meeting at $x=0$ and $x=${m}$. Which integral gives the area of the enclosed region?`,
+        figure: {
+          kind: "graph",
+          curves: [
+            { label: `y = ${coefTex(m)}x`, points: linePts, tone: 0 },
+            { label: "y = x^2", points: parPts, smooth: true, tone: 1 },
+          ],
+          window: { xMin: -0.5, xMax: m + 0.5, yMin: -0.5, yMax: m * m + 1 },
+        },
         correct,
         distractors: [
           `\\displaystyle\\int_{0}^{${m}}\\left(x^{2} - ${coefTex(m)}x\\right)dx`,
@@ -4193,9 +4284,23 @@ GAP_TEMPLATES.push(
     track: "BC",
     manifestation: "arc-length:compare-chord",
     build: (r: RNG) => {
+      const curvePts: Array<[number, number]> = [];
+      for (let x = 0; x <= 4.001; x += 0.2) curvePts.push([x, Math.sqrt(x)]);
+      const chordPts: Array<[number, number]> = [
+        [0, 0],
+        [4, 2],
+      ];
       const correct = `\\text{The arc length is greater, unless the curve is a straight segment.}`;
       return {
-        prompt: `How does the arc length of a smooth curve between two points compare with the straight-line distance between them?`,
+        prompt: `The graph of $y=\\sqrt{x}$ from $(0,0)$ to $(4,2)$ is shown along with the straight chord between the same two points. How does the arc length of a smooth curve between two points compare with the straight-line distance between them?`,
+        figure: {
+          kind: "graph",
+          curves: [
+            { label: "y = sqrt(x)", points: curvePts, smooth: true, tone: 0 },
+            { label: "chord", points: chordPts, dashed: true, tone: 1 },
+          ],
+          window: { xMin: -0.5, xMax: 4.5, yMin: -0.5, yMax: 3 },
+        },
         correct,
         distractors: [
           `\\text{The arc length is smaller.}`,
@@ -4542,9 +4647,18 @@ GAP_TEMPLATES.push(
     manifestation: "polar-derivatives:graph-match",
     build: (r: RNG) => {
       const a = ri(r, 2, 6);
+      const circlePts: Array<[number, number]> = [];
+      for (let t = 0; t <= 2 * Math.PI + 0.001; t += Math.PI / 24) {
+        circlePts.push([a * Math.cos(t), a * Math.sin(t)]);
+      }
       const correct = `\\text{a circle of radius } ${a} \\text{ centered at the origin}`;
       return {
         prompt: `Which curve is described by $r = ${a}$?`,
+        figure: {
+          kind: "graph",
+          curves: [{ label: "r = a", points: circlePts, smooth: true }],
+          window: { xMin: -a - 1, xMax: a + 1, yMin: -a - 1, yMax: a + 1 },
+        },
         correct,
         distractors: [
           `\\text{a circle of radius } ${a} \\text{ centered at } (${a}, 0)`,

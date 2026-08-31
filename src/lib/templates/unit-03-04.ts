@@ -1310,6 +1310,12 @@ export const UNIT_03_04_TEMPLATES: QuestionTemplate[] = [
           `\\text{The speed is never increasing}`,
         ],
         explanation: `Here $v(t)\\ge 0$ throughout $[0,4]$, so speed equals $v(t)$ itself, and speed increases exactly where $v(t)$ is increasing. Since $v(t)=-(t-2)^{2}+4$ rises on $(0,2)$ and falls on $(2,4)$, the speed increases on $(0,2)$ and decreases on $(2,4)$. Choosing the interval after the peak is the common misreading.`,
+        figure: {
+          kind: "graph",
+          curves: [{ label: "v(t)", points: pts, smooth: true, tone: 0 }],
+          window,
+          caption: "Velocity v(t) of a particle for 0 ≤ t ≤ 4",
+        },
       };
     },
   },
