@@ -4309,3 +4309,331 @@ GAP_TEMPLATES.push(
     },
   },
 );
+
+/* ------------------------------------------------------------------ */
+/* Unit 9 — Parametric, polar, and vector-valued functions (BC)        */
+/* ------------------------------------------------------------------ */
+
+const U9 = "unit-9-parametric-polar-vector";
+
+GAP_TEMPLATES.push(
+  {
+    id: "g9-param-tangent-line",
+    unit: U9,
+    topic: "parametric-derivatives",
+    difficulty: "hard",
+    track: "bc",
+    manifestation: "parametric-derivatives:tangent-line",
+    build: (r: RNG) => {
+      const t0 = ri(r, 1, 4);
+      // x = t^2, y = t^3 ; dy/dx = 3t/2
+      const slope = (3 * t0) / 2;
+      const x0 = t0 * t0;
+      const y0 = t0 ** 3;
+      const correct = `y - ${y0} = ${dec(slope, 3)}\\left(x - ${x0}\\right)`;
+      return {
+        prompt: `A curve is given by $x = t^{2}$ and $y = t^{3}$. Find an equation of the tangent line at $t = ${t0}$.`,
+        correct,
+        distractors: [
+          `y - ${y0} = ${dec(3 * t0 * t0, 3)}\\left(x - ${x0}\\right)`,
+          `y - ${x0} = ${dec(slope, 3)}\\left(x - ${y0}\\right)`,
+          `y - ${y0} = ${dec(2 * t0, 3)}\\left(x - ${x0}\\right)`,
+        ],
+        explanation: `$\\frac{dy}{dx} = \\frac{3t^{2}}{2t} = \\frac{3t}{2}$, which is $${dec(slope, 3)}$ at $t=${t0}$, and the point is $(${x0}, ${y0})$.`,
+      };
+    },
+  },
+  {
+    id: "g9-param-eliminate",
+    unit: U9,
+    topic: "parametric-derivatives",
+    difficulty: "medium",
+    track: "bc",
+    manifestation: "parametric-derivatives:eliminate-parameter",
+    build: (r: RNG) => {
+      const k = ri(r, 1, 5);
+      const correct = `y = x^{2} + ${k}`;
+      return {
+        prompt: `Eliminate the parameter for $x = t$, $y = t^{2} + ${k}$.`,
+        correct,
+        distractors: [`y = x + ${k}`, `y = \\left(x + ${k}\\right)^{2}`, `x = y^{2} + ${k}`],
+        explanation: `Since $x=t$, substituting gives $y = x^{2} + ${k}$.`,
+      };
+    },
+  },
+  {
+    id: "g9-param-error",
+    unit: U9,
+    topic: "parametric-derivatives",
+    difficulty: "medium",
+    track: "bc",
+    manifestation: "parametric-derivatives:error-analysis",
+    build: (r: RNG) => {
+      void r;
+      const correct = `\\dfrac{dy}{dx} = \\dfrac{dy/dt}{dx/dt}`;
+      return {
+        prompt: `Which formula correctly gives the slope of a parametric curve?`,
+        correct,
+        distractors: [
+          `\\dfrac{dy}{dx} = \\dfrac{dx/dt}{dy/dt}`,
+          `\\dfrac{dy}{dx} = \\dfrac{dy}{dt}\\cdot\\dfrac{dx}{dt}`,
+          `\\dfrac{dy}{dx} = \\dfrac{dy}{dt} - \\dfrac{dx}{dt}`,
+        ],
+        explanation: `The chain rule gives $\\frac{dy}{dt} = \\frac{dy}{dx}\\cdot\\frac{dx}{dt}$, so the slope is the quotient of the $t$-derivatives with $dy/dt$ on top.`,
+      };
+    },
+  },
+  {
+    id: "g9-param-arc-setup",
+    unit: U9,
+    topic: "parametric-arc-length",
+    difficulty: "medium",
+    track: "bc",
+    manifestation: "parametric-arc-length:setup",
+    build: (r: RNG) => {
+      const b = ri(r, 1, 5);
+      const correct = `\\displaystyle\\int_{0}^{${b}}\\sqrt{4t^{2} + 9t^{4}}\\,dt`;
+      return {
+        prompt: `For $x = t^{2}$ and $y = t^{3}$, which integral gives the length of the curve for $0\\le t\\le ${b}$?`,
+        correct,
+        distractors: [
+          `\\displaystyle\\int_{0}^{${b}}\\sqrt{2t + 3t^{2}}\\,dt`,
+          `\\displaystyle\\int_{0}^{${b}}\\left(2t + 3t^{2}\\right)dt`,
+          `\\displaystyle\\int_{0}^{${b}}\\sqrt{1 + 9t^{4}}\\,dt`,
+        ],
+        explanation: `With $\\frac{dx}{dt} = 2t$ and $\\frac{dy}{dt} = 3t^{2}$, the arc length integrand is $\\sqrt{(2t)^{2} + \\left(3t^{2}\\right)^{2}}$.`,
+      };
+    },
+  },
+  {
+    id: "g9-param-distance-vs-displacement",
+    unit: U9,
+    topic: "parametric-arc-length",
+    difficulty: "hard",
+    track: "bc",
+    manifestation: "parametric-arc-length:distance-vs-displacement",
+    build: (r: RNG) => {
+      void r;
+      const correct = `\\text{Distance is the integral of speed; displacement is the change in position.}`;
+      return {
+        prompt: `For a particle moving along a parametric path, how do total distance travelled and displacement differ?`,
+        correct,
+        distractors: [
+          `\\text{They are always equal.}`,
+          `\\text{Displacement is the integral of speed; distance is the change in position.}`,
+          `\\text{Distance is always smaller than the magnitude of displacement.}`,
+        ],
+        explanation: `Distance accumulates $\\sqrt{(dx/dt)^{2} + (dy/dt)^{2}}$, which is never negative, while displacement is the vector difference of the endpoints and can be smaller in magnitude.`,
+      };
+    },
+  },
+  {
+    id: "g9-param-bounds",
+    unit: U9,
+    topic: "parametric-arc-length",
+    difficulty: "medium",
+    track: "bc",
+    manifestation: "parametric-arc-length:bounds",
+    build: (r: RNG) => {
+      void r;
+      const correct = `0 \\le t \\le 2\\pi`;
+      return {
+        prompt: `The circle $x = \\cos(t)$, $y = \\sin(t)$ is traced once. Which parameter interval should be used for its arc length?`,
+        correct,
+        distractors: [`0 \\le t \\le \\pi`, `0 \\le t \\le 4\\pi`, `-1 \\le t \\le 1`],
+        explanation: `One full trip around the circle takes $t$ from $0$ to $2\\pi$; a larger interval retraces the curve and doubles the computed length.`,
+      };
+    },
+  },
+  {
+    id: "g9-vector-position-from-velocity",
+    unit: U9,
+    topic: "vector-valued-functions",
+    difficulty: "hard",
+    track: "bc",
+    manifestation: "vector-valued-functions:position-from-velocity",
+    build: (r: RNG) => {
+      const x0 = ri(r, 1, 5);
+      const y0 = ri(r, 1, 5);
+      const k = ri(r, 2, 5);
+      const correct = `\\left\\langle ${x0} + \\dfrac{t^{2}}{2},\\; ${y0} + ${k}t \\right\\rangle`;
+      return {
+        prompt: `A particle has velocity $\\left\\langle t, ${k} \\right\\rangle$ and position $\\left\\langle ${x0}, ${y0} \\right\\rangle$ at $t=0$. Find its position at time $t$.`,
+        correct,
+        distractors: [
+          `\\left\\langle ${x0} + t,\\; ${y0} + ${k} \\right\\rangle`,
+          `\\left\\langle \\dfrac{t^{2}}{2},\\; ${k}t \\right\\rangle`,
+          `\\left\\langle ${x0} + t^{2},\\; ${y0} + ${k}t \\right\\rangle`,
+        ],
+        explanation: `Integrate each component and use the initial position as the constant: $x = ${x0} + \\frac{t^{2}}{2}$ and $y = ${y0} + ${k}t$.`,
+      };
+    },
+  },
+  {
+    id: "g9-vector-components",
+    unit: U9,
+    topic: "vector-valued-functions",
+    difficulty: "medium",
+    track: "bc",
+    manifestation: "vector-valued-functions:component-analysis",
+    build: (r: RNG) => {
+      const a = ri(r, 1, 5);
+      const correct = `\\text{It moves left when } t < ${a} \\text{ and right when } t > ${a}.`;
+      return {
+        prompt: `A particle has velocity $\\left\\langle t - ${a},\\; t^{2} + 1 \\right\\rangle$. Describe its horizontal motion.`,
+        correct,
+        distractors: [
+          `\\text{It moves right for all } t.`,
+          `\\text{It moves left for all } t.`,
+          `\\text{It is at rest at } t = ${a}, \\text{ then moves down.}`,
+        ],
+        explanation: `The horizontal velocity $t - ${a}$ is negative before $t=${a}$ and positive afterward, so the particle moves left then right. The vertical component is always positive.`,
+      };
+    },
+  },
+  {
+    id: "g9-vector-total-distance",
+    unit: U9,
+    topic: "vector-valued-functions",
+    difficulty: "hard",
+    track: "bc",
+    calculator: true,
+    manifestation: "vector-valued-functions:total-distance",
+    build: (r: RNG) => {
+      const b = ri(r, 1, 4);
+      const k = ri(r, 2, 5);
+      const speed = Math.sqrt(1 + k * k);
+      const total = b * speed;
+      const correct = dec(total, 3);
+      return {
+        prompt: `A particle has velocity $\\left\\langle 1, ${k} \\right\\rangle$ for $0\\le t\\le ${b}$. Find the total distance travelled.`,
+        correct,
+        distractors: opts(correct, [dec(b, 3), dec(k * b, 3), dec(b * (1 + k), 3), dec(total / 2, 3)]),
+        explanation: `The speed is $\\sqrt{1 + ${k * k}} = ${dec(speed, 3)}$, constant, so the distance is $${b}\\cdot ${dec(speed, 3)} = ${correct}$.`,
+      };
+    },
+  },
+  {
+    id: "g9-polar-tangent-angle",
+    unit: U9,
+    topic: "polar-derivatives",
+    difficulty: "hard",
+    track: "bc",
+    manifestation: "polar-derivatives:tangent-at-angle",
+    build: (r: RNG) => {
+      const a = ri(r, 1, 5);
+      const correct = `\\text{horizontal}`;
+      return {
+        prompt: `For the circle $r = ${a}$, what is the tangent line at $\\theta = \\dfrac{\\pi}{2}$?`,
+        correct,
+        distractors: [`\\text{vertical}`, `\\text{of slope } 1`, `\\text{undefined, since } r \\text{ is constant}`],
+        explanation: `At $\\theta = \\frac{\\pi}{2}$ the point is the top of the circle of radius $${a}$, where the tangent line is horizontal.`,
+      };
+    },
+  },
+  {
+    id: "g9-polar-graph-match",
+    unit: U9,
+    topic: "polar-derivatives",
+    difficulty: "medium",
+    track: "bc",
+    manifestation: "polar-derivatives:graph-match",
+    build: (r: RNG) => {
+      const a = ri(r, 2, 6);
+      const correct = `\\text{a circle of radius } ${a} \\text{ centered at the origin}`;
+      return {
+        prompt: `Which curve is described by $r = ${a}$?`,
+        correct,
+        distractors: [
+          `\\text{a circle of radius } ${a} \\text{ centered at } (${a}, 0)`,
+          `\\text{a vertical line } x = ${a}`,
+          `\\text{a spiral through the origin}`,
+        ],
+        explanation: `A constant radius means every point is $${a}$ units from the origin, which is a circle centered at the origin.`,
+      };
+    },
+  },
+  {
+    id: "g9-polar-error",
+    unit: U9,
+    topic: "polar-derivatives",
+    difficulty: "hard",
+    track: "bc",
+    manifestation: "polar-derivatives:error-analysis",
+    build: (r: RNG) => {
+      void r;
+      const correct = `\\dfrac{dr}{d\\theta} \\text{ is not the slope; the slope requires } \\dfrac{dy/d\\theta}{dx/d\\theta}.`;
+      return {
+        prompt: `A student computes $\\dfrac{dr}{d\\theta}$ and reports it as the slope of a polar curve. What is the error?`,
+        correct,
+        distractors: [
+          `\\dfrac{dr}{d\\theta} \\text{ must be squared first.}`,
+          `\\text{The slope of a polar curve is always } \\tan(\\theta).`,
+          `\\text{Polar curves have no tangent lines.}`,
+        ],
+        explanation: `The slope is measured in the $xy$-plane, so convert with $x = r\\cos\\theta$ and $y = r\\sin\\theta$ and take the quotient of their $\\theta$-derivatives.`,
+      };
+    },
+  },
+  {
+    id: "g9-polar-area-between",
+    unit: U9,
+    topic: "polar-area",
+    difficulty: "hard",
+    track: "bc",
+    manifestation: "polar-area:between-curves",
+    build: (r: RNG) => {
+      const a = ri(r, 2, 4);
+      const b = a + ri(r, 1, 3);
+      const correct = `\\dfrac{1}{2}\\displaystyle\\int_{0}^{2\\pi}\\left(${b}^{2} - ${a}^{2}\\right)d\\theta`;
+      return {
+        prompt: `Which integral gives the area of the ring between the polar circles $r = ${a}$ and $r = ${b}$?`,
+        correct,
+        distractors: [
+          `\\dfrac{1}{2}\\displaystyle\\int_{0}^{2\\pi}\\left(${b} - ${a}\\right)^{2}d\\theta`,
+          `\\displaystyle\\int_{0}^{2\\pi}\\left(${b}^{2} - ${a}^{2}\\right)d\\theta`,
+          `\\dfrac{1}{2}\\displaystyle\\int_{0}^{\\pi}\\left(${b}^{2} - ${a}^{2}\\right)d\\theta`,
+        ],
+        explanation: `Polar area uses $\\frac{1}{2}\\int r^{2}\\,d\\theta$, and the region between two curves subtracts the squares of the radii over a full revolution.`,
+      };
+    },
+  },
+  {
+    id: "g9-polar-bounds",
+    unit: U9,
+    topic: "polar-area",
+    difficulty: "hard",
+    track: "bc",
+    manifestation: "polar-area:bounds",
+    build: (r: RNG) => {
+      const a = ri(r, 2, 5);
+      const correct = `0 \\le \\theta \\le \\pi`;
+      return {
+        prompt: `The curve $r = ${a}\\sin(\\theta)$ traces a full circle exactly once on which interval?`,
+        correct,
+        distractors: [`0 \\le \\theta \\le 2\\pi`, `0 \\le \\theta \\le \\dfrac{\\pi}{2}`, `-\\pi \\le \\theta \\le \\pi`],
+        explanation: `$r = ${a}\\sin(\\theta)$ completes the circle as $\\theta$ goes from $0$ to $\\pi$; continuing to $2\\pi$ retraces it and doubles a computed area.`,
+      };
+    },
+  },
+  {
+    id: "g9-polar-calculator",
+    unit: U9,
+    topic: "polar-area",
+    difficulty: "hard",
+    track: "bc",
+    calculator: true,
+    manifestation: "polar-area:calculator",
+    build: (r: RNG) => {
+      const a = ri(r, 2, 6);
+      const area = (Math.PI * a * a) / 4;
+      const correct = dec(area, 3);
+      return {
+        prompt: `Find the area enclosed by $r = ${a}\\sin(\\theta)$, correct to three decimal places.`,
+        correct,
+        distractors: opts(correct, [dec(4 * area, 3), dec(2 * area, 3), dec(area / 2, 3), dec(Math.PI * a, 3)]),
+        explanation: `The curve is a circle of radius $\\frac{${a}}{2}$, so $\\frac{1}{2}\\int_{0}^{\\pi}\\left(${a}\\sin\\theta\\right)^{2}d\\theta = \\pi\\left(\\frac{${a}}{2}\\right)^{2} = ${correct}$.`,
+      };
+    },
+  },
+);
