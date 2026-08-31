@@ -1189,3 +1189,483 @@ GAP_TEMPLATES.push(
     },
   },
 );
+
+/* ------------------------------------------------------------------ */
+/* Unit 3 — Composite, implicit, and inverse differentiation           */
+/* ------------------------------------------------------------------ */
+
+const U3 = "unit-3-differentiation-composite-implicit-inverse";
+
+GAP_TEMPLATES.push(
+  {
+    id: "g3-chain-with-product",
+    unit: U3,
+    topic: "chain-rule",
+    difficulty: "hard",
+    manifestation: "chain-rule:with-product",
+    build: (r: RNG) => {
+      const a = ri(r, 2, 6);
+      const correct = `e^{${a}x}\\left(${a}x + 1\\right)`;
+      return {
+        prompt: `If $f(x)=xe^{${a}x}$, find $f'(x)$.`,
+        correct,
+        distractors: [
+          `e^{${a}x}\\left(x + ${a}\\right)`,
+          `${a}xe^{${a}x}`,
+          `e^{${a}x}\\left(${a}x - 1\\right)`,
+        ],
+        explanation: `Product rule with the chain rule on $e^{${a}x}$: $f'(x)=e^{${a}x} + x\\cdot ${a}e^{${a}x} = e^{${a}x}(${a}x + 1)$.`,
+      };
+    },
+  },
+  {
+    id: "g3-chain-table",
+    unit: U3,
+    topic: "chain-rule",
+    difficulty: "medium",
+    manifestation: "chain-rule:table-composition",
+    build: (r: RNG) => {
+      const a = ri(r, 1, 4);
+      const ga = ri(r, 2, 7);
+      const gpa = ri(r, 2, 6);
+      const fpga = ri(r, 2, 6);
+      const v = fpga * gpa;
+      const correct = `${v}`;
+      const body = table(
+        ["$x$", "$g(x)$", "$g'(x)$", "$f'(x)$"],
+        [`$${a}$`, `$${ga}$`, `$${gpa}$`, `$${ri(r, 1, 5)}$`],
+      );
+      return {
+        prompt: `For differentiable functions $f$ and $g$, the table gives values at $x=${a}$, and separately $f'(${ga}) = ${fpga}$.\n\n${body}\n\nIf $h(x)=f(g(x))$, find $h'(${a})$.`,
+        correct,
+        distractors: opts(correct, [`${fpga}`, `${gpa}`, `${fpga + gpa}`, `${ga * gpa}`]),
+        explanation: `The chain rule gives $h'(${a}) = f'(g(${a}))\\,g'(${a}) = f'(${ga})\\cdot ${gpa} = ${fpga}\\cdot ${gpa} = ${v}$.`,
+      };
+    },
+  },
+  {
+    id: "g3-chain-graph",
+    unit: U3,
+    topic: "chain-rule",
+    difficulty: "hard",
+    manifestation: "chain-rule:graph-composition",
+    build: (r: RNG) => {
+      const a = ri(r, 1, 3);
+      const s1 = ri(r, 2, 4);
+      const s2 = ri(r, 2, 4);
+      const pts: Array<[number, number]> = [
+        [0, 0],
+        [4, 4 * s1],
+      ];
+      const inner = s1 * a;
+      const v = s1 * s2;
+      const correct = `${v}`;
+      return {
+        prompt: `The graph of $u$ shown is a single line segment, and $w$ is a differentiable function with $w'(x)=${s2}$ for all $x$. Find $\\dfrac{d}{dx}\\,w(u(x))$ at $x=${a}$.`,
+        figure: graph("y = u(x)", pts, { xMin: -1, xMax: 5, yMin: -1, yMax: 4 * s1 + 1 }),
+        correct,
+        distractors: opts(correct, [`${s1}`, `${s2}`, `${s1 + s2}`, `${inner}`]),
+        explanation: `The segment's slope is $u'(${a}) = ${s1}$, so the chain rule gives $w'(u(${a}))\\,u'(${a}) = ${s2}\\cdot ${s1} = ${v}$.`,
+      };
+    },
+  },
+  {
+    id: "g3-hidden-composition",
+    unit: U3,
+    topic: "chain-rule",
+    difficulty: "medium",
+    manifestation: "chain-rule:hidden-composition",
+    build: (r: RNG) => {
+      const a = ri(r, 2, 8);
+      const correct = `\\dfrac{${a}}{2\\sqrt{${a}x + 1}}`;
+      return {
+        prompt: `Which rule is needed for $f(x)=\\sqrt{${a}x + 1}$, and what is $f'(x)$?`,
+        correct,
+        distractors: [
+          `\\dfrac{1}{2\\sqrt{${a}x + 1}}`,
+          `\\dfrac{${a}}{\\sqrt{${a}x + 1}}`,
+          `${a}\\sqrt{${a}x + 1}`,
+        ],
+        explanation: `The radical hides a composition: with outer $\\sqrt{u}$ and inner $u = ${a}x+1$, the chain rule gives $\\frac{1}{2\\sqrt{u}}\\cdot ${a}$.`,
+      };
+    },
+  },
+  {
+    id: "g3-chain-error",
+    unit: U3,
+    topic: "chain-rule",
+    difficulty: "medium",
+    manifestation: "chain-rule:error-analysis",
+    build: (r: RNG) => {
+      const a = ri(r, 2, 6);
+      const n = ri(r, 3, 5);
+      const correct = `\\text{The factor } ${a} \\text{ from the derivative of the inside was omitted.}`;
+      return {
+        prompt: `A student differentiates $f(x)=\\left(${a}x + 1\\right)^{${n}}$ and writes $f'(x)=${n}\\left(${a}x + 1\\right)^{${n - 1}}$. What went wrong?`,
+        correct,
+        distractors: [
+          `\\text{The exponent should stay } ${n}.`,
+          `\\text{The product rule should have been used.}`,
+          `\\text{Nothing; the answer is correct.}`,
+        ],
+        explanation: `The chain rule requires multiplying by the inner derivative, so $f'(x)=${n * a}\\left(${a}x+1\\right)^{${n - 1}}$.`,
+      };
+    },
+  },
+  {
+    id: "g3-implicit-trig",
+    unit: U3,
+    topic: "implicit-differentiation",
+    difficulty: "hard",
+    manifestation: "implicit-differentiation:trig-exp-relation",
+    build: (r: RNG) => {
+      const a = ri(r, 2, 6);
+      const correct = `\\dfrac{${a}}{\\cos y}`;
+      return {
+        prompt: `The curve $\\sin y = ${a}x$ defines $y$ implicitly as a function of $x$. Find $\\dfrac{dy}{dx}$.`,
+        correct,
+        distractors: [`${a}\\cos y`, `\\dfrac{\\cos y}{${a}}`, `\\dfrac{${a}}{\\sin y}`],
+        explanation: `Differentiating both sides gives $\\cos y\\cdot\\frac{dy}{dx} = ${a}$, so $\\frac{dy}{dx} = \\frac{${a}}{\\cos y}$.`,
+      };
+    },
+  },
+  {
+    id: "g3-implicit-tangent-line",
+    unit: U3,
+    topic: "implicit-differentiation",
+    difficulty: "hard",
+    manifestation: "implicit-differentiation:tangent-line",
+    build: (r: RNG) => {
+      const t = pick(r, [
+        [3, 4, 5],
+        [6, 8, 10],
+        [5, 12, 13],
+      ] as const);
+      const [x0, y0, h] = t;
+      const m = frac(-x0, y0);
+      const correct = `y - ${y0} = ${m}\\left(x - ${x0}\\right)`;
+      return {
+        prompt: `Write an equation of the line tangent to $x^{2} + y^{2} = ${h * h}$ at the point $(${x0}, ${y0})$.`,
+        correct,
+        distractors: [
+          `y - ${y0} = ${frac(x0, y0)}\\left(x - ${x0}\\right)`,
+          `y - ${y0} = ${frac(y0, x0)}\\left(x - ${x0}\\right)`,
+          `y - ${x0} = ${m}\\left(x - ${y0}\\right)`,
+        ],
+        explanation: `Implicit differentiation gives $\\frac{dy}{dx} = -\\frac{x}{y} = ${m}$ at $(${x0},${y0})$; point-slope form then gives the tangent line.`,
+      };
+    },
+  },
+  {
+    id: "g3-implicit-horizontal",
+    unit: U3,
+    topic: "implicit-differentiation",
+    difficulty: "hard",
+    manifestation: "implicit-differentiation:horizontal-vertical",
+    build: (r: RNG) => {
+      const b = ri(r, 2, 7);
+      const correct = `\\text{where } x = 0`;
+      return {
+        prompt: `For the curve $x^{2} + ${b}y^{2} = ${b * 9}$, at which points is the tangent line horizontal?`,
+        correct,
+        distractors: [`\\text{where } y = 0`, `\\text{where } x = y`, `\\text{nowhere}`],
+        explanation: `Differentiating gives $\\frac{dy}{dx} = \\frac{-x}{${b}y}$, which is zero exactly when $x=0$ (and $y\\ne 0$). Where $y=0$ the tangent is vertical instead.`,
+      };
+    },
+  },
+  {
+    id: "g3-implicit-second",
+    unit: U3,
+    topic: "implicit-differentiation",
+    difficulty: "hard",
+    manifestation: "implicit-differentiation:second-derivative",
+    build: (r: RNG) => {
+      const a = ri(r, 2, 6);
+      const correct = `-\\dfrac{${a}}{y^{3}}\\cdot ${a}^{0}`.replace(`\\cdot ${a}^{0}`, "");
+      return {
+        prompt: `The curve $x^{2} + y^{2} = ${a * a}$ defines $y$ implicitly. Which expression equals $\\dfrac{d^{2}y}{dx^{2}}$?`,
+        correct: `-\\dfrac{x^{2} + y^{2}}{y^{3}}`,
+        distractors: [`-\\dfrac{x}{y}`, `\\dfrac{x^{2} + y^{2}}{y^{3}}`, `-\\dfrac{1}{y}`],
+        explanation: `From $\\frac{dy}{dx} = -\\frac{x}{y}$, differentiating again and substituting gives $\\frac{d^{2}y}{dx^{2}} = -\\frac{y - x\\left(-\\frac{x}{y}\\right)}{y^{2}} = -\\frac{x^{2}+y^{2}}{y^{3}}$.`,
+      };
+    },
+  },
+  {
+    id: "g3-implicit-error",
+    unit: U3,
+    topic: "implicit-differentiation",
+    difficulty: "medium",
+    manifestation: "implicit-differentiation:error-analysis",
+    build: (r: RNG) => {
+      const a = ri(r, 2, 9);
+      const correct = `\\text{The factor } \\dfrac{dy}{dx} \\text{ from differentiating } y^{2} \\text{ was omitted.}`;
+      return {
+        prompt: `A student differentiates $x^{2} + y^{2} = ${a * a}$ and writes $2x + 2y = 0$. What is the error?`,
+        correct,
+        distractors: [
+          `\\text{The derivative of } x^{2} \\text{ should be } x.`,
+          `\\text{The right-hand side should differentiate to } ${a}.`,
+          `\\text{The equation should be divided by } 2 \\text{ first.}`,
+        ],
+        explanation: `Since $y$ depends on $x$, $\\frac{d}{dx}y^{2} = 2y\\frac{dy}{dx}$. The correct equation is $2x + 2y\\frac{dy}{dx} = 0$.`,
+      };
+    },
+  },
+  {
+    id: "g3-inverse-table",
+    unit: U3,
+    topic: "derivatives-of-inverse-functions",
+    difficulty: "medium",
+    manifestation: "derivatives-of-inverse-functions:table",
+    build: (r: RNG) => {
+      const a = ri(r, 1, 5);
+      const fa = ri(r, 4, 9);
+      const fpa = ri(r, 2, 6);
+      const correct = frac(1, fpa);
+      const body = table(["$x$", "$f(x)$", "$f'(x)$"], [`$${a}$`, `$${fa}$`, `$${fpa}$`]);
+      return {
+        prompt: `The table gives values for a differentiable, increasing function $f$.\n\n${body}\n\nIf $g$ is the inverse of $f$, find $g'(${fa})$.`,
+        correct,
+        distractors: opts(correct, [`${fpa}`, frac(1, fa), `${fa}`, frac(1, a)]),
+        explanation: `Since $f(${a})=${fa}$, we have $g(${fa})=${a}$ and $g'(${fa}) = \\frac{1}{f'(${a})} = ${correct}$.`,
+      };
+    },
+  },
+  {
+    id: "g3-inverse-tangent",
+    unit: U3,
+    topic: "derivatives-of-inverse-functions",
+    difficulty: "hard",
+    manifestation: "derivatives-of-inverse-functions:tangent-to-inverse",
+    build: (r: RNG) => {
+      const a = ri(r, 1, 4);
+      const fa = ri(r, 5, 9);
+      const fpa = ri(r, 2, 6);
+      const correct = `y - ${a} = ${frac(1, fpa)}\\left(x - ${fa}\\right)`;
+      return {
+        prompt: `A differentiable, increasing function $f$ satisfies $f(${a})=${fa}$ and $f'(${a})=${fpa}$. Write an equation of the line tangent to the graph of $f^{-1}$ at $x=${fa}$.`,
+        correct,
+        distractors: [
+          `y - ${fa} = ${frac(1, fpa)}\\left(x - ${a}\\right)`,
+          `y - ${a} = ${fpa}\\left(x - ${fa}\\right)`,
+          `y - ${fa} = ${fpa}\\left(x - ${a}\\right)`,
+        ],
+        explanation: `The inverse passes through $(${fa}, ${a})$ with slope $\\frac{1}{f'(${a})} = ${frac(1, fpa)}$.`,
+      };
+    },
+  },
+  {
+    id: "g3-inverse-concept",
+    unit: U3,
+    topic: "derivatives-of-inverse-functions",
+    difficulty: "medium",
+    manifestation: "derivatives-of-inverse-functions:reciprocal-concept",
+    build: (r: RNG) => {
+      const a = ri(r, 2, 9);
+      const correct = `\\left(f^{-1}\\right)'(${a}) = \\dfrac{1}{f'\\left(f^{-1}(${a})\\right)}`;
+      return {
+        prompt: `Let $f$ be differentiable and invertible. Which statement is correct?`,
+        correct,
+        distractors: [
+          `\\left(f^{-1}\\right)'(${a}) = \\dfrac{1}{f'(${a})}`,
+          `\\left(f^{-1}\\right)'(${a}) = f'(${a})`,
+          `\\left(f^{-1}\\right)'(${a}) = -\\dfrac{1}{f'(${a})}`,
+        ],
+        explanation: `The reciprocal must be evaluated at the matching input, $f^{-1}(${a})$, not at $${a}$ itself.`,
+      };
+    },
+  },
+  {
+    id: "g3-inverse-reflection",
+    unit: U3,
+    topic: "derivatives-of-inverse-functions",
+    difficulty: "medium",
+    manifestation: "derivatives-of-inverse-functions:graph-reflection",
+    build: (r: RNG) => {
+      const s = ri(r, 2, 5);
+      const b = ri(r, 1, 4);
+      const correct = frac(1, s);
+      return {
+        prompt: `The graph of the invertible function $f$ shown is a single line segment. What is the slope of the graph of $f^{-1}$?`,
+        figure: graph(
+          "y = f(x)",
+          [
+            [0, b],
+            [4, b + 4 * s],
+          ],
+          { xMin: -1, xMax: 5, yMin: 0, yMax: b + 4 * s + 1 },
+        ),
+        correct,
+        distractors: opts(correct, [`${s}`, `${-s}`, frac(-1, s), `${b}`]),
+        explanation: `Reflecting a line of slope $${s}$ across $y=x$ produces a line of reciprocal slope $${correct}$.`,
+      };
+    },
+  },
+  {
+    id: "g3-arcsin-arccos",
+    unit: U3,
+    topic: "inverse-trig-derivatives",
+    difficulty: "medium",
+    manifestation: "inverse-trig-derivatives:arcsin-arctan",
+    build: (r: RNG) => {
+      const which = pick(r, ["arcsin", "arccos", "arctan"] as const);
+      const answers = {
+        arcsin: `\\dfrac{1}{\\sqrt{1 - x^{2}}}`,
+        arccos: `-\\dfrac{1}{\\sqrt{1 - x^{2}}}`,
+        arctan: `\\dfrac{1}{1 + x^{2}}`,
+      } as const;
+      const correct = answers[which];
+      return {
+        prompt: `Find $\\dfrac{d}{dx}\\left[\\${which} x\\right]$.`,
+        correct,
+        distractors: opts(correct, [answers.arcsin, answers.arccos, answers.arctan, `\\dfrac{1}{\\sqrt{x^{2} - 1}}`]),
+        explanation: `This is the standard derivative of $\\${which} x$.`,
+      };
+    },
+  },
+  {
+    id: "g3-inverse-trig-evaluate",
+    unit: U3,
+    topic: "inverse-trig-derivatives",
+    difficulty: "medium",
+    manifestation: "inverse-trig-derivatives:evaluate",
+    build: (r: RNG) => {
+      const a = ri(r, 2, 6);
+      const correct = frac(1, 1 + a * a);
+      return {
+        prompt: `If $f(x)=\\arctan x$, find $f'(${a})$.`,
+        correct,
+        distractors: opts(correct, [frac(1, a * a), frac(a, 1 + a * a), frac(1, 1 - a * a), `${a}`]),
+        explanation: `$f'(x)=\\frac{1}{1+x^{2}}$, so $f'(${a}) = \\frac{1}{1 + ${a * a}} = ${correct}$.`,
+      };
+    },
+  },
+  {
+    id: "g3-inverse-trig-match-integral",
+    unit: U3,
+    topic: "inverse-trig-derivatives",
+    difficulty: "hard",
+    manifestation: "inverse-trig-derivatives:match-integral",
+    build: (r: RNG) => {
+      const a = ri(r, 2, 6);
+      const correct = `\\arctan\\left(\\dfrac{x}{${a}}\\right)\\cdot\\dfrac{1}{${a}} + C`;
+      return {
+        prompt: `Which antiderivative form matches $\\displaystyle\\int\\frac{dx}{x^{2} + ${a * a}}$?`,
+        correct,
+        distractors: [
+          `\\arcsin\\left(\\dfrac{x}{${a}}\\right) + C`,
+          `\\dfrac{1}{${a}}\\ln\\left|x^{2} + ${a * a}\\right| + C`,
+          `${a}\\arctan\\left(\\dfrac{x}{${a}}\\right) + C`,
+        ],
+        explanation: `Recognizing the arctangent pattern $\\int\\frac{dx}{x^{2}+a^{2}} = \\frac{1}{a}\\arctan\\frac{x}{a} + C$ with $a=${a}$ gives the answer.`,
+      };
+    },
+  },
+  {
+    id: "g3-inverse-trig-context",
+    unit: U3,
+    topic: "inverse-trig-derivatives",
+    difficulty: "hard",
+    manifestation: "inverse-trig-derivatives:context",
+    build: (r: RNG) => {
+      const d = ri(r, 2, 8);
+      const correct = `\\text{radians per second}`;
+      return {
+        prompt: `A camera $${d}$ meters from a straight track turns to follow a car, so the viewing angle satisfies $\\theta = \\arctan\\!\\left(\\dfrac{x}{${d}}\\right)$, where $x$ is measured in meters and time in seconds. What are the units of $\\dfrac{d\\theta}{dt}$?`,
+        correct,
+        distractors: [
+          `\\text{meters per second}`,
+          `\\text{seconds per radian}`,
+          `\\text{meters per radian}`,
+        ],
+        explanation: `$\\theta$ is an angle in radians and $t$ is in seconds, so the derivative measures radians per second.`,
+      };
+    },
+  },
+  {
+    id: "g3-higher-order-pattern",
+    unit: U3,
+    topic: "higher-order-derivatives",
+    difficulty: "hard",
+    manifestation: "higher-order-derivatives:pattern",
+    build: (r: RNG) => {
+      const a = ri(r, 2, 6);
+      const n = pick(r, [4, 8, 12] as const);
+      const correct = `${a}\\sin x`;
+      return {
+        prompt: `If $f(x)=${a}\\sin x$, find $f^{(${n})}(x)$.`,
+        correct,
+        distractors: [`${a}\\cos x`, `-${a}\\sin x`, `-${a}\\cos x`],
+        explanation: `Derivatives of sine cycle with period $4$, and $${n}$ is a multiple of $4$, so $f^{(${n})} = f = ${a}\\sin x$.`,
+      };
+    },
+  },
+  {
+    id: "g3-higher-order-graph",
+    unit: U3,
+    topic: "higher-order-derivatives",
+    difficulty: "medium",
+    manifestation: "higher-order-derivatives:from-graph",
+    build: (r: RNG) => {
+      const a = ri(r, 1, 3);
+      const s = ri(r, 2, 4);
+      const pts: Array<[number, number]> = [
+        [0, 4],
+        [a + 1, 4 - s],
+        [a + 4, 4 - s + 2 * s],
+      ];
+      const correct = `f''(x) < 0`;
+      return {
+        prompt: `The graph of $f'$ shown consists of line segments. Which statement about $f''$ holds for $0 < x < ${a + 1}$?`,
+        figure: graph("y = f'(x)", pts, { xMin: -1, xMax: a + 5, yMin: 0, yMax: 8 }),
+        correct,
+        distractors: [`f''(x) > 0`, `f''(x) = 0`, `f''(x) \\text{ is undefined}`],
+        explanation: `On that interval the graph of $f'$ is decreasing, and $f''$ is the slope of $f'$, so $f'' < 0$ there.`,
+      };
+    },
+  },
+  {
+    id: "g3-higher-order-context",
+    unit: U3,
+    topic: "higher-order-derivatives",
+    difficulty: "medium",
+    manifestation: "higher-order-derivatives:context-meaning",
+    build: (r: RNG) => {
+      const t = ri(r, 2, 9);
+      const correct = `\\text{The population is increasing at a decreasing rate at time } t=${t}.`;
+      return {
+        prompt: `Let $P(t)$ be a population at time $t$ years. If $P'(${t}) > 0$ and $P''(${t}) < 0$, what is happening at $t=${t}$?`,
+        correct,
+        distractors: [
+          `\\text{The population is decreasing at time } t=${t}.`,
+          `\\text{The population is increasing at an increasing rate at time } t=${t}.`,
+          `\\text{The population has a maximum at time } t=${t}.`,
+        ],
+        explanation: `A positive first derivative means growth; a negative second derivative means that growth rate is itself falling.`,
+      };
+    },
+  },
+  {
+    id: "g3-higher-order-table",
+    unit: U3,
+    topic: "higher-order-derivatives",
+    difficulty: "medium",
+    manifestation: "higher-order-derivatives:table",
+    build: (r: RNG) => {
+      const a = ri(r, 2, 5);
+      const step = 2;
+      const xs = [a - step, a, a + step];
+      const d0 = ri(r, 2, 6);
+      const d2 = d0 + ri(r, 2, 8);
+      const ys = [`${d0}`, `${ri(r, 2, 9)}`, `${d2}`];
+      const slope = (d2 - d0) / (2 * step);
+      const correct = dec(slope, 3);
+      return {
+        prompt: `Values of $f'$ are given in the table.\n\n${tablePair("f'(x)", xs, ys)}\n\nUse a symmetric difference quotient to estimate $f''(${a})$.`,
+        correct,
+        distractors: opts(correct, [dec(d2 - d0, 3), dec(-slope, 3), dec(slope * 2, 3), `0`]),
+        explanation: `Estimate with $\\frac{f'(${xs[2]}) - f'(${xs[0]})}{${xs[2]} - ${xs[0]}} = \\frac{${d2} - ${d0}}{${2 * step}} = ${correct}$.`,
+      };
+    },
+  },
+);
