@@ -2898,7 +2898,7 @@ GAP_TEMPLATES.push(
     unit: U6,
     topic: "riemann-sums",
     difficulty: "hard",
-    manifestation: "riemann-sums:sigma-translation",
+    manifestation: "riemann-sums:sigma-to-integral",
     build: (r: RNG) => {
       const n = pick(r, [4, 5, 8, 10] as const);
       const b = ri(r, 2, 6);
@@ -2920,7 +2920,7 @@ GAP_TEMPLATES.push(
     unit: U6,
     topic: "riemann-sums",
     difficulty: "medium",
-    manifestation: "riemann-sums:construct-sum",
+    manifestation: "riemann-sums:construct",
     build: (r: RNG) => {
       const a = ri(r, 0, 2);
       const b = a + 6;
@@ -2944,7 +2944,7 @@ GAP_TEMPLATES.push(
     unit: U6,
     topic: "riemann-sums",
     difficulty: "medium",
-    manifestation: "riemann-sums:from-graph",
+    manifestation: "riemann-sums:graph-sum",
     build: (r: RNG) => {
       const h = ri(r, 2, 5);
       const pts: Array<[number, number]> = [
@@ -2968,7 +2968,7 @@ GAP_TEMPLATES.push(
     unit: U6,
     topic: "fundamental-theorem-of-calculus",
     difficulty: "hard",
-    manifestation: "fundamental-theorem-of-calculus:both-limits",
+    manifestation: "fundamental-theorem-of-calculus:ftc1-both-limits",
     build: (r: RNG) => {
       const k = ri(r, 2, 5);
       const correct = `${2 * k}x\\sin\\left(x^{2}\\right)`;
@@ -3007,7 +3007,7 @@ GAP_TEMPLATES.push(
     unit: U6,
     topic: "fundamental-theorem-of-calculus",
     difficulty: "medium",
-    manifestation: "fundamental-theorem-of-calculus:from-graph",
+    manifestation: "fundamental-theorem-of-calculus:graph-area",
     build: (r: RNG) => {
       const h = ri(r, 2, 4);
       const pts: Array<[number, number]> = [
@@ -3051,7 +3051,7 @@ GAP_TEMPLATES.push(
     unit: U6,
     topic: "u-substitution",
     difficulty: "medium",
-    manifestation: "u-substitution:exponential-log",
+    manifestation: "u-substitution:exp-log",
     build: (r: RNG) => {
       const k = ri(r, 2, 6);
       const correct = `\\dfrac{1}{${k}}e^{${k}x} + C`;
@@ -3232,7 +3232,7 @@ GAP_TEMPLATES.push(
     topic: "partial-fractions",
     difficulty: "hard",
     track: "bc",
-    manifestation: "partial-fractions:long-division",
+    manifestation: "partial-fractions:long-division-first",
     build: (r: RNG) => {
       const a = ri(r, 1, 6);
       const correct = `1 + \\dfrac{${a}}{x - ${a}}`;
@@ -3354,7 +3354,7 @@ GAP_TEMPLATES.push(
     unit: U6,
     topic: "accumulation-functions",
     difficulty: "medium",
-    manifestation: "accumulation-functions:graph-evaluation",
+    manifestation: "accumulation-functions:evaluate-from-graph",
     build: (r: RNG) => {
       const h = ri(r, 2, 5);
       const pts: Array<[number, number]> = [
