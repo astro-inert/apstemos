@@ -12,32 +12,22 @@ import type { AlgebraicStructure, Representation, ReasoningType } from "./ced-ta
 export type Difficulty = "easy" | "medium" | "hard";
 
 
-/** An optional diagram rendered alongside the prompt. */
-export type SlopeFieldFigure = {
-  kind: "slope-field";
-  /** dy/dx = a·x + b·y */
-  a: number;
-  b: number;
-  /** grid half-width, e.g. 3 → x,y ∈ [-3, 3] */
-  extent: number;
-};
+export type {
+  Figure,
+  GraphCurve,
+  GraphFigure,
+  GraphMarker,
+  ParametricFigure,
+  PiecewiseGraphFigure,
+  RiemannFigure,
+  SlopeFieldFigure,
+  TableFigure,
+  Window,
+} from "./figures";
+export { fitWindow, sampleCurve, samplePolar, sampleParametric } from "./figures";
 
-/**
- * A piecewise-linear graph, used for graphical manifestations (graphs of f,
- * f', rate functions, and velocity curves). Points are joined in order.
- */
-export type PiecewiseGraphFigure = {
-  kind: "piecewise-graph";
-  /** curve label such as "y = f'(x)" */
-  label: string;
-  points: Array<[number, number]>;
-  xMin: number;
-  xMax: number;
-  yMin: number;
-  yMax: number;
-};
+import type { Figure } from "./figures";
 
-export type Figure = SlopeFieldFigure | PiecewiseGraphFigure;
 
 export type BuiltQuestion = {
   prompt: string;
