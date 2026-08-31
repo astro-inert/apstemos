@@ -313,7 +313,7 @@ const MAX_PER_SKELETON = 8;
  * parameterize. Richer reasoning types get a larger budget.
  */
 function variantBudget(reasoning: ReasoningType): number {
-  return reasoning === "computation" ? 9 : 22;
+  return reasoning === "computation" ? 8 : 24;
 }
 
 /**

@@ -762,14 +762,14 @@ export const UNIT_05_06_TEMPLATES: QuestionTemplate[] = [
     mistakes: ["confuses-f-and-fprime"],
     build: (r: RNG) => {
       const c = ri(r, -2, 3);
-      const correct = `\\text{The student mistook the graph of $f'$ for the graph of $f$, concluding $f$ is increasing where actually $f'$ is positive—which is correct, but stating the maximum of $f$ occurs where the graph shown is highest is wrong since that graph is $f'$, not $f$.}`;
+      const correct = `\\text{The graph shown is $f'$, so its highest point locates the largest slope of $f$, not a maximum of $f$.}`;
       return {
         prompt: `Given the graph of $f'$, a student states: "The graph shows $f$ has its maximum value at $x=${c}$, because the curve is highest there." What is the flaw in this reasoning?`,
         correct,
         distractors: [
-          `\\text{There is no flaw; the highest point of any graph always corresponds to a maximum of $f$.}`,
-          `\\text{The flaw is that maxima of $f$ can only occur at endpoints.}`,
-          `\\text{The flaw is that $f'$ cannot have a maximum value.}`,
+          `\\text{There is no flaw, because the highest point of a derivative graph is always a maximum of $f$.}`,
+          `\\text{The flaw is that a maximum of $f$ can only occur at an endpoint of the interval shown.}`,
+          `\\text{The flaw is that $f'$ itself can never attain a maximum value on a closed interval.}`,
         ],
         explanation: `The student is looking at the graph of $f'$, not $f$. The peak of $f'$'s graph tells us where $f'$ is largest, not where $f$ itself is maximized; to find extrema of $f$ we need where $f'=0$ and changes sign.`,
       };
@@ -958,11 +958,10 @@ export const UNIT_05_06_TEMPLATES: QuestionTemplate[] = [
     difficulty: "medium",
     manifestation: "fundamental-theorem-of-calculus:ftc1-basic",
     build: (r: RNG) => {
-      const p = ri(r, 2, 4);
+      const p = ri(r, 3, 5);
       const c = ri(r, 2, 5);
-      const val = c ** p;
       return {
-        prompt: `Let $h(x)=\\displaystyle\\int_0^x t^{${p - 1}}\\,dt$ scaled so that $h'(x)=${p}x^{${p - 1}}$. What is $h'(${c})$?`,
+        prompt: `Let $h(x)=\\displaystyle\\int_0^x ${p}t^{${p - 1}}\\,dt$. What is $h'(${c})$?`,
         correct: `${p * c ** (p - 1)}`,
         distractors: [
           `${c ** p}`,
@@ -1613,14 +1612,14 @@ export const UNIT_05_06_TEMPLATES: QuestionTemplate[] = [
     manifestation: "improper-integrals:compare",
     mistakes: ["wrong-comparison-direction"],
     build: (r: RNG) => {
-      const correct = `\\text{Diverges, since } \\dfrac{x+\\sin x}{x^{2}} \\ge \\dfrac{x-1}{x^{2}} \\text{ eventually behaves like } \\dfrac{1}{x}, \\text{ and } \\int_1^\\infty \\frac{dx}{x} \\text{ diverges.}`;
+      const correct = `\\text{Diverges, by comparison with } \\int_1^\\infty \\frac{dx}{x}.`;
       return {
         prompt: `Determine the convergence of $\\displaystyle\\int_1^{\\infty} \\frac{x+\\sin x}{x^{2}}\\,dx$ using a comparison with a $p$-integral.`,
         correct,
         distractors: [
-          `\\text{Converges, since } \\sin x \\text{ is bounded and therefore negligible.}`,
-          `\\text{Converges, by comparison with } \\int_1^\\infty \\frac{dx}{x^2}.`,
-          `\\text{Diverges, but only because } \\sin x \\text{ can be negative.}`,
+          `\\text{Converges, by comparison with } \\int_1^\\infty \\frac{dx}{x^{2}}.`,
+          `\\text{Converges, because } \\sin x \\text{ is bounded on } [1,\\infty).`,
+          `\\text{Diverges, because } \\sin x \\text{ takes negative values.}`,
         ],
         explanation: `For large $x$, $\\frac{x+\\sin x}{x^2} \\ge \\frac{x-1}{x^2} = \\frac{1}{x} - \\frac{1}{x^2}$, which behaves like $\\frac{1}{x}$; since $\\int_1^\\infty \\frac{dx}{x}$ diverges, so does the given integral by comparison.`,
       };
