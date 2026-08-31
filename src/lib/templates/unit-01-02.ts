@@ -986,10 +986,9 @@ export const UNIT_01_02_TEMPLATES: QuestionTemplate[] = [
     difficulty: "medium",
     manifestation: "power-rule:negative-fractional",
     build: (r: RNG) => {
-      const t = ri(r, 1, 9);
+      const t = pick(r, [2, 3, 5, 6, 7, 8, 10]);
       const a = ri(r, 2, 6);
-      const val = frac(a, 2 * Math.round(Math.sqrt(t) * Math.sqrt(t)) === t * 1 ? t : t, 1);
-      const derivAtT = a / (2 * Math.sqrt(t));
+
       return {
         prompt: `Let $f(x)=${a}x^{1/2}$. Find $f'(${t})$ in simplified radical form.`,
         correct: `\\dfrac{${a}}{2\\sqrt{${t}}}`,
