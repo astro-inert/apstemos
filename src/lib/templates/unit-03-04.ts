@@ -1303,13 +1303,13 @@ export const UNIT_03_04_TEMPLATES: QuestionTemplate[] = [
       const window = fitWindow(pts, 1);
       return {
         prompt: `The velocity of a particle moving along a line is graphed for $0 \\le t \\le 4$, given by $v(t)=-(t-2)^{2}+4$. On which interval is the particle's speed increasing?`,
-        correct: `(2, 4)`,
+        correct: `(0, 2)`,
         distractors: [
-          `(0, 2)`,
+          `(2, 4)`,
           `(0, 4)`,
           `\\text{The speed is never increasing}`,
         ],
-        explanation: `Here $v(t)\\ge 0$ throughout $[0,4]$, so speed equals $v(t)$ itself, and speed increases exactly where $v(t)$ is increasing. Since $v(t)=-(t-2)^{2}+4$ rises on $(0,2)$ and falls on $(2,4)$, the speed is actually increasing on $(0,2)$, not $(2,4)$; picking the interval after the peak is the common misreading this item tests.`,
+        explanation: `Here $v(t)\\ge 0$ throughout $[0,4]$, so speed equals $v(t)$ itself, and speed increases exactly where $v(t)$ is increasing. Since $v(t)=-(t-2)^{2}+4$ rises on $(0,2)$ and falls on $(2,4)$, the speed increases on $(0,2)$ and decreases on $(2,4)$. Choosing the interval after the peak is the common misreading.`,
       };
     },
   },
