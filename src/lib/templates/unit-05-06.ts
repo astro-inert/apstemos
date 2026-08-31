@@ -1315,10 +1315,10 @@ export const UNIT_05_06_TEMPLATES: QuestionTemplate[] = [
     build: (r: RNG) => {
       const a = ri(r, 2, 7);
       return {
-        prompt: `Evaluate $\\displaystyle\\int ${a}\\ln x\\,dx$.`,
-        correct: `${a}x\\ln x - ${a}x + C`,
-        distractors: [`${a}x\\ln x + ${a}x + C`, `${a}x\\ln x - x + C`, `\\dfrac{${a}}{x} + C`],
-        explanation: `Factor out the constant: $${a}\\int \\ln x\\,dx$. With $u=\\ln x$ and $dv=dx$, $\\int \\ln x\\,dx = x\\ln x - x$, so the result is $${a}x\\ln x - ${a}x + C$.`,
+        prompt: `A student must find $\\displaystyle\\int ${a}x\\ln x\\,dx$ by parts. Which choice of $u$ and $dv$ makes the resulting integral elementary?`,
+        correct: `u=\\ln x,\\quad dv=${a}x\\,dx`,
+        distractors: [`u=${a}x,\\quad dv=\\ln x\\,dx`, `u=${a}x\\ln x,\\quad dv=dx`, `u=x\\ln x,\\quad dv=${a}\\,dx`],
+        explanation: `Taking $u=\\ln x$ gives $du=\\frac{1}{x}dx$ and $v=\\frac{${a}x^{2}}{2}$, so $\\int v\\,du=\\int \\frac{${a}x}{2}dx$ is a simple power integral. Letting $u$ be the algebraic factor instead leaves $\\int \\ln x$-type terms that are no simpler.`,
       };
     },
   },
@@ -1331,10 +1331,10 @@ export const UNIT_05_06_TEMPLATES: QuestionTemplate[] = [
     build: (r: RNG) => {
       const k = ri(r, 2, 6);
       return {
-        prompt: `Evaluate $\\displaystyle\\int \\ln(${k}x)\\,dx$.`,
-        correct: `x\\ln(${k}x) - x + C`,
-        distractors: [`x\\ln(${k}x) + x + C`, `${k}x\\ln(${k}x) - ${k}x + C`, `\\dfrac{\\ln(${k}x)}{${k}} + C`],
-        explanation: `Write $\\ln(${k}x)=\\ln ${k} + \\ln x$. Integrating, $x\\ln ${k} + x\\ln x - x = x\\ln(${k}x) - x$, so the antiderivative is $x\\ln(${k}x) - x + C$.`,
+        prompt: `The marginal cost of producing $x$ units is $C'(x)=\\ln(${k}x)$ dollars per unit. Which expression gives the total added cost from $x=1$ to $x=${k}$ units?`,
+        correct: `\\left[x\\ln(${k}x) - x\\right]_{1}^{${k}}`,
+        distractors: [`\\left[x\\ln(${k}x) + x\\right]_{1}^{${k}}`, `\\left[\\dfrac{\\ln(${k}x)}{${k}}\\right]_{1}^{${k}}`, `\\left[${k}x\\ln(${k}x) - ${k}x\\right]_{1}^{${k}}`],
+        explanation: `Total added cost is $\\int_{1}^{${k}} \\ln(${k}x)\\,dx$. Since $\\ln(${k}x)=\\ln ${k} + \\ln x$, an antiderivative is $x\\ln(${k}x) - x$, so the cost equals that expression evaluated from $1$ to $${k}$.`,
       };
     },
   },
