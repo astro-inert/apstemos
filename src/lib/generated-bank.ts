@@ -316,7 +316,7 @@ function variantBudget(reasoning: ReasoningType, representation: string): number
   const base = reasoning === "computation" ? 5 : 24;
   // Table- and graph-reading items are the forms the exam leans on most and the
   // hardest to parameterize, so they get extra room.
-  if (representation === "tabular") return Math.max(base, 14);
+  if (representation === "tabular") return Math.max(base, 20);
   if (representation === "graphical") return Math.max(base, 12);
   return base;
 }
