@@ -287,25 +287,50 @@ let KEY_CACHE: string[] | null = null;
 
 /**
  * Structural signature of a prompt: numbers collapsed so two *families* that
- * only differ by their constants are recognised as the same question, while
- * variants inside a family stay distinct (those are deduplicated by exact text).
+ * only differ by their constants are recognised as the same question.
  */
 function promptSignature(prompt: string): string {
   return prompt.replace(/-?\d+(\.\d+)?/g, "#").replace(/\s+/g, " ").trim();
 }
 
+/** Prompt skeleton used for near-duplicate detection inside a topic. */
+function promptSkeleton(prompt: string): string {
+  return prompt
+    .replace(/\$[^$]*\$/g, " ⟨math⟩ ")
+    .replace(/-?\d+(\.\d+)?/g, "#")
+    .replace(/[^\p{L}#⟨⟩ ]+/gu, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase();
+}
+
+/** How many questions may share one prompt skeleton within a topic. */
+const MAX_PER_SKELETON = 8;
+
+/**
+ * Computation-only families are deliberately rationed: without a cap the bank
+ * fills up with "compute this" items because they are the easiest form to
+ * parameterize. Richer reasoning types get a larger budget.
+ */
+function variantBudget(reasoning: ReasoningType): number {
+  return reasoning === "computation" ? 9 : 22;
+}
+
 /**
  * Distinct generated question keys.
  *
- * Three filters run here: identical prompt families are dropped, each
- * manifestation is capped so the bank cannot be padded with one form of a
- * concept, and exact-duplicate variants inside a family are skipped.
+ * Filters, in order: identical prompt families are dropped, each manifestation
+ * is capped, computation-heavy families get a smaller budget, exact-duplicate
+ * variants are skipped, near-duplicate skeletons are limited per topic, and
+ * items whose skeleton *and* full choice set match an earlier item are removed.
  */
 function allKeys(): string[] {
   if (KEY_CACHE) return KEY_CACHE;
   const keys: string[] = [];
   const familySignatures = new Set<string>();
   const perManifestation = new Map<string, number>();
+  const perSkeleton = new Map<string, number>();
+  const answerSets = new Set<string>();
   for (const t of TEMPLATES) {
     const probe = buildQuestion(`${t.id}::0`);
     if (probe) {
@@ -313,18 +338,34 @@ function allKeys(): string[] {
       if (familySignatures.has(sig)) continue; // same question asked twice — skip the family
       familySignatures.add(sig);
     }
-    const mid = templateTaxonomy(t).manifestation;
+    const tax = templateTaxonomy(t);
+    const mid = tax.manifestation;
     const used = perManifestation.get(mid) ?? 0;
-    const budget = Math.min(VARIANTS_PER_TEMPLATE, MAX_VARIANTS_PER_MANIFESTATION - used);
+    const budget = Math.min(
+      variantBudget(tax.reasoning),
+      VARIANTS_PER_TEMPLATE,
+      MAX_VARIANTS_PER_MANIFESTATION - used,
+    );
     if (budget <= 0) continue;
     const seen = new Set<string>();
     for (let v = 0; v < VARIANT_SCAN && seen.size < budget; v++) {
       const key = `${t.id}::${v}`;
       const q = buildQuestion(key);
       if (!q) continue;
-      const sig = q.prompt;
-      if (seen.has(sig)) continue;
-      seen.add(sig);
+      if (seen.has(q.prompt)) continue;
+
+      const skeleton = `${t.topic}|${promptSkeleton(q.prompt)}`;
+      if ((perSkeleton.get(skeleton) ?? 0) >= MAX_PER_SKELETON) continue;
+
+      const fingerprint = `${skeleton}|${q.choices
+        .map((c) => c.text.replace(/\s+/g, ""))
+        .sort()
+        .join("~")}`;
+      if (answerSets.has(fingerprint)) continue;
+
+      seen.add(q.prompt);
+      answerSets.add(fingerprint);
+      perSkeleton.set(skeleton, (perSkeleton.get(skeleton) ?? 0) + 1);
       keys.push(key);
     }
     perManifestation.set(mid, used + seen.size);
@@ -332,6 +373,7 @@ function allKeys(): string[] {
   KEY_CACHE = keys;
   return keys;
 }
+
 
 
 export type BankFilter = {
