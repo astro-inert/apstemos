@@ -1676,7 +1676,9 @@ export function pow(base: string, e: number): string {
 /* ------------------------------------------------------------------ */
 
 import { EXTRA_TEMPLATES } from "./question-templates-extra";
+import { GAP_TEMPLATES } from "./question-templates-gap";
 
-/** Every template in the bank: the original families plus the expanded
- *  CED-coverage families (second and third asked-forms per topic). */
-export const TEMPLATES: QuestionTemplate[] = [...BASE_TEMPLATES, ...EXTRA_TEMPLATES];
+/** Every template in the bank: the original families, the expanded
+ *  CED-coverage families, and the manifestation gap-filling families. */
+export const TEMPLATES: QuestionTemplate[] = [...BASE_TEMPLATES, ...EXTRA_TEMPLATES, ...GAP_TEMPLATES];
+
