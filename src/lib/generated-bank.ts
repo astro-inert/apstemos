@@ -312,8 +312,13 @@ const MAX_PER_SKELETON = 8;
  * fills up with "compute this" items because they are the easiest form to
  * parameterize. Richer reasoning types get a larger budget.
  */
-function variantBudget(reasoning: ReasoningType): number {
-  return reasoning === "computation" ? 8 : 24;
+function variantBudget(reasoning: ReasoningType, representation: string): number {
+  const base = reasoning === "computation" ? 5 : 24;
+  // Table- and graph-reading items are the forms the exam leans on most and the
+  // hardest to parameterize, so they get extra room.
+  if (representation === "tabular") return Math.max(base, 14);
+  if (representation === "graphical") return Math.max(base, 12);
+  return base;
 }
 
 /**
@@ -342,7 +347,7 @@ function allKeys(): string[] {
     const mid = tax.manifestation;
     const used = perManifestation.get(mid) ?? 0;
     const budget = Math.min(
-      variantBudget(tax.reasoning),
+      variantBudget(tax.reasoning, tax.representation),
       VARIANTS_PER_TEMPLATE,
       MAX_VARIANTS_PER_MANIFESTATION - used,
     );
