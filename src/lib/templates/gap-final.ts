@@ -39,7 +39,7 @@ export const GAP_FINAL_TEMPLATES: QuestionTemplate[] = [
     manifestation: "evaluating-limits-algebraically:complex-fraction",
     build: (r: RNG) => {
       const a = ri(r, 2, 6);
-      const val = -frac(1, a * a);
+      const val = `-${frac(1, a * a)}`;
       return {
         prompt: `Evaluate $\\displaystyle\\lim_{x\\to 0}\\frac{\\dfrac{1}{${a}+x}-\\dfrac{1}{${a}}}{x}$.`,
         correct: val,
