@@ -81,10 +81,10 @@ export const UNIT_01_02_TEMPLATES: QuestionTemplate[] = [
       const bAdd = ri(r, -5, 5);
       const val = c * s + bAdd;
       return {
-        prompt: `Since $f(x)=${c}\\sqrt{x+${aOff}}${term(bAdd, "")}$ is continuous at $x=${t}$, evaluate $\\displaystyle\\lim_{x\\to ${t}} f(x)$.`,
+        prompt: `Since $f(x)=${c === 1 ? "" : c}\\sqrt{x+${aOff}}${term(bAdd, "")}$ is continuous at $x=${t}$, evaluate $\\displaystyle\\lim_{x\\to ${t}} f(x)$.`,
         correct: `${val}`,
         distractors: [`${c * s}`, `${c * (t + aOff) + bAdd}`, `${-val}`],
-        explanation: `Substitute directly: $x+${aOff}=${t + aOff}=${s}^{2}$, so $f(${t})=${c}\\cdot ${s}${term(bAdd, "")}=${val}$.`,
+        explanation: `Substitute directly: $x+${aOff}=${t + aOff}=${s}^{2}$, so $f(${t})=${c === 1 ? "" : `${c}\\cdot `}${s}${term(bAdd, "")}=${val}$.`,
       };
     },
   },

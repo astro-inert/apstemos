@@ -19,6 +19,7 @@ import {
   type RNG,
   type TableFigure,
 } from "../question-templates";
+import { fitWindow, sampleCurve } from "../figures";
 
 const U5 = "unit-5-analytical-applications-of-differentiation";
 const U6 = "unit-6-integration-and-accumulation-of-change";
@@ -414,7 +415,7 @@ export const UNIT_05_06_TEMPLATES: QuestionTemplate[] = [
         [c + 0.5, 0.2],
         [c + 3, 4],
       ];
-      const correct = `\\text{The test is inconclusive because $f'$ touches zero without changing sign or slope near $x=${c}$.}`;
+      const correct = `\\text{The test is inconclusive at $x=${c}$.}`;
       return {
         prompt: `The graph of $f'$ shown touches the $x$-axis at $x=${c}$ but stays non-negative on both sides, flattening out right at that point ($f''(${c})=0$ as well). What can be concluded using the Second Derivative Test at $x=${c}$?`,
         figure: pwGraph(pts, { xMin: c - 4, xMax: c + 4, yMin: -1, yMax: 5 }, "y = f'(x)"),
@@ -422,7 +423,7 @@ export const UNIT_05_06_TEMPLATES: QuestionTemplate[] = [
         distractors: [
           `\\text{$f$ has a local maximum at $x=${c}$.}`,
           `\\text{$f$ has a local minimum at $x=${c}$.}`,
-          `\\text{$f$ is concave up at $x=${c}$.}`,
+          `\\text{$f$ has an inflection point at $x=${c}$.}`,
         ],
         explanation: `Because $f''(${c})=0$ as well, the Second Derivative Test gives no information; here $f'$ does not change sign at $x=${c}$, so it is neither a maximum nor a minimum, and the test result is inconclusive.`,
       };
@@ -562,14 +563,14 @@ export const UNIT_05_06_TEMPLATES: QuestionTemplate[] = [
     manifestation: "local-and-global-extrema:open-interval",
     build: (r: RNG) => {
       const c = ri(r, 1, 5);
-      const correct = `\\text{If $f$ has exactly one critical number $x=${c}$ on $(${c - 3},${c + 3})$ and $f'$ changes from negative to positive there, then $f(${c})$ is a global minimum on that interval.}`;
+      const correct = `\\text{If $f'$ changes from negative to positive only at $x=${c}$, then $f(${c})$ is the global minimum.}`;
       return {
         prompt: `Which statement about a differentiable function $f$ on the open interval $(${c - 3},${c + 3})$ must be true?`,
         correct,
         distractors: [
-          `\\text{Any critical number of $f$ on $(${c - 3},${c + 3})$ must be a global extremum.}`,
-          `\\text{If $f'(${c})=0$, then $f(${c})$ must be a global maximum.}`,
-          `\\text{A function with no critical numbers on $(${c - 3},${c + 3})$ must be constant.}`,
+          `\\text{Every critical number of $f$ on the open interval is a global extremum of $f$.}`,
+          `\\text{If $f'(${c})=0$ and $f''(${c})=0$, then $f(${c})$ is the global maximum.}`,
+          `\\text{If $f$ has no critical numbers on the open interval, then $f$ is constant there.}`,
         ],
         explanation: `On an open interval, a single critical number where $f'$ switches from negative to positive is a local minimum that is also the global minimum, since $f$ decreases into it and increases away from it with no other competing critical points.`,
       };
@@ -586,6 +587,10 @@ export const UNIT_05_06_TEMPLATES: QuestionTemplate[] = [
     build: (r: RNG) => {
       const c = ri(r, -2, 2);
       const correct = `\\text{Graph I is $f$, Graph II is $f'$, and Graph III is $f''$.}`;
+      const graphI = sampleCurve((x) => (x - c) * (x - c), c - 3, c + 3, 40);
+      const graphII = sampleCurve((x) => 2 * (x - c), c - 3, c + 3, 20);
+      const graphIII = sampleCurve(() => 2, c - 3, c + 3, 20);
+      const window = fitWindow([...graphI, ...graphII, ...graphIII], 1);
       return {
         prompt: `Three graphs are described: Graph I is a curve with a single local minimum at $x=${c}$; Graph II is a line that is negative for $x<${c}$, zero at $x=${c}$, and positive for $x>${c}$; Graph III is a constant positive horizontal line. If these represent $f$, $f'$, and $f''$ in some order, which assignment is consistent?`,
         correct,
@@ -595,6 +600,16 @@ export const UNIT_05_06_TEMPLATES: QuestionTemplate[] = [
           `\\text{Graph I is $f$, Graph II is $f''$, and Graph III is $f'$.}`,
         ],
         explanation: `Graph I's minimum at $x=${c}$ matches Graph II being zero (and changing sign) there, since $f'=0$ at an extremum of $f$; Graph II's constant positive slope matches Graph III being its (constant) derivative.`,
+        figure: {
+          kind: "graph",
+          curves: [
+            { label: "Graph I", points: graphI, smooth: true, tone: 0 },
+            { label: "Graph II", points: graphII, smooth: false, tone: 1 },
+            { label: "Graph III", points: graphIII, smooth: false, dashed: true, tone: 0 },
+          ],
+          window,
+          caption: "Graphs I, II, and III",
+        },
       };
     },
   },
@@ -606,6 +621,9 @@ export const UNIT_05_06_TEMPLATES: QuestionTemplate[] = [
     manifestation: "curve-sketching:match-graphs",
     build: (r: RNG) => {
       const correct = `\\text{Curve B, since it is the parabola that is zero exactly where Curve A has horizontal tangents.}`;
+      const curveA = sampleCurve((x) => x ** 3 - 3 * x, -2, 2, 40);
+      const curveB = sampleCurve((x) => x * x - 1, -2, 2, 40);
+      const window = fitWindow([...curveA, ...curveB], 1);
       return {
         prompt: `Curve A is the graph of a cubic $f$ with local extrema at $x=-1$ and $x=1$. Curve B is an upward parabola with zeros at $x=-1$ and $x=1$. Which curve could represent $f'$?`,
         correct,
@@ -615,6 +633,15 @@ export const UNIT_05_06_TEMPLATES: QuestionTemplate[] = [
           `\\text{Curve B, since it must have the same sign as $f$ everywhere.}`,
         ],
         explanation: `The derivative of a cubic is a quadratic, and it must vanish exactly at the cubic's critical numbers, $x=\\pm1$. Curve B matches both facts, so it is consistent with being $f'$.`,
+        figure: {
+          kind: "graph",
+          curves: [
+            { label: "Curve A", points: curveA, smooth: true, tone: 0 },
+            { label: "Curve B", points: curveB, smooth: true, tone: 1 },
+          ],
+          window,
+          caption: "Curve A (cubic) and Curve B (parabola)",
+        },
       };
     },
   },
@@ -627,6 +654,10 @@ export const UNIT_05_06_TEMPLATES: QuestionTemplate[] = [
     build: (r: RNG) => {
       const c = ri(r, -1, 3);
       const correct = `\\text{The graph with a single zero-crossing at $x=${c}$ and no sign changes elsewhere is $f''$.}`;
+      const graphOneCrossing = sampleCurve((x) => x - c, c - 3, c + 3, 20);
+      const graphAlwaysPositive = sampleCurve(() => 2, c - 3, c + 3, 20);
+      const graphTwoCrossings = sampleCurve((x) => (x - c) * (x - c) - 1, c - 3, c + 3, 40);
+      const window = fitWindow([...graphOneCrossing, ...graphAlwaysPositive, ...graphTwoCrossings], 1);
       return {
         prompt: `Function $f$ has exactly one inflection point, at $x=${c}$, and is concave down for $x<${c}$, concave up for $x>${c}$. Among three candidate graphs — one that is negative then positive with one crossing at $x=${c}$, one that is always positive, and one that has two crossings — which must represent $f''$?`,
         correct,
@@ -636,6 +667,16 @@ export const UNIT_05_06_TEMPLATES: QuestionTemplate[] = [
           `\\text{None of them, since $f''$ cannot be determined from concavity alone.}`,
         ],
         explanation: `A single inflection point with concave-down-to-concave-up behavior means $f''$ changes sign exactly once, from negative to positive, at $x=${c}$ — matching the graph with one crossing there.`,
+        figure: {
+          kind: "graph",
+          curves: [
+            { label: "One crossing", points: graphOneCrossing, smooth: false, tone: 0 },
+            { label: "Always positive", points: graphAlwaysPositive, smooth: false, dashed: true, tone: 1 },
+            { label: "Two crossings", points: graphTwoCrossings, smooth: true, tone: 1 },
+          ],
+          window,
+          caption: "Three candidate graphs",
+        },
       };
     },
   },
@@ -721,14 +762,14 @@ export const UNIT_05_06_TEMPLATES: QuestionTemplate[] = [
     mistakes: ["confuses-f-and-fprime"],
     build: (r: RNG) => {
       const c = ri(r, -2, 3);
-      const correct = `\\text{The student mistook the graph of $f'$ for the graph of $f$, concluding $f$ is increasing where actually $f'$ is positive—which is correct, but stating the maximum of $f$ occurs where the graph shown is highest is wrong since that graph is $f'$, not $f$.}`;
+      const correct = `\\text{The graph shown is $f'$, so its highest point locates the largest slope of $f$, not a maximum of $f$.}`;
       return {
         prompt: `Given the graph of $f'$, a student states: "The graph shows $f$ has its maximum value at $x=${c}$, because the curve is highest there." What is the flaw in this reasoning?`,
         correct,
         distractors: [
-          `\\text{There is no flaw; the highest point of any graph always corresponds to a maximum of $f$.}`,
-          `\\text{The flaw is that maxima of $f$ can only occur at endpoints.}`,
-          `\\text{The flaw is that $f'$ cannot have a maximum value.}`,
+          `\\text{There is no flaw, because the highest point of a derivative graph is always a maximum of $f$.}`,
+          `\\text{The flaw is that a maximum of $f$ can only occur at an endpoint of the interval shown.}`,
+          `\\text{The flaw is that $f'$ itself can never attain a maximum value on a closed interval.}`,
         ],
         explanation: `The student is looking at the graph of $f'$, not $f$. The peak of $f'$'s graph tells us where $f'$ is largest, not where $f$ itself is maximized; to find extrema of $f$ we need where $f'=0$ and changes sign.`,
       };
@@ -917,11 +958,10 @@ export const UNIT_05_06_TEMPLATES: QuestionTemplate[] = [
     difficulty: "medium",
     manifestation: "fundamental-theorem-of-calculus:ftc1-basic",
     build: (r: RNG) => {
-      const p = ri(r, 2, 4);
+      const p = ri(r, 3, 5);
       const c = ri(r, 2, 5);
-      const val = c ** p;
       return {
-        prompt: `Let $h(x)=\\displaystyle\\int_0^x t^{${p - 1}}\\,dt$ scaled so that $h'(x)=${p}x^{${p - 1}}$. What is $h'(${c})$?`,
+        prompt: `Let $h(x)=\\displaystyle\\int_0^x ${p}t^{${p - 1}}\\,dt$. What is $h'(${c})$?`,
         correct: `${p * c ** (p - 1)}`,
         distractors: [
           `${c ** p}`,
@@ -1256,13 +1296,101 @@ export const UNIT_05_06_TEMPLATES: QuestionTemplate[] = [
     difficulty: "hard",
     manifestation: "integration-by-parts:logarithm",
     build: (r: RNG) => {
-      const correct = `e - e + 1 = 1`;
       // simplified: ∫_1^e ln x dx = [x ln x - x] = (e*1 - e) - (0 - 1) = 1
       return {
         prompt: `Evaluate $\\displaystyle\\int_1^{e} \\ln x\\,dx$.`,
         correct: `1`,
         distractors: [`e - 1`, `e`, `0`],
         explanation: `Using $\\int \\ln x\\,dx = x\\ln x - x$, evaluate from $1$ to $e$: $(e\\cdot 1 - e) - (1\\cdot 0 - 1) = 0 - (-1) = 1$.`,
+      };
+    },
+  },
+
+  {
+    id: "n6-ibp-log-scaled-4",
+    unit: U6,
+    topic: "integration-by-parts",
+    difficulty: "medium",
+    manifestation: "integration-by-parts:logarithm",
+    build: (r: RNG) => {
+      const a = ri(r, 2, 7);
+      return {
+        prompt: `A student must find $\\displaystyle\\int ${a}x\\ln x\\,dx$ by parts. Which choice of $u$ and $dv$ makes the resulting integral elementary?`,
+        correct: `u=\\ln x,\\quad dv=${a}x\\,dx`,
+        distractors: [`u=${a}x,\\quad dv=\\ln x\\,dx`, `u=${a}x\\ln x,\\quad dv=dx`, `u=x\\ln x,\\quad dv=${a}\\,dx`],
+        explanation: `Taking $u=\\ln x$ gives $du=\\frac{1}{x}dx$ and $v=\\frac{${a}x^{2}}{2}$, so $\\int v\\,du=\\int \\frac{${a}x}{2}dx$ is a simple power integral. Letting $u$ be the algebraic factor instead leaves $\\int \\ln x$-type terms that are no simpler.`,
+      };
+    },
+  },
+  {
+    id: "n6-ibp-log-argument-5",
+    unit: U6,
+    topic: "integration-by-parts",
+    difficulty: "hard",
+    manifestation: "integration-by-parts:logarithm",
+    build: (r: RNG) => {
+      const k = ri(r, 2, 6);
+      return {
+        prompt: `The marginal cost of producing $x$ units is $C'(x)=\\ln(${k}x)$ dollars per unit. Which expression gives the total added cost from $x=1$ to $x=${k}$ units?`,
+        correct: `\\left[x\\ln(${k}x) - x\\right]_{1}^{${k}}`,
+        distractors: [`\\left[x\\ln(${k}x) + x\\right]_{1}^{${k}}`, `\\left[\\dfrac{\\ln(${k}x)}{${k}}\\right]_{1}^{${k}}`, `\\left[${k}x\\ln(${k}x) - ${k}x\\right]_{1}^{${k}}`],
+        explanation: `Total added cost is $\\int_{1}^{${k}} \\ln(${k}x)\\,dx$. Since $\\ln(${k}x)=\\ln ${k} + \\ln x$, an antiderivative is $x\\ln(${k}x) - x$, so the cost equals that expression evaluated from $1$ to $${k}$.`,
+      };
+    },
+  },
+
+  /* ---- riemann-sums:trapezoidal-unequal (2 families) ---- */
+  {
+    id: "n6-trap-unequal-flow-1",
+    unit: U6,
+    topic: "riemann-sums",
+    difficulty: "medium",
+    manifestation: "riemann-sums:trapezoidal-unequal",
+    build: (r: RNG) => {
+      const t = [0, 2, 5, 9];
+      const v = [ri(r, 3, 6), ri(r, 7, 11), ri(r, 12, 16), ri(r, 17, 22)];
+      const trap =
+        ((t[1]! - t[0]!) * (v[0]! + v[1]!)) / 2 +
+        ((t[2]! - t[1]!) * (v[1]! + v[2]!)) / 2 +
+        ((t[3]! - t[2]!) * (v[2]! + v[3]!)) / 2;
+      const fmt = (x: number) => (Number.isInteger(x) ? `${x}` : x.toFixed(1));
+      return {
+        prompt: `Water flows into a tank at rate $R(t)$ liters per minute. Using a trapezoidal sum with the three subintervals given by the table, approximate $\\displaystyle\\int_{0}^{9} R(t)\\,dt$.`,
+        figure: {
+          kind: "table" as const,
+          headers: ["t \\text{ (min)}", ...t.map((x) => `${x}`)],
+          rows: [["R(t)", ...v.map((x) => `${x}`)]],
+        },
+        correct: fmt(trap),
+        distractors: [fmt(trap + (v[3]! - v[0]!)), fmt(trap / 2), fmt(trap - (v[2]! - v[1]!))],
+        explanation: `The widths are $2$, $3$, and $4$. Adding the three trapezoids, $\\tfrac{2}{2}(${v[0]}+${v[1]}) + \\tfrac{3}{2}(${v[1]}+${v[2]}) + \\tfrac{4}{2}(${v[2]}+${v[3]}) = ${fmt(trap)}$ liters.`,
+      };
+    },
+  },
+  {
+    id: "n6-trap-unequal-temp-2",
+    unit: U6,
+    topic: "riemann-sums",
+    difficulty: "hard",
+    manifestation: "riemann-sums:trapezoidal-unequal",
+    build: (r: RNG) => {
+      const x = [1, 3, 4, 8];
+      const f = [ri(r, 2, 5), ri(r, 6, 9), ri(r, 10, 13), ri(r, 14, 18)];
+      const trap =
+        ((x[1]! - x[0]!) * (f[0]! + f[1]!)) / 2 +
+        ((x[2]! - x[1]!) * (f[1]! + f[2]!)) / 2 +
+        ((x[3]! - x[2]!) * (f[2]! + f[3]!)) / 2;
+      const fmt = (n: number) => (Number.isInteger(n) ? `${n}` : n.toFixed(1));
+      return {
+        prompt: `The table gives values of a continuous, increasing function $f$. Which value is the trapezoidal approximation of $\\displaystyle\\int_{1}^{8} f(x)\\,dx$ using the three subintervals shown?`,
+        figure: {
+          kind: "table" as const,
+          headers: ["x", ...x.map((n) => `${n}`)],
+          rows: [["f(x)", ...f.map((n) => `${n}`)]],
+        },
+        correct: fmt(trap),
+        distractors: [fmt(trap + (f[3]! - f[2]!)), fmt(trap - (f[1]! - f[0]!)), fmt((7 * (f[0]! + f[3]!)) / 2)],
+        explanation: `Widths of $2$, $1$, and $4$ give $\\tfrac{2}{2}(${f[0]}+${f[1]}) + \\tfrac{1}{2}(${f[1]}+${f[2]}) + \\tfrac{4}{2}(${f[2]}+${f[3]}) = ${fmt(trap)}$. Using one trapezoid across the whole interval, or mismatching a width, produces the other values.`,
       };
     },
   },
@@ -1484,14 +1612,14 @@ export const UNIT_05_06_TEMPLATES: QuestionTemplate[] = [
     manifestation: "improper-integrals:compare",
     mistakes: ["wrong-comparison-direction"],
     build: (r: RNG) => {
-      const correct = `\\text{Diverges, since } \\dfrac{x+\\sin x}{x^{2}} \\ge \\dfrac{x-1}{x^{2}} \\text{ eventually behaves like } \\dfrac{1}{x}, \\text{ and } \\int_1^\\infty \\frac{dx}{x} \\text{ diverges.}`;
+      const correct = `\\text{Diverges, by comparison with } \\int_1^\\infty \\frac{dx}{x}.`;
       return {
         prompt: `Determine the convergence of $\\displaystyle\\int_1^{\\infty} \\frac{x+\\sin x}{x^{2}}\\,dx$ using a comparison with a $p$-integral.`,
         correct,
         distractors: [
-          `\\text{Converges, since } \\sin x \\text{ is bounded and therefore negligible.}`,
-          `\\text{Converges, by comparison with } \\int_1^\\infty \\frac{dx}{x^2}.`,
-          `\\text{Diverges, but only because } \\sin x \\text{ can be negative.}`,
+          `\\text{Converges, by comparison with } \\int_1^\\infty \\frac{dx}{x^{2}}.`,
+          `\\text{Converges, because } \\sin x \\text{ is bounded on } [1,\\infty).`,
+          `\\text{Diverges, because } \\sin x \\text{ takes negative values.}`,
         ],
         explanation: `For large $x$, $\\frac{x+\\sin x}{x^2} \\ge \\frac{x-1}{x^2} = \\frac{1}{x} - \\frac{1}{x^2}$, which behaves like $\\frac{1}{x}$; since $\\int_1^\\infty \\frac{dx}{x}$ diverges, so does the given integral by comparison.`,
       };

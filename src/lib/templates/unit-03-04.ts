@@ -32,6 +32,13 @@ const signedLinear = (m: number, b: number): string => {
   return `${head}${term(b, "")}`;
 };
 
+/** Renders x^n with the exponent omitted when n === 1 (and 1 when n === 0). */
+function pwx(base: string, n: number): string {
+  if (n === 0) return "";
+  if (n === 1) return base;
+  return `${base}^{${n}}`;
+}
+
 export const UNIT_03_04_TEMPLATES: QuestionTemplate[] = [
   /* ================================================================== */
   /* Unit 3: chain-rule:with-product                                     */
@@ -49,15 +56,19 @@ export const UNIT_03_04_TEMPLATES: QuestionTemplate[] = [
       const n = ri(r, 2, 3);
       // f(x) = x^a * (kx+1)^n
       // f'(x) = a x^(a-1) (kx+1)^n + x^a * n k (kx+1)^(n-1)
-      const correct = `${a}x^{${a - 1}}(${k}x+1)^{${n}} + ${n * k}x^{${a}}(${k}x+1)^{${n - 1}}`;
-      const missingChain = `${a}x^{${a - 1}}(${k}x+1)^{${n}} + ${n}x^{${a}}(${k}x+1)^{${n - 1}}`;
-      const productOmitted = `${a}x^{${a - 1}}(${k}x+1)^{${n}}`;
-      const sumRuleInstead = `${a}x^{${a - 1}} + ${n * k}(${k}x+1)^{${n - 1}}`;
+      const X1 = pwx("x", a - 1);
+      const Xa = pwx("x", a);
+      const P = pwx(`(${k}x+1)`, n);
+      const P1 = pwx(`(${k}x+1)`, n - 1);
+      const correct = `${a}${X1}${P} + ${n * k}${Xa}${P1}`;
+      const missingChain = `${a}${X1}${P} + ${n}${Xa}${P1}`;
+      const productOmitted = `${a}${X1}${P}`;
+      const sumRuleInstead = `${a}${X1} + ${n * k}${P1}`;
       return {
         prompt: `If $f(x)=x^{${a}}(${k}x+1)^{${n}}$, what is $f'(x)$?`,
         correct,
         distractors: [missingChain, productOmitted, sumRuleInstead],
-        explanation: `Using the product rule with the chain rule on the second factor: $\\frac{d}{dx}[x^{${a}}] = ${a}x^{${a - 1}}$ and $\\frac{d}{dx}[(${k}x+1)^{${n}}] = ${n * k}(${k}x+1)^{${n - 1}}$ (the inner derivative ${k} must be multiplied in). Combining with the product rule gives ${correct}.`,
+        explanation: `Using the product rule with the chain rule on the second factor: $\\frac{d}{dx}[${Xa}] = ${a}${X1}$ and $\\frac{d}{dx}[${P}] = ${n * k}${P1}$ (the inner derivative ${k} must be multiplied in). Combining with the product rule gives ${correct}.`,
       };
     },
   },
@@ -74,15 +85,17 @@ export const UNIT_03_04_TEMPLATES: QuestionTemplate[] = [
       const p = ri(r, 2, 3);
       // g(x) = sin(kx) * (x+c)^p
       // g' = k cos(kx) (x+c)^p + p sin(kx) (x+c)^{p-1}
-      const correct = `${k}\\cos(${k}x)(x+${c})^{${p}} + ${p}\\sin(${k}x)(x+${c})^{${p - 1}}`;
-      const forgotChain = `\\cos(${k}x)(x+${c})^{${p}} + ${p}\\sin(${k}x)(x+${c})^{${p - 1}}`;
-      const swapped = `${k}\\cos(${k}x)(x+${c})^{${p - 1}} + ${p}\\sin(${k}x)(x+${c})^{${p}}`;
-      const productSkipped = `${k}\\cos(${k}x)(x+${c})^{${p}}`;
+      const B = pwx(`(x+${c})`, p);
+      const B1 = pwx(`(x+${c})`, p - 1);
+      const correct = `${k}\\cos(${k}x)${B} + ${p}\\sin(${k}x)${B1}`;
+      const forgotChain = `\\cos(${k}x)${B} + ${p}\\sin(${k}x)${B1}`;
+      const swapped = `${k}\\cos(${k}x)${B1} + ${p}\\sin(${k}x)${B}`;
+      const productSkipped = `${k}\\cos(${k}x)${B}`;
       return {
         prompt: `A physics student models displacement with $g(x)=\\sin(${k}x)(x+${c})^{${p}}$. Determine $g'(x)$.`,
         correct,
         distractors: [forgotChain, swapped, productSkipped],
-        explanation: `Apply the product rule: the derivative of $\\sin(${k}x)$ is $${k}\\cos(${k}x)$ by the chain rule, and the derivative of $(x+${c})^{${p}}$ is $${p}(x+${c})^{${p - 1}}$. Combining gives ${correct}.`,
+        explanation: `Apply the product rule: the derivative of $\\sin(${k}x)$ is $${k}\\cos(${k}x)$ by the chain rule, and the derivative of $${B}$ is $${p}${B1}$. Combining gives ${correct}.`,
       };
     },
   },
@@ -98,15 +111,17 @@ export const UNIT_03_04_TEMPLATES: QuestionTemplate[] = [
       const m = ri(r, 2, 4);
       // h(x) = e^{kx} * x^m
       // h' = k e^{kx} x^m + m e^{kx} x^{m-1}
-      const correct = `${k}e^{${k}x}x^{${m}} + ${m}e^{${k}x}x^{${m - 1}}`;
-      const noChain = `e^{${k}x}x^{${m}} + ${m}e^{${k}x}x^{${m - 1}}`;
-      const wrongPower = `${k}e^{${k}x}x^{${m}} + ${m}e^{${k}x}x^{${m}}`;
-      const onlyFirst = `${k}e^{${k}x}x^{${m}}`;
+      const Xm = pwx("x", m);
+      const Xm1 = pwx("x", m - 1);
+      const correct = `${k}e^{${k}x}${Xm} + ${m}e^{${k}x}${Xm1}`;
+      const noChain = `e^{${k}x}${Xm} + ${m}e^{${k}x}${Xm1}`;
+      const wrongPower = `${k}e^{${k}x}${Xm} + ${m}e^{${k}x}${Xm}`;
+      const onlyFirst = `${k}e^{${k}x}${Xm}`;
       return {
         prompt: `Suppose the volume of a tank is modeled by $V(x)=e^{${k}x}x^{${m}}$, where $x$ is measured in hours. Find $V'(x)$.`,
         correct,
         distractors: [noChain, wrongPower, onlyFirst],
-        explanation: `By the product rule, $V'(x)=\\frac{d}{dx}[e^{${k}x}]\\cdot x^{${m}} + e^{${k}x}\\cdot\\frac{d}{dx}[x^{${m}}]$. The chain rule gives $\\frac{d}{dx}[e^{${k}x}]=${k}e^{${k}x}$, and the power rule gives $${m}x^{${m - 1}}$, so $V'(x)=${correct}$.`,
+        explanation: `By the product rule, $V'(x)=\\frac{d}{dx}[e^{${k}x}]\\cdot x^{${m}} + e^{${k}x}\\cdot\\frac{d}{dx}[x^{${m}}]$. The chain rule gives $\\frac{d}{dx}[e^{${k}x}]=${k}e^{${k}x}$, and the power rule gives $${m}${Xm1}$, so $V'(x)=${correct}$.`,
       };
     },
   },
@@ -1310,6 +1325,12 @@ export const UNIT_03_04_TEMPLATES: QuestionTemplate[] = [
           `\\text{The speed is never increasing}`,
         ],
         explanation: `Here $v(t)\\ge 0$ throughout $[0,4]$, so speed equals $v(t)$ itself, and speed increases exactly where $v(t)$ is increasing. Since $v(t)=-(t-2)^{2}+4$ rises on $(0,2)$ and falls on $(2,4)$, the speed increases on $(0,2)$ and decreases on $(2,4)$. Choosing the interval after the peak is the common misreading.`,
+        figure: {
+          kind: "graph",
+          curves: [{ label: "v(t)", points: pts, smooth: true, tone: 0 }],
+          window,
+          caption: "Velocity v(t) of a particle for 0 ≤ t ≤ 4",
+        },
       };
     },
   },

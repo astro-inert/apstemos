@@ -30,16 +30,10 @@ function piFrac(k: number, d: number): string {
   const g = gcd(k, d) || 1;
   const n = k / g;
   const den = d / g;
-  const numStr = n === 1 ? "\\pi" : n === -1 ? "-\\pi" : `${n}\\pi`;
-  if (den === 1) return numStr;
-  return `\\frac{${n === 1 ? "\\pi" : n === -1 ? "-\\pi" : `${Math.abs(n)}\\pi`}}{${den}}`.replace(
-    "-\\pi",
-    n < 0 ? "\\pi" : "-\\pi",
-  ) === undefined
-    ? numStr
-    : n < 0
-      ? `-\\frac{${Math.abs(n)}\\pi}{${den}}`
-      : `\\frac{${n}\\pi}{${den}}`;
+  const piPart = (m: number) => (m === 1 ? "\\pi" : m === -1 ? "-\\pi" : `${m}\\pi`);
+  if (den === 1) return piPart(n);
+  const absNumStr = Math.abs(n) === 1 ? "\\pi" : `${Math.abs(n)}\\pi`;
+  return n < 0 ? `-\\frac{${absNumStr}}{${den}}` : `\\frac{${absNumStr}}{${den}}`;
 }
 
 export const UNIT_07_08_TEMPLATES: QuestionTemplate[] = [
@@ -547,8 +541,8 @@ export const UNIT_07_08_TEMPLATES: QuestionTemplate[] = [
       return {
         prompt: `The graph of $f(x)=\\sqrt{${R}^{2}-x^{2}}$ is a semicircle of radius ${R} on $[-${R},${R}]$. What is the average value of $f$ on this interval?`,
         correct: piFrac(R, 4),
-        distractors: [piFrac(R, 2), `${R}`, piFrac(R * R, 2)],
-        explanation: `The average value is $\\dfrac{1}{2${R}}\\int_{-${R}}^{${R}}f(x)\\,dx=\\dfrac{1}{2${R}}\\cdot\\dfrac{\\pi ${R}^{2}}{2}=${piFrac(R, 4)}$. Using the diameter incorrectly or reporting the area instead of the average gives the other choices.`,
+        distractors: [piFrac(R, 2), piFrac(R, 8), piFrac(R * R, 2)],
+        explanation: `The average value is $\\dfrac{1}{2${R}}\\int_{-${R}}^{${R}}f(x)\\,dx=\\dfrac{1}{2${R}}\\cdot\\dfrac{\\pi ${R}^{2}}{2}=${piFrac(R, 4)}$. Dividing by the radius instead of the diameter, or reporting the area instead of the average, gives the other choices.`,
         figure: {
           kind: "graph",
           curves: [{ points: pts, smooth: true }],
@@ -669,11 +663,11 @@ export const UNIT_07_08_TEMPLATES: QuestionTemplate[] = [
       const signed = -k * c;
       return {
         prompt: `On $[0,${c}]$, $g(x)-f(x)=${k}$ for every $x$ (so $g$ lies above $f$ the whole time). What is $\\displaystyle\\int_{0}^{${c}}\\bigl(f(x)-g(x)\\bigr)\\,dx$, and what is the geometric area between the curves?`,
-        correct: `\\text{Signed integral } =${signed},\\ \\text{geometric area}=${k * c}`,
+        correct: `\\text{Signed integral}=${signed}\\text{, geometric area}=${k * c}`,
         distractors: [
-          `\\text{Signed integral }=${k * c},\\ \\text{geometric area}=${k * c}`,
-          `\\text{Signed integral }=${signed},\\ \\text{geometric area}=${signed}`,
-          `\\text{Signed integral }=0,\\ \\text{geometric area}=${k * c}`,
+          `\\text{Signed integral}=${k * c}\\text{, geometric area}=${k * c}`,
+          `\\text{Signed integral}=${signed}\\text{, geometric area}=${signed}`,
+          `\\text{Signed integral}=0\\text{, geometric area}=${k * c}`,
         ],
         explanation: `Since $f-g=-${k}$ everywhere, $\\int_{0}^{${c}}(f-g)\\,dx=-${k}(${c})=${signed}$, a negative signed value. The geometric area is always nonnegative and equals $\\int|f-g|\\,dx=${k * c}$.`,
       };

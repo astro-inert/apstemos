@@ -27,6 +27,7 @@ export type {
 export { fitWindow, sampleCurve, samplePolar, sampleParametric } from "./figures";
 
 import type { Figure } from "./figures";
+import { fitWindow, samplePolar } from "./figures";
 
 
 export type BuiltQuestion = {
@@ -391,6 +392,11 @@ export const BASE_TEMPLATES: QuestionTemplate[] = [
     difficulty: "medium",
     build: (r) => {
       const a = ri(r, -6, 6);
+      const pts: Array<[number, number]> = [
+        [a - 4, 4],
+        [a, 0],
+        [a + 4, 4],
+      ];
       return {
         prompt: `Let $f(x)=|x ${term(-a, "")}|$. Which statement is true at $x=${a}$?`,
         correct: `\\text{$f$ is continuous but not differentiable.}`,
@@ -400,6 +406,15 @@ export const BASE_TEMPLATES: QuestionTemplate[] = [
           `\\text{$f$ is neither continuous nor differentiable.}`,
         ],
         explanation: `The absolute value graph has a corner at $x=${a}$: the one-sided slopes are $-1$ and $1$, so $f$ is continuous there but not differentiable.`,
+        figure: {
+          kind: "piecewise-graph",
+          label: "f(x)",
+          points: pts,
+          xMin: a - 4,
+          xMax: a + 4,
+          yMin: -1,
+          yMax: 5,
+        },
       };
     },
   },
@@ -809,10 +824,16 @@ export const BASE_TEMPLATES: QuestionTemplate[] = [
       const right = h * (v[1] + v[2] + v[3]);
       const xs = [0, h, 2 * h, 3 * h];
       return {
-        prompt: `The table gives values of a continuous function $f$: $f(${xs[0]})=${v[0]}$, $f(${xs[1]})=${v[1]}$, $f(${xs[2]})=${v[2]}$, $f(${xs[3]})=${v[3]}$. Use a left Riemann sum with the three subintervals of equal width to approximate $\\int_{0}^{${3 * h}} f(x)\\,dx$.`,
+        prompt: `The table gives values of a continuous function $f$. Use a left Riemann sum with the three subintervals of equal width to approximate $\\int_{0}^{${3 * h}} f(x)\\,dx$.`,
         correct: `${left}`,
         distractors: [`${right}`, `${(left + right) / 2}`, `${v[0] + v[1] + v[2]}`],
         explanation: `Each subinterval has width $${h}$; using left endpoints: $${h}(${v[0]}+${v[1]}+${v[2]}) = ${left}$.`,
+        figure: {
+          kind: "table",
+          headers: ["x", ...xs.map((x) => `${x}`)],
+          rows: [["f(x)", ...v.map((val) => `${val}`)]],
+          caption: "Values of f(x)",
+        },
       };
     },
   },
@@ -904,6 +925,16 @@ export const BASE_TEMPLATES: QuestionTemplate[] = [
         correct: dec(y2, 4),
         distractors: [dec(y1, 4), dec(A + 2 * h * A, 4), dec(y2 + h, 4)],
         explanation: `Step 1: $y_1 = ${A} + ${h}(0+${A}) = ${dec(y1, 4)}$. Step 2: $y_2 = ${dec(y1, 4)} + ${h}(${h}+${dec(y1, 4)}) = ${dec(y2, 4)}$.`,
+        figure: {
+          kind: "table",
+          headers: ["x", "y", "dy/dx = x + y"],
+          rows: [
+            ["0", `${A}`, `${A}`],
+            [dec(h, 2), dec(y1, 4), dec(h + y1, 4)],
+            [dec(2 * h, 2), dec(y2, 4), "—"],
+          ],
+          caption: "Euler's method steps",
+        },
       };
     },
   },
@@ -1143,6 +1174,8 @@ export const BASE_TEMPLATES: QuestionTemplate[] = [
     mistakes: ["polar-area-formula", "wrong-bounds"],
     build: (r) => {
       const a = ri(r, 2, 8);
+      const pts = samplePolar((t) => a * (1 + Math.cos(t)), 0, Math.PI);
+      const window = fitWindow(pts, 1);
       return {
         prompt: `Which integral gives the area inside $r=${a}(1+\\cos\\theta)$ for $0\\le\\theta\\le\\pi$?`,
         correct: `\\dfrac{1}{2}\\int_{0}^{\\pi} ${a * a}(1+\\cos\\theta)^{2}\\,d\\theta`,
@@ -1152,6 +1185,13 @@ export const BASE_TEMPLATES: QuestionTemplate[] = [
           `\\int_{0}^{\\pi} ${a * a}(1+\\cos\\theta)^{2}\\,d\\theta`,
         ],
         explanation: `Polar area is $\\frac{1}{2}\\int r^{2}d\\theta$ over the given $\\theta$-interval.`,
+        figure: {
+          kind: "parametric",
+          label: "r(θ) = a(1 + cos θ), 0 ≤ θ ≤ π",
+          points: pts,
+          window,
+          caption: "Half of the cardioid traced as θ runs from 0 to π",
+        },
       };
     },
   },
@@ -1667,9 +1707,11 @@ export function pow(base: string, e: number): string {
 
 import { EXTRA_TEMPLATES } from "./question-templates-extra";
 import { GAP_TEMPLATES } from "./question-templates-gap";
+import { GAP_FINAL_TEMPLATES } from "./templates/gap-final";
 import { UNIT_01_02_TEMPLATES } from "./templates/unit-01-02";
 import { UNIT_03_04_TEMPLATES } from "./templates/unit-03-04";
 import { UNIT_05_06_TEMPLATES } from "./templates/unit-05-06";
+import { UNIT_07_08_TEMPLATES } from "./templates/unit-07-08";
 import { UNIT_09_10_TEMPLATES } from "./templates/unit-09-10";
 
 /** Every template in the bank: the original families, the expanded
@@ -1682,7 +1724,9 @@ export const TEMPLATES: QuestionTemplate[] = [
   ...UNIT_01_02_TEMPLATES,
   ...UNIT_03_04_TEMPLATES,
   ...UNIT_05_06_TEMPLATES,
+  ...UNIT_07_08_TEMPLATES,
   ...UNIT_09_10_TEMPLATES,
+  ...GAP_FINAL_TEMPLATES,
 ];
 
 

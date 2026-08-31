@@ -23,6 +23,13 @@ import {
   term,
   type QuestionTemplate,
 } from "./question-templates";
+import {
+  fitWindow,
+  sampleCurve,
+  samplePolar,
+  type PiecewiseGraphFigure,
+  type TableFigure,
+} from "./figures";
 
 const U1 = "unit-1-limits-and-continuity";
 const U2 = "unit-2-differentiation-definition-and-properties";
@@ -52,12 +59,28 @@ export const EXTRA_TEMPLATES: QuestionTemplate[] = [
       const b = ri(r, 1, 9);
       const left = m * c + b;
       const right = c * c;
+      const pts: Array<[number, number]> = [
+        [c - 3, m * (c - 3) + b],
+        [c, left],
+        [c, right],
+        [c + 3, (c + 3) * (c + 3)],
+      ];
+      const window = fitWindow(pts, 1);
+      const figure: PiecewiseGraphFigure = {
+        kind: "piecewise-graph",
+        label: "f(x)",
+        points: pts,
+        xMin: window.xMin,
+        xMax: window.xMax,
+        yMin: window.yMin,
+        yMax: window.yMax,
+      };
       return {
         prompt: `Let $f$ be defined by $f(x)=${poly([[m, "x"], [b, ""]])}$ for $x<${c}$ and $f(x)=x^{2}$ for $x\\ge ${c}$. Find $\\displaystyle\\lim_{x\\to ${c}^{-}} f(x)$.`,
         correct: `${left}`,
         distractors: [`${right}`, `${left + right}`, `\\text{The limit does not exist.}`],
         explanation: `Approaching from the left uses the linear piece: $${m}(${c}) + ${b} = ${left}$. The right-hand limit is $${right}$, but it is not what the one-sided limit asks for.`,
-        figure: undefined,
+        figure,
       };
     },
     mistakes: ["sign-error"],
@@ -198,13 +221,18 @@ export const EXTRA_TEMPLATES: QuestionTemplate[] = [
       const base = ri(r, 5, 40);
       const lo = base - slope * 0.5;
       const hi = base + slope * 0.5;
-      const table =
-        `| $t$ | $${a - 0.5}$ | $${a}$ | $${a + 0.5}$ |\n| --- | --- | --- | --- |\n| $P(t)$ | $${dec(lo, 2)}$ | $${base}$ | $${dec(hi, 2)}$ |`;
+      const figure: TableFigure = {
+        kind: "table",
+        headers: ["t", `${a - 0.5}`, `${a}`, `${a + 0.5}`],
+        rows: [["P(t)", dec(lo, 2), `${base}`, dec(hi, 2)]],
+        caption: "Selected values of P(t)",
+      };
       return {
-        prompt: `Selected values of a differentiable function $P$ are given.\n\n${table}\n\nUse a symmetric difference quotient to approximate $P'(${a})$.`,
+        prompt: `Selected values of a differentiable function $P$ are given. Use a symmetric difference quotient to approximate $P'(${a})$.`,
         correct: `${slope}`,
         distractors: [`${dec(slope / 2, 2)}`, `${2 * slope}`, `${base}`],
         explanation: `$P'(${a}) \\approx \\dfrac{P(${a + 0.5}) - P(${a - 0.5})}{1} = ${dec(hi - lo, 2)} = ${slope}$.`,
+        figure,
       };
     },
   },
@@ -659,13 +687,18 @@ export const EXTRA_TEMPLATES: QuestionTemplate[] = [
       const h = 2;
       const trap = (h / 2) * (v[0]! + 2 * v[1]! + 2 * v[2]! + v[3]!);
       const left = h * (v[0]! + v[1]! + v[2]!);
-      const table =
-        `| $t$ | $0$ | $2$ | $4$ | $6$ |\n| --- | --- | --- | --- | --- |\n| $R(t)$ | $${v[0]}$ | $${v[1]}$ | $${v[2]}$ | $${v[3]}$ |`;
+      const figure: TableFigure = {
+        kind: "table",
+        headers: ["t", "0", "2", "4", "6"],
+        rows: [["R(t)", `${v[0]}`, `${v[1]}`, `${v[2]}`, `${v[3]}`]],
+        caption: "Rate R(t), in gallons per hour",
+      };
       return {
-        prompt: `The table gives values of a rate $R$, in gallons per hour.\n\n${table}\n\nUse a trapezoidal sum with the three subintervals to approximate $\\displaystyle\\int_{0}^{6} R(t)\\,dt$.`,
+        prompt: `The table gives values of a rate $R$, in gallons per hour. Use a trapezoidal sum with the three subintervals to approximate $\\displaystyle\\int_{0}^{6} R(t)\\,dt$.`,
         correct: `${dec(trap, 2)}`,
         distractors: [`${dec(left, 2)}`, `${dec(trap / 2, 2)}`, `${dec(h * (v[1]! + v[2]! + v[3]!), 2)}`],
         explanation: `Each trapezoid has width $2$: $\\frac{2}{2}\\left[${v[0]} + 2(${v[1]}) + 2(${v[2]}) + ${v[3]}\\right] = ${dec(trap, 2)}$ gallons.`,
+        figure,
       };
     },
   },
@@ -803,11 +836,22 @@ export const EXTRA_TEMPLATES: QuestionTemplate[] = [
       // dy/dx = x + y, start at (0, y0)
       const y1 = y0 + h * (0 + y0);
       const y2 = y1 + h * (h + y1);
+      const figure: TableFigure = {
+        kind: "table",
+        headers: ["x", "y", "dy/dx = x + y"],
+        rows: [
+          ["0", `${y0}`, `${y0}`],
+          [dec(h, 2), dec(y1, 4), dec(h + y1, 4)],
+          [dec(2 * h, 2), dec(y2, 4), "—"],
+        ],
+        caption: "Euler's method steps",
+      };
       return {
         prompt: `Let $\\dfrac{dy}{dx} = x + y$ with $y(0)=${y0}$. Use Euler's method with two steps of size $${h}$ to approximate $y(${dec(2 * h, 2)})$.`,
         correct: `${dec(y2, 4)}`,
         distractors: [`${dec(y1, 4)}`, `${dec(y0 + 2 * h * y0, 4)}`, `${dec(y2 + h, 4)}`],
         explanation: `Step 1: $y \\approx ${y0} + ${h}(0+${y0}) = ${dec(y1, 4)}$. Step 2: $y \\approx ${dec(y1, 4)} + ${h}(${h}+${dec(y1, 4)}) = ${dec(y2, 4)}$.`,
+        figure,
       };
     },
   },
@@ -879,6 +923,13 @@ export const EXTRA_TEMPLATES: QuestionTemplate[] = [
         correct: `\\dfrac{dy}{dx} = ${k} - y`,
         distractors: [`\\dfrac{dy}{dx} = y - ${k}`, `\\dfrac{dy}{dx} = x - ${k}`, `\\dfrac{dy}{dx} = ${k} - x`],
         explanation: `Slopes depend on $y$ only and vanish at $y=${k}$, being positive below that line: $\\frac{dy}{dx} = ${k}-y$.`,
+        figure: {
+          kind: "slope-field",
+          a: 0,
+          b: -1,
+          extent: k + 3,
+          window: { xMin: -(k + 3), xMax: k + 3, yMin: -1, yMax: 2 * k + 2 },
+        },
       };
     },
   },
@@ -927,6 +978,19 @@ export const EXTRA_TEMPLATES: QuestionTemplate[] = [
     difficulty: "hard",
     build: (r) => {
       const b = ri(r, 1, 4);
+      const linePts = sampleCurve((x) => b * x, 0, b, 40);
+      const parabolaPts = sampleCurve((x) => x * x, 0, b, 40);
+      const window = fitWindow([...linePts, ...parabolaPts], 1);
+      const figure = {
+        kind: "graph" as const,
+        curves: [
+          { label: `y=${coef(b, "x")}`, points: linePts, smooth: false, tone: 0 as const },
+          { label: "y=x^2", points: parabolaPts, smooth: true, tone: 1 as const },
+        ],
+        window,
+        shade: { from: 0, to: b, curve: 0 as const },
+        caption: `Region bounded by y=${coef(b, "x")} and y=x^2`,
+      };
       return {
         prompt: `The region bounded by $y=x^{2}$ and $y=${coef(b, "x")}$ is revolved about the $x$-axis. Which integral gives the volume?`,
         correct: `\\pi\\displaystyle\\int_{0}^{${b}}\\left(${b * b}x^{2} - x^{4}\\right)dx`,
@@ -936,6 +1000,7 @@ export const EXTRA_TEMPLATES: QuestionTemplate[] = [
           `2\\pi\\displaystyle\\int_{0}^{${b}}x\\left(${coef(b, "x")} - x^{2}\\right)dx`,
         ],
         explanation: `The curves meet at $x=0$ and $x=${b}$, with $${coef(b, "x")}$ on the outside. Washers give $\\pi\\int_0^{${b}}\\left[(${coef(b, "x")})^{2}-(x^{2})^{2}\\right]dx$.`,
+        figure,
       };
     },
     mistakes: ["washer-square-difference"],
