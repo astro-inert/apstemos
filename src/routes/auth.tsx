@@ -43,14 +43,15 @@ function AuthPage() {
         const { error } = await supabase.auth.signUp({
           email,
           password,
-          options: { emailRedirectTo: `${window.location.origin}/command-center` },
+          options: { emailRedirectTo: `${window.location.origin}${next ?? "/command-center"}` },
         });
         if (error) throw error;
         toast.success("Check your email to confirm your account.");
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        navigate({ to: "/command-center" });
+        if (next) window.location.replace(next);
+        else navigate({ to: "/command-center" });
       }
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Something went wrong");
@@ -62,7 +63,7 @@ function AuthPage() {
   async function handleGoogle() {
     setLoading(true);
     const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: `${window.location.origin}/command-center`,
+      redirect_uri: `${window.location.origin}${next ?? "/command-center"}`,
     });
     if (result.error) {
       toast.error("Google sign-in failed");
@@ -70,7 +71,8 @@ function AuthPage() {
       return;
     }
     if (result.redirected) return;
-    navigate({ to: "/command-center" });
+    if (next) window.location.replace(next);
+    else navigate({ to: "/command-center" });
   }
 
   return (
