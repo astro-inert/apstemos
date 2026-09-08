@@ -5,15 +5,23 @@ import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { toast } from "sonner";
 
+/** Only same-origin relative paths may be used as a post-sign-in destination. */
+function safeNext(value: unknown): string | undefined {
+  if (typeof value !== "string" || !value.startsWith("/") || value.startsWith("//")) return undefined;
+  return value;
+}
+
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [{ title: "Sign in — AP STEM OS" }],
   }),
+  validateSearch: (search: Record<string, unknown>) => ({ next: safeNext(search.next) }),
   component: AuthPage,
 });
 
 function AuthPage() {
   const navigate = useNavigate();
+  const { next } = Route.useSearch();
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -21,9 +29,11 @@ function AuthPage() {
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
-      if (data.user) navigate({ to: "/command-center" });
+      if (!data.user) return;
+      if (next) window.location.replace(next);
+      else navigate({ to: "/command-center" });
     });
-  }, [navigate]);
+  }, [navigate, next]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -33,14 +43,15 @@ function AuthPage() {
         const { error } = await supabase.auth.signUp({
           email,
           password,
-          options: { emailRedirectTo: `${window.location.origin}/command-center` },
+          options: { emailRedirectTo: `${window.location.origin}${next ?? "/command-center"}` },
         });
         if (error) throw error;
         toast.success("Check your email to confirm your account.");
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        navigate({ to: "/command-center" });
+        if (next) window.location.replace(next);
+        else navigate({ to: "/command-center" });
       }
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Something went wrong");
@@ -52,7 +63,7 @@ function AuthPage() {
   async function handleGoogle() {
     setLoading(true);
     const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: `${window.location.origin}/command-center`,
+      redirect_uri: `${window.location.origin}${next ?? "/command-center"}`,
     });
     if (result.error) {
       toast.error("Google sign-in failed");
@@ -60,7 +71,8 @@ function AuthPage() {
       return;
     }
     if (result.redirected) return;
-    navigate({ to: "/command-center" });
+    if (next) window.location.replace(next);
+    else navigate({ to: "/command-center" });
   }
 
   return (

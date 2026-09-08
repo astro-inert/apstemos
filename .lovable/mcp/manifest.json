@@ -1,0 +1,184 @@
+{
+  "version": 1,
+  "sdk_version": "2.0.4",
+  "path": "/mcp",
+  "auth": {
+    "type": "oauth",
+    "issuer": "https://jlsxmgxjqdzqocrqizab.supabase.co/auth/v1",
+    "accepted_audiences": [
+      "authenticated"
+    ]
+  },
+  "mcp": {
+    "server": {
+      "name": "ap-stem-os",
+      "version": "0.1.0",
+      "title": "AP STEM OS"
+    },
+    "tools": [
+      {
+        "name": "list_units_and_topics",
+        "title": "List units and topics",
+        "description": "List every AP Calculus AB/BC unit in the course, with its exam weighting and the topics inside it. Topic slugs returned here are the values other tools accept.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_practice_questions",
+        "title": "Get practice questions",
+        "description": "Draw multiple-choice practice questions the signed-in student has never answered before, on their saved AB/BC track. Optionally scope to a unit or topic slug. Answers are not included; submit one with submit_answer to see the result.",
+        "annotations": {
+          "readOnlyHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "unit_slug": {
+              "description": "Unit slug from list_units_and_topics.",
+              "type": "string",
+              "maxLength": 120
+            },
+            "topic_slug": {
+              "description": "Topic slug from list_units_and_topics.",
+              "type": "string",
+              "maxLength": 120
+            },
+            "limit": {
+              "description": "How many questions to return, 1-10. Defaults to 5.",
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "submit_answer",
+        "title": "Submit an answer",
+        "description": "Record the student's answer to a practice question from get_practice_questions and return whether it was correct, the correct choice, and a worked explanation. The question will never be served to them again.",
+        "annotations": {
+          "readOnlyHint": false,
+          "idempotentHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "question_key": {
+              "type": "string",
+              "maxLength": 120,
+              "description": "The question_key returned by get_practice_questions."
+            },
+            "selected_label": {
+              "type": "string",
+              "maxLength": 2,
+              "description": "The chosen choice label: A, B, C, or D."
+            }
+          },
+          "required": [
+            "question_key",
+            "selected_label"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_performance",
+        "title": "Get performance breakdown",
+        "description": "Summarize the signed-in student's practice performance: overall accuracy, per-unit accuracy with mastery status, per-topic accuracy, and units they have not touched. Contains no AP score prediction.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_mistakes",
+        "title": "List mistakes",
+        "description": "List entries from the shared Common Mistakes database and, when include_mine is true, the student's own saved mistakes. Optionally filter the shared list by category.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "category": {
+              "description": "Filter shared mistakes by category, e.g. Algebra or Units.",
+              "type": "string",
+              "maxLength": 40
+            },
+            "include_mine": {
+              "description": "Also return the student's own saved mistakes. Defaults to true.",
+              "type": "boolean"
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "save_mistake",
+        "title": "Save a mistake",
+        "description": "Save a mistake to the signed-in student's personal mistakes list. Write in the second person, exam-focused, with all mathematics in inline LaTeX ($...$).",
+        "annotations": {
+          "readOnlyHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "description": "Short name for the mistake."
+            },
+            "category": {
+              "type": "string",
+              "description": "One or two words, e.g. Algebra, Calculator, Units, Justification, Series."
+            },
+            "description": {
+              "type": "string",
+              "description": "What goes wrong."
+            },
+            "how_to_avoid": {
+              "type": "string",
+              "description": "One actionable, checkable habit."
+            },
+            "example": {
+              "description": "A short concrete instance with the correct version.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "title",
+            "category",
+            "description",
+            "how_to_avoid"
+          ]
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}

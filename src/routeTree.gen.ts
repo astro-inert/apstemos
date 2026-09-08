@@ -15,6 +15,7 @@ import { Route as PhysicsCMechanicsRouteImport } from './routes/physics-c-mechan
 import { Route as PhysicsCElectricityMagnetismRouteImport } from './routes/physics-c-electricity-magnetism'
 import { Route as Physics2RouteImport } from './routes/physics-2'
 import { Route as Physics1RouteImport } from './routes/physics-1'
+import { Route as McpRouteImport } from './routes/mcp'
 import { Route as LatexMasterSheetRouteImport } from './routes/latex-master-sheet'
 import { Route as FrqsByTypeRouteImport } from './routes/frqs-by-type'
 import { Route as ExamStrategyRouteImport } from './routes/exam-strategy'
@@ -31,9 +32,11 @@ import { Route as TopicRundownUnitIdRouteImport } from './routes/topic-rundown.$
 import { Route as AuthenticatedPredictRouteImport } from './routes/_authenticated/predict'
 import { Route as AuthenticatedPracticeRouteImport } from './routes/_authenticated/practice'
 import { Route as AuthenticatedCommandCenterRouteImport } from './routes/_authenticated/command-center'
+import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as QuestionNavigatorUnitIdIndexRouteImport } from './routes/question-navigator.$unitId.index'
 import { Route as QuestionNavigatorUnitIdTopicIdRouteImport } from './routes/question-navigator.$unitId.$topicId'
 import { Route as AuthenticatedAdminPredictionsRouteImport } from './routes/_authenticated/admin/predictions'
+import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 
 const StatisticsRoute = StatisticsRouteImport.update({
   id: '/statistics',
@@ -64,6 +67,11 @@ const Physics2Route = Physics2RouteImport.update({
 const Physics1Route = Physics1RouteImport.update({
   id: '/physics-1',
   path: '/physics-1',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const McpRoute = McpRouteImport.update({
+  id: '/mcp',
+  path: '/mcp',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LatexMasterSheetRoute = LatexMasterSheetRouteImport.update({
@@ -146,6 +154,12 @@ const AuthenticatedCommandCenterRoute =
     path: '/command-center',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const Char91DotwellKnownChar93OauthProtectedResourceRoute =
+  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
+    id: '/.well-known/oauth-protected-resource',
+    path: '/.well-known/oauth-protected-resource',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const QuestionNavigatorUnitIdIndexRoute =
   QuestionNavigatorUnitIdIndexRouteImport.update({
     id: '/question-navigator/$unitId/',
@@ -164,6 +178,11 @@ const AuthenticatedAdminPredictionsRoute =
     path: '/admin/predictions',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
+  id: '/.lovable/oauth/consent',
+  path: '/.lovable/oauth/consent',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -175,18 +194,21 @@ export interface FileRoutesByFullPath {
   '/exam-strategy': typeof ExamStrategyRoute
   '/frqs-by-type': typeof FrqsByTypeRoute
   '/latex-master-sheet': typeof LatexMasterSheetRoute
+  '/mcp': typeof McpRoute
   '/physics-1': typeof Physics1Route
   '/physics-2': typeof Physics2Route
   '/physics-c-electricity-magnetism': typeof PhysicsCElectricityMagnetismRoute
   '/physics-c-mechanics': typeof PhysicsCMechanicsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/statistics': typeof StatisticsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/command-center': typeof AuthenticatedCommandCenterRoute
   '/practice': typeof AuthenticatedPracticeRoute
   '/predict': typeof AuthenticatedPredictRoute
   '/topic-rundown/$unitId': typeof TopicRundownUnitIdRoute
   '/question-navigator/': typeof QuestionNavigatorIndexRoute
   '/topic-rundown/': typeof TopicRundownIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/admin/predictions': typeof AuthenticatedAdminPredictionsRoute
   '/question-navigator/$unitId/$topicId': typeof QuestionNavigatorUnitIdTopicIdRoute
   '/question-navigator/$unitId/': typeof QuestionNavigatorUnitIdIndexRoute
@@ -201,18 +223,21 @@ export interface FileRoutesByTo {
   '/exam-strategy': typeof ExamStrategyRoute
   '/frqs-by-type': typeof FrqsByTypeRoute
   '/latex-master-sheet': typeof LatexMasterSheetRoute
+  '/mcp': typeof McpRoute
   '/physics-1': typeof Physics1Route
   '/physics-2': typeof Physics2Route
   '/physics-c-electricity-magnetism': typeof PhysicsCElectricityMagnetismRoute
   '/physics-c-mechanics': typeof PhysicsCMechanicsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/statistics': typeof StatisticsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/command-center': typeof AuthenticatedCommandCenterRoute
   '/practice': typeof AuthenticatedPracticeRoute
   '/predict': typeof AuthenticatedPredictRoute
   '/topic-rundown/$unitId': typeof TopicRundownUnitIdRoute
   '/question-navigator': typeof QuestionNavigatorIndexRoute
   '/topic-rundown': typeof TopicRundownIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/admin/predictions': typeof AuthenticatedAdminPredictionsRoute
   '/question-navigator/$unitId/$topicId': typeof QuestionNavigatorUnitIdTopicIdRoute
   '/question-navigator/$unitId': typeof QuestionNavigatorUnitIdIndexRoute
@@ -229,18 +254,21 @@ export interface FileRoutesById {
   '/exam-strategy': typeof ExamStrategyRoute
   '/frqs-by-type': typeof FrqsByTypeRoute
   '/latex-master-sheet': typeof LatexMasterSheetRoute
+  '/mcp': typeof McpRoute
   '/physics-1': typeof Physics1Route
   '/physics-2': typeof Physics2Route
   '/physics-c-electricity-magnetism': typeof PhysicsCElectricityMagnetismRoute
   '/physics-c-mechanics': typeof PhysicsCMechanicsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/statistics': typeof StatisticsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/_authenticated/command-center': typeof AuthenticatedCommandCenterRoute
   '/_authenticated/practice': typeof AuthenticatedPracticeRoute
   '/_authenticated/predict': typeof AuthenticatedPredictRoute
   '/topic-rundown/$unitId': typeof TopicRundownUnitIdRoute
   '/question-navigator/': typeof QuestionNavigatorIndexRoute
   '/topic-rundown/': typeof TopicRundownIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/_authenticated/admin/predictions': typeof AuthenticatedAdminPredictionsRoute
   '/question-navigator/$unitId/$topicId': typeof QuestionNavigatorUnitIdTopicIdRoute
   '/question-navigator/$unitId/': typeof QuestionNavigatorUnitIdIndexRoute
@@ -257,18 +285,21 @@ export interface FileRouteTypes {
     | '/exam-strategy'
     | '/frqs-by-type'
     | '/latex-master-sheet'
+    | '/mcp'
     | '/physics-1'
     | '/physics-2'
     | '/physics-c-electricity-magnetism'
     | '/physics-c-mechanics'
     | '/sitemap.xml'
     | '/statistics'
+    | '/.well-known/oauth-protected-resource'
     | '/command-center'
     | '/practice'
     | '/predict'
     | '/topic-rundown/$unitId'
     | '/question-navigator/'
     | '/topic-rundown/'
+    | '/.lovable/oauth/consent'
     | '/admin/predictions'
     | '/question-navigator/$unitId/$topicId'
     | '/question-navigator/$unitId/'
@@ -283,18 +314,21 @@ export interface FileRouteTypes {
     | '/exam-strategy'
     | '/frqs-by-type'
     | '/latex-master-sheet'
+    | '/mcp'
     | '/physics-1'
     | '/physics-2'
     | '/physics-c-electricity-magnetism'
     | '/physics-c-mechanics'
     | '/sitemap.xml'
     | '/statistics'
+    | '/.well-known/oauth-protected-resource'
     | '/command-center'
     | '/practice'
     | '/predict'
     | '/topic-rundown/$unitId'
     | '/question-navigator'
     | '/topic-rundown'
+    | '/.lovable/oauth/consent'
     | '/admin/predictions'
     | '/question-navigator/$unitId/$topicId'
     | '/question-navigator/$unitId'
@@ -310,18 +344,21 @@ export interface FileRouteTypes {
     | '/exam-strategy'
     | '/frqs-by-type'
     | '/latex-master-sheet'
+    | '/mcp'
     | '/physics-1'
     | '/physics-2'
     | '/physics-c-electricity-magnetism'
     | '/physics-c-mechanics'
     | '/sitemap.xml'
     | '/statistics'
+    | '/.well-known/oauth-protected-resource'
     | '/_authenticated/command-center'
     | '/_authenticated/practice'
     | '/_authenticated/predict'
     | '/topic-rundown/$unitId'
     | '/question-navigator/'
     | '/topic-rundown/'
+    | '/.lovable/oauth/consent'
     | '/_authenticated/admin/predictions'
     | '/question-navigator/$unitId/$topicId'
     | '/question-navigator/$unitId/'
@@ -338,15 +375,18 @@ export interface RootRouteChildren {
   ExamStrategyRoute: typeof ExamStrategyRoute
   FrqsByTypeRoute: typeof FrqsByTypeRoute
   LatexMasterSheetRoute: typeof LatexMasterSheetRoute
+  McpRoute: typeof McpRoute
   Physics1Route: typeof Physics1Route
   Physics2Route: typeof Physics2Route
   PhysicsCElectricityMagnetismRoute: typeof PhysicsCElectricityMagnetismRoute
   PhysicsCMechanicsRoute: typeof PhysicsCMechanicsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   StatisticsRoute: typeof StatisticsRoute
+  Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   TopicRundownUnitIdRoute: typeof TopicRundownUnitIdRoute
   QuestionNavigatorIndexRoute: typeof QuestionNavigatorIndexRoute
   TopicRundownIndexRoute: typeof TopicRundownIndexRoute
+  DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   QuestionNavigatorUnitIdTopicIdRoute: typeof QuestionNavigatorUnitIdTopicIdRoute
   QuestionNavigatorUnitIdIndexRoute: typeof QuestionNavigatorUnitIdIndexRoute
 }
@@ -393,6 +433,13 @@ declare module '@tanstack/react-router' {
       path: '/physics-1'
       fullPath: '/physics-1'
       preLoaderRoute: typeof Physics1RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mcp': {
+      id: '/mcp'
+      path: '/mcp'
+      fullPath: '/mcp'
+      preLoaderRoute: typeof McpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/latex-master-sheet': {
@@ -507,6 +554,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCommandCenterRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/.well-known/oauth-protected-resource': {
+      id: '/.well-known/oauth-protected-resource'
+      path: '/.well-known/oauth-protected-resource'
+      fullPath: '/.well-known/oauth-protected-resource'
+      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/question-navigator/$unitId/': {
       id: '/question-navigator/$unitId/'
       path: '/question-navigator/$unitId'
@@ -527,6 +581,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/predictions'
       preLoaderRoute: typeof AuthenticatedAdminPredictionsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/.lovable/oauth/consent': {
+      id: '/.lovable/oauth/consent'
+      path: '/.lovable/oauth/consent'
+      fullPath: '/.lovable/oauth/consent'
+      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
+      parentRoute: typeof rootRouteImport
     }
   }
 }
@@ -559,15 +620,19 @@ const rootRouteChildren: RootRouteChildren = {
   ExamStrategyRoute: ExamStrategyRoute,
   FrqsByTypeRoute: FrqsByTypeRoute,
   LatexMasterSheetRoute: LatexMasterSheetRoute,
+  McpRoute: McpRoute,
   Physics1Route: Physics1Route,
   Physics2Route: Physics2Route,
   PhysicsCElectricityMagnetismRoute: PhysicsCElectricityMagnetismRoute,
   PhysicsCMechanicsRoute: PhysicsCMechanicsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   StatisticsRoute: StatisticsRoute,
+  Char91DotwellKnownChar93OauthProtectedResourceRoute:
+    Char91DotwellKnownChar93OauthProtectedResourceRoute,
   TopicRundownUnitIdRoute: TopicRundownUnitIdRoute,
   QuestionNavigatorIndexRoute: QuestionNavigatorIndexRoute,
   TopicRundownIndexRoute: TopicRundownIndexRoute,
+  DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   QuestionNavigatorUnitIdTopicIdRoute: QuestionNavigatorUnitIdTopicIdRoute,
   QuestionNavigatorUnitIdIndexRoute: QuestionNavigatorUnitIdIndexRoute,
 }
