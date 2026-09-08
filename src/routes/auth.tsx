@@ -5,15 +5,23 @@ import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { toast } from "sonner";
 
+/** Only same-origin relative paths may be used as a post-sign-in destination. */
+function safeNext(value: unknown): string | undefined {
+  if (typeof value !== "string" || !value.startsWith("/") || value.startsWith("//")) return undefined;
+  return value;
+}
+
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [{ title: "Sign in — AP STEM OS" }],
   }),
+  validateSearch: (search: Record<string, unknown>) => ({ next: safeNext(search.next) }),
   component: AuthPage,
 });
 
 function AuthPage() {
   const navigate = useNavigate();
+  const { next } = Route.useSearch();
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -21,9 +29,11 @@ function AuthPage() {
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
-      if (data.user) navigate({ to: "/command-center" });
+      if (!data.user) return;
+      if (next) window.location.replace(next);
+      else navigate({ to: "/command-center" });
     });
-  }, [navigate]);
+  }, [navigate, next]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
