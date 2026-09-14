@@ -40,9 +40,11 @@ export default defineTool({
     }
 
     const payload = { common_mistakes: sharedRes.data ?? [], my_mistakes: mine };
+    const text = JSON.stringify(payload, null, 2);
     return {
-      content: [{ type: "text", text: JSON.stringify(payload, null, 2) }],
-      structuredContent: payload,
+      content: [{ type: "text" as const, text }],
+      structuredContent: JSON.parse(text) as Record<string, unknown[]>,
     };
+
   },
 });
