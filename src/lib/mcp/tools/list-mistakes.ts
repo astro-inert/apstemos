@@ -1,4 +1,4 @@
-import { defineTool, ToolError } from "@lovable.dev/mcp-js";
+import { defineTool, ToolError, type JsonValueInput } from "@lovable.dev/mcp-js";
 import { z } from "zod";
 import { supabaseForUser } from "../supabase";
 
@@ -43,7 +43,7 @@ export default defineTool({
     const text = JSON.stringify(payload, null, 2);
     return {
       content: [{ type: "text" as const, text }],
-      structuredContent: JSON.parse(text) as Record<string, unknown[]>,
+      structuredContent: JSON.parse(text) as JsonValueInput,
     };
 
   },
