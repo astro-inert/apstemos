@@ -4,6 +4,8 @@ import { Reveal } from "@/components/home/primitives";
 import { findTopic, type UnitEntry, type TopicEntry } from "@/lib/question-navigator-data";
 import { ArrowLeft, FileText, ListChecks, MessageSquareQuote, AlertTriangle, Sparkles } from "lucide-react";
 import { SubjectContentGate } from "@/components/SubjectContentGate";
+import { getTopicGuide } from "@/lib/navigator-guides";
+import { GuideRenderer } from "@/components/navigator/GuideRenderer";
 
 export const Route = createFileRoute("/question-navigator/$unitId/$topicId")({
   loader: ({ params }): { unit: UnitEntry; topic: TopicEntry } => {
@@ -45,16 +47,13 @@ const sections = [
 
 function Page() {
   const { unit, topic } = Route.useLoaderData() as { unit: UnitEntry; topic: TopicEntry };
+  const guide = getTopicGuide(topic.slug);
 
   return (
     <PageShell
-      eyebrow={`unit ${unit.number} · ${topic.title}`}
-      title={
-        <>
-          How the AP tests <span className="text-primary">{topic.title}</span>
-        </>
-      }
-      description={topic.blurb}
+      eyebrow={`unit ${unit.number} · ${unit.title.toLowerCase()}`}
+      title={topic.title}
+      description={guide ? undefined : topic.blurb}
     >
       <div className="mb-8 flex flex-wrap items-center gap-5">
         <Link
@@ -70,6 +69,7 @@ function Page() {
         </Link>
       </div>
 
+      {guide ? <GuideRenderer guide={guide} /> : (
       <div className="grid gap-4">
         {sections.map((s, i) => {
           const Icon = s.icon;
@@ -93,6 +93,7 @@ function Page() {
           );
         })}
       </div>
+      )}
     </PageShell>
   );
 }

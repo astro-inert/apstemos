@@ -21,7 +21,15 @@ export default defineTool({
     const sharedRes = await shared;
     if (sharedRes.error) throw new ToolError(sharedRes.error.message);
 
-    let mine: unknown[] = [];
+    type MineRow = {
+      code: string | null;
+      title: string | null;
+      category: string | null;
+      description: string | null;
+      example: string | null;
+      how_to_avoid: string | null;
+    };
+    let mine: MineRow[] = [];
     if (include_mine !== false) {
       const mineRes = await supabase
         .from("user_mistakes")
