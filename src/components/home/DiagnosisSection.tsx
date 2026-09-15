@@ -17,13 +17,13 @@ export function DiagnosisSection({ subject }: { subject: SubjectConfig }) {
   return (
     <Section className="border-t border-border">
       <SectionHeading
-        label={calculus ? "Practice · 2,000+ AP-style MCQs" : "02 · the magic moment"}
+        label={calculus ? "Practice · 2,000+ AP-style questions" : `Practice · ${subject.navLabel}`}
         title={
           <>
-            {calculus ? <>Practice built around the<br />actual course.</> : <>Don't just see that you're wrong.<br />Understand why.</>}
+             {calculus ? <>2,000+ AP-style questions.<br />Built for real practice.</> : <>AP-style questions.<br />Built for real practice.</>}
           </>
         }
-        sub={calculus ? "Work through original AP-style questions by AB or BC, unit, topic, and difficulty. Every question includes a concise explanation—and every result feeds the rest of APSTEMOS." : "Select an answer below. The diagnosis is the information already hidden inside your choice."}
+        sub={`Practice with questions modeled after ${subject.navLabel} MCQs, organized by unit and subtopic and tagged Easy, Medium, or Hard. Every question includes a concise explanation of the correct answer, and every answer automatically updates your performance data.`}
       />
 
       <div className="mt-14 grid gap-4 lg:grid-cols-2 lg:gap-6">

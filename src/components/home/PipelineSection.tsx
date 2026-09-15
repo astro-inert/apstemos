@@ -35,8 +35,8 @@ export function PipelineSection({ subject }: { subject: SubjectConfig }) {
       ),
     },
     {
-      name: calculus ? "Measure" : "Diagnose",
-      caption: calculus ? "Every answer updates your unit mastery and topic-level performance." : "Your mastery updates immediately.",
+       name: "Score Command Center",
+       caption: "Every answer updates your strengths, weaknesses, and unit mastery by subtopic.",
       fragment: (
         <div>
           <div className="flex items-baseline justify-between gap-2 text-[11px]">
@@ -58,8 +58,8 @@ export function PipelineSection({ subject }: { subject: SubjectConfig }) {
       ),
     },
     {
-      name: calculus ? "Diagnose" : "Understand",
-      caption: calculus ? "Identify and tag the reasoning error behind a missed answer." : "The mistake behind the miss is named.",
+       name: "Common Mistakes",
+       caption: "Return to missed questions and identify the mistake behind each wrong answer.",
       fragment: (
         <div className="rounded-lg border border-border px-2.5 py-2">
           <div className="micro-label">mistake</div>
@@ -73,8 +73,8 @@ export function PipelineSection({ subject }: { subject: SubjectConfig }) {
       ),
     },
     {
-      name: calculus ? "Learn" : "Target",
-      caption: calculus ? "Open the same topic in the Navigator for MCQ and FRQ guidance." : "A recommendation appears at the top of your plan.",
+       name: "Question Type Navigator",
+       caption: "Open the same subtopic for MCQ and FRQ guidance, methods, conditions, and common traps.",
       fragment: (
         <div className="rounded-lg border border-primary/30 bg-accent/40 px-2.5 py-2">
           <div className="num text-[10px] text-primary">01</div>
@@ -86,8 +86,8 @@ export function PipelineSection({ subject }: { subject: SubjectConfig }) {
       ),
     },
     {
-      name: calculus ? "Target" : "Repeat",
-      caption: calculus ? "Use your highest-ROI recommendations to choose where practice matters most." : "The next question is chosen from your weakest points.",
+       name: "Return to Practice",
+       caption: "Use what you learned to choose what to practice next.",
       fragment: (
         <div className="space-y-1.5">
           <div className="num text-[10px] text-subtle">next question</div>
@@ -102,11 +102,11 @@ export function PipelineSection({ subject }: { subject: SubjectConfig }) {
   if (calculus) {
     stages.push({
       name: "Repeat",
-      caption: "Return to Practice with a specific weakness to fix.",
+       caption: "Keep building a clearer picture of what you know and what still needs work.",
       fragment: (
         <div className="space-y-1.5">
           <div className="num text-[10px] text-subtle">next question</div>
-          <div className="rounded-lg border border-border px-2.5 py-2 text-[11px]">{loop.next.label}<span className="num mt-1 block text-[10px] text-muted-foreground">Practice → Measure → Diagnose → Learn → Target → Repeat</span></div>
+           <div className="rounded-lg border border-border px-2.5 py-2 text-[11px]">{loop.next.label}<span className="num mt-1 block text-[10px] text-muted-foreground">Practice → Score Command Center → Common Mistakes → Question Type Navigator</span></div>
         </div>
       ),
     });
@@ -115,9 +115,9 @@ export function PipelineSection({ subject }: { subject: SubjectConfig }) {
   return (
     <Section id="the-system">
       <SectionHeading
-        label={calculus ? "The APSTEMOS workflow · more than a question bank" : "01 · the loop"}
-        title={calculus ? "Don't just answer questions. Use them." : "Every answer changes what comes next."}
-        sub={calculus ? "Most practice ends when you check the answer. APSTEMOS starts there. Every question becomes part of a continuous workflow you can act on." : `One continuous system for ${subject.navLabel}: practice feeds diagnosis, diagnosis feeds targeting, targeting decides the next question you see.`}
+         label="Practice → Score Command Center → Common Mistakes → Question Type Navigator"
+         title="Every answer gives you more than a score."
+         sub={`Each question you answer updates your Score Command Center, giving you a clearer picture of your strengths and weaknesses by unit and subtopic. When you miss a question, return to it in your Answer Log, identify what went wrong in the Common Mistakes Database, and use the Question Type Navigator to learn how to approach that subtopic on both MCQs and FRQs for ${subject.navLabel}.`}
       />
 
       <div ref={ref} className="relative mt-16">

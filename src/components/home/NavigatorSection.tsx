@@ -16,8 +16,8 @@ export function NavigatorSection({ subject }: { subject: SubjectConfig }) {
     <Section className="border-t border-border">
       <SectionHeading
         label="05 · question type navigator"
-        title={calculus ? "From “I got it wrong” to “I know how to approach it.”" : "Know how the AP asks."}
-        sub={calculus ? "The Navigator follows the same unit-and-topic organization as Practice. Learn how to recognize and approach important MCQ and FRQ structures, avoid common traps, justify work, and communicate reasoning." : "A field manual for the exam: unit, topic, and the approach for each question type."}
+        title="Know how every topic can be tested."
+        sub={`The Question Type Navigator follows the exact same unit and subtopic structure as Practice. For each subtopic, learn how to recognize and approach its MCQs and FRQs, which methods and conditions matter, what mistakes to watch for, and what the ${subject.navLabel} exam expects from your work. When the Score Command Center reveals a weak subtopic, open that same subtopic in the Navigator and learn how to handle the questions you're likely to encounter.`}
       />
 
        <div className="mt-14 overflow-hidden border-y border-border bg-card">
@@ -31,7 +31,7 @@ export function NavigatorSection({ subject }: { subject: SubjectConfig }) {
               to="/question-navigator"
               className="group inline-flex items-center gap-1.5 text-sm font-medium transition-colors hover:text-primary"
             >
-              Open the navigator
+              Explore the Question Type Navigator
               <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
             </Link>
           ) : (
@@ -61,7 +61,7 @@ export function NavigatorSection({ subject }: { subject: SubjectConfig }) {
           </ul>
 
           <div className="p-6 sm:p-8">
-            <MicroLabel>{calculus ? "How this topic appears on the AP exam" : "How to approach this question type"}</MicroLabel>
+            <MicroLabel>How this subtopic appears on the AP exam</MicroLabel>
             <AnimatePresence mode="wait">
               <motion.div
                 key={active}

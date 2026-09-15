@@ -1,16 +1,17 @@
 import { Reveal, Section, MicroLabel } from "./primitives";
+import type { SubjectConfig } from "@/lib/subjects";
 
-export function ManifestoSection() {
+export function ManifestoSection({ subject }: { subject: SubjectConfig }) {
   return (
     <Section className="border-t border-border">
       <div className="mx-auto max-w-3xl text-center">
         <Reveal>
-          <MicroLabel className="mb-6">Putting it together · one complete feedback loop</MicroLabel>
+          <MicroLabel className="mb-6">From one answer to the next</MicroLabel>
           <h2 className="font-display text-3xl font-semibold leading-[1.05] sm:text-5xl">
-            One question can change what you study next.
+            One structure connects the entire workflow.
           </h2>
           <p className="mx-auto mt-6 max-w-xl text-[15px] leading-relaxed text-secondary-foreground">
-            A missed answer updates the relevant topic, enters your Answer Log, connects to the mistake behind it, opens targeted Navigator guidance, and informs what you practice next.
+            From answering a {subject.navLabel} question to understanding what needs work and knowing how to improve it, every part of AP STEM OS uses the same unit and subtopic structure.
           </p>
         </Reveal>
         <Reveal delay={0.08}>
