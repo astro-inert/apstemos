@@ -68,13 +68,13 @@ export function SubjectSwitcher({ current }: Props) {
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         aria-haspopup="menu"
-        className="flex items-center gap-2 rounded-lg px-2 py-1.5 font-display text-base font-bold tracking-tight hover:bg-elevated transition-colors"
+        className="flex min-w-0 w-full items-center gap-1.5 rounded-lg px-1.5 py-1.5 font-display text-[15px] font-bold tracking-tight hover:bg-elevated transition-colors sm:gap-2 sm:px-2 sm:text-base"
       >
-        <span className="grid place-items-center h-7 w-7 rounded-md bg-primary text-primary-foreground transition-colors">
-          <ActiveIcon className="h-4 w-4" strokeWidth={2.5} />
+        <span className="grid shrink-0 place-items-center h-6 w-6 rounded-md bg-primary text-primary-foreground transition-colors sm:h-7 sm:w-7">
+          <ActiveIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" strokeWidth={2.5} />
         </span>
-        <span className="max-w-[9.5rem] truncate lg:max-w-none">{active.navLabel}</span>
-        <ChevronDown className={`h-3.5 w-3.5 text-muted-foreground transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
+        <span className="min-w-0 flex-1 truncate text-left">{active.navLabel}</span>
+        <ChevronDown className={`h-3.5 w-3.5 shrink-0 text-muted-foreground transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
       </button>
 
       {open && (
