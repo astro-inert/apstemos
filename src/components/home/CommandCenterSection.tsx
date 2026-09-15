@@ -17,18 +17,18 @@ export function CommandCenterSection({
   return (
     <Section className="border-t border-border">
       <SectionHeading
-        label="03 · score command center"
+        label="score command center"
         title="Know exactly where you stand."
         sub={`The Score Command Center turns your ${subject.navLabel} answers into unit and subtopic mastery, so weak areas become specific rather than vague.`}
       />
 
       <div className="mt-14 grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-7">
-        {/* Unit mastery */}
+        {/* Unit level breakdown */}
         <Reveal className="min-w-0 max-w-full rounded-2xl border border-border bg-card p-6 shadow-card sm:p-8">
           <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
             <div className="min-w-0">
               <MicroLabel>{subject.navLabel}</MicroLabel>
-              <div className="mt-1 font-display text-sm font-semibold">Unit mastery</div>
+              <div className="mt-1 font-display text-sm font-semibold">Unit level breakdown</div>
             </div>
             <ExampleBadge live={data.live} />
           </div>
@@ -49,7 +49,7 @@ export function CommandCenterSection({
             ))}
           </ul>
            <p className="num mt-7 text-[11px] text-muted-foreground">
-             {data.completedQuestions} completed questions · 70% operational mastery threshold
+             {data.completedQuestions} completed questions · 70% accuracy threshold for topic strength
           </p>
         </Reveal>
 
@@ -57,10 +57,20 @@ export function CommandCenterSection({
         <Reveal delay={0.08} className="relative min-w-0 max-w-full">
            <div className="relative h-full overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-card sm:p-8">
             <div className="relative">
-              <MicroLabel>Highest-priority recommendations</MicroLabel>
-               <p className="mt-3 max-w-sm text-[14px] leading-relaxed text-secondary-foreground">
-                  Recommendations prioritize the lowest-mastery areas with enough evidence.
-              </p>
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <MicroLabel>Topic diagnostics</MicroLabel>
+                   <p className="mt-3 max-w-sm text-[14px] leading-relaxed text-secondary-foreground">
+                      Recommendations prioritize the lowest-mastery areas with enough evidence.
+                  </p>
+                </div>
+                {data.predicted && (
+                  <div className="flex flex-col items-end shrink-0">
+                    <MicroLabel>Projected AP Score</MicroLabel>
+                    <div className="num mt-1 font-display text-4xl font-bold text-primary">{data.predicted}</div>
+                  </div>
+                )}
+              </div>
               <ol className="mt-7 space-y-3">
                 {data.moves.map((m, i) => (
                   <motion.li

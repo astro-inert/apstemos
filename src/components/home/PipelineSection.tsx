@@ -46,7 +46,7 @@ export function PipelineSection({ subject }: { subject: SubjectConfig }) {
           </div>
           <div className="mt-2 h-1.5 rounded-full bg-elevated">
             <motion.div
-              className="h-full rounded-full bg-primary"
+              className="h-full rounded-full bg-primary-grad"
               initial={{ width: `${loop.diagnose.from}%` }}
               whileInView={{ width: `${loop.diagnose.to}%` }}
               viewport={{ once: true }}
@@ -110,7 +110,7 @@ export function PipelineSection({ subject }: { subject: SubjectConfig }) {
         {/* the rail */}
         <div className="pointer-events-none absolute left-[13px] top-2 bottom-2 w-px bg-border lg:left-0 lg:right-0 lg:top-[13px] lg:bottom-auto lg:h-px lg:w-auto">
           <motion.div
-            className="absolute left-0 top-0 w-px bg-primary lg:h-px lg:w-auto"
+            className="absolute left-0 top-0 w-px bg-primary-grad lg:h-px lg:w-auto"
             style={
               reduced
                 ? { height: "100%", width: "100%" }

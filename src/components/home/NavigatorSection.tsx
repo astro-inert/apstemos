@@ -48,7 +48,7 @@ export function NavigatorSection({ subject }: { subject: SubjectConfig }) {
                   onFocus={() => setActive(i)}
                   onClick={() => setActive(i)}
                   className={`flex min-h-12 w-full items-center justify-between gap-3 border-b border-border px-5 py-3.5 text-left text-[14px] transition-colors last:border-b-0 sm:px-6 ${
-                    active === i ? "bg-accent/50 text-primary" : "hover:bg-elevated/60"
+                    active === i ? "bg-primary/5 text-primary border-l-2 border-primary" : "hover:bg-elevated/60"
                   }`}
                 >
                   <span className="min-w-0 truncate font-medium">{s}</span>

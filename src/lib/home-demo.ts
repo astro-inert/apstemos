@@ -126,7 +126,7 @@ const calcBC: HomeDemo = {
       "Limits from Graphs and Tables",
       "Squeeze Theorem",
       "Continuity & Discontinuity Types",
-      "Intermediate Value Theorem",
+      "Intermediate Value Theorem", "Limits at Infinity",
     ],
     activeIndex: 0,
     mcq: [

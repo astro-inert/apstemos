@@ -76,7 +76,7 @@ export function MasteryBar({ value, delay = 0 }: { value: number; delay?: number
   return (
     <div className="h-1.5 w-full overflow-hidden rounded-full bg-elevated">
       <motion.div
-        className="h-full rounded-full bg-primary"
+        className="h-full rounded-full bg-primary-grad"
         style={{ opacity: value >= 70 ? 1 : 0.72 }}
         initial={reduced ? { width: `${value}%` } : { width: 0 }}
         whileInView={{ width: `${value}%` }}
