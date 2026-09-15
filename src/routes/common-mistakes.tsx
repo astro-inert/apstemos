@@ -14,7 +14,7 @@ export const Route = createFileRoute("/common-mistakes")({
   head: () => ({
     meta: [
       { title: "Common Mistakes — AP STEM OS" },
-      { name: "description", content: "The 22+ ways AP Calculus students lose points — described, exampled, and fixed." },
+      { name: "description", content: "A searchable database of recurring AP Calculus errors — what goes wrong, what it looks like, and how to avoid it." },
     ],
   }),
   component: () => (
@@ -91,7 +91,7 @@ function CommonMistakes() {
           Where points <span className="text-primary">die</span>.
         </>
       }
-      description='Every mistake here has cost real students real points. Read the description, study the example, and copy the "how to avoid" line into your notes.'
+      description='A searchable database of recurring AP Calculus errors — what goes wrong, what it looks like, and how to avoid it. Tag mistakes from your Answer Log or add your own when the database does not match what happened.'
     >
       <div className="mb-8">
         <MistakeCaptureDialog />
@@ -186,4 +186,3 @@ function CommonMistakes() {
     </PageShell>
   );
 }
-
