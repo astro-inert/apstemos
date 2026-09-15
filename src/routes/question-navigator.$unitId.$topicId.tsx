@@ -6,6 +6,7 @@ import { ArrowLeft, FileText, ListChecks, MessageSquareQuote, AlertTriangle, Spa
 import { SubjectContentGate } from "@/components/SubjectContentGate";
 import { getTopicGuide } from "@/lib/navigator-guides";
 import { getUnit2TopicGuide } from "@/lib/navigator-guides-unit2";
+import { getUnit2Topic5Guide } from "@/lib/navigator-guide-unit2-topic5";
 import { GuideRenderer } from "@/components/navigator/GuideRenderer";
 
 export const Route = createFileRoute("/question-navigator/$unitId/$topicId")({
@@ -48,7 +49,7 @@ const sections = [
 
 function Page() {
   const { unit, topic } = Route.useLoaderData() as { unit: UnitEntry; topic: TopicEntry };
-  const guide = getTopicGuide(topic.slug) ?? getUnit2TopicGuide(topic.slug);
+  const guide = getTopicGuide(topic.slug) ?? getUnit2TopicGuide(topic.slug) ?? getUnit2Topic5Guide(topic.slug);
 
   return (
     <PageShell
