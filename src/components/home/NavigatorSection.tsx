@@ -47,13 +47,13 @@ export function NavigatorSection({ subject }: { subject: SubjectConfig }) {
                   onMouseEnter={() => setActive(i)}
                   onFocus={() => setActive(i)}
                   onClick={() => setActive(i)}
-                  className={`flex min-h-12 w-full items-center justify-between gap-3 border-b border-border px-5 py-3.5 text-left text-[14px] transition-colors last:border-b-0 sm:px-6 ${
+                  className={`flex min-h-[2.75rem] sm:min-h-12 w-full items-center justify-between gap-3 border-b border-border px-5 py-2.5 sm:py-3.5 text-left text-[14px] transition-colors last:border-b-0 sm:px-6 ${
                     active === i ? "bg-primary/5 text-primary border-l-2 border-primary" : "hover:bg-elevated/60"
                   }`}
                 >
                   <span className="min-w-0 truncate font-medium">{s}</span>
                   <ChevronRight
-                    className={`h-4 w-4 shrink-0 transition-transform ${active === i ? "translate-x-0.5 text-primary" : "text-subtle"}`}
+                    className={`h-4 w-4 shrink-0 shrink-0 transition-transform ${active === i ? "translate-x-0.5 text-primary" : "text-subtle"}`}
                   />
                 </button>
               </li>
@@ -69,7 +69,7 @@ export function NavigatorSection({ subject }: { subject: SubjectConfig }) {
                 animate={{ opacity: 1, y: 0 }}
                 exit={reduced ? { opacity: 1 } : { opacity: 0, y: -6 }}
                 transition={{ type: "spring", stiffness: 200, damping: 24 }}
-                className="mt-6 grid gap-8 sm:grid-cols-2"
+                className="mt-6 grid gap-6 sm:gap-8 sm:grid-cols-2"
               >
                 {[
                   { k: "MCQ", steps: activeGuidance.mcq },
