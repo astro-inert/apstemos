@@ -32,7 +32,7 @@ export function ResourcesSection({ subject }: { subject: SubjectConfig }) {
         title="Everything else you need for exam day."
         sub={live ? undefined : `${subject.navLabel} resources are being written now.`}
       />
-      <div className="mt-14 grid gap-px overflow-hidden rounded-3xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
+       <div className="mt-14 grid gap-px overflow-hidden border-y border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
         {RESOURCES.map((r, i) => {
           const body = (
             <>
@@ -43,7 +43,7 @@ export function ResourcesSection({ subject }: { subject: SubjectConfig }) {
                 ) : null}
               </div>
               <h3 className="mt-6 font-display text-[15px] font-semibold leading-tight">{r.title}</h3>
-              <p className="mt-2 text-[13px] leading-relaxed text-muted-foreground">{r.copy}</p>
+               <p className="mt-2 text-[13px] leading-relaxed text-secondary-foreground">{r.copy}</p>
               {live ? null : <ComingSoon className="mt-5 self-start" />}
             </>
           );

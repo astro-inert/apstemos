@@ -17,12 +17,12 @@ export function HeroSection({ subject, data }: { subject: SubjectConfig; data: I
           className="max-w-3xl"
         >
           <MicroLabel className="mb-6">{subject.navLabel} · score optimization</MicroLabel>
-          <h1 className="font-display text-[2.6rem] font-semibold leading-[0.98] tracking-[-0.045em] sm:text-[4.6rem]">
+          <h1 className="font-display text-[2.6rem] font-semibold leading-[0.98] sm:text-[4.6rem]">
             Know exactly what
             <br />
             to study to get a <span className="text-primary">5</span>.
           </h1>
-          <p className="mt-7 max-w-xl text-[16px] leading-relaxed text-muted-foreground sm:text-[17px]">
+          <p className="mt-7 max-w-xl text-[16px] leading-7 text-secondary-foreground sm:text-[17px]">
             AP STEM OS turns every question you answer into a personalized study plan — showing you what you know, what
             you're missing, and what to work on next.
           </p>
@@ -34,7 +34,7 @@ export function HeroSection({ subject, data }: { subject: SubjectConfig; data: I
               </MagneticLink>
             ) : (
               <div className="flex flex-col items-start gap-3">
-                <span className="inline-flex cursor-not-allowed items-center gap-2 rounded-full border border-dashed border-border bg-card px-6 py-3 text-sm font-semibold text-muted-foreground">
+                <span className="inline-flex cursor-not-allowed items-center gap-2 rounded-md border border-dashed border-border bg-card px-6 py-3 text-sm font-semibold text-muted-foreground">
                   {subject.navLabel} question bank
                   <ArrowRight className="h-4 w-4" />
                 </span>
@@ -49,7 +49,7 @@ export function HeroSection({ subject, data }: { subject: SubjectConfig; data: I
               <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
             </a>
           </div>
-          <p className="num mt-7 text-[11px] uppercase tracking-[0.16em] text-subtle">
+          <p className="num mt-7 text-[12px] text-muted-foreground">
             Free forever · No credit card · Built for the AP exam
           </p>
         </motion.div>
@@ -83,8 +83,8 @@ export function MagneticLink({
         to={to}
         className={
           variant === "primary"
-            ? "inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-glow transition-shadow hover:shadow-elevated"
-            : "inline-flex items-center gap-2 rounded-full border border-border bg-card px-6 py-3 text-sm font-semibold transition-colors hover:border-primary/40"
+            ? "inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+            : "inline-flex items-center gap-2 rounded-md border border-border bg-card px-6 py-3 text-sm font-semibold transition-colors hover:border-primary/40"
         }
       >
         {children}
@@ -100,7 +100,7 @@ function Instrument({ subject, data }: { subject: SubjectConfig; data: Instrumen
       initial={reduced ? { opacity: 1 } : { opacity: 0, y: 26 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: "spring", stiffness: 90, damping: 22, delay: 0.12 }}
-      className="overflow-hidden rounded-3xl border border-border bg-card shadow-instrument"
+      className="overflow-hidden rounded-lg border border-border bg-card shadow-instrument"
     >
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-5 py-4 sm:px-7">
         <div className="min-w-0">

@@ -24,7 +24,7 @@ export function CommandCenterSection({
 
       <div className="mt-14 grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-6">
         {/* Unit mastery */}
-        <Reveal className="rounded-3xl border border-border bg-card p-6 shadow-card sm:p-8">
+        <Reveal className="border-t-2 border-foreground bg-card p-6 sm:p-8">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
               <MicroLabel>{subject.navLabel}</MicroLabel>
@@ -48,18 +48,17 @@ export function CommandCenterSection({
               </li>
             ))}
           </ul>
-          <p className="num mt-7 text-[10px] uppercase tracking-[0.16em] text-subtle">
+           <p className="num mt-7 text-[11px] text-muted-foreground">
             70% is AP STEM OS's operational mastery threshold
           </p>
         </Reveal>
 
         {/* Recommendations — visually dominant */}
         <Reveal delay={0.08} className="relative">
-          <div className="relative h-full overflow-hidden rounded-3xl border border-primary/25 bg-card p-6 shadow-instrument sm:p-8">
-            <div className="pointer-events-none absolute inset-0 opacity-80 atmosphere" />
+           <div className="relative h-full overflow-hidden border-t-2 border-primary bg-card p-6 sm:p-8">
             <div className="relative">
               <MicroLabel>Highest-priority recommendations</MicroLabel>
-              <p className="mt-3 max-w-sm text-[13px] leading-relaxed text-muted-foreground">
+               <p className="mt-3 max-w-sm text-[14px] leading-relaxed text-secondary-foreground">
                 The score tells you where you are. These tell you what to do.
               </p>
               <ol className="mt-7 space-y-3">
@@ -72,7 +71,7 @@ export function CommandCenterSection({
                     {live ? (
                     <Link
                       to="/practice"
-                      className="group flex items-start gap-4 rounded-2xl border border-border bg-background/70 px-4 py-4 transition-colors hover:border-primary/40"
+                       className="group flex items-start gap-4 border-t border-border bg-background/70 px-4 py-4 transition-colors hover:bg-elevated/60"
                     >
                       <span className="num text-[13px] text-primary">{i + 1}.</span>
                       <span className="min-w-0 flex-1">

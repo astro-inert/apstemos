@@ -29,7 +29,7 @@ export function DiagnosisSection({ subject }: { subject: SubjectConfig }) {
 
       <div className="mt-14 grid gap-4 lg:grid-cols-2 lg:gap-6">
         {/* Question */}
-        <div className="rounded-3xl border border-border bg-card p-6 shadow-card sm:p-8">
+        <div className="border-t-2 border-foreground bg-card p-6 sm:p-8">
           <div className="flex items-center justify-between gap-3">
             <MicroLabel>{q.id}</MicroLabel>
             <span className="num text-[10px] text-subtle">{q.meta}</span>
@@ -52,7 +52,7 @@ export function DiagnosisSection({ subject }: { subject: SubjectConfig }) {
                 <button
                   key={i}
                   onClick={() => setPicked(i)}
-                  className={`flex w-full items-center gap-3 rounded-2xl border px-4 py-3 text-left text-sm transition-all ${state}`}
+                   className={`flex w-full items-center gap-3 rounded-md border px-4 py-3 text-left text-sm transition-all ${state}`}
                 >
                   <span className="num text-[11px] text-subtle">{String.fromCharCode(65 + i)}</span>
                   <span className="min-w-0 flex-1">
@@ -79,8 +79,7 @@ export function DiagnosisSection({ subject }: { subject: SubjectConfig }) {
         </div>
 
         {/* Diagnosis */}
-        <div className="relative min-h-[22rem] overflow-hidden rounded-3xl border border-border bg-card p-6 shadow-card sm:p-8">
-          <div className="pointer-events-none absolute inset-0 opacity-70 atmosphere" />
+         <div className="relative min-h-[22rem] overflow-hidden border-t-2 border-primary bg-card p-6 sm:p-8">
           <AnimatePresence mode="wait">
             {!revealed ? (
               <motion.div
@@ -140,7 +139,7 @@ export function DiagnosisSection({ subject }: { subject: SubjectConfig }) {
                 {isSubjectLive(subject.id) ? (
                   <Link
                     to="/practice"
-                    className="mt-7 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-shadow hover:shadow-glow"
+                     className="mt-7 inline-flex items-center gap-2 rounded-md bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
                   >
                     Practice this weakness
                     <ArrowRight className="h-4 w-4" />

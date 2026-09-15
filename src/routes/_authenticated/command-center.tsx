@@ -55,11 +55,11 @@ function ErrorView({ error }: { error: Error }) {
   return (
     <AppShell>
       <div className="mx-auto max-w-md px-5 py-20 sm:px-8">
-        <h2 className="font-display text-xl font-semibold tracking-[-0.02em]">Couldn't load your data</h2>
+        <h2 className="font-display text-xl font-semibold">Couldn't load your data</h2>
         <p className="mt-2 text-[14px] text-muted-foreground">{error.message}</p>
         <button
           onClick={() => router.invalidate()}
-          className="mt-6 rounded-full bg-primary px-5 py-2.5 text-[14px] font-semibold text-primary-foreground"
+          className="mt-6 rounded-md bg-primary px-5 py-2.5 text-[14px] font-semibold text-primary-foreground"
         >
           Try again
         </button>
@@ -111,13 +111,13 @@ function CalcCommandCenter() {
   return (
     <div className="mx-auto max-w-6xl space-y-6 px-5 pb-24 pt-12 sm:px-8 sm:pt-16">
       {/* Header */}
-      <div className="flex flex-wrap items-end justify-between gap-4">
+      <div className="flex flex-wrap items-end justify-between gap-4 border-b border-border pb-8">
         <div className="min-w-0">
           <div className="micro-label">score command center</div>
-          <h1 className="mt-4 font-display text-3xl font-semibold leading-[1.06] tracking-[-0.035em] sm:text-4xl">
+          <h1 className="mt-4 font-display text-4xl font-semibold leading-[1.06] sm:text-5xl">
             {data.profile?.display_name ? `Welcome back, ${data.profile.display_name}.` : "Welcome back."}
           </h1>
-          <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">
+          <p className="mt-3 text-[15px] leading-relaxed text-secondary-foreground">
             {data.attempts_count === 0
               ? "No attempts yet — your dashboard updates as you practice."
               : `${data.attempts_count} questions logged · ${Math.round(data.accuracy * 100)}% overall accuracy`}
@@ -126,26 +126,26 @@ function CalcCommandCenter() {
         <div className="flex shrink-0 items-center gap-2">
           <Link
             to="/practice"
-            className="inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-[13px] font-semibold text-primary-foreground"
+            className="inline-flex items-center gap-1.5 rounded-md bg-primary px-4 py-2 text-[13px] font-semibold text-primary-foreground"
           >
             Practice <ArrowRight className="h-3.5 w-3.5" />
           </Link>
           <Link
             to="/predict"
-            className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-4 py-2 text-[13px] font-medium transition-colors hover:border-primary/40"
+            className="inline-flex items-center gap-1.5 rounded-md border border-border bg-card px-4 py-2 text-[13px] font-medium transition-colors hover:border-primary/40"
           >
             MCQ diagnostic
           </Link>
           {isAdmin && (
             <Link
               to="/admin/predictions"
-              className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-4 py-2 text-[13px] font-medium transition-colors hover:border-primary/40"
+              className="inline-flex items-center gap-1.5 rounded-md border border-border bg-card px-4 py-2 text-[13px] font-medium transition-colors hover:border-primary/40"
             >
               Prediction analytics
             </Link>
           )}
           <TrackSwitcher track={data.profile?.track === "AB" ? "AB" : "BC"} />
-          <span className="num inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-2 text-[12px] text-muted-foreground">
+          <span className="num inline-flex items-center gap-1.5 rounded-md border border-border bg-card px-3 py-2 text-[12px] text-muted-foreground">
             <Calendar className="h-3.5 w-3.5" /> {daysToExam} days to exam
           </span>
         </div>
@@ -205,23 +205,23 @@ function OtherSubjectCommandCenter({ subjectId }: { subjectId: SubjectId }) {
   return (
     <div className="mx-auto max-w-6xl space-y-6 px-5 pb-24 pt-12 sm:px-8 sm:pt-16">
       {/* Header */}
-      <div className="flex flex-wrap items-end justify-between gap-4">
+      <div className="flex flex-wrap items-end justify-between gap-4 border-b border-border pb-8">
         <div className="min-w-0">
           <div className="micro-label">score command center</div>
-          <h1 className="mt-4 font-display text-3xl font-semibold leading-[1.06] tracking-[-0.035em] sm:text-4xl">{subject.navLabel} Command Center</h1>
-          <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">
+          <h1 className="mt-4 font-display text-4xl font-semibold leading-[1.06] sm:text-5xl">{subject.navLabel} Command Center</h1>
+          <p className="mt-3 text-[15px] leading-relaxed text-secondary-foreground">
             The {subject.navLabel} question bank is coming soon — this dashboard will populate with your real attempts once it launches.
           </p>
         </div>
         <div className="flex shrink-0 items-center gap-2">
-          <span className="num inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-2 text-[12px] text-muted-foreground">
+          <span className="num inline-flex items-center gap-1.5 rounded-md border border-border bg-card px-3 py-2 text-[12px] text-muted-foreground">
 
             <Calendar className="h-3.5 w-3.5" /> {daysToExam} days to exam
           </span>
         </div>
       </div>
 
-      <div className="flex items-start gap-3 rounded-3xl border border-dashed border-border bg-card/60 p-5 text-[14px] leading-relaxed text-muted-foreground">
+      <div className="flex items-start gap-3 border-l-2 border-primary bg-card/60 p-5 text-[14px] leading-relaxed text-secondary-foreground">
         <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
         <span>
           No attempt data yet for {subject.navLabel}. The unit-mastery table below shows the real exam units so you can see what's ahead —
@@ -230,21 +230,21 @@ function OtherSubjectCommandCenter({ subjectId }: { subjectId: SubjectId }) {
       </div>
 
       <div className="grid lg:grid-cols-3 gap-4">
-        <div className="rounded-3xl border border-border bg-card p-6 shadow-card">
-          <div className="text-xs uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5"><Target className="h-3.5 w-3.5" /> {engineLabel}</div>
+        <div className="border-t-2 border-foreground bg-card p-6">
+          <div className="micro-label inline-flex items-center gap-1.5"><Target className="h-3.5 w-3.5" /> {engineLabel}</div>
           <div className="mt-4 flex items-baseline gap-2">
             <span className="font-display text-4xl font-bold tabular-nums">{raw}</span>
             <span className="text-muted-foreground text-sm">/ {total}</span>
             <span className="ml-auto text-xs text-muted-foreground">target {target}</span>
           </div>
           <div className="mt-4 relative h-2.5 rounded-full bg-elevated overflow-hidden">
-            <div className="absolute inset-y-0 left-0 bg-gradient-to-r from-primary to-emerald-400 rounded-full" style={{ width: `${pct}%` }} />
+            <div className="absolute inset-y-0 left-0 rounded-full bg-primary" style={{ width: `${pct}%` }} />
             <div className="absolute inset-y-0 w-0.5 bg-foreground/70" style={{ left: `${targetPct}%` }} />
           </div>
           <div className="mt-3 text-xs text-muted-foreground">Illustrative target based on the {subject.navLabel} exam structure — {gap}-point gap to target.</div>
         </div>
-        <div className="lg:col-span-2 rounded-3xl border border-border bg-card p-6 shadow-card">
-          <div className="text-xs uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5"><Zap className="h-3.5 w-3.5 text-amber-400" /> Recommendations</div>
+        <div className="border-t-2 border-primary bg-card p-6 lg:col-span-2">
+          <div className="micro-label inline-flex items-center gap-1.5"><Zap className="h-3.5 w-3.5 text-warning" /> Recommendations</div>
           <ol className="mt-4 space-y-2.5 text-sm">
             {subject.recommendations.map((a, i) => (
               <li key={a.t} className="flex items-center gap-3">
@@ -258,10 +258,10 @@ function OtherSubjectCommandCenter({ subjectId }: { subjectId: SubjectId }) {
       </div>
 
       {/* Unit mastery — untouched state */}
-      <div className="rounded-3xl border border-border bg-card overflow-hidden">
+      <div className="overflow-hidden border-y border-border bg-card">
         <div className="flex items-center justify-between px-5 py-4 border-b border-border">
           <div>
-            <div className="text-xs uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5">
+            <div className="micro-label inline-flex items-center gap-1.5">
               <Activity className="h-3.5 w-3.5" /> Unit level breakdown
             </div>
             <h3 className="font-display font-semibold mt-1">All {subject.units.length} units · no data yet</h3>
@@ -281,7 +281,7 @@ function OtherSubjectCommandCenter({ subjectId }: { subjectId: SubjectId }) {
                 </div>
               </div>
               <div className="col-span-2 text-right">
-                <span className="text-[10px] uppercase tracking-wider text-muted-foreground">Untouched</span>
+                <span className="num text-[10px] text-muted-foreground">Untouched</span>
               </div>
             </div>
           ))}
@@ -289,17 +289,17 @@ function OtherSubjectCommandCenter({ subjectId }: { subjectId: SubjectId }) {
       </div>
 
       {/* Common mistakes for this subject */}
-      <div className="rounded-3xl border border-border bg-card p-6 shadow-card">
+      <div className="border-t-2 border-border bg-card p-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <div className="text-xs uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5"><AlertTriangle className="h-3.5 w-3.5 text-rose-400" /> Common mistakes to watch for</div>
+            <div className="micro-label inline-flex items-center gap-1.5"><AlertTriangle className="h-3.5 w-3.5 text-destructive" /> Common mistakes to watch for</div>
             <h3 className="font-display font-semibold mt-1">{subject.mistakesHeading}</h3>
           </div>
           <Link to="/common-mistakes" className="text-xs text-primary hover:underline inline-flex items-center gap-1">All mistakes <ArrowRight className="h-3 w-3" /></Link>
         </div>
         <div className="grid sm:grid-cols-2 gap-2">
           {subject.mistakes.map((m) => (
-            <div key={m.title} className="flex items-center gap-3 p-3 rounded-lg bg-elevated/50 border border-border">
+            <div key={m.title} className="flex items-center gap-3 border-t border-border bg-elevated/50 p-3">
               <div className="flex-1 min-w-0">
                 <div className="text-sm font-medium truncate">{m.title}</div>
                 <div className="text-xs text-muted-foreground">{m.category}</div>
@@ -321,8 +321,8 @@ function PerformanceDiagnostics({ units }: { units: UnitRow[] }) {
   return (
     <div className="grid lg:grid-cols-3 gap-4">
       {/* Untouched / projected lift */}
-      <div className="rounded-3xl border border-border bg-card p-6 shadow-card">
-        <div className="text-xs uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5">
+      <div className="border-t-2 border-border bg-card p-6">
+        <div className="micro-label inline-flex items-center gap-1.5">
           <Sparkles className="h-3.5 w-3.5 text-primary" /> Untouched units
         </div>
         <h3 className="font-display font-semibold mt-1">Highest ROI to start</h3>
@@ -344,10 +344,10 @@ function PerformanceDiagnostics({ units }: { units: UnitRow[] }) {
       </div>
 
       {/* Full unit performance table — topic-level placeholder */}
-      <div className="lg:col-span-3 rounded-3xl border border-border bg-card overflow-hidden">
+      <div className="overflow-hidden border-y border-border bg-card lg:col-span-3">
         <div className="flex items-center justify-between px-5 py-4 border-b border-border">
           <div>
-            <div className="text-xs uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5">
+            <div className="micro-label inline-flex items-center gap-1.5">
               <Activity className="h-3.5 w-3.5" /> Unit level breakdown
             </div>
             <h3 className="font-display font-semibold mt-1">All 10 units · ranked by mastery</h3>
@@ -390,7 +390,7 @@ function PerformanceDiagnostics({ units }: { units: UnitRow[] }) {
                   {m < 0 ? "—" : `${m}%`}
                 </div>
                 <div className="col-span-1 sm:col-span-1 text-right">
-                  <span className={`text-[10px] uppercase tracking-wider ${
+                  <span className={`num text-[10px] ${
                     m < 0 ? "text-muted-foreground" :
                     m >= 80 ? "text-emerald-400" :
                     m >= 60 ? "text-amber-400" :
@@ -399,17 +399,20 @@ function PerformanceDiagnostics({ units }: { units: UnitRow[] }) {
                 </div>
 
                 <div className="col-span-1 text-right">
-                  {QN_UNITS.find((qu) => qu.number === u.number) ? (
+                  {(() => {
+                    const practiceUnit = QN_UNITS.find((qu) => qu.number === u.number);
+                    return practiceUnit ? (
                     <Link
                       to="/practice"
-                      search={{ unit: QN_UNITS.find((qu) => qu.number === u.number)!.slug }}
+                      search={{ unit: practiceUnit.slug }}
                       title={`Practice only Unit ${u.number} questions`}
                       aria-label={`Practice only Unit ${u.number} questions`}
                       className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-border text-muted-foreground hover:bg-elevated hover:text-foreground"
                     >
                       <ArrowRight className="h-3.5 w-3.5" />
                     </Link>
-                  ) : null}
+                    ) : null;
+                  })()}
                 </div>
               </div>
             );
@@ -422,10 +425,10 @@ function PerformanceDiagnostics({ units }: { units: UnitRow[] }) {
 
 function TopMistakesPanel({ mistakes }: { mistakes: Array<{ code: string; title: string; category: string; occurrences: number }> }) {
   return (
-    <div className="rounded-3xl border border-border bg-card p-6 shadow-card h-full">
+    <div className="h-full border-t-2 border-border bg-card p-6">
       <div className="flex items-center justify-between mb-4">
         <div>
-          <div className="text-xs uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5"><AlertTriangle className="h-3.5 w-3.5 text-rose-400" /> Ranked by occurrences</div>
+          <div className="micro-label inline-flex items-center gap-1.5"><AlertTriangle className="h-3.5 w-3.5 text-destructive" /> Ranked by occurrences</div>
           <h3 className="font-display font-semibold mt-1">Your top mistakes</h3>
         </div>
         <Link to="/common-mistakes" className="text-xs text-primary hover:underline inline-flex items-center gap-1">All mistakes <ArrowRight className="h-3 w-3" /></Link>
@@ -437,7 +440,7 @@ function TopMistakesPanel({ mistakes }: { mistakes: Array<{ code: string; title:
       ) : (
         <div className="space-y-2">
           {mistakes.map((m) => (
-            <div key={m.code} className="flex items-center gap-3 p-3 rounded-lg bg-elevated/50 border border-border">
+            <div key={m.code} className="flex items-center gap-3 border-t border-border bg-elevated/50 p-3">
               <div className="flex-1 min-w-0">
                 <div className="text-sm font-medium truncate"><LaTeX>{m.title}</LaTeX></div>
 
@@ -459,8 +462,8 @@ function InsightsPanel({ data }: { data: Awaited<ReturnType<typeof getPerformanc
   const untouched = data.unit_mastery.filter((u) => u.mastery < 0).length;
   const weak = data.unit_mastery.filter((u) => u.mastery >= 0 && u.mastery < 60).length;
   return (
-    <div className="rounded-3xl border border-border bg-card p-6 shadow-card h-full">
-      <div className="text-xs uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5"><Sparkles className="h-3.5 w-3.5 text-primary" /> Insights</div>
+    <div className="h-full border-t-2 border-border bg-card p-6">
+      <div className="micro-label inline-flex items-center gap-1.5"><Sparkles className="h-3.5 w-3.5 text-primary" /> Insights</div>
       <ul className="mt-4 space-y-3 text-sm">
         <li className="flex items-start gap-2">
           <span className="h-1.5 w-1.5 rounded-full bg-primary mt-1.5 shrink-0" />
@@ -490,13 +493,13 @@ function TrackSwitcher({ track }: { track: "AB" | "BC" }) {
   });
   const active = mutation.isPending ? (mutation.variables as "AB" | "BC") : track;
   return (
-    <div className="inline-flex items-center rounded-full border border-border bg-card p-0.5" role="group" aria-label="Exam track">
+    <div className="inline-flex items-center rounded-md border border-border bg-card p-0.5" role="group" aria-label="Exam track">
       {(["AB", "BC"] as const).map((t) => (
         <button
           key={t}
           onClick={() => t !== active && mutation.mutate(t)}
           aria-pressed={active === t}
-          className={`rounded-full px-3 py-1.5 text-[12px] font-semibold transition-colors ${
+          className={`rounded-sm px-3 py-1.5 text-[12px] font-semibold transition-colors ${
             active === t ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
           }`}
         >

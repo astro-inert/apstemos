@@ -105,12 +105,12 @@ export function SectionHeading({
   return (
     <Reveal className={align === "center" ? "text-center" : ""}>
       {label ? <MicroLabel className="mb-5">{label}</MicroLabel> : null}
-      <h2 className="max-w-3xl font-display text-3xl font-semibold leading-[1.06] tracking-[-0.035em] sm:text-5xl">
+      <h2 className="max-w-3xl font-display text-3xl font-semibold leading-[1.08] sm:text-5xl">
         {title}
       </h2>
       {sub ? (
         <p
-          className={`mt-4 max-w-xl text-[15px] leading-relaxed text-muted-foreground ${
+          className={`mt-4 max-w-xl text-[16px] leading-7 text-secondary-foreground ${
             align === "center" ? "mx-auto" : ""
           }`}
         >
@@ -139,7 +139,7 @@ export function Section({
 
 export function ExampleBadge({ live }: { live: boolean }) {
   return (
-    <span className="num rounded-full border border-border bg-elevated/60 px-2 py-0.5 text-[10px] uppercase tracking-[0.16em] text-subtle">
+    <span className="num border-l-2 border-primary bg-elevated/60 px-2 py-1 text-[11px] text-muted-foreground">
       {live ? "your data" : "example preview"}
     </span>
   );
@@ -149,7 +149,7 @@ export function ExampleBadge({ live }: { live: boolean }) {
 export function ComingSoon({ className = "" }: { className?: string }) {
   return (
     <span
-      className={`num inline-flex items-center rounded-full border border-dashed border-border bg-elevated/50 px-2.5 py-0.5 text-[10px] uppercase tracking-[0.16em] text-subtle ${className}`}
+      className={`num inline-flex items-center border border-dashed border-border bg-elevated/50 px-2.5 py-1 text-[11px] text-muted-foreground ${className}`}
     >
       content coming soon
     </span>

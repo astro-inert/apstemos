@@ -19,7 +19,7 @@ export function NavigatorSection({ subject }: { subject: SubjectConfig }) {
         sub="A field manual for the exam: unit, topic, and the exact approach for each question type."
       />
 
-      <div className="mt-14 overflow-hidden rounded-3xl border border-border bg-card shadow-card">
+       <div className="mt-14 overflow-hidden border-y border-border bg-card">
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-6 py-5">
           <div>
             <MicroLabel>{subject.navLabel}</MicroLabel>
@@ -80,7 +80,7 @@ export function NavigatorSection({ subject }: { subject: SubjectConfig }) {
                       {col.steps.map((s, i) => (
                         <li key={s} className="flex gap-3 text-[13px] leading-relaxed">
                           <span className="num shrink-0 text-[11px] text-subtle">{i + 1}.</span>
-                          <span className="text-muted-foreground">{s}</span>
+                           <span className="text-secondary-foreground">{s}</span>
                         </li>
                       ))}
                     </ol>

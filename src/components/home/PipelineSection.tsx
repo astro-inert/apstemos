@@ -133,7 +133,7 @@ export function PipelineSection({ subject }: { subject: SubjectConfig }) {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-10% 0px" }}
                 transition={{ type: "spring", stiffness: 110, damping: 20, delay: 0.08 * i }}
-                className="mt-4 rounded-2xl border border-border bg-card p-3.5 shadow-card"
+               className="mt-4 border-t border-border bg-card p-3.5"
               >
                 {s.fragment}
               </motion.div>
