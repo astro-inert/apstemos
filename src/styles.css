@@ -6,7 +6,7 @@
 
 /*
  * AP STEM OS — editorial academic system.
- * Warm paper canvas, ink-dark type, and one precise blue-violet interaction color.
+ * Warm paper canvas, ink-dark type, and subject-specific interaction colors.
  */
 
 @theme inline {
@@ -204,6 +204,8 @@
 
 /* Instrument surfaces: hairline card with a very soft shadow. */
 @utility panel {
+  min-width: 0;
+  max-width: 100%;
   border: 1px solid var(--border);
   background: var(--card);
   border-radius: var(--radius-2xl);
@@ -245,6 +247,65 @@
   p { color: var(--secondary-foreground); }
 }
 
+/* Subject identities stay scoped to semantic tokens so every surface remains readable. */
+[data-subject="calc-bc"] {
+  --primary: oklch(0.56 0.23 13);
+  --primary-foreground: oklch(0.995 0 0);
+  --accent: oklch(0.95 0.035 8);
+  --accent-foreground: oklch(0.39 0.17 13);
+  --ring: oklch(0.56 0.23 13);
+}
+
+[data-subject="stats"] {
+  --primary: oklch(0.49 0.2 302);
+  --primary-foreground: oklch(0.995 0 0);
+  --accent: oklch(0.94 0.105 94);
+  --accent-foreground: oklch(0.34 0.13 302);
+  --ring: oklch(0.49 0.2 302);
+}
+
+.dark [data-subject="calc-bc"],
+.dark[data-subject="calc-bc"] {
+  --primary: oklch(0.72 0.18 10);
+  --primary-foreground: oklch(0.15 0.025 264);
+  --accent: oklch(0.3 0.08 8);
+  --accent-foreground: oklch(0.9 0.08 8);
+  --ring: oklch(0.72 0.18 10);
+}
+
+.dark [data-subject="stats"],
+.dark[data-subject="stats"] {
+  --primary: oklch(0.74 0.16 302);
+  --primary-foreground: oklch(0.15 0.025 264);
+  --accent: oklch(0.34 0.09 94);
+  --accent-foreground: oklch(0.91 0.1 94);
+  --ring: oklch(0.74 0.16 302);
+}
+
+/* Mobile containment: wide math and tables scroll locally, never the whole page. */
+.subject-theme main,
+.subject-theme section,
+.subject-theme article,
+.subject-theme figure,
+.subject-theme [role="region"] {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.subject-theme p,
+.subject-theme li,
+.subject-theme td,
+.subject-theme th {
+  overflow-wrap: anywhere;
+}
+
+.subject-theme .katex-display {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-block: 0.15rem;
+}
+
 /* Compatibility pass: older surfaces inherit the sharper editorial geometry. */
 @layer utilities {
   .rounded-3xl { border-radius: var(--radius-2xl); }
@@ -262,7 +323,7 @@
   }
 }
 
-/* Subject changes keep one product accent; only content changes. */
+/* Subject changes retain the same product structure while shifting its accent. */
 .subject-theme,
 .subject-theme * {
   transition: color 0.4s var(--ease-out-expo), background-color 0.4s var(--ease-out-expo),
