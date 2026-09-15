@@ -20,9 +20,9 @@ export function AnswerLogPanel() {
     <div className="border-y border-border bg-card">
       <div className="px-5 py-4 border-b border-border">
         <div className="micro-label text-primary">Answer log</div>
-        <h3 className="font-display font-semibold mt-1">Every question you've answered</h3>
+        <h3 className="font-display font-semibold mt-1">Your recent answers</h3>
         <p className="mt-1 text-sm text-secondary-foreground">
-          Green = earned the points, red = lost them. Missed questions link to the mistakes behind them.
+          Correct and incorrect attempts are logged here. Missed questions link to the mistakes behind them.
         </p>
       </div>
       {isLoading ? (
@@ -59,7 +59,7 @@ export function AnswerLogPanel() {
                       key={c}
                       to="/common-mistakes"
                       hash={c}
-                     className="rounded-sm bg-destructive/10 px-1.5 py-0.5 font-mono text-destructive hover:underline"
+                      className="rounded-sm bg-destructive/10 px-1.5 py-0.5 font-mono text-destructive hover:underline"
                     >
                       {c}
                     </Link>
@@ -74,9 +74,9 @@ export function AnswerLogPanel() {
                 </div>
               </div>
               <div
-                className={`shrink-0 font-mono text-xs tabular-nums ${r.correct ? "text-emerald-400" : "text-rose-400"}`}
+                className={`shrink-0 font-mono text-[11px] font-medium ${r.correct ? "text-emerald-400" : "text-rose-400"}`}
               >
-                {r.points_earned}/{r.points_possible}
+                {r.correct ? "Correct" : "Incorrect"}
               </div>
             </div>
           ))}
