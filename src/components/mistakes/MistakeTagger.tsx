@@ -58,6 +58,7 @@ export function MistakeTagger({ attemptId, questionPrompt, topic }: Props) {
     mutationFn: (code: string) => tagFn({ data: { attempt_id: attemptId, code } }),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["answer-log"] });
+      qc.invalidateQueries({ queryKey: ["performance-snapshot"] });
       toast.success("Mistake tagged.");
       setOpen(false);
     },
