@@ -14,7 +14,11 @@ export const Route = createFileRoute("/common-mistakes")({
   head: () => ({
     meta: [
       { title: "Common Mistakes — AP STEM OS" },
-      { name: "description", content: "The 22+ ways AP Calculus students lose points — described, exampled, and fixed." },
+      {
+        name: "description",
+        content:
+          "A searchable database of recurring AP Calculus errors — what goes wrong, what it looks like, and how to avoid it.",
+      },
     ],
   }),
   component: () => (
@@ -73,7 +77,10 @@ function CommonMistakes() {
   const [q, setQ] = useState("");
   const [cat, setCat] = useState<string>("all");
 
-  const categories = useMemo(() => ["all", ...Array.from(new Set(mistakes.map((m) => m.category)))], [mistakes]);
+  const categories = useMemo(
+    () => ["all", ...Array.from(new Set(mistakes.map((m) => m.category)))],
+    [mistakes],
+  );
   const filtered = useMemo(() => {
     return mistakes.filter((m) => {
       if (cat !== "all" && m.category !== cat) return false;
@@ -91,7 +98,7 @@ function CommonMistakes() {
           Where points <span className="text-primary">die</span>.
         </>
       }
-      description='Every mistake here has cost real students real points. Read the description, study the example, and copy the "how to avoid" line into your notes.'
+      description="A searchable database of recurring AP Calculus errors — what goes wrong, what it looks like, and how to avoid it. Tag mistakes from your Answer Log or add your own when the database does not match what happened."
     >
       <div className="mb-8">
         <MistakeCaptureDialog />
@@ -141,7 +148,9 @@ function CommonMistakes() {
                   <div className="micro-label mt-1.5 flex items-center gap-2">
                     {m.category}
                     {m.personal && (
-                      <span className="border-l-2 border-primary bg-primary/10 px-2 py-0.5 text-primary">personal</span>
+                      <span className="border-l-2 border-primary bg-primary/10 px-2 py-0.5 text-primary">
+                        personal
+                      </span>
                     )}
                   </div>
                 </div>
@@ -186,4 +195,3 @@ function CommonMistakes() {
     </PageShell>
   );
 }
-

@@ -7,7 +7,11 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { MistakeCaptureDialog } from "./MistakeCaptureDialog";
-import { listUserMistakes, tagAttemptMistake, type UserMistake } from "@/lib/user-mistakes.functions";
+import {
+  listUserMistakes,
+  tagAttemptMistake,
+  type UserMistake,
+} from "@/lib/user-mistakes.functions";
 
 interface Props {
   attemptId: string;
@@ -26,7 +30,9 @@ export function MistakeTagger({ attemptId, questionPrompt, topic }: Props) {
   const { data: shared } = useQuery({
     queryKey: ["common-mistakes-lite"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("common_mistakes").select("code, title, category");
+      const { data, error } = await supabase
+        .from("common_mistakes")
+        .select("code, title, category");
       if (error) throw error;
       return data ?? [];
     },
@@ -46,8 +52,18 @@ export function MistakeTagger({ attemptId, questionPrompt, topic }: Props) {
 
   const options = useMemo(() => {
     const all = [
-      ...(mine ?? []).map((m) => ({ code: m.code, title: m.title, category: m.category, personal: true })),
-      ...(shared ?? []).map((m) => ({ code: m.code, title: m.title, category: m.category, personal: false })),
+      ...(mine ?? []).map((m) => ({
+        code: m.code,
+        title: m.title,
+        category: m.category,
+        personal: true,
+      })),
+      ...(shared ?? []).map((m) => ({
+        code: m.code,
+        title: m.title,
+        category: m.category,
+        personal: false,
+      })),
     ];
     if (!q) return all.slice(0, 40);
     const needle = q.toLowerCase();
@@ -58,6 +74,7 @@ export function MistakeTagger({ attemptId, questionPrompt, topic }: Props) {
     mutationFn: (code: string) => tagFn({ data: { attempt_id: attemptId, code } }),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["answer-log"] });
+      qc.invalidateQueries({ queryKey: ["performance-snapshot"] });
       toast.success("Mistake tagged.");
       setOpen(false);
     },

@@ -2,15 +2,12 @@ import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { QN_UNITS } from "./question-navigator-data";
 
-/** A unit needs this many logged questions before mastery % is trusted… */
+/** A unit needs this many logged questions before its accuracy is treated as established. */
 export const UNIT_MASTERY_THRESHOLD = 10;
-/** …and every subtopic in the unit must have at least this many logged questions. */
-export const UNIT_SUBTOPIC_MIN = 1;
 /** A subtopic needs this many logged questions before it counts as a strength/weakness. */
 export const SUBTOPIC_THRESHOLD = 3;
 /** Accuracy at or above this counts as a strength; below it, a weakness. Never both. */
 export const STRENGTH_CUTOFF = 70;
-
 
 export type PerformanceSnapshot = {
   profile: {
@@ -20,10 +17,11 @@ export type PerformanceSnapshot = {
     exam_date: string;
   } | null;
   attempts_count: number;
+  /** Ordinary question-bank accuracy: correct attempts / attempts. */
   accuracy: number; // 0-1
   points_earned: number;
   points_possible: number;
-  /** Unit-weighted mastery expressed on the 108-point map. NOT a score prediction. */
+  /** Unit-weighted demonstrated practice performance on the 108-point map. NOT a score prediction. */
   mastery_points: number;
   mastery_points_possible: number;
   unit_mastery: Array<{
@@ -32,12 +30,15 @@ export type PerformanceSnapshot = {
     name: string;
     ap_weight_pct: number;
     ap_points: number;
+    /** Ordinary MCQ accuracy for attempts in this unit; -1 if untouched. */
     mastery: number; // 0-100, or -1 if no data
     attempts: number;
+    correct: number;
     /** how many of the unit's subtopics have at least one logged question */
     subtopics_covered: number;
     subtopics_total: number;
-    /** true once attempts >= UNIT_MASTERY_THRESHOLD AND every subtopic has been touched */
+    coverage: number; // 0-1
+    /** true once there is enough volume and every subtopic has at least one attempt */
     mastery_unlocked: boolean;
   }>;
 
@@ -48,12 +49,18 @@ export type PerformanceSnapshot = {
     topic_title: string;
     accuracy: number; // 0-100
     attempts: number;
+    correct: number;
     /** true once attempts >= SUBTOPIC_THRESHOLD */
     unlocked: boolean;
   }>;
-  untouched_units: Array<{ unit_id: string; number: number; name: string; ap_points: number; ap_weight_pct: number }>;
-  /** Ranked by how often the mistake actually occurred. No point-loss estimates:
-   *  there is no defensible way to convert a mistake tally into AP points. */
+  untouched_units: Array<{
+    unit_id: string;
+    number: number;
+    name: string;
+    ap_points: number;
+    ap_weight_pct: number;
+  }>;
+  /** Ranked by how often the mistake actually occurred. No point-loss estimates. */
   top_mistakes: Array<{
     code: string;
     title: string;
@@ -68,18 +75,27 @@ export const getPerformanceSnapshot = createServerFn({ method: "GET" })
     const { supabase, userId } = context;
 
     const [profileRes, unitsRes, attemptsRes, mistakesCatRes] = await Promise.all([
-      supabase.from("profiles").select("display_name, track, target_score, exam_date").eq("id", userId).maybeSingle(),
-      supabase.from("units").select("id, number, name, ap_weight_pct, ap_points").eq("subject_id", "ap-calc-bc").order("number"),
+      supabase
+        .from("profiles")
+        .select("display_name, track, target_score, exam_date")
+        .eq("id", userId)
+        .maybeSingle(),
+      supabase
+        .from("units")
+        .select("id, number, name, ap_weight_pct, ap_points")
+        .eq("subject_id", "ap-calc-bc")
+        .order("number"),
       supabase
         .from("attempts")
-        .select("question_key, unit_id, unit_slug, topic_slug, correct, points_earned, points_possible, mistake_codes")
+        .select(
+          "question_key, unit_id, unit_slug, topic_slug, correct, points_earned, points_possible, mistake_codes",
+        )
         .eq("user_id", userId),
       supabase.from("common_mistakes").select("code, title, category"),
     ]);
 
     const track = profileRes.data?.track === "AB" ? "AB" : "BC";
     const { questionKeyInTrack } = await import("./generated-bank");
-    // Legacy rows without a generated key cannot be proven AB-safe, so they stay in BC only.
     const attempts = (attemptsRes.data ?? []).filter((attempt) =>
       attempt.question_key ? questionKeyInTrack(attempt.question_key, track) : track === "BC",
     );
@@ -87,38 +103,37 @@ export const getPerformanceSnapshot = createServerFn({ method: "GET" })
     const mistakesCat = mistakesCatRes.data ?? [];
 
     const attempts_count = attempts.length;
+    const correct_count = attempts.reduce((sum, attempt) => sum + (attempt.correct ? 1 : 0), 0);
+    const accuracy = attempts_count > 0 ? correct_count / attempts_count : 0;
     const points_earned = attempts.reduce((s, a) => s + Number(a.points_earned ?? 0), 0);
     const points_possible = attempts.reduce((s, a) => s + Number(a.points_possible ?? 0), 0);
-    const accuracy = points_possible > 0 ? points_earned / points_possible : 0;
 
-    // Unit mastery: % correct within unit; -1 if untouched
-    const byUnit = new Map<string, { e: number; p: number; n: number }>();
+    const byUnit = new Map<string, { correct: number; n: number }>();
     for (const a of attempts) {
+      const qnUnit = a.unit_slug ? QN_UNITS.find((entry) => entry.slug === a.unit_slug) : undefined;
       const matchedUnit = a.unit_id
         ? units.find((unit) => unit.id === a.unit_id)
-        : QN_UNITS.find((unit) => unit.slug === a.unit_slug)
-          ? units.find((unit) => unit.number === QN_UNITS.find((entry) => entry.slug === a.unit_slug)?.number)
+        : qnUnit
+          ? units.find((unit) => unit.number === qnUnit.number)
           : undefined;
       if (!matchedUnit) continue;
-      const cur = byUnit.get(matchedUnit.id) ?? { e: 0, p: 0, n: 0 };
-      cur.e += Number(a.points_earned ?? 0);
-      cur.p += Number(a.points_possible ?? 0);
+      const cur = byUnit.get(matchedUnit.id) ?? { correct: 0, n: 0 };
+      cur.correct += a.correct ? 1 : 0;
       cur.n += 1;
       byUnit.set(matchedUnit.id, cur);
     }
 
-    // Which subtopics has the user actually touched? Mastery only unlocks with
-    // full subtopic coverage, so a unit can't look "mastered" off one topic.
     const touchedTopics = new Set(attempts.map((a) => a.topic_slug).filter(Boolean) as string[]);
 
     const unit_mastery = units.map((u) => {
       const m = byUnit.get(u.id);
-      const mastery = m && m.p > 0 ? Math.round((m.e / m.p) * 100) : -1;
+      const mastery = m && m.n > 0 ? Math.round((m.correct / m.n) * 100) : -1;
       const qnUnit = QN_UNITS.find((q) => q.number === u.number);
       const topics = qnUnit?.topics ?? [];
       const subtopics_total = topics.length;
       const subtopics_covered = topics.filter((t) => touchedTopics.has(t.slug)).length;
       const attemptsN = m?.n ?? 0;
+      const coverage = subtopics_total > 0 ? subtopics_covered / subtopics_total : 0;
       return {
         unit_id: u.id,
         number: u.number,
@@ -127,14 +142,15 @@ export const getPerformanceSnapshot = createServerFn({ method: "GET" })
         ap_points: u.ap_points,
         mastery,
         attempts: attemptsN,
+        correct: m?.correct ?? 0,
         subtopics_covered,
         subtopics_total,
+        coverage,
         mastery_unlocked:
           attemptsN >= UNIT_MASTERY_THRESHOLD &&
           subtopics_total > 0 &&
-          subtopics_covered >= subtopics_total * UNIT_SUBTOPIC_MIN,
+          subtopics_covered === subtopics_total,
       };
-
     });
 
     const untouched_units = unit_mastery
@@ -147,14 +163,12 @@ export const getPerformanceSnapshot = createServerFn({ method: "GET" })
         ap_weight_pct: u.ap_weight_pct,
       }));
 
-    // Subtopic accuracy (needs SUBTOPIC_THRESHOLD attempts to be trusted)
-    const byTopic = new Map<string, { e: number; p: number; n: number }>();
+    const byTopic = new Map<string, { correct: number; n: number }>();
     for (const a of attempts) {
       const slug = a.topic_slug;
       if (!slug) continue;
-      const cur = byTopic.get(slug) ?? { e: 0, p: 0, n: 0 };
-      cur.e += Number(a.points_earned ?? 0);
-      cur.p += Number(a.points_possible ?? 0);
+      const cur = byTopic.get(slug) ?? { correct: 0, n: 0 };
+      cur.correct += a.correct ? 1 : 0;
       cur.n += 1;
       byTopic.set(slug, cur);
     }
@@ -169,21 +183,24 @@ export const getPerformanceSnapshot = createServerFn({ method: "GET" })
             unit_number: u.number,
             topic_slug: t.slug,
             topic_title: t.title,
-            accuracy: s.p > 0 ? Math.round((s.e / s.p) * 100) : 0,
+            accuracy: s.n > 0 ? Math.round((s.correct / s.n) * 100) : 0,
             attempts: s.n,
+            correct: s.correct,
             unlocked: s.n >= SUBTOPIC_THRESHOLD,
           };
         })
         .filter((topic): topic is NonNullable<typeof topic> => topic !== null),
     );
 
-    // Unit-weighted mastery on the 108-point map. Untouched units contribute 0 —
-    // this is a picture of demonstrated mastery, not an estimate of exam score.
+    // A weighted summary of demonstrated practice performance. It is deliberately
+    // separate from the diagnostic-based AP score estimate.
     const mastery_points = Math.round(
-      unit_mastery.reduce((s, u) => s + (u.mastery >= 0 ? u.mastery / 100 : 0) * u.ap_points, 0),
+      unit_mastery.reduce(
+        (s, u) => s + (u.mastery_unlocked && u.mastery >= 0 ? u.mastery / 100 : 0) * u.ap_points,
+        0,
+      ),
     );
 
-    // Top mistakes from the user's attempts
     const mistakeCounts = new Map<string, number>();
     for (const a of attempts) {
       for (const code of (a.mistake_codes ?? []) as string[]) {
