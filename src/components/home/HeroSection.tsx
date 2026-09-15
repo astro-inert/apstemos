@@ -86,7 +86,7 @@ export function MagneticLink({
         to={to}
         className={
           variant === "primary"
-            ? `inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-card transition-colors hover:bg-primary/90 ${className}`
+            ? `inline-flex items-center gap-2 rounded-full bg-primary-grad px-6 py-3 text-sm font-semibold text-primary-foreground shadow-card transition-colors hover:bg-primary-grad/90 ${className}`
             : `inline-flex items-center gap-2 rounded-full border border-border bg-card px-6 py-3 text-sm font-semibold transition-colors hover:border-primary/40 ${className}`
         }
       >
@@ -138,7 +138,7 @@ function Instrument({ subject, data }: { subject: SubjectConfig; data: Instrumen
                 {[1, 2, 3, 4, 5].map((i) => (
                   <div
                     key={i}
-                    className={`h-1 flex-1 rounded-full ${i <= (data.predicted ?? 0) ? "bg-primary" : "bg-elevated"}`}
+                    className={`h-1 flex-1 rounded-full ${i <= (data.predicted ?? 0) ? "bg-primary-grad" : "bg-elevated"}`}
                   />
                 ))}
               </div>
