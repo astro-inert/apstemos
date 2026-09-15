@@ -65,7 +65,15 @@ function PracticePage() {
   const track = trackQuery.data?.track ?? "BC";
   const trackMutation = useMutation({
     mutationFn: (next: "AB" | "BC") => saveTrackFn({ data: { track: next } }),
-    onSuccess: async () => {
+    onMutate: (next) => {
+      qc.setQueryData(["exam-track"], { track: next });
+      setFilter({ unit: undefined, topic: undefined });
+    },
+    onError: () => {
+      qc.invalidateQueries({ queryKey: ["exam-track"] });
+    },
+    onSuccess: async (_result, next) => {
+      qc.setQueryData(["exam-track"], { track: next });
       setFilter({ unit: undefined, topic: undefined });
       await qc.invalidateQueries();
     },

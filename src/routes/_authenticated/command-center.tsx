@@ -487,6 +487,11 @@ function TrackSwitcher({ track }: { track: "AB" | "BC" }) {
   const qc = useQueryClient();
   const mutation = useMutation({
     mutationFn: (next: "AB" | "BC") => save({ data: { track: next } }),
+    onMutate: (next) => {
+      qc.setQueryData(["performance-snapshot"], (current: typeof data | undefined) =>
+        current ? { ...current, profile: { ...current.profile, track: next } } : current,
+      );
+    },
     onSuccess: () => {
       qc.invalidateQueries();
     },
