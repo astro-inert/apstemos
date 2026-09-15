@@ -18,12 +18,25 @@ import {
 } from "./question-templates";
 
 /**
- * IMPORTANT: Practice is intentionally scoped to Unit 1 while APSTEMOS moves
- * from the legacy generated bank to the audited Navigator-aligned Unit 1 bank.
- * This prevents legacy Unit 2–10 generated items from appearing during the
- * replacement. The canonical Unit 1 bank is wired in separately.
+ * Canonical Practice bank.
+ *
+ * APSTEMOS is currently publishing Unit 1 only while the remaining units are
+ * rebuilt against the Navigator. The bank intentionally contains 242 Unit 1
+ * MCQs. Repeated exposure to the same legitimate AP structure is allowed, but
+ * each exposure is independently parameterized rather than copied verbatim.
  */
 const ACTIVE_BANK_UNIT = "unit-1-limits-and-continuity";
+const ACTIVE_BANK_SIZE = 242;
+
+/** Exact APSTEMOS Unit 1 Navigator topic order. */
+const UNIT_1_TOPICS = [
+  "evaluating-limits-algebraically",
+  "limits-from-graphs-and-tables",
+  "squeeze-theorem",
+  "continuity-and-discontinuity",
+  "intermediate-value-theorem",
+  "limits-at-infinity",
+] as const;
 
 export function templateTaxonomy(t: QuestionTemplate) {
   const id = t.manifestation ?? TEMPLATE_MANIFESTATION[t.id];
@@ -55,8 +68,12 @@ function inTrack(t: QuestionTemplate, track?: "AB" | "BC"): boolean {
   return tt === "both" || tt === track;
 }
 
-export const VARIANTS_PER_TEMPLATE = 18;
-export const MAX_VARIANTS_PER_MANIFESTATION = 36;
+/**
+ * We deliberately permit several near-duplicate exposures per question family.
+ * The generator changes the actual mathematical parameters, answer, distractors,
+ * and (when present) figure data for every variant.
+ */
+export const VARIANTS_PER_TEMPLATE = 24;
 export type GeneratedChoice = { label: string; text: string };
 export type GeneratedQuestion = {
   key: string; id: string; template_id: string; variant: number; type: "MCQ";
@@ -71,7 +88,6 @@ function asMath(text: string): string {
   const t = text.trim();
   if (!t) return t;
   if (/^\$[\s\S]*\$$/.test(t)) return t;
-  if (!t.includes("\\text{")) return `$${t}$`;
   return `$${t}$`;
 }
 const FALLBACK_DISTRACTORS = ["0", "1", "-1", "\\text{None of these}", "2", "\\text{The limit does not exist.}"];
@@ -103,18 +119,73 @@ export function buildQuestion(key: string): GeneratedQuestion | null {
     choices:choices.map((c)=>({label:c.label,text:c.tex})), answer_label:answer.label, answer_text:answer.tex,
     explanation:built.explanation, common_mistake_codes:tpl.mistakes??[] };
 }
-const VARIANT_SCAN = 240; let KEY_CACHE: string[] | null = null;
-function promptSignature(prompt:string){return prompt.replace(/-?\d+(\.\d+)?/g,"#").replace(/\s+/g," ").trim();}
+
+const VARIANT_SCAN = 240;
+let KEY_CACHE: string[] | null = null;
+
+/**
+ * Builds the 242-question bank in a topic-balanced round robin. This avoids the
+ * old behavior where easy-to-parameterize families could crowd out graphical,
+ * tabular, theorem-condition, or conceptual questions.
+ */
 function allKeys(): string[] {
-  if (KEY_CACHE) return KEY_CACHE; const keys:string[]=[]; const familySignatures=new Set<string>();
-  for (const t of TEMPLATES) {
-    if (t.unit !== ACTIVE_BANK_UNIT) continue;
-    const probe=buildQuestion(`${t.id}::0`); if(probe){const sig=`${t.topic}|${promptSignature(probe.prompt)}`; if(familySignatures.has(sig)) continue; familySignatures.add(sig);}
-    const seen=new Set<string>();
-    for(let v=0;v<VARIANT_SCAN && seen.size<VARIANTS_PER_TEMPLATE;v++){const key=`${t.id}::${v}`;const q=buildQuestion(key);if(!q||seen.has(q.prompt))continue;seen.add(q.prompt);keys.push(key);}
+  if (KEY_CACHE) return KEY_CACHE;
+
+  const unitTemplates = TEMPLATES.filter(
+    (t) => t.unit === ACTIVE_BANK_UNIT && UNIT_1_TOPICS.includes(t.topic as (typeof UNIT_1_TOPICS)[number]),
+  );
+  const byTopic = new Map<string, string[]>(UNIT_1_TOPICS.map((topic) => [topic, []]));
+
+  for (const t of unitTemplates) {
+    const bucket = byTopic.get(t.topic);
+    if (!bucket) continue;
+    const seenPrompts = new Set<string>();
+    for (let v = 0; v < VARIANT_SCAN && seenPrompts.size < VARIANTS_PER_TEMPLATE; v++) {
+      const key = `${t.id}::${v}`;
+      const q = buildQuestion(key);
+      if (!q || seenPrompts.has(q.prompt)) continue;
+      // A valid item must have exactly four distinct choices and one keyed answer.
+      if (q.choices.length !== 4 || new Set(q.choices.map((c) => c.text)).size !== 4) continue;
+      if (!q.choices.some((c) => c.label === q.answer_label)) continue;
+      seenPrompts.add(q.prompt);
+      bucket.push(key);
+    }
   }
-  KEY_CACHE=keys; return keys;
+
+  // Interleave families within each topic so one template cannot dominate.
+  for (const topic of UNIT_1_TOPICS) {
+    const bucket = byTopic.get(topic)!;
+    bucket.sort((a, b) => {
+      const [ta, va] = a.split("::");
+      const [tb, vb] = b.split("::");
+      const variantDelta = Number(va) - Number(vb);
+      return variantDelta || ta.localeCompare(tb);
+    });
+  }
+
+  const keys: string[] = [];
+  let row = 0;
+  while (keys.length < ACTIVE_BANK_SIZE) {
+    let added = false;
+    for (const topic of UNIT_1_TOPICS) {
+      const bucket = byTopic.get(topic)!;
+      if (row < bucket.length && keys.length < ACTIVE_BANK_SIZE) {
+        keys.push(bucket[row]);
+        added = true;
+      }
+    }
+    if (!added) break;
+    row++;
+  }
+
+  if (keys.length < ACTIVE_BANK_SIZE) {
+    throw new Error(`Unit 1 bank audit failed: expected ${ACTIVE_BANK_SIZE} valid questions, found ${keys.length}.`);
+  }
+
+  KEY_CACHE = keys;
+  return keys;
 }
+
 export type BankFilter={unit_slug?:string;topic_slug?:string;track?:"AB"|"BC";calculator?:boolean;difficulty?:Difficulty};
 export function bankKeys(filter?:BankFilter):string[]{
   const templateById=new Map(TEMPLATES.map((t)=>[t.id,t]));
