@@ -79,7 +79,7 @@ export function PipelineSection({ subject }: { subject: SubjectConfig }) {
           <div className="num text-[10px] text-primary">01</div>
           <div className="mt-0.5 text-[11px] font-medium">{loop.target.topic}</div>
           <div className="num text-[10px] text-muted-foreground">
-            targeted practice · {loop.target.questions} questions
+            MCQ + FRQ guidance · {loop.target.questions} checkpoints
           </div>
         </div>
       ),

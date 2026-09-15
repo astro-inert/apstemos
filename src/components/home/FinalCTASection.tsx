@@ -15,7 +15,7 @@ export function FinalCTASection({ subject }: { subject: SubjectConfig }) {
             </h2>
             <p className="mt-6 max-w-lg text-[15px] leading-relaxed text-secondary-foreground">
               {isSubjectLive(subject.id)
-                  ? "See what you know. Find what needs work. Understand your mistakes. Learn how each topic can be tested. Then put it back into practice."
+                  ? "Choose a unit and subtopic, answer a question, and start building a clearer picture of what you know."
                 : `The ${subject.navLabel} question bank is being built now — the loop above is exactly how it will work.`}
             </p>
             <div className="mt-9">

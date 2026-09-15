@@ -112,10 +112,10 @@ const calcBC: HomeDemo = {
     next: "Targeted Practice",
   },
   mistake: {
-    title: "Using velocity when asked for displacement",
+    title: "Forgetting the inner derivative",
     whatHappens:
-      "You calculate instantaneous velocity instead of integrating velocity over the requested interval.",
-    howToAvoid: ["position", "velocity", "acceleration", "displacement", "distance"],
+      "You differentiate the outer function correctly but omit the derivative of its inner function, losing the chain-rule factor.",
+    howToAvoid: ["identify the outer function", "identify the inner function", "differentiate both", "multiply the factors"],
     tagged: 3,
   },
   navigator: {
@@ -150,7 +150,7 @@ const physics1: HomeDemo = {
     practiceTopics: ["Kinematics graphs", "Newton's second law", "Energy bar charts"],
     diagnose: { topic: "Newton's Second Law", from: 64, to: 71 },
     mistake: { label: "Missing force on the free-body diagram", count: 3 },
-    target: { topic: "Free-body diagrams", questions: 8 },
+    target: { topic: "Newton's Second Law", questions: 8 },
     next: { label: "MCQ · Unit 2 · Hard", note: "chosen from 2 weak topics" },
   },
   questionCount: "1,700+",
@@ -185,10 +185,10 @@ const physics1: HomeDemo = {
     next: "Targeted Practice",
   },
   mistake: {
-    title: "Using speed when asked for displacement",
+    title: "Omitting a force from the free-body diagram",
     whatHappens:
-      "You report total distance traveled instead of the change in position over the requested interval.",
-    howToAvoid: ["position", "velocity", "acceleration", "displacement", "distance"],
+      "You write the net-force equation from an incomplete free-body diagram, so the calculated acceleration does not represent the system.",
+    howToAvoid: ["isolate the object", "identify every interaction", "draw one vector per force", "choose axes", "sum by component"],
     tagged: 3,
   },
   navigator: {
@@ -223,7 +223,7 @@ const physics2: HomeDemo = {
     practiceTopics: ["Fluid pressure", "Parallel circuits", "Thermal processes"],
     diagnose: { topic: "Parallel Circuits", from: 61, to: 70 },
     mistake: { label: "Added parallel resistances directly", count: 3 },
-    target: { topic: "Equivalent resistance", questions: 8 },
+    target: { topic: "Parallel Circuits", questions: 8 },
     next: { label: "MCQ · Circuits · Hard", note: "chosen from 2 weak topics" },
   },
   questionCount: "1,700+",
@@ -295,7 +295,7 @@ const physicsCMech: HomeDemo = {
     practiceTopics: ["Rotational inertia", "Work by a variable force", "Oscillations"],
     diagnose: { topic: "Work by a Variable Force", from: 66, to: 74 },
     mistake: { label: "Skipped the work integral and used $Fd$", count: 3 },
-    target: { topic: "Work integrals", questions: 8 },
+    target: { topic: "Work by a Variable Force", questions: 8 },
     next: { label: "MCQ · Energy · Hard", note: "chosen from 2 weak topics" },
   },
   questionCount: "1,700+",
@@ -367,7 +367,7 @@ const physicsCEM: HomeDemo = {
     practiceTopics: ["Electric flux", "Gauss's law symmetry", "RC circuits"],
     diagnose: { topic: "Gauss's Law", from: 62, to: 69 },
     mistake: { label: "Used total charge instead of enclosed charge", count: 3 },
-    target: { topic: "Gaussian surface choice", questions: 8 },
+    target: { topic: "Gauss's Law", questions: 8 },
     next: { label: "MCQ · Unit 2 · Hard", note: "chosen from 2 weak topics" },
   },
   questionCount: "1,700+",
@@ -409,7 +409,7 @@ const physicsCEM: HomeDemo = {
     tagged: 3,
   },
   navigator: {
-    unitLabel: "UNIT 2 · GAUSS'S LAW",
+    unitLabel: "UNIT 1 · ELECTROSTATICS & GAUSS'S LAW",
     subtopics: [
       "Electric Flux",
       "Spherical Symmetry",
@@ -440,7 +440,7 @@ const stats: HomeDemo = {
     practiceTopics: ["Sampling methods", "Confidence intervals", "Chi-square tests"],
     diagnose: { topic: "Confidence Intervals", from: 66, to: 73 },
     mistake: { label: "Interpreted the interval as a probability", count: 3 },
-    target: { topic: "Interpreting intervals in context", questions: 8 },
+    target: { topic: "Confidence Intervals", questions: 8 },
     next: { label: "MCQ · Inference · Hard", note: "chosen from 2 weak topics" },
   },
   questionCount: "1,700+",
@@ -491,7 +491,7 @@ const stats: HomeDemo = {
       "Two-Sample Proportion Tests",
       "Errors & Power",
     ],
-    activeIndex: 1,
+    activeIndex: 0,
     mcq: [
       "Identify the parameter in context.",
       "Check the conditions for the procedure.",
