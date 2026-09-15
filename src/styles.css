@@ -384,3 +384,18 @@
   transition: color 0.4s var(--ease-out-expo), background-color 0.4s var(--ease-out-expo),
     border-color 0.4s var(--ease-out-expo);
 }
+
+/* Semantic Gradient System */
+@theme inline {
+  --bg-gradient-hero: linear-gradient(180deg, var(--background) 0%, oklch(from var(--background) calc(l - 0.05) c h) 100%);
+  --bg-gradient-subtle: linear-gradient(135deg, var(--background) 0%, var(--secondary) 100%);
+  --bg-gradient-elevated: linear-gradient(to bottom, var(--card) 0%, oklch(from var(--card) calc(l - 0.02) c h) 100%);
+  --bg-gradient-primary: linear-gradient(135deg, var(--primary) 0%, oklch(from var(--primary) calc(l + 0.05) c h) 100%);
+}
+
+@layer utilities {
+  .bg-hero { background: var(--bg-gradient-hero); }
+  .bg-subtle { background: var(--bg-gradient-subtle); }
+  .bg-elevated { background: var(--bg-gradient-elevated); }
+  .bg-primary-grad { background: var(--bg-gradient-primary); }
+}
