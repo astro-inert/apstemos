@@ -75,15 +75,15 @@ function Page() {
           const Icon = s.icon;
           return (
             <Reveal key={s.title} delay={Math.min(i, 6) * 0.04}>
-              <section className="rounded-3xl border border-border bg-card p-6 shadow-card sm:p-7">
+              <section className="border-t-2 border-border bg-card p-6 sm:p-7">
                 <div className="flex items-start gap-4">
                   <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary ring-1 ring-primary/20">
                     <Icon className="h-4 w-4" />
                   </div>
                   <div className="min-w-0">
                     <div className="font-display text-[15px] font-semibold leading-tight">{s.title}</div>
-                    <div className="mt-2 text-[13px] leading-relaxed text-muted-foreground">{s.desc}</div>
-                    <div className="mt-5 rounded-2xl border border-dashed border-border bg-elevated/40 px-4 py-5 text-[13px] text-muted-foreground">
+                    <div className="mt-2 text-[13px] leading-relaxed text-secondary-foreground">{s.desc}</div>
+                    <div className="mt-5 border-l-2 border-dashed border-border bg-elevated/40 px-4 py-5 text-[13px] text-muted-foreground">
                       Content coming soon.
                     </div>
                   </div>
