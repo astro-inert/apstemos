@@ -14,13 +14,12 @@ export function CommandCenterSection({
 }) {
   const reduced = useReducedMotion();
   const live = isSubjectLive(subject.id);
-  const calculus = subject.id === "calc-bc";
   return (
     <Section className="border-t border-border">
       <SectionHeading
         label="03 · score command center"
-        title={calculus ? "From answers to action." : "Stop guessing what to study."}
-        sub={calculus ? "See exactly where you're strong—and where you're not. Every Practice result updates your unit mastery, topic strengths and weaknesses, and highest-ROI study suggestions." : "Your Score Command Center turns practice into a prioritized study plan."}
+        title="Know exactly where you stand."
+        sub={`The Score Command Center tracks your ${subject.navLabel} performance by unit and subtopic, showing your strengths, weaknesses, and overall unit mastery. Instead of relying on a single practice score, you can see exactly which parts of the course you've mastered and which need more work—then decide what to practice next.`}
       />
 
       <div className="mt-14 grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-6">
@@ -60,7 +59,7 @@ export function CommandCenterSection({
             <div className="relative">
               <MicroLabel>Highest-priority recommendations</MicroLabel>
                <p className="mt-3 max-w-sm text-[14px] leading-relaxed text-secondary-foreground">
-                 {calculus ? "Prioritize the weaknesses where additional practice can have the greatest value." : "The score tells you where you are. These tell you what to do."}
+                  Use your performance by unit and subtopic to decide what to practice next.
               </p>
               <ol className="mt-7 space-y-3">
                 {data.moves.map((m, i) => (

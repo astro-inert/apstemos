@@ -10,8 +10,6 @@ export function NavigatorSection({ subject }: { subject: SubjectConfig }) {
   const nav = HOME_DEMO[subject.id].navigator;
   const [active, setActive] = useState(nav.activeIndex);
   const reduced = useReducedMotion();
-  const calculus = subject.id === "calc-bc";
-
   return (
     <Section className="border-t border-border">
       <SectionHeading
