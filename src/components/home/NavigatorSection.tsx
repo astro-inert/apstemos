@@ -20,7 +20,7 @@ export function NavigatorSection({ subject }: { subject: SubjectConfig }) {
         sub={`For each ${subject.navLabel} subtopic, learn how to recognize and approach its MCQs and FRQs, which methods and conditions matter, and what the exam expects from your work.`}
       />
 
-       <div className="mt-14 overflow-hidden border-y border-border bg-card">
+       <div className="mt-14 overflow-hidden rounded-2xl border border-border bg-card shadow-card">
         <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-b border-border px-5 py-5 sm:px-6">
           <div className="min-w-0">
             <MicroLabel>{subject.navLabel}</MicroLabel>

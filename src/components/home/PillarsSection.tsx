@@ -82,7 +82,7 @@ export function PillarsSection({ subject }: { subject: SubjectConfig }) {
          label="Built for deliberate practice"
          title="The system stays accountable to your work."
       />
-      <div className="mt-14 grid gap-4 md:grid-cols-3 lg:gap-6">
+      <div className="mt-14 grid gap-5 md:grid-cols-3 lg:gap-7">
         {pillars.map((p, i) => {
           const clickable = live || p.to === "/command-center";
           const Card: React.ElementType = clickable ? Link : "div";
@@ -90,15 +90,15 @@ export function PillarsSection({ subject }: { subject: SubjectConfig }) {
           <Reveal key={p.title} delay={i * 0.07}>
             <Card
               {...(clickable ? ({ to: p.to } as never) : {})}
-             className={`group flex h-full flex-col border-t-2 border-border bg-card p-6 sm:p-8 ${
-                 clickable ? "transition-colors hover:border-primary" : "opacity-80"
+             className={`group flex h-full flex-col rounded-2xl border border-border bg-card p-6 shadow-card sm:p-8 ${
+                 clickable ? "transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-elevated" : "opacity-80"
               }`}
             >
               <MicroLabel>{p.n}</MicroLabel>
               <h3 className="mt-4 font-display text-xl font-semibold leading-tight">{p.title}</h3>
                <p className="mt-3 text-[14px] leading-relaxed text-secondary-foreground">{p.copy}</p>
               {clickable ? null : <ComingSoon className="mt-4 self-start" />}
-               <div className="mt-8 flex min-h-[6.5rem] items-end border-t border-border bg-background p-4">
+               <div className="mt-8 flex min-h-[6.5rem] items-end rounded-xl border border-border bg-background p-4">
                 <div className="w-full">{p.preview}</div>
               </div>
             </Card>
