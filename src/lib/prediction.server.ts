@@ -15,7 +15,6 @@ type DB = SupabaseClient<Database>;
 
 export type ScoreEstimate = {
   model_version: string;
-  /** null whenever confidence_state is insufficient_data — never show a score then. */
   estimated_score: number | null;
   range: { low: number; high: number } | null;
   distribution: Record<string, number> | null;
@@ -28,7 +27,6 @@ export type ScoreEstimate = {
   first_attempt_count: number;
   repeat_count: number;
   provisional_share: number;
-  /** true when no item in the pool has empirically calibrated difficulty yet */
   uncalibrated: boolean;
   has_fresh_diagnostic: boolean;
   last_diagnostic_at: string | null;
@@ -44,19 +42,15 @@ function unitWeightMap(unitRows: Array<{ number: number; ap_weight_pct: number |
 }
 
 /**
- * Builds the response set the ability model consumes: diagnostic responses first
- * (primary evidence), then practice attempts tagged by provenance.
+ * Builds an AP score estimate from the latest submitted diagnostic only.
+ * Practice remains evidence for mastery/weakness analytics, but self-selected
+ * practice is intentionally excluded from the exam-score model.
  */
 export async function buildScoreEstimate(supabase: DB, userId: string): Promise<ScoreEstimate> {
   const { getActiveTrack } = await import("./track.server");
   const { questionKeyInTrack } = await import("./generated-bank");
   const track = await getActiveTrack(supabase, userId);
-  const [attemptsRes, diagRes, diagRespRes, unitsRes] = await Promise.all([
-    supabase
-      .from("attempts")
-      .select("question_key, correct, attempt_kind, difficulty, unit_slug, topic_slug, diagnostic_id")
-      .eq("user_id", userId)
-      .not("question_key", "is", null),
+  const [diagRes, diagRespRes, unitsRes] = await Promise.all([
     supabase
       .from("diagnostics")
       .select("id, submitted_at, question_keys")
@@ -83,45 +77,15 @@ export async function buildScoreEstimate(supabase: DB, userId: string): Promise<
     (r) => latestDiagnostic && r.diagnostic_id === latestDiagnostic.id && questionKeyInTrack(r.question_key, track),
   );
 
-  // Diagnostic items take precedence; practice attempts for the same key are skipped.
-  const claimed = new Set(diagResponses.map((r) => r.question_key));
+  const responses: ScoredResponse[] = diagResponses.map((r) => ({
+    question_key: r.question_key,
+    correct: !!r.correct,
+    kind: "diagnostic",
+    difficulty_label: (r.difficulty ?? "medium") as "easy" | "medium" | "hard",
+    unit_slug: r.unit_slug,
+    topic_slug: r.topic_slug,
+  }));
 
-  const responses: ScoredResponse[] = [];
-  for (const r of diagResponses) {
-    responses.push({
-      question_key: r.question_key,
-      correct: !!r.correct,
-      kind: "diagnostic",
-      difficulty_label: (r.difficulty ?? "medium") as "easy" | "medium" | "hard",
-      unit_slug: r.unit_slug,
-      topic_slug: r.topic_slug,
-    });
-  }
-
-  let repeat_count = 0;
-  let first_attempt_count = 0;
-  const seenPractice = new Set<string>();
-  for (const a of attemptsRes.data ?? []) {
-    const key = a.question_key;
-    if (!key || !questionKeyInTrack(key, track)) continue;
-    if (claimed.has(key)) continue;
-    const kind = (a.attempt_kind ?? "first_attempt") as ScoredResponse["kind"];
-    if (kind === "first_attempt") first_attempt_count += 1;
-    else repeat_count += 1;
-    // Only the strongest response per key contributes.
-    if (seenPractice.has(key) && kind !== "first_attempt") continue;
-    seenPractice.add(key);
-    responses.push({
-      question_key: key,
-      correct: !!a.correct,
-      kind,
-      difficulty_label: (a.difficulty ?? "medium") as "easy" | "medium" | "hard",
-      unit_slug: a.unit_slug,
-      topic_slug: a.topic_slug,
-    });
-  }
-
-  // Attach empirical item parameters where they exist and are past the sample floor.
   const keys = [...new Set(responses.map((r) => r.question_key))];
   if (keys.length) {
     const statRows: Array<{
@@ -168,7 +132,7 @@ export async function buildScoreEstimate(supabase: DB, userId: string): Promise<
   });
 
   const dist = scoreDistribution(ability.theta, ability.se);
-  const showScore = state !== "insufficient_data";
+  const showScore = state !== "insufficient_data" && has_fresh_diagnostic;
 
   return {
     model_version: MODEL_VERSION,
@@ -179,27 +143,28 @@ export async function buildScoreEstimate(supabase: DB, userId: string): Promise<
       : null,
     ability: ability.theta,
     standard_error: ability.se,
-    confidence_state: state,
+    confidence_state: showScore ? state : "insufficient_data",
     coverage,
     question_count: responses.length,
     unique_question_count,
-    first_attempt_count: first_attempt_count + diagResponses.length,
-    repeat_count,
+    first_attempt_count: diagResponses.length,
+    repeat_count: 0,
     provisional_share: ability.provisionalShare,
     uncalibrated: ability.provisionalShare >= 1,
     has_fresh_diagnostic,
     last_diagnostic_at: latestDiagnostic?.submitted_at ?? null,
-    missing,
-    next_step: nextStepFor({
-      state,
-      uniqueItems: unique_question_count,
-      coverage: coverage.score,
-      hasFreshDiagnostic: has_fresh_diagnostic,
-    }),
+    missing: !latestDiagnostic ? ["a completed MCQ diagnostic"] : missing,
+    next_step: !latestDiagnostic
+      ? "Complete the timed MCQ diagnostic to generate a score estimate. Practice results are kept separate from score prediction."
+      : nextStepFor({
+          state: showScore ? state : "insufficient_data",
+          uniqueItems: unique_question_count,
+          coverage: coverage.score,
+          hasFreshDiagnostic: has_fresh_diagnostic,
+        }),
   };
 }
 
-/** Persists an estimate so accuracy can be validated later against reported scores. */
 export async function persistEstimate(
   supabase: DB,
   userId: string,
