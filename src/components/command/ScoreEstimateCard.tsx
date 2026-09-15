@@ -19,10 +19,7 @@ const CONF_STYLE: Record<string, string> = {
   high: "bg-success/10 text-success",
 };
 
-/**
- * MCQ-Based AP Score Estimate. Deliberately refuses to show a score until the
- * evidence gates are met, and never implies free-response coverage.
- */
+/** Diagnostic-based AP score estimate. Practice analytics are deliberately separate. */
 export function ScoreEstimateCard() {
   const fn = useServerFn(getScoreEstimate);
   const { data, isLoading } = useQuery({
@@ -35,7 +32,7 @@ export function ScoreEstimateCard() {
     <div className="relative overflow-hidden border-t-2 border-primary bg-card p-6">
       <div className="relative">
         <div className="flex items-start justify-between gap-3 text-xs">
-          <span className="micro-label">MCQ-based AP score estimate</span>
+          <span className="micro-label">MCQ diagnostic score estimate</span>
           {data && (
             <span className={`shrink-0 border-l-2 border-current px-2 py-0.5 text-[10px] font-medium ${CONF_STYLE[data.confidence_state]}`}>
               {CONF_LABEL[data.confidence_state]}
@@ -44,13 +41,13 @@ export function ScoreEstimateCard() {
         </div>
 
         {isLoading || !data ? (
-          <div className="mt-6 text-[14px] text-muted-foreground">Reading your response history…</div>
+          <div className="mt-6 text-[14px] text-muted-foreground">Reading your diagnostic evidence…</div>
         ) : data.confidence_state === "insufficient_data" || data.estimated_score === null ? (
           <div className="mt-5">
             <div className="font-display text-3xl font-semibold tracking-[-0.03em]">Not enough evidence yet</div>
             <p className="mt-3 text-[13px] leading-relaxed text-muted-foreground">
-              We won't show an estimate until your answers can actually support one. Right now:{" "}
-              <span className="num text-foreground">{data.unique_question_count}</span> unique questions of{" "}
+              Score estimates come from the timed MCQ diagnostic, not self-selected Practice. Right now:{" "}
+              <span className="num text-foreground">{data.unique_question_count}</span> diagnostic questions of{" "}
               <span className="num text-foreground">{CONFIDENCE_GATES.preliminary.minUniqueItems}</span> needed
               {data.missing.length ? ` · still need ${data.missing.join(", ")}` : ""}.
             </p>
@@ -95,15 +92,13 @@ export function ScoreEstimateCard() {
             </div>
 
             <p className="mt-4 text-[11px] leading-relaxed text-muted-foreground">
-              Your current multiple-choice performance is most consistent with a {data.estimated_score}.{" "}
-              <strong className="font-medium text-foreground">Free-response performance is not included</strong> — AP
-              STEM OS contains MCQs only.
+              Your latest timed MCQ diagnostic is most consistent with a {data.estimated_score}.{" "}
+              <strong className="font-medium text-foreground">Practice performance and free-response performance are not included in this estimate.</strong>
             </p>
 
             <div className="mt-4 border-t border-border pt-4 text-[12px] text-muted-foreground">
               <div className="num">
-                {data.unique_question_count} unique questions · {data.first_attempt_count} first attempts ·{" "}
-                {Math.round(data.coverage.score * 100)}% coverage
+                {data.unique_question_count} diagnostic questions · {Math.round(data.coverage.score * 100)}% blueprint coverage
               </div>
               <div className="mt-1.5 flex items-start gap-1.5">
                 <Info className="mt-0.5 h-3 w-3 shrink-0" />
