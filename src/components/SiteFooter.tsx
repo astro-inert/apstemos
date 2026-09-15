@@ -29,11 +29,11 @@ export function SiteFooter() {
           <Link to="/" className="font-display text-[15px] font-semibold tracking-[-0.02em]">
             AP STEM OS
           </Link>
-          <p className="mt-4 max-w-xs text-[13px] leading-relaxed text-muted-foreground">
+          <p className="mt-4 max-w-xs text-[14px] leading-relaxed text-secondary-foreground">
             A score-optimization platform for AP Calculus AB/BC, AP Physics 1, 2, C: Mechanics and C: E&amp;M, and AP
             Statistics.
           </p>
-          <p className="num mt-6 text-[11px] uppercase tracking-[0.18em] text-subtle">Free forever.</p>
+          <p className="num mt-6 text-[12px] text-muted-foreground">Free forever.</p>
         </div>
         {columns.map((c) => (
           <div key={c.label}>
@@ -41,7 +41,7 @@ export function SiteFooter() {
             <ul className="mt-4 space-y-2.5">
               {c.links.map((l) => (
                 <li key={l.to}>
-                  <Link to={l.to} className="text-[13px] text-muted-foreground transition-colors hover:text-primary">
+                  <Link to={l.to} className="text-[13px] text-secondary-foreground transition-colors hover:text-primary">
                     {l.label}
                   </Link>
                 </li>

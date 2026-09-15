@@ -59,7 +59,7 @@ export function SiteNav({ subject = "calc-bc" }: { subject?: SubjectId }) {
     >
       <nav className="mx-auto flex max-w-6xl items-center gap-4 px-5 py-3.5 sm:px-8">
         <div className="flex min-w-0 items-center gap-4">
-          <Link to="/" className="shrink-0 font-display text-[15px] font-semibold tracking-[-0.03em]">
+          <Link to="/" className="shrink-0 font-display text-[15px] font-bold">
             AP STEM OS
           </Link>
           <span className="hidden h-4 w-px bg-border sm:block" />
@@ -73,16 +73,16 @@ export function SiteNav({ subject = "calc-bc" }: { subject?: SubjectId }) {
           <NavLink to="/predict">Diagnostic</NavLink>
           <NavLink to="/command-center">Score Command Center</NavLink>
           <div className="group relative">
-            <button className="inline-flex items-center gap-1 rounded-full px-3.5 py-1.5 text-[13px] text-muted-foreground transition-colors hover:text-foreground">
+            <button className="inline-flex items-center gap-1 rounded-md px-3.5 py-1.5 text-[13px] font-medium text-secondary-foreground transition-colors hover:bg-elevated hover:text-foreground">
               Resources
               <ChevronDown className="h-3.5 w-3.5 transition-transform group-hover:rotate-180" />
             </button>
-            <div className="invisible absolute right-0 top-full mt-1 w-64 rounded-2xl border border-border bg-popover p-1.5 opacity-0 shadow-elevated transition-all group-hover:visible group-hover:opacity-100">
+            <div className="invisible absolute right-0 top-full mt-1 w-64 rounded-md border border-border bg-popover p-1.5 opacity-0 shadow-elevated transition-all group-hover:visible group-hover:opacity-100">
               {resources.map((r) => (
                 <Link
                   key={r.to}
                   to={r.to}
-                  className="block rounded-xl px-3 py-2 text-[13px] text-muted-foreground transition-colors hover:bg-elevated hover:text-foreground"
+                  className="block rounded-sm px-3 py-2 text-[13px] text-secondary-foreground transition-colors hover:bg-elevated hover:text-foreground"
                 >
                   {r.label}
                 </Link>
@@ -96,7 +96,7 @@ export function SiteNav({ subject = "calc-bc" }: { subject?: SubjectId }) {
           {signedIn ? (
             <button
               onClick={signOut}
-              className="hidden items-center gap-1.5 rounded-full border border-border px-4 py-2 text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground sm:inline-flex"
+              className="hidden items-center gap-1.5 rounded-md border border-border px-4 py-2 text-[13px] font-medium text-secondary-foreground transition-colors hover:border-primary/40 hover:text-foreground sm:inline-flex"
             >
               <LogOut className="h-3.5 w-3.5" />
               Sign out
@@ -104,7 +104,7 @@ export function SiteNav({ subject = "calc-bc" }: { subject?: SubjectId }) {
           ) : (
             <Link
               to="/practice"
-              className="hidden items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-[13px] font-semibold text-primary-foreground transition-shadow hover:shadow-glow sm:inline-flex"
+              className="hidden items-center gap-1.5 rounded-md bg-primary px-4 py-2 text-[13px] font-semibold text-primary-foreground transition-colors hover:bg-primary/90 sm:inline-flex"
             >
               Start practicing →
             </Link>
@@ -168,8 +168,8 @@ function NavLink({ to, children }: { to: string; children: React.ReactNode }) {
   return (
     <Link
       to={to}
-      className="rounded-full px-3.5 py-1.5 text-[13px] text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
-      activeProps={{ className: "rounded-full px-3.5 py-1.5 text-[13px] text-foreground" }}
+      className="rounded-md px-3.5 py-1.5 text-[13px] font-medium text-secondary-foreground transition-colors hover:bg-elevated hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+      activeProps={{ className: "rounded-md bg-elevated px-3.5 py-1.5 text-[13px] font-semibold text-foreground" }}
     >
       {children}
     </Link>
@@ -181,7 +181,7 @@ function MobileLink({ to, children, onClick }: { to: string; children: React.Rea
     <Link
       to={to}
       onClick={onClick}
-      className="rounded-xl px-3 py-3 text-[14px] text-muted-foreground transition-colors hover:bg-elevated hover:text-foreground"
+      className="rounded-md px-3 py-3 text-[14px] text-secondary-foreground transition-colors hover:bg-elevated hover:text-foreground"
     >
       {children}
     </Link>
