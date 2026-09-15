@@ -10,7 +10,7 @@ export function CommandCenterSection({ subject, data }: { subject: SubjectConfig
   const live = isSubjectLive(subject.id);
   return (
     <Section className="border-t border-border">
-      <SectionHeading label="score command center" title="Know exactly where you stand." sub={`The Score Command Center turns your ${subject.navLabel} answers into unit and subtopic mastery. It shows strengths and weaknesses clearly so you can decide what to practice next.`} />
+      <SectionHeading label="02 score command center" title="Know exactly where you stand." sub={`The Score Command Center turns your ${subject.navLabel} answers into unit and subtopic mastery. It shows strengths and weaknesses clearly so you can decide what to practice next.`} />
       <div className="mt-14 grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-7">
         <Reveal className="min-w-0 max-w-full rounded-2xl border border-border bg-card p-6 shadow-card sm:p-8">
           <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3"><div className="min-w-0"><MicroLabel>{subject.navLabel}</MicroLabel><div className="mt-1 font-display text-sm font-semibold">Unit level breakdown</div></div><ExampleBadge live={data.live} /></div>
