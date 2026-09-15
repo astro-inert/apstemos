@@ -1,45 +1,45 @@
-# Native Unit 1 Question Type Navigator Pages
+# AP STEM OS — editorial academic visual system
 
 ## Goal
-Replace the placeholder content inside six existing Unit 1 topic pages with complete, responsive, web-native versions of the supplied Navigator PDFs. The pages remain inside the current Question Type Navigator hierarchy and use the existing topic-card links.
+Retune the existing product into a deliberately art-directed academic software experience. Preserve all copy, routes, features, data, interactions, and information architecture while replacing the generic rounded-card SaaS language with a confident editorial system.
 
-## Exact PDF-to-topic mapping
-- `Evaluating Limits Algebraically` → `evaluating-limits-algebraically`
-- `Limits from Graphs and Tables` → `limits-from-graphs-and-tables`
-- `Squeeze Theorem` → `squeeze-theorem`
-- `Continuity & Discontinuity Types` → `continuity-and-discontinuity`
-- `Intermediate Value Theorem` → `intermediate-value-theorem`
-- `Limits at Infinity` → `limits-at-infinity`
+## Site-wide visual language
+- Make warm off-white the page canvas and white the primary reading surface.
+- Set the typography hierarchy to near-black navy for headings and primary content, dark slate for body copy, medium slate for supporting information, and very faint slate only for truly tertiary metadata.
+- Use one distinctive blue-violet interaction color, with pink, yellow, and pale blue reserved for small instructional/status accents.
+- Remove atmospheric gradients, glow effects, heavy shadows, and broad glass treatments. Keep only quiet elevation where an overlay needs separation.
+- Tighten radii and use hairline rules, whitespace, alignment, and typographic scale instead of wrapping every block in a card.
+- Replace tiny uppercase tracking-heavy labels with readable sentence-case labels. Keep monospaced type for section numbers, measurements, IDs, and technical metadata.
+- Retain dark mode, but tune it to the same hierarchy and restrained identity.
 
-No topic names, slugs, parent units, or routes will change.
+## Shared product shell
+- Restyle the navigation as a crisp academic utility bar with clearer active states, rectangular controls, and a restrained menu surface.
+- Remove decorative background effects from the app shell.
+- Strengthen page titles, descriptions, and section headings; standardize a measured spacing scale and readable line lengths.
+- Simplify the footer into an editorial reference index separated by rules rather than decorative styling.
 
-## Build
-1. Add a typed Unit 1 Navigator content registry keyed by the six existing topic slugs. Encode every substantive source element: core ideas, theorem statements, recognition rules, prompt-signal tables, strategy branches, classifications/cases, worked examples, execution guidance, traps, representation translations, cross-topic connections, quick-reference rules, and verification checklists.
-2. Add focused native renderers for those structures:
-   - responsive comparison and recognition tables;
-   - interactive decision trees with selectable branches and visible outcomes;
-   - theorem/rule callouts;
-   - numbered worked solutions with KaTeX-rendered expressions;
-   - mistake and execution guidance panels;
-   - accessible checklists that students can tick locally;
-   - compact page navigation for moving among the page’s sections.
-3. Replace the topic-page placeholder cards with the matching registry content while retaining the current dynamic topic route and Unit 1 topic cards. Topics without supplied content retain their current fallback state.
-4. Keep the topic name as the sole main title. Omit PDF mastheads, document-title blocks, CED Alignment sections/metadata, page numbers, “review this page” document language, and the three-part descriptor directly beneath each topic name.
-5. Preserve all substantive mathematical and instructional content from the PDFs without embedding, linking, or presenting the PDFs as downloads. Keep MCQ and FRQ guidance together on each topic page rather than creating additional routes.
-6. Use the existing semantic colors, typography, spacing, dark mode, motion conventions, and KaTeX renderer. Tables and formulas will scroll safely on narrow screens; interactive controls will be keyboard accessible.
+## Homepage and product surfaces
+- Flatten non-interactive homepage sections into open editorial compositions with rules and columns.
+- Preserve cards only for the command-center preview, answer choices, actionable recommendations, and other genuinely grouped or interactive content.
+- Replace pill CTAs and tags with compact squared controls, simple text links, or inline metadata where appropriate.
+- Remove ornamental animation/glow treatment while retaining subtle motion that communicates state or sequence.
+- Apply the same visual hierarchy to Practice, Score Command Center, Common Mistakes, and resource pages so body copy remains dark and readable throughout.
 
-## Source-content fidelity
-- Preserve the source hierarchy and exact instructional logic, including all theorem hypotheses and conclusions.
-- Preserve worked-example values, equations, intermediate steps, conclusions, classifications, and caveats.
-- Preserve distinctions such as limit versus point value, existence versus uniqueness, finite-table evidence versus proof, endpoint one-sided continuity, and `√(x²)=|x|` sign handling.
-- Convert flowchart layout into real HTML controls/branches rather than screenshots.
-- Do not add new taxonomy or inferred instructional claims.
+## Question Type Navigator field manual
+- Recast the unit directory as a ruled academic index rather than a rounded container.
+- Recast topic cards as structured reference entries with prominent numbering, stronger titles, readable summaries, and restrained interaction cues.
+- Give topic guides a desktop field-manual layout: persistent section index alongside an open reading column; collapse naturally on smaller screens.
+- Turn guide sections into open chapters separated by rules, not isolated rounded cards.
+- Render formulas, theorem/rule notes, warnings, examples, tables, checklists, and decision trees as distinct editorial patterns with minimal radii and stronger text contrast.
+- Preserve every guide word, formula, interaction, and anchor.
+
+## Technical implementation
+- Update semantic design tokens and shared utilities in `src/styles.css`; keep all colors tokenized.
+- Update shared shells and primitives first, then the homepage modules, Navigator routes/renderers, and core practice/dashboard surfaces.
+- Keep the existing fonts and math rendering; use display type for hierarchy, body type for reading, and mono selectively.
+- Do not alter data fetching, authentication, scoring, route structure, or copy.
 
 ## Verification
-- Confirm every supplied PDF maps to its correct existing topic card and route.
-- Audit page content against each PDF section-by-section for omissions.
-- Check all formulas, tables, and examples render correctly.
-- Test interaction and navigation by keyboard.
-- Check representative phone and desktop layouts for clipping, overflow, and overlap.
-- Confirm route metadata remains unique and complete.
-- Run the focused typecheck/tests and inspect the current preview diagnostics before completion.
+- Check the homepage, Navigator index/unit/topic pages, Practice, Score Command Center, Common Mistakes, and representative resource pages at desktop and phone widths.
+- Verify light and dark themes, readable contrast, no horizontal overflow, no clipped mathematical content, and no interaction regressions.
+- Confirm all content-route metadata remains intact and inspect current build/runtime diagnostics before completion.
