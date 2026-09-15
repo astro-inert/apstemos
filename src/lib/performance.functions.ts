@@ -53,7 +53,13 @@ export type PerformanceSnapshot = {
     /** true once attempts >= SUBTOPIC_THRESHOLD */
     unlocked: boolean;
   }>;
-  untouched_units: Array<{ unit_id: string; number: number; name: string; ap_points: number; ap_weight_pct: number }>;
+  untouched_units: Array<{
+    unit_id: string;
+    number: number;
+    name: string;
+    ap_points: number;
+    ap_weight_pct: number;
+  }>;
   /** Ranked by how often the mistake actually occurred. No point-loss estimates. */
   top_mistakes: Array<{
     code: string;
@@ -69,11 +75,21 @@ export const getPerformanceSnapshot = createServerFn({ method: "GET" })
     const { supabase, userId } = context;
 
     const [profileRes, unitsRes, attemptsRes, mistakesCatRes] = await Promise.all([
-      supabase.from("profiles").select("display_name, track, target_score, exam_date").eq("id", userId).maybeSingle(),
-      supabase.from("units").select("id, number, name, ap_weight_pct, ap_points").eq("subject_id", "ap-calc-bc").order("number"),
+      supabase
+        .from("profiles")
+        .select("display_name, track, target_score, exam_date")
+        .eq("id", userId)
+        .maybeSingle(),
+      supabase
+        .from("units")
+        .select("id, number, name, ap_weight_pct, ap_points")
+        .eq("subject_id", "ap-calc-bc")
+        .order("number"),
       supabase
         .from("attempts")
-        .select("question_key, unit_id, unit_slug, topic_slug, correct, points_earned, points_possible, mistake_codes")
+        .select(
+          "question_key, unit_id, unit_slug, topic_slug, correct, points_earned, points_possible, mistake_codes",
+        )
         .eq("user_id", userId),
       supabase.from("common_mistakes").select("code, title, category"),
     ]);
@@ -130,7 +146,10 @@ export const getPerformanceSnapshot = createServerFn({ method: "GET" })
         subtopics_covered,
         subtopics_total,
         coverage,
-        mastery_unlocked: attemptsN >= UNIT_MASTERY_THRESHOLD && subtopics_total > 0 && subtopics_covered === subtopics_total,
+        mastery_unlocked:
+          attemptsN >= UNIT_MASTERY_THRESHOLD &&
+          subtopics_total > 0 &&
+          subtopics_covered === subtopics_total,
       };
     });
 
@@ -176,7 +195,10 @@ export const getPerformanceSnapshot = createServerFn({ method: "GET" })
     // A weighted summary of demonstrated practice performance. It is deliberately
     // separate from the diagnostic-based AP score estimate.
     const mastery_points = Math.round(
-      unit_mastery.reduce((s, u) => s + (u.mastery_unlocked && u.mastery >= 0 ? u.mastery / 100 : 0) * u.ap_points, 0),
+      unit_mastery.reduce(
+        (s, u) => s + (u.mastery_unlocked && u.mastery >= 0 ? u.mastery / 100 : 0) * u.ap_points,
+        0,
+      ),
     );
 
     const mistakeCounts = new Map<string, number>();

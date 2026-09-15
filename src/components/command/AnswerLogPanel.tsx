@@ -8,11 +8,16 @@ import { QN_UNITS } from "@/lib/question-navigator-data";
 import { MistakeTagger } from "@/components/mistakes/MistakeTagger";
 
 const topicTitle = (slug: string | null) =>
-  slug ? (QN_UNITS.flatMap((u) => u.topics).find((t) => t.slug === slug)?.title ?? slug) : "Untagged";
+  slug
+    ? (QN_UNITS.flatMap((u) => u.topics).find((t) => t.slug === slug)?.title ?? slug)
+    : "Untagged";
 
 export function AnswerLogPanel() {
   const fn = useServerFn(getAnswerLog);
-  const { data, isLoading } = useQuery({ queryKey: ["answer-log"], queryFn: () => fn({ data: { limit: 100 } }) });
+  const { data, isLoading } = useQuery({
+    queryKey: ["answer-log"],
+    queryFn: () => fn({ data: { limit: 100 } }),
+  });
 
   const rows = data ?? [];
 
@@ -22,7 +27,8 @@ export function AnswerLogPanel() {
         <div className="micro-label text-primary">Answer log</div>
         <h3 className="font-display font-semibold mt-1">Your recent answers</h3>
         <p className="mt-1 text-sm text-secondary-foreground">
-          Correct and incorrect attempts are logged here. Missed questions link to the mistakes behind them.
+          Correct and incorrect attempts are logged here. Missed questions link to the mistakes
+          behind them.
         </p>
       </div>
       {isLoading ? (

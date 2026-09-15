@@ -34,21 +34,31 @@ export function ScoreEstimateCard() {
         <div className="flex items-start justify-between gap-3 text-xs">
           <span className="micro-label">MCQ diagnostic score estimate</span>
           {data && (
-            <span className={`shrink-0 border-l-2 border-current px-2 py-0.5 text-[10px] font-medium ${CONF_STYLE[data.confidence_state]}`}>
+            <span
+              className={`shrink-0 border-l-2 border-current px-2 py-0.5 text-[10px] font-medium ${CONF_STYLE[data.confidence_state]}`}
+            >
               {CONF_LABEL[data.confidence_state]}
             </span>
           )}
         </div>
 
         {isLoading || !data ? (
-          <div className="mt-6 text-[14px] text-muted-foreground">Reading your diagnostic evidence…</div>
+          <div className="mt-6 text-[14px] text-muted-foreground">
+            Reading your diagnostic evidence…
+          </div>
         ) : data.confidence_state === "insufficient_data" || data.estimated_score === null ? (
           <div className="mt-5">
-            <div className="font-display text-3xl font-semibold tracking-[-0.03em]">Not enough evidence yet</div>
+            <div className="font-display text-3xl font-semibold tracking-[-0.03em]">
+              Not enough evidence yet
+            </div>
             <p className="mt-3 text-[13px] leading-relaxed text-muted-foreground">
-              Score estimates come from the timed MCQ diagnostic, not self-selected Practice. Right now:{" "}
-              <span className="num text-foreground">{data.unique_question_count}</span> diagnostic questions of{" "}
-              <span className="num text-foreground">{CONFIDENCE_GATES.preliminary.minUniqueItems}</span> needed
+              Score estimates come from the timed MCQ diagnostic, not self-selected Practice. Right
+              now: <span className="num text-foreground">{data.unique_question_count}</span>{" "}
+              diagnostic questions of{" "}
+              <span className="num text-foreground">
+                {CONFIDENCE_GATES.preliminary.minUniqueItems}
+              </span>{" "}
+              needed
               {data.missing.length ? ` · still need ${data.missing.join(", ")}` : ""}.
             </p>
             <Link
@@ -61,7 +71,9 @@ export function ScoreEstimateCard() {
         ) : (
           <>
             <div className="mt-4 flex items-baseline gap-3">
-              <span className="num font-display text-6xl font-bold tracking-tight">{data.estimated_score}</span>
+              <span className="num font-display text-6xl font-bold tracking-tight">
+                {data.estimated_score}
+              </span>
               <div className="text-[13px] text-muted-foreground">
                 <div>
                   most likely · range{" "}
@@ -85,7 +97,9 @@ export function ScoreEstimateCard() {
                         style={{ width: `${Math.round(p * 100)}%` }}
                       />
                     </div>
-                    <span className="num w-8 text-right text-muted-foreground">{Math.round(p * 100)}%</span>
+                    <span className="num w-8 text-right text-muted-foreground">
+                      {Math.round(p * 100)}%
+                    </span>
                   </div>
                 );
               })}
@@ -93,12 +107,16 @@ export function ScoreEstimateCard() {
 
             <p className="mt-4 text-[11px] leading-relaxed text-muted-foreground">
               Your latest timed MCQ diagnostic is most consistent with a {data.estimated_score}.{" "}
-              <strong className="font-medium text-foreground">Practice performance and free-response performance are not included in this estimate.</strong>
+              <strong className="font-medium text-foreground">
+                Practice performance and free-response performance are not included in this
+                estimate.
+              </strong>
             </p>
 
             <div className="mt-4 border-t border-border pt-4 text-[12px] text-muted-foreground">
               <div className="num">
-                {data.unique_question_count} diagnostic questions · {Math.round(data.coverage.score * 100)}% blueprint coverage
+                {data.unique_question_count} diagnostic questions ·{" "}
+                {Math.round(data.coverage.score * 100)}% blueprint coverage
               </div>
               <div className="mt-1.5 flex items-start gap-1.5">
                 <Info className="mt-0.5 h-3 w-3 shrink-0" />

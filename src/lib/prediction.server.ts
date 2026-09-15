@@ -65,16 +65,23 @@ export async function buildScoreEstimate(supabase: DB, userId: string): Promise<
     supabase.from("units").select("number, ap_weight_pct").eq("subject_id", "ap-calc-bc"),
   ]);
 
-  const latestDiagnostic = (diagRes.data ?? []).find((diagnostic) => {
-    const keys = diagnostic.question_keys;
-    if (track === "AB") return keys.length > 0 && keys.every((key) => questionKeyInTrack(key, "AB"));
-    return keys.some((key) => !questionKeyInTrack(key, "AB"));
-  }) ?? null;
+  const latestDiagnostic =
+    (diagRes.data ?? []).find((diagnostic) => {
+      const keys = diagnostic.question_keys;
+      if (track === "AB")
+        return keys.length > 0 && keys.every((key) => questionKeyInTrack(key, "AB"));
+      return keys.some((key) => !questionKeyInTrack(key, "AB"));
+    }) ?? null;
   const freshCutoff = Date.now() - DIAGNOSTIC.freshnessDays * 86400_000;
-  const has_fresh_diagnostic = !!latestDiagnostic?.submitted_at && new Date(latestDiagnostic.submitted_at).getTime() >= freshCutoff;
+  const has_fresh_diagnostic =
+    !!latestDiagnostic?.submitted_at &&
+    new Date(latestDiagnostic.submitted_at).getTime() >= freshCutoff;
 
   const diagResponses = (diagRespRes.data ?? []).filter(
-    (r) => latestDiagnostic && r.diagnostic_id === latestDiagnostic.id && questionKeyInTrack(r.question_key, track),
+    (r) =>
+      latestDiagnostic &&
+      r.diagnostic_id === latestDiagnostic.id &&
+      questionKeyInTrack(r.question_key, track),
   );
 
   const responses: ScoredResponse[] = diagResponses.map((r) => ({
@@ -99,7 +106,9 @@ export async function buildScoreEstimate(supabase: DB, userId: string): Promise<
     for (let i = 0; i < keys.length; i += 200) {
       const { data } = await supabase
         .from("item_stats")
-        .select("question_key, empirical_difficulty, discrimination, calibrated, n_first_attempts, difficulty_label")
+        .select(
+          "question_key, empirical_difficulty, discrimination, calibrated, n_first_attempts, difficulty_label",
+        )
         .in("question_key", keys.slice(i, i + 200));
       statRows.push(...((data ?? []) as typeof statRows));
     }
@@ -107,7 +116,10 @@ export async function buildScoreEstimate(supabase: DB, userId: string): Promise<
     for (const r of responses) {
       const s = byKey.get(r.question_key);
       if (!s) continue;
-      const usable = s.calibrated && s.n_first_attempts >= ITEM_CALIBRATION_MIN_RESPONSES && s.empirical_difficulty !== null;
+      const usable =
+        s.calibrated &&
+        s.n_first_attempts >= ITEM_CALIBRATION_MIN_RESPONSES &&
+        s.empirical_difficulty !== null;
       r.calibrated = usable;
       r.empirical_difficulty = usable ? Number(s.empirical_difficulty) : null;
       r.discrimination = usable && s.discrimination !== null ? Number(s.discrimination) : null;
@@ -118,8 +130,13 @@ export async function buildScoreEstimate(supabase: DB, userId: string): Promise<
   const ability = estimateAbility(responses);
   const coverage = computeCoverage({
     responses,
-    unitWeights: unitWeightMap((unitsRes.data ?? []).filter((unit) => track === "BC" || unit.number <= 8)),
-    totalTopics: QN_UNITS.filter((unit) => track === "BC" || unit.number <= 8).reduce((sum, unit) => sum + unit.topics.length, 0),
+    unitWeights: unitWeightMap(
+      (unitsRes.data ?? []).filter((unit) => track === "BC" || unit.number <= 8),
+    ),
+    totalTopics: QN_UNITS.filter((unit) => track === "BC" || unit.number <= 8).reduce(
+      (sum, unit) => sum + unit.topics.length,
+      0,
+    ),
   });
 
   const unique_question_count = keys.length;

@@ -76,9 +76,20 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "AP STEM OS — Score optimization for AP Calculus, Physics & Statistics" },
-      { name: "description", content: "The friendly, no-fluff prep companion for AP Calculus AB & BC. Self-study guides, topic rundowns, the 108 points breakdown, and FRQs by type." },
-      { property: "og:title", content: "AP STEM OS — Score optimization for AP Calculus, Physics & Statistics" },
-      { property: "og:description", content: "Self-study guides, topic rundowns, 108 points breakdown, and FRQs by type — built to help you score a 5." },
+      {
+        name: "description",
+        content:
+          "The friendly, no-fluff prep companion for AP Calculus AB & BC. Self-study guides, topic rundowns, the 108 points breakdown, and FRQs by type.",
+      },
+      {
+        property: "og:title",
+        content: "AP STEM OS — Score optimization for AP Calculus, Physics & Statistics",
+      },
+      {
+        property: "og:description",
+        content:
+          "Self-study guides, topic rundowns, 108 points breakdown, and FRQs by type — built to help you score a 5.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -87,7 +98,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "icon", type: "image/png", href: "/favicon.png" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap",
+      },
     ],
   }),
   shellComponent: RootShell,
@@ -100,3 +114,38 @@ function RootShell({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{if(localStorage.getItem('theme')==='dark'){document.documentElement.classList.add('dark')}}catch(e){}`,
+          }}
+        />
+        <HeadContent />
+      </head>
+      <body>
+        {children}
+        <Scripts />
+      </body>
+    </html>
+  );
+}
+
+function RootComponent() {
+  const { queryClient } = Route.useRouteContext();
+  const router = useRouter();
+
+  React.useEffect(() => {
+    const { data } = supabase.auth.onAuthStateChange((event) => {
+      if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
+      router.invalidate();
+      if (event !== "SIGNED_OUT") queryClient.invalidateQueries();
+    });
+    return () => data.subscription.unsubscribe();
+  }, [router, queryClient]);
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Outlet />
+      <Toaster richColors position="top-right" />
+    </QueryClientProvider>
+  );
+}
