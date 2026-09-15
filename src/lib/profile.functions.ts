@@ -2,6 +2,18 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
+export const getExamTrack = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<{ track: "AB" | "BC" }> => {
+    const { data, error } = await context.supabase
+      .from("profiles")
+      .select("track")
+      .eq("id", context.userId)
+      .maybeSingle();
+    if (error) throw new Error(error.message);
+    return { track: data?.track === "AB" ? "AB" : "BC" };
+  });
+
 /** Saves the AB/BC exam track on the account. Practice, diagnostics, and the
  *  Command Center all read this, so the choice persists across sessions. */
 export const setExamTrack = createServerFn({ method: "POST" })
