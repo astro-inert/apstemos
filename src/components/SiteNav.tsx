@@ -7,7 +7,6 @@ import { SubjectSwitcher } from "./SubjectSwitcher";
 import { supabase } from "@/integrations/supabase/client";
 import { SUBJECTS, type SubjectId } from "@/lib/subjects";
 import logoAsset from "@/assets/ap-stem-os-logo.png.asset.json";
-import markAsset from "@/assets/ap-stem-os-mark.png.asset.json";
 
 const resources = [
   { to: "/frqs-by-type", label: "FRQ Library" },
@@ -59,18 +58,17 @@ export function SiteNav({ subject = "calc-bc" }: { subject?: SubjectId }) {
         scrolled ? "glass border-b border-border" : "border-b border-transparent bg-transparent"
       }`}
     >
-      <nav className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-5 py-3 sm:px-8 md:flex md:gap-4">
-        <div className="flex min-w-0 items-center gap-3 lg:gap-4">
+      <nav className="mx-auto flex max-w-6xl items-center gap-2 px-4 py-2.5 sm:gap-3 sm:px-8 sm:py-3 md:gap-4">
+        <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3 lg:flex-initial lg:gap-4">
           <Link
             to={SUBJECTS[subject].path}
             aria-label="AP STEM OS home"
             className="inline-flex shrink-0 items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
           >
-            <img src={markAsset.url} alt="" className="h-9 w-9 object-contain sm:hidden" />
-            <img src={logoAsset.url} alt="AP STEM OS" className="hidden h-9 w-auto object-contain sm:block" />
+            <img src={logoAsset.url} alt="AP STEM OS" className="h-7 w-auto object-contain sm:h-9" />
           </Link>
-          <span className="hidden h-4 w-px bg-border sm:block" />
-          <div className="hidden min-w-0 sm:block">
+          <span className="hidden h-4 w-px shrink-0 bg-border min-[420px]:block" />
+          <div className="min-w-0 flex-1 lg:flex-initial">
             <SubjectSwitcher current={subject} />
           </div>
         </div>
@@ -128,10 +126,7 @@ export function SiteNav({ subject = "calc-bc" }: { subject?: SubjectId }) {
 
       {open ? (
         <div className="border-t border-border bg-background px-5 pb-6 pt-4 md:hidden">
-          <div className="sm:hidden">
-            <SubjectSwitcher current={subject} />
-          </div>
-          <div className="mt-4 flex flex-col gap-1">
+          <div className="flex flex-col gap-1">
             <MobileLink to="/practice" onClick={() => setOpen(false)}>
               Practice
             </MobileLink>
