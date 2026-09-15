@@ -5,4 +5,4 @@
 - [x] Verify math rendering, interactive decision flows, accessibility, and mobile/desktop layouts.
 - [x] Redesign the site-wide visual system as an editorial academic software product without changing content or functionality.
 - [ ] Complete pending MCP integration verification separately from this Navigator change.
-- [ ] Restore Calculus pink/red and Statistics yellow/purple accents, contain cards on mobile, and convert strategy flows into genuine interactive flowcharts.
+- [x] Restore Calculus pink/red and Statistics yellow/purple accents, contain cards on mobile, and convert strategy flows into genuine interactive flowcharts.

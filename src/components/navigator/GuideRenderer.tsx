@@ -2,6 +2,7 @@ import { useState } from "react";
 import { AlertTriangle, Check, ChevronRight, RotateCcw, ScrollText, Sparkles } from "lucide-react";
 import { LaTeX } from "@/components/LaTeX";
 import { Reveal } from "@/components/home/primitives";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { GuideBlock, GuideSection, GuideTreeNode, TopicGuide } from "@/lib/navigator-guides";
 
@@ -134,6 +135,22 @@ function Checklist({ block }: { block: Extract<GuideBlock, { kind: "checklist" }
 
 type Visited = { node: GuideTreeNode; chosen: number };
 
+function FlowConnector({ split = false }: { split?: boolean }) {
+  return (
+    <div aria-hidden className="relative mx-auto h-8 w-full max-w-2xl">
+      <span className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-primary/55" />
+      {split ? <span className="absolute inset-x-[12%] bottom-0 h-px bg-primary/55" /> : null}
+    </div>
+  );
+}
+
+const flowGridClass = (count: number) => {
+  if (count >= 4) return "sm:grid-cols-2 xl:grid-cols-4";
+  if (count === 3) return "sm:grid-cols-3";
+  if (count === 2) return "sm:grid-cols-2";
+  return "sm:grid-cols-1";
+};
+
 function DecisionTree({ block }: { block: Extract<GuideBlock, { kind: "tree" }> }) {
   const byId = new Map(block.nodes.map((n) => [n.id, n]));
   const [path, setPath] = useState<Visited[]>([]);
@@ -152,63 +169,72 @@ function DecisionTree({ block }: { block: Extract<GuideBlock, { kind: "tree" }> 
   const current = currentId ? byId.get(currentId) : undefined;
 
   return (
-    <div className="border-l-2 border-primary bg-card py-2 pl-5 sm:pl-7">
-      <ol className="space-y-0">
+    <div role="region" aria-label="Interactive strategy flowchart" className="min-w-0 border-y border-border bg-card px-3 py-6 sm:px-6">
+      <div className="mx-auto max-w-3xl">
+        <div className="mx-auto w-fit max-w-full border border-primary bg-primary px-4 py-2 text-center text-[11px] font-semibold text-primary-foreground">
+          Start
+        </div>
+        <FlowConnector />
+
         {path.map((step, i) => {
           const opt = step.node.options[step.chosen];
           return (
-            <li key={`${step.node.id}-${i}`} className="relative border-b border-border bg-elevated/30 px-3.5 py-4 before:absolute before:-left-[1.7rem] before:top-1/2 before:h-px before:w-5 before:bg-primary sm:before:-left-[2.2rem] sm:before:w-7">
-              <div className="text-[13px] leading-relaxed">
-                <LaTeX>{step.node.prompt}</LaTeX>
+            <div key={`${step.node.id}-${i}`}>
+              <div className="mx-auto max-w-xl border border-border bg-elevated/45 px-4 py-4 text-center">
+                <div className="text-[13px] font-medium leading-relaxed"><LaTeX>{step.node.prompt}</LaTeX></div>
               </div>
-              <div className="mt-2 flex items-center gap-1.5 text-[12.5px] font-medium text-primary">
+              <FlowConnector />
+              <div className="mx-auto flex w-fit max-w-full items-center gap-1.5 border border-primary/40 bg-accent px-3 py-2 text-center text-[12px] font-semibold text-accent-foreground">
                 <ChevronRight className="h-3.5 w-3.5 shrink-0" />
                 <LaTeX>{opt?.label ?? ""}</LaTeX>
               </div>
-            </li>
+              <FlowConnector />
+            </div>
           );
         })}
 
         {current ? (
-          <li className="border-b border-primary/30 bg-primary/[0.05] px-3.5 py-4">
-            <div className="text-[13.5px] font-medium leading-relaxed">
-              <LaTeX>{current.prompt}</LaTeX>
+          <div>
+            <div className="mx-auto max-w-xl border-2 border-primary/45 bg-primary/[0.05] px-4 py-4 text-center">
+              <div className="micro-label mb-2 text-primary">Decision</div>
+              <div className="text-[13.5px] font-medium leading-relaxed"><LaTeX>{current.prompt}</LaTeX></div>
             </div>
-            <div className="mt-3 flex flex-wrap gap-2">
-              {current.options.map((o, i) => (
-                <button
-                  key={i}
-                  type="button"
-                  onClick={() => setPath((p) => [...p, { node: current, chosen: i }])}
-                  className="rounded-sm border border-border bg-card px-3.5 py-2 text-[12.5px] font-medium transition-colors hover:border-primary/40 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
-                >
-                  <LaTeX>{o.label}</LaTeX>
-                </button>
+            <FlowConnector split={current.options.length > 1} />
+            <div className={cn("grid min-w-0 gap-2", flowGridClass(current.options.length))}>
+              {current.options.map((option, i) => (
+                <div key={i} className="relative min-w-0 pt-3 before:absolute before:left-1/2 before:top-0 before:h-3 before:w-px before:-translate-x-1/2 before:bg-primary/55">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setPath((previous) => [...previous, { node: current, chosen: i }])}
+                    className="h-auto min-h-11 w-full min-w-0 whitespace-normal px-3 py-2.5 text-center text-[12px] leading-snug hover:border-primary/50 hover:text-primary"
+                  >
+                    <LaTeX>{option.label}</LaTeX>
+                  </Button>
+                </div>
               ))}
             </div>
-          </li>
+          </div>
         ) : null}
 
         {outcome ? (
-          <li className="border border-primary/40 bg-primary/[0.08] px-3.5 py-4">
-            <div className="micro-label text-primary">result</div>
-            <div className="mt-1.5 text-[13.5px] leading-relaxed">
-              <LaTeX>{outcome}</LaTeX>
+          <div>
+            <div className="mx-auto max-w-xl border-2 border-primary bg-accent px-4 py-4 text-center">
+              <div className="micro-label text-primary">Outcome</div>
+              <div className="mt-1.5 text-[13.5px] font-medium leading-relaxed text-accent-foreground"><LaTeX>{outcome}</LaTeX></div>
             </div>
-          </li>
+          </div>
         ) : null}
-      </ol>
 
-      {path.length ? (
-        <button
-          type="button"
-          onClick={() => setPath([])}
-          className="mt-4 inline-flex items-center gap-1.5 text-[12px] text-subtle transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
-        >
-          <RotateCcw className="h-3 w-3" />
-          Start over
-        </button>
-      ) : null}
+        {path.length ? (
+          <div className="mt-5 flex justify-center">
+            <Button type="button" variant="ghost" size="sm" onClick={() => setPath([])} className="text-muted-foreground hover:text-foreground">
+              <RotateCcw className="h-3 w-3" />
+              Start over
+            </Button>
+          </div>
+        ) : null}
+      </div>
     </div>
   );
 }
@@ -229,7 +255,7 @@ function Block({ block }: { block: GuideBlock }) {
       return (
         <figure className="border-y border-border bg-elevated/40 px-4 py-5 text-center sm:px-5">
           {block.label ? <div className="micro-label mb-2">{block.label}</div> : null}
-          <div className="overflow-x-auto text-[14px]">
+          <div className="min-w-0 max-w-full overflow-x-auto text-[14px]">
             <LaTeX>{`$$${block.tex}$$`}</LaTeX>
           </div>
         </figure>
@@ -324,7 +350,7 @@ function SectionCard({ section, index }: { section: GuideSection; index: number 
             <LaTeX>{section.title}</LaTeX>
           </h2>
         </div>
-        <div className="mt-6 space-y-6 sm:ml-[5.25rem]">
+        <div className="mt-6 min-w-0 max-w-full space-y-6 sm:ml-[5.25rem]">
           {section.blocks.map((b, i) => (
             <Block key={i} block={b} />
           ))}
