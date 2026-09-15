@@ -73,9 +73,11 @@ export async function buildScoreEstimate(supabase: DB, userId: string): Promise<
     supabase.from("units").select("number, ap_weight_pct").eq("subject_id", "ap-calc-bc"),
   ]);
 
-  const latestDiagnostic = (diagRes.data ?? []).find((diagnostic) =>
-    diagnostic.question_keys.some((key) => questionKeyInTrack(key, track)),
-  ) ?? null;
+  const latestDiagnostic = (diagRes.data ?? []).find((diagnostic) => {
+    const keys = diagnostic.question_keys;
+    if (track === "AB") return keys.length > 0 && keys.every((key) => questionKeyInTrack(key, "AB"));
+    return keys.some((key) => !questionKeyInTrack(key, "AB"));
+  }) ?? null;
   const freshCutoff = Date.now() - DIAGNOSTIC.freshnessDays * 86400_000;
   const has_fresh_diagnostic = !!latestDiagnostic?.submitted_at && new Date(latestDiagnostic.submitted_at).getTime() >= freshCutoff;
 

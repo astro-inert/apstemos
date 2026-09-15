@@ -5,7 +5,7 @@ import { ChevronDown, LogOut, Menu, X } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 import { SubjectSwitcher } from "./SubjectSwitcher";
 import { supabase } from "@/integrations/supabase/client";
-import type { SubjectId } from "@/lib/subjects";
+import { SUBJECTS, type SubjectId } from "@/lib/subjects";
 
 const resources = [
   { to: "/frqs-by-type", label: "FRQ Library" },
@@ -57,9 +57,9 @@ export function SiteNav({ subject = "calc-bc" }: { subject?: SubjectId }) {
         scrolled ? "glass border-b border-border" : "border-b border-transparent bg-transparent"
       }`}
     >
-      <nav className="mx-auto flex max-w-6xl items-center gap-4 px-5 py-3.5 sm:px-8">
+      <nav className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-5 py-3.5 sm:px-8 md:flex md:gap-4">
         <div className="flex min-w-0 items-center gap-4">
-          <Link to="/" className="shrink-0 font-display text-[15px] font-bold">
+          <Link to={SUBJECTS[subject].path} className="shrink-0 font-display text-[15px] font-bold">
             AP STEM OS
           </Link>
           <span className="hidden h-4 w-px bg-border sm:block" />
@@ -91,12 +91,12 @@ export function SiteNav({ subject = "calc-bc" }: { subject?: SubjectId }) {
           </div>
         </div>
 
-        <div className="ml-auto flex shrink-0 items-center gap-2 md:ml-0">
+        <div className="flex shrink-0 items-center gap-2 md:ml-0">
           <ThemeToggle />
           {signedIn ? (
             <button
               onClick={signOut}
-              className="hidden items-center gap-1.5 rounded-md border border-border px-4 py-2 text-[13px] font-medium text-secondary-foreground transition-colors hover:border-primary/40 hover:text-foreground sm:inline-flex"
+              className="hidden items-center gap-1.5 rounded-md border border-border px-4 py-2 text-[13px] font-medium text-secondary-foreground transition-colors hover:border-primary/40 hover:text-foreground md:inline-flex"
             >
               <LogOut className="h-3.5 w-3.5" />
               Sign out
@@ -104,7 +104,7 @@ export function SiteNav({ subject = "calc-bc" }: { subject?: SubjectId }) {
           ) : (
             <Link
               to="/practice"
-              className="hidden items-center gap-1.5 rounded-md bg-primary px-4 py-2 text-[13px] font-semibold text-primary-foreground transition-colors hover:bg-primary/90 sm:inline-flex"
+              className="hidden items-center gap-1.5 rounded-md bg-primary px-4 py-2 text-[13px] font-semibold text-primary-foreground transition-colors hover:bg-primary/90 md:inline-flex"
             >
               Start practicing →
             </Link>

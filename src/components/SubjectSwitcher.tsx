@@ -73,14 +73,14 @@ export function SubjectSwitcher({ current }: Props) {
         <span className="grid place-items-center h-7 w-7 rounded-md bg-primary text-primary-foreground transition-colors">
           <ActiveIcon className="h-4 w-4" strokeWidth={2.5} />
         </span>
-        <span className="truncate max-w-[9.5rem] sm:max-w-none">{active.navLabel}</span>
+        <span className="max-w-[9.5rem] truncate lg:max-w-none">{active.navLabel}</span>
         <ChevronDown className={`h-3.5 w-3.5 text-muted-foreground transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
       </button>
 
       {open && (
         <div
           role="menu"
-          className="absolute left-0 top-full mt-2 w-[min(92vw,20rem)] glass rounded-xl shadow-elevated p-1.5 origin-top-left animate-bounce-in z-50"
+          className="absolute left-0 top-full z-50 mt-2 w-[min(78vw,20rem)] origin-top-left rounded-xl p-1.5 shadow-elevated glass animate-bounce-in sm:w-[min(70vw,20rem)]"
         >
           {SUBJECT_MENU.map((group) => {
             const GroupIcon = group.icon;
