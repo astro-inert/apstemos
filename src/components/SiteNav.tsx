@@ -2,7 +2,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { ChevronDown, LogOut, Menu, X } from "lucide-react";
-import { ThemeToggle } from "./ThemeToggle";
+
 import { SubjectSwitcher } from "./SubjectSwitcher";
 import { supabase } from "@/integrations/supabase/client";
 import { SUBJECTS, type SubjectId } from "@/lib/subjects";
@@ -99,7 +99,7 @@ export function SiteNav({ subject = "calc-bc" }: { subject?: SubjectId }) {
         </div>
 
         <div className="flex shrink-0 items-center gap-2 md:ml-0">
-          <ThemeToggle />
+          
           {signedIn ? (
             <button
               onClick={signOut}
