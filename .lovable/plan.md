@@ -13,6 +13,7 @@ Keep the current AP STEM OS palette exactly as it is for every subject, includin
 ## Homepage refinement
 
 - Refine the header proportions and button styling while preserving every navigation destination and subject-switching behavior.
+- Incorporate the uploaded AP STEM OS logo as the actual navbar brand asset—not merely a reference. Prepare a clean, tightly cropped version that blends into the navbar, retains the existing brand colors, remains sharp on high-density screens, and uses a compact mark treatment on narrow phones so it never crowds the subject switcher or menu.
 - Recompose the existing opening section so the primary action is visually dominant and the Score Command Center preview remains visible as the next major product signal.
 - Polish the workflow rail, practice demo, Command Center, mistake analysis, Navigator, toolkit, synthesis, and final action using consistent spacing, softer corners, subtle borders, and restrained shadows inspired by the reference.
 - Keep all current wording, data, interactions, animations, routes, and subject-specific states unchanged.
@@ -23,6 +24,7 @@ Keep the current AP STEM OS palette exactly as it is for every subject, includin
 - Apply the same visual treatment across AP Calculus, Statistics, Physics 1, Physics 2, Physics C Mechanics, and Physics C E&M.
 - Keep major demonstrations readable on phones rather than hiding them.
 - Ensure navigation, buttons, cards, math, labels, and dashboard rows fit naturally at narrow and intermediate widths.
+- Verify the logo remains legible without increasing navbar height or causing overlap at intermediate widths.
 - Preserve reduced-motion behavior and keyboard/focus accessibility.
 
 ## Verification
