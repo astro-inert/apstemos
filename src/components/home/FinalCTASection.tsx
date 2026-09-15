@@ -7,13 +7,13 @@ export function FinalCTASection({ subject }: { subject: SubjectConfig }) {
   const calculus = subject.id === "calc-bc";
   return (
     <Section className="border-t border-border">
-      <div className="relative overflow-hidden border-y border-border bg-card px-6 py-16 sm:px-12 sm:py-24">
-        <div className="relative">
+      <div className="relative overflow-hidden rounded-2xl border border-border bg-card px-6 py-16 text-center shadow-card sm:px-12 sm:py-24">
+        <div className="relative mx-auto max-w-3xl">
           <Reveal>
-            <h2 className="max-w-2xl font-display text-4xl font-semibold leading-[0.98] sm:text-6xl">
+            <h2 className="mx-auto max-w-2xl font-display text-4xl font-semibold leading-[0.98] sm:text-6xl">
                Stop studying.<br />Start <span className="text-primary">optimizing.</span>
             </h2>
-            <p className="mt-6 max-w-lg text-[15px] leading-relaxed text-secondary-foreground">
+            <p className="mx-auto mt-6 max-w-lg text-[15px] leading-relaxed text-secondary-foreground">
               {isSubjectLive(subject.id)
                   ? "Choose a unit and subtopic, answer a question, and start building a clearer picture of what you know."
                 : `The ${subject.navLabel} question bank is being built now — the loop above is exactly how it will work.`}

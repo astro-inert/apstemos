@@ -15,7 +15,7 @@ export function ManifestoSection({ subject }: { subject: SubjectConfig }) {
           </p>
         </Reveal>
         <Reveal delay={0.08}>
-          <div className="mt-12 grid gap-px overflow-hidden border-y border-border bg-border sm:grid-cols-3">
+          <div className="mt-12 grid gap-px overflow-hidden rounded-2xl border border-border bg-border shadow-card sm:grid-cols-3">
             {["Practice → mastery data", "Weak areas → repeated mistakes", "Question-type guidance → practice again"].map((t) => (
               <div key={t} className="num bg-card px-5 py-6 text-[12px] font-medium text-foreground/80">
                 {t}

@@ -6,6 +6,8 @@ import { ThemeToggle } from "./ThemeToggle";
 import { SubjectSwitcher } from "./SubjectSwitcher";
 import { supabase } from "@/integrations/supabase/client";
 import { SUBJECTS, type SubjectId } from "@/lib/subjects";
+import logoAsset from "@/assets/ap-stem-os-logo.png.asset.json";
+import markAsset from "@/assets/ap-stem-os-mark.png.asset.json";
 
 const resources = [
   { to: "/frqs-by-type", label: "FRQ Library" },
@@ -57,10 +59,15 @@ export function SiteNav({ subject = "calc-bc" }: { subject?: SubjectId }) {
         scrolled ? "glass border-b border-border" : "border-b border-transparent bg-transparent"
       }`}
     >
-      <nav className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-5 py-3.5 sm:px-8 md:flex md:gap-4">
-        <div className="flex min-w-0 items-center gap-4">
-          <Link to={SUBJECTS[subject].path} className="shrink-0 font-display text-[15px] font-bold">
-            AP STEM OS
+      <nav className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-5 py-3 sm:px-8 md:flex md:gap-4">
+        <div className="flex min-w-0 items-center gap-3 lg:gap-4">
+          <Link
+            to={SUBJECTS[subject].path}
+            aria-label="AP STEM OS home"
+            className="inline-flex shrink-0 items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+          >
+            <img src={markAsset.url} alt="" className="h-9 w-9 object-contain sm:hidden" />
+            <img src={logoAsset.url} alt="AP STEM OS" className="hidden h-9 w-auto object-contain sm:block" />
           </Link>
           <span className="hidden h-4 w-px bg-border sm:block" />
           <div className="hidden min-w-0 sm:block">
@@ -73,7 +80,7 @@ export function SiteNav({ subject = "calc-bc" }: { subject?: SubjectId }) {
           <NavLink to="/predict">Diagnostic</NavLink>
           <NavLink to="/command-center">Score Command Center</NavLink>
           <div className="group relative">
-            <button className="inline-flex items-center gap-1 rounded-md px-3.5 py-1.5 text-[13px] font-medium text-secondary-foreground transition-colors hover:bg-elevated hover:text-foreground">
+            <button className="inline-flex min-h-10 items-center gap-1 rounded-full px-3.5 py-1.5 text-[13px] font-medium text-secondary-foreground transition-colors hover:bg-elevated hover:text-foreground">
               Resources
               <ChevronDown className="h-3.5 w-3.5 transition-transform group-hover:rotate-180" />
             </button>
@@ -96,7 +103,7 @@ export function SiteNav({ subject = "calc-bc" }: { subject?: SubjectId }) {
           {signedIn ? (
             <button
               onClick={signOut}
-              className="hidden items-center gap-1.5 rounded-md border border-border px-4 py-2 text-[13px] font-medium text-secondary-foreground transition-colors hover:border-primary/40 hover:text-foreground md:inline-flex"
+              className="hidden min-h-10 items-center gap-1.5 rounded-full border border-border px-4 py-2 text-[13px] font-medium text-secondary-foreground transition-colors hover:border-primary/40 hover:text-foreground md:inline-flex"
             >
               <LogOut className="h-3.5 w-3.5" />
               Sign out
@@ -104,7 +111,7 @@ export function SiteNav({ subject = "calc-bc" }: { subject?: SubjectId }) {
           ) : (
             <Link
               to="/practice"
-              className="hidden items-center gap-1.5 rounded-md bg-primary px-4 py-2 text-[13px] font-semibold text-primary-foreground transition-colors hover:bg-primary/90 md:inline-flex"
+              className="hidden min-h-10 items-center gap-1.5 rounded-full bg-primary px-5 py-2 text-[13px] font-semibold text-primary-foreground shadow-card transition-colors hover:bg-primary/90 md:inline-flex"
             >
               Start practicing →
             </Link>
@@ -112,7 +119,7 @@ export function SiteNav({ subject = "calc-bc" }: { subject?: SubjectId }) {
           <button
             onClick={() => setOpen((v) => !v)}
             aria-label="Menu"
-            className="grid h-9 w-9 place-items-center rounded-lg border border-border bg-card md:hidden"
+            className="grid h-10 w-10 place-items-center rounded-full border border-border bg-card md:hidden"
           >
             {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
           </button>
@@ -168,8 +175,8 @@ function NavLink({ to, children }: { to: string; children: React.ReactNode }) {
   return (
     <Link
       to={to}
-      className="rounded-md px-3.5 py-1.5 text-[13px] font-medium text-secondary-foreground transition-colors hover:bg-elevated hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
-      activeProps={{ className: "rounded-md bg-elevated px-3.5 py-1.5 text-[13px] font-semibold text-foreground" }}
+      className="rounded-full px-3.5 py-2 text-[13px] font-medium text-secondary-foreground transition-colors hover:bg-elevated hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+      activeProps={{ className: "rounded-full bg-elevated px-3.5 py-2 text-[13px] font-semibold text-foreground" }}
     >
       {children}
     </Link>

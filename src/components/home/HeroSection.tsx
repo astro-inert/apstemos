@@ -10,32 +10,32 @@ export function HeroSection({ subject, data }: { subject: SubjectConfig; data: I
   const calculus = subject.id === "calc-bc";
   const course = subject.navLabel.replace("AP ", "");
   return (
-    <section className="relative px-5 pt-16 sm:px-8 sm:pt-24">
+    <section className="relative px-5 pt-14 sm:px-8 sm:pt-20">
       <div className="mx-auto max-w-6xl">
         <motion.div
           initial={reduced ? { opacity: 1 } : { opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ type: "spring", stiffness: 110, damping: 20 }}
-          className="max-w-3xl"
+          className="mx-auto max-w-4xl text-center"
         >
           <MicroLabel className="mb-6">{calculus ? "AP Calculus AB & BC" : subject.navLabel}</MicroLabel>
           <h1 className="font-display text-[2.6rem] font-semibold leading-[0.98] sm:text-[4.6rem]">
             Stop studying.<br />Start <span className="text-primary">optimizing.</span>
           </h1>
-          <p className="mt-7 max-w-xl text-[16px] leading-7 text-secondary-foreground sm:text-[17px]">
+          <p className="mx-auto mt-7 max-w-2xl text-[16px] leading-7 text-secondary-foreground sm:text-[17px]">
             {calculus
               ? "2,000+ AP-style questions connected to subtopic-level performance tracking, mistake analysis, and MCQ and FRQ guidance for every AP Calculus topic."
               : `AP-style ${course} questions connected to subtopic-level performance tracking, mistake analysis, and MCQ and FRQ guidance for every topic.`}
           </p>
-          <div className="mt-9 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+          <div className="mt-9 flex flex-col items-center justify-center gap-4 sm:flex-row">
             {isSubjectLive(subject.id) ? (
               <MagneticLink to="/practice" className="min-h-12">
                 Start Practicing
                 <ArrowRight className="h-4 w-4" />
               </MagneticLink>
             ) : (
-              <div className="flex flex-col items-start gap-3">
-                <span className="inline-flex cursor-not-allowed items-center gap-2 rounded-md border border-dashed border-border bg-card px-6 py-3 text-sm font-semibold text-muted-foreground">
+              <div className="flex flex-col items-center gap-3">
+                <span className="inline-flex cursor-not-allowed items-center gap-2 rounded-full border border-dashed border-border bg-card px-6 py-3 text-sm font-semibold text-muted-foreground">
                   {subject.navLabel} question bank
                   <ArrowRight className="h-4 w-4" />
                 </span>
@@ -56,7 +56,7 @@ export function HeroSection({ subject, data }: { subject: SubjectConfig; data: I
         </motion.div>
       </div>
 
-      <div className="mx-auto mt-14 max-w-6xl sm:mt-20">
+       <div className="mx-auto mt-16 max-w-6xl sm:mt-20">
         <Instrument subject={subject} data={data} />
       </div>
     </section>
@@ -86,8 +86,8 @@ export function MagneticLink({
         to={to}
         className={
           variant === "primary"
-            ? `inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 ${className}`
-            : `inline-flex items-center gap-2 rounded-md border border-border bg-card px-6 py-3 text-sm font-semibold transition-colors hover:border-primary/40 ${className}`
+            ? `inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-card transition-colors hover:bg-primary/90 ${className}`
+            : `inline-flex items-center gap-2 rounded-full border border-border bg-card px-6 py-3 text-sm font-semibold transition-colors hover:border-primary/40 ${className}`
         }
       >
         {children}
@@ -103,7 +103,7 @@ function Instrument({ subject, data }: { subject: SubjectConfig; data: Instrumen
       initial={reduced ? { opacity: 1 } : { opacity: 0, y: 26 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: "spring", stiffness: 90, damping: 22, delay: 0.12 }}
-      className="min-w-0 max-w-full overflow-hidden rounded-lg border border-border bg-card shadow-instrument"
+      className="min-w-0 max-w-full overflow-hidden rounded-2xl border border-border bg-card shadow-instrument"
     >
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-5 py-4 sm:px-7">
         <div className="min-w-0">

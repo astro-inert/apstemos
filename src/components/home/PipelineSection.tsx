@@ -106,7 +106,7 @@ export function PipelineSection({ subject }: { subject: SubjectConfig }) {
          sub="A result does more than mark right or wrong. It updates mastery, surfaces a pattern, and points to a focused next step."
       />
 
-      <div ref={ref} className="relative mt-16">
+      <div ref={ref} className="relative mt-14 sm:mt-16">
         {/* the rail */}
         <div className="pointer-events-none absolute left-[13px] top-2 bottom-2 w-px bg-border lg:left-0 lg:right-0 lg:top-[13px] lg:bottom-auto lg:h-px lg:w-auto">
           <motion.div
@@ -119,7 +119,7 @@ export function PipelineSection({ subject }: { subject: SubjectConfig }) {
           />
         </div>
 
-        <ol className="grid gap-8 sm:gap-10 lg:grid-cols-5 lg:gap-5">
+        <ol className="grid gap-7 sm:gap-9 lg:grid-cols-5 lg:gap-5">
           {stages.map((s, i) => (
             <li key={s.name} className="relative pl-10 lg:pl-0 lg:pt-10">
               <span className="absolute left-0 top-1 grid h-[27px] w-[27px] place-items-center rounded-full border border-border bg-background lg:left-0 lg:top-0">
@@ -132,7 +132,7 @@ export function PipelineSection({ subject }: { subject: SubjectConfig }) {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-10% 0px" }}
                 transition={{ type: "spring", stiffness: 110, damping: 20, delay: 0.08 * i }}
-               className="mt-4 border-t border-border bg-card p-3.5"
+               className="mt-4 rounded-xl border border-border bg-card p-3.5 shadow-card"
               >
                 {s.fragment}
               </motion.div>

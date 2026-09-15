@@ -26,9 +26,9 @@ export function DiagnosisSection({ subject }: { subject: SubjectConfig }) {
         sub={calculus ? `Filter 2,000+ original ${subject.navLabel}-style questions by unit, subtopic, and difficulty. Each answer includes a concise explanation and updates your performance data.` : `Preview an original ${subject.navLabel}-style question with an immediate explanation. The complete practice bank is coming soon.`}
       />
 
-      <div className="mt-14 grid gap-4 lg:grid-cols-2 lg:gap-6">
+      <div className="mt-14 grid overflow-hidden rounded-2xl border border-border bg-card shadow-card lg:grid-cols-2">
         {/* Question */}
-        <div className="min-w-0 max-w-full border-t-2 border-foreground bg-card p-6 sm:p-8">
+        <div className="min-w-0 max-w-full p-6 sm:p-8 lg:border-r lg:border-border">
           <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
             <MicroLabel>{q.id}</MicroLabel>
             <span className="num text-[10px] text-subtle">{q.meta}</span>
@@ -51,7 +51,7 @@ export function DiagnosisSection({ subject }: { subject: SubjectConfig }) {
                 <button
                   key={i}
                   onClick={() => setPicked(i)}
-                   className={`flex w-full items-center gap-3 rounded-md border px-4 py-3 text-left text-sm transition-all ${state}`}
+                    className={`flex min-h-12 w-full items-center gap-3 rounded-xl border px-4 py-3 text-left text-sm transition-all ${state}`}
                 >
                   <span className="num text-[11px] text-subtle">{String.fromCharCode(65 + i)}</span>
                   <span className="min-w-0 flex-1">
@@ -78,7 +78,7 @@ export function DiagnosisSection({ subject }: { subject: SubjectConfig }) {
         </div>
 
         {/* Diagnosis */}
-          <div className="relative min-w-0 max-w-full overflow-hidden border-t-2 border-primary bg-card p-6 sm:min-h-[22rem] sm:p-8">
+          <div className="relative min-w-0 max-w-full overflow-hidden border-t border-border bg-elevated/35 p-6 sm:min-h-[22rem] sm:p-8 lg:border-l-0 lg:border-t-0">
           <AnimatePresence mode="wait">
             {!revealed ? (
               <motion.div
@@ -138,7 +138,7 @@ export function DiagnosisSection({ subject }: { subject: SubjectConfig }) {
                 {isSubjectLive(subject.id) ? (
                   <Link
                     to="/practice"
-                     className="mt-7 inline-flex items-center gap-2 rounded-md bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+                     className="mt-7 inline-flex min-h-11 items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-card transition-colors hover:bg-primary/90"
                   >
                     Practice this weakness
                     <ArrowRight className="h-4 w-4" />

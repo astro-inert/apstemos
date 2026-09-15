@@ -22,9 +22,9 @@ export function CommandCenterSection({
         sub={`The Score Command Center turns your ${subject.navLabel} answers into unit and subtopic mastery, so weak areas become specific rather than vague.`}
       />
 
-      <div className="mt-14 grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-6">
+      <div className="mt-14 grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-7">
         {/* Unit mastery */}
-        <Reveal className="min-w-0 max-w-full border-t-2 border-foreground bg-card p-6 sm:p-8">
+        <Reveal className="min-w-0 max-w-full rounded-2xl border border-border bg-card p-6 shadow-card sm:p-8">
           <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
             <div className="min-w-0">
               <MicroLabel>{subject.navLabel}</MicroLabel>
@@ -55,7 +55,7 @@ export function CommandCenterSection({
 
         {/* Recommendations — visually dominant */}
         <Reveal delay={0.08} className="relative min-w-0 max-w-full">
-           <div className="relative h-full overflow-hidden border-t-2 border-primary bg-card p-6 sm:p-8">
+           <div className="relative h-full overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-card sm:p-8">
             <div className="relative">
               <MicroLabel>Highest-priority recommendations</MicroLabel>
                <p className="mt-3 max-w-sm text-[14px] leading-relaxed text-secondary-foreground">
@@ -71,7 +71,7 @@ export function CommandCenterSection({
                     {live ? (
                     <Link
                       to="/practice"
-                       className="group flex min-w-0 items-start gap-3 border-t border-border bg-background/70 px-3 py-4 transition-colors hover:bg-elevated/60 sm:gap-4 sm:px-4"
+                        className="group flex min-w-0 items-start gap-3 rounded-xl border border-border bg-background/70 px-3 py-4 transition-colors hover:border-primary/30 hover:bg-elevated/60 sm:gap-4 sm:px-4"
                     >
                       <span className="num text-[13px] text-primary">{i + 1}.</span>
                       <span className="min-w-0 flex-1">
@@ -82,7 +82,7 @@ export function CommandCenterSection({
                       <ArrowRight className="mt-1 h-4 w-4 shrink-0 text-subtle transition-all group-hover:translate-x-0.5 group-hover:text-primary" />
                     </Link>
                     ) : (
-                      <div className="flex items-start gap-4 border-t border-border bg-background/70 px-4 py-4">
+                      <div className="flex items-start gap-4 rounded-xl border border-border bg-background/70 px-4 py-4">
                         <span className="num text-[13px] text-primary">{i + 1}.</span>
                         <span className="min-w-0 flex-1">
                           <span className="block font-display text-[15px] font-semibold leading-tight">{m.name}</span>
