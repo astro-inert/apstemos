@@ -17,11 +17,11 @@ export function AnswerLogPanel() {
   const rows = data ?? [];
 
   return (
-    <div className="rounded-3xl border border-border bg-card shadow-card">
+    <div className="border-y border-border bg-card">
       <div className="px-5 py-4 border-b border-border">
-        <div className="text-xs uppercase tracking-wider text-muted-foreground">// answer log</div>
+        <div className="micro-label text-primary">Answer log</div>
         <h3 className="font-display font-semibold mt-1">Every question you've answered</h3>
-        <p className="text-sm text-muted-foreground mt-1">
+        <p className="mt-1 text-sm text-secondary-foreground">
           Green = earned the points, red = lost them. Missed questions link to the mistakes behind them.
         </p>
       </div>
@@ -59,7 +59,7 @@ export function AnswerLogPanel() {
                       key={c}
                       to="/common-mistakes"
                       hash={c}
-                      className="rounded bg-rose-500/10 px-1.5 py-0.5 font-mono text-rose-300 hover:underline"
+                     className="rounded-sm bg-destructive/10 px-1.5 py-0.5 font-mono text-destructive hover:underline"
                     >
                       {c}
                     </Link>

@@ -105,7 +105,7 @@ function CommonMistakes() {
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="Search mistakes…"
-            className="w-full rounded-full border border-border bg-card py-2.5 pl-10 pr-4 text-[14px] outline-none transition-colors focus:border-primary/50"
+            className="w-full rounded-md border border-border bg-card py-2.5 pl-10 pr-4 text-[14px] outline-none transition-colors focus:border-primary/50"
           />
         </div>
         <div className="flex flex-wrap gap-1.5">
@@ -113,7 +113,7 @@ function CommonMistakes() {
             <button
               key={c}
               onClick={() => setCat(c)}
-              className={`num rounded-full border px-3.5 py-1.5 text-[11px] uppercase tracking-[0.12em] transition-colors ${cat === c ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-muted-foreground hover:border-primary/40 hover:text-foreground"}`}
+              className={`num rounded-sm border px-3.5 py-1.5 text-[11px] transition-colors ${cat === c ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-muted-foreground hover:border-primary/40 hover:text-foreground"}`}
             >
               {c}
             </button>
@@ -127,7 +127,7 @@ function CommonMistakes() {
           <article
             key={m.code}
             id={m.code}
-            className="scroll-mt-28 rounded-3xl border border-border bg-card p-6 shadow-card transition-all hover:border-primary/30 hover:shadow-elevated"
+            className="scroll-mt-28 border-t-2 border-border bg-card p-6 transition-colors hover:border-primary"
           >
             <div className="flex items-start justify-between gap-3">
               <div className="flex min-w-0 items-start gap-3">
@@ -141,19 +141,19 @@ function CommonMistakes() {
                   <div className="micro-label mt-1.5 flex items-center gap-2">
                     {m.category}
                     {m.personal && (
-                      <span className="rounded-full bg-primary/15 px-2 py-0.5 text-primary">personal</span>
+                      <span className="border-l-2 border-primary bg-primary/10 px-2 py-0.5 text-primary">personal</span>
                     )}
                   </div>
                 </div>
               </div>
             </div>
 
-            <p className="mt-4 text-[14px] leading-relaxed text-muted-foreground">
+            <p className="mt-4 text-[14px] leading-relaxed text-secondary-foreground">
               <LaTeX>{m.description}</LaTeX>
             </p>
 
             {m.example && (
-              <div className="mt-4 rounded-2xl border border-border bg-elevated/50 p-4 text-[13px] leading-relaxed">
+              <div className="mt-4 border-l-2 border-border bg-elevated/50 p-4 text-[13px] leading-relaxed">
                 <div className="micro-label mb-2">example</div>
                 <LaTeX>{m.example}</LaTeX>
               </div>

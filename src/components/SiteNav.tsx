@@ -144,7 +144,7 @@ export function SiteNav({ subject = "calc-bc" }: { subject?: SubjectId }) {
           {signedIn ? (
             <button
               onClick={signOut}
-              className="mt-5 flex w-full items-center justify-center gap-1.5 rounded-full border border-border px-4 py-3 text-[13px] font-medium text-muted-foreground"
+              className="mt-5 flex w-full items-center justify-center gap-1.5 rounded-md border border-border px-4 py-3 text-[13px] font-medium text-secondary-foreground"
             >
               <LogOut className="h-3.5 w-3.5" />
               Sign out
@@ -153,7 +153,7 @@ export function SiteNav({ subject = "calc-bc" }: { subject?: SubjectId }) {
             <Link
               to="/practice"
               onClick={() => setOpen(false)}
-              className="mt-5 flex items-center justify-center rounded-full bg-primary px-4 py-3 text-[13px] font-semibold text-primary-foreground"
+              className="mt-5 flex items-center justify-center rounded-md bg-primary px-4 py-3 text-[13px] font-semibold text-primary-foreground"
             >
               Start practicing →
             </Link>

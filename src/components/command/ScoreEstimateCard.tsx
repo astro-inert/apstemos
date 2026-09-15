@@ -14,9 +14,9 @@ const CONF_LABEL: Record<string, string> = {
 
 const CONF_STYLE: Record<string, string> = {
   insufficient_data: "bg-muted text-muted-foreground",
-  preliminary: "bg-amber-500/10 text-amber-500",
-  moderate: "bg-sky-500/10 text-sky-500",
-  high: "bg-emerald-500/10 text-emerald-500",
+  preliminary: "bg-warning/10 text-warning",
+  moderate: "bg-accent text-accent-foreground",
+  high: "bg-success/10 text-success",
 };
 
 /**
@@ -32,13 +32,12 @@ export function ScoreEstimateCard() {
   });
 
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-border bg-card p-6 shadow-card">
-      <div className="absolute -right-20 -top-20 h-48 w-48 rounded-full bg-primary opacity-25 blur-3xl" />
+    <div className="relative overflow-hidden border-t-2 border-primary bg-card p-6">
       <div className="relative">
         <div className="flex items-start justify-between gap-3 text-xs">
           <span className="micro-label">MCQ-based AP score estimate</span>
           {data && (
-            <span className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-medium ${CONF_STYLE[data.confidence_state]}`}>
+            <span className={`shrink-0 border-l-2 border-current px-2 py-0.5 text-[10px] font-medium ${CONF_STYLE[data.confidence_state]}`}>
               {CONF_LABEL[data.confidence_state]}
             </span>
           )}
@@ -57,7 +56,7 @@ export function ScoreEstimateCard() {
             </p>
             <Link
               to="/predict"
-              className="mt-5 inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-[13px] font-semibold text-primary-foreground"
+              className="mt-5 inline-flex items-center gap-1.5 rounded-md bg-primary px-4 py-2 text-[13px] font-semibold text-primary-foreground"
             >
               Take the MCQ diagnostic <ArrowRight className="h-3.5 w-3.5" />
             </Link>
