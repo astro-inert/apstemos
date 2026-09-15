@@ -1,11 +1,9 @@
 import { Link } from "@tanstack/react-router";
 import { motion, useReducedMotion } from "motion/react";
-import { HOME_DEMO } from "@/lib/home-demo";
 import { isSubjectLive, type SubjectConfig } from "@/lib/subjects";
 import { ComingSoon, MicroLabel, Reveal, Section, SectionHeading } from "./primitives";
 
 export function PillarsSection({ subject }: { subject: SubjectConfig }) {
-  const demo = HOME_DEMO[subject.id];
   const reduced = useReducedMotion();
   const live = isSubjectLive(subject.id);
   const calculus = subject.id === "calc-bc";
