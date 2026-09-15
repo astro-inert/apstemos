@@ -8,3 +8,5 @@
 - [x] Restore Calculus pink/red and Statistics yellow/purple accents, contain cards on mobile, and convert strategy flows into genuine interactive flowcharts.
 - [x] Complete the approved mobile containment, AB/BC filtering, homepage accuracy/copy, Physics color, and subject-home navigation pass.
 - [x] Refine all subject homepages for credibility, coherent demo data, accurate examples, concise copy, and mobile conversion.
+- [ ] Apply the approved reference-inspired visual refinement without changing colors, content, routes, or functionality.
+- [ ] Incorporate the supplied AP STEM OS logo into the navbar with mobile-safe sizing.
