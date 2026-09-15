@@ -45,6 +45,7 @@ export interface DemoNavigator {
   activeIndex: number;
   mcq: string[];
   frq: string[];
+  guidanceBySubtopic?: Record<string, { mcq: string[]; frq: string[] }>;
 }
 
 export interface DemoLoop {
@@ -140,6 +141,24 @@ const calcBC: HomeDemo = {
       "Evaluate the simplified expression at the limiting value.",
       "Compare one-sided limits when the two-sided limit is in question.",
     ],
+    guidanceBySubtopic: {
+      "Limits from Graphs and Tables": {
+        mcq: ["Approach the input from the required side.", "Track the function's output, not the plotted point.", "Compare left- and right-hand behavior.", "Conclude a two-sided limit exists only when both sides agree."],
+        frq: ["Report each one-sided limit separately when needed.", "Distinguish the limit from the function value.", "Cite the table or graph behavior that supports the value.", "State that the limit does not exist when the sides disagree."],
+      },
+      "Squeeze Theorem": {
+        mcq: ["Identify lower and upper bounding functions.", "Evaluate both bounding limits.", "Confirm the bounds approach the same value.", "Conclude the trapped function has that limit."],
+        frq: ["Write the bounding inequality near the target input.", "Evaluate the outer limits.", "Name the Squeeze Theorem explicitly.", "State the resulting limit of the middle function."],
+      },
+      "Continuity & Discontinuity Types": {
+        mcq: ["Check that the function value is defined.", "Find the two-sided limit at the point.", "Compare the limit with the function value.", "Classify any removable, jump, or infinite discontinuity."],
+        frq: ["State the three conditions for continuity.", "Evaluate one-sided limits when a piece changes.", "Solve for any parameter that makes limit and value agree.", "Justify the discontinuity type from the failed condition."],
+      },
+      "Intermediate Value Theorem": {
+        mcq: ["Confirm continuity on the closed interval.", "Evaluate the function at both endpoints.", "Check that the target value lies between those outputs.", "Conclude existence, not uniqueness, of a solution."],
+        frq: ["State that the function is continuous on the interval.", "Show the endpoint values bracket the target.", "Invoke the Intermediate Value Theorem by name.", "Conclude at least one solution exists in the open interval."],
+      },
+    },
   },
 };
 

@@ -10,6 +10,8 @@ export function NavigatorSection({ subject }: { subject: SubjectConfig }) {
   const nav = HOME_DEMO[subject.id].navigator;
   const [active, setActive] = useState(nav.activeIndex);
   const reduced = useReducedMotion();
+  const activeSubtopic = nav.subtopics[active] ?? nav.subtopics[nav.activeIndex] ?? "";
+  const activeGuidance = nav.guidanceBySubtopic?.[activeSubtopic] ?? { mcq: nav.mcq, frq: nav.frq };
   return (
     <Section className="border-t border-border">
       <SectionHeading
@@ -70,8 +72,8 @@ export function NavigatorSection({ subject }: { subject: SubjectConfig }) {
                 className="mt-6 grid gap-8 sm:grid-cols-2"
               >
                 {[
-                  { k: "MCQ", steps: nav.mcq },
-                  { k: "FRQ", steps: nav.frq },
+                  { k: "MCQ", steps: activeGuidance.mcq },
+                  { k: "FRQ", steps: activeGuidance.frq },
                 ].map((col) => (
                   <div key={col.k}>
                     <div className="num text-[11px] font-semibold tracking-[0.18em] text-primary">{col.k}</div>
@@ -89,7 +91,7 @@ export function NavigatorSection({ subject }: { subject: SubjectConfig }) {
             </AnimatePresence>
             <Reveal delay={0.1}>
               <p className="num mt-8 text-[10px] text-subtle">
-                {nav.subtopics[active]}
+                {activeSubtopic}
               </p>
             </Reveal>
           </div>

@@ -66,7 +66,7 @@ export function PipelineSection({ subject }: { subject: SubjectConfig }) {
             <LaTeX>{loop.mistake.label}</LaTeX>
           </div>
           <div className="num mt-1 text-[10px] text-muted-foreground">
-            tagged · {loop.mistake.count}rd time
+            tagged · {loop.mistake.count} occurrences
           </div>
         </div>
       ),
