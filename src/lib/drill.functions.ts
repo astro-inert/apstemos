@@ -25,6 +25,7 @@ export const getDrillSet = createServerFn({ method: "POST" })
       .object({
         unit_slug: z.string().max(120).optional(),
         topic_slug: z.string().max(120).optional(),
+        difficulty: z.enum(["easy", "medium", "hard"]).optional(),
         limit: z.number().int().min(1).max(40).default(20),
         seed: z.string().max(60).default("default"),
       })
@@ -37,11 +38,11 @@ export const getDrillSet = createServerFn({ method: "POST" })
     const track = await getActiveTrack(context.supabase, context.userId);
     const seen = await getSeenKeys(context.supabase, context.userId);
 
-    const filter = { unit_slug: data.unit_slug, topic_slug: data.topic_slug, track };
+    const filter = { unit_slug: data.unit_slug, topic_slug: data.topic_slug, difficulty: data.difficulty, track };
     // A question the student has already answered never comes back.
     const unseen = bankKeys(filter).filter((k) => !seen.has(k));
     const picked = shuffle(
-      makeRng(`${context.userId}:${data.seed}:${data.unit_slug ?? ""}:${data.topic_slug ?? ""}`),
+      makeRng(`${context.userId}:${data.seed}:${data.unit_slug ?? ""}:${data.topic_slug ?? ""}:${data.difficulty ?? ""}:${track}`),
       unseen,
     ).slice(0, data.limit);
     const questions = picked

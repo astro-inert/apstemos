@@ -50,6 +50,9 @@ function unitWeightMap(unitRows: Array<{ number: number; ap_weight_pct: number |
  * (primary evidence), then practice attempts tagged by provenance.
  */
 export async function buildScoreEstimate(supabase: DB, userId: string): Promise<ScoreEstimate> {
+  const { getActiveTrack } = await import("./track.server");
+  const { questionKeyInTrack } = await import("./generated-bank");
+  const track = await getActiveTrack(supabase, userId);
   const [attemptsRes, diagRes, diagRespRes, unitsRes] = await Promise.all([
     supabase
       .from("attempts")
@@ -58,11 +61,11 @@ export async function buildScoreEstimate(supabase: DB, userId: string): Promise<
       .not("question_key", "is", null),
     supabase
       .from("diagnostics")
-      .select("id, submitted_at")
+      .select("id, submitted_at, question_keys")
       .eq("user_id", userId)
       .not("submitted_at", "is", null)
       .order("submitted_at", { ascending: false })
-      .limit(1),
+      .limit(20),
     supabase
       .from("diagnostic_responses")
       .select("question_key, correct, difficulty, unit_slug, topic_slug, diagnostic_id, was_unseen")
@@ -70,12 +73,14 @@ export async function buildScoreEstimate(supabase: DB, userId: string): Promise<
     supabase.from("units").select("number, ap_weight_pct").eq("subject_id", "ap-calc-bc"),
   ]);
 
-  const latestDiagnostic = diagRes.data?.[0] ?? null;
+  const latestDiagnostic = (diagRes.data ?? []).find((diagnostic) =>
+    diagnostic.question_keys.some((key) => questionKeyInTrack(key, track)),
+  ) ?? null;
   const freshCutoff = Date.now() - DIAGNOSTIC.freshnessDays * 86400_000;
   const has_fresh_diagnostic = !!latestDiagnostic?.submitted_at && new Date(latestDiagnostic.submitted_at).getTime() >= freshCutoff;
 
   const diagResponses = (diagRespRes.data ?? []).filter(
-    (r) => latestDiagnostic && r.diagnostic_id === latestDiagnostic.id,
+    (r) => latestDiagnostic && r.diagnostic_id === latestDiagnostic.id && questionKeyInTrack(r.question_key, track),
   );
 
   // Diagnostic items take precedence; practice attempts for the same key are skipped.
@@ -97,7 +102,8 @@ export async function buildScoreEstimate(supabase: DB, userId: string): Promise<
   let first_attempt_count = 0;
   const seenPractice = new Set<string>();
   for (const a of attemptsRes.data ?? []) {
-    const key = a.question_key!;
+    const key = a.question_key;
+    if (!key || !questionKeyInTrack(key, track)) continue;
     if (claimed.has(key)) continue;
     const kind = (a.attempt_kind ?? "first_attempt") as ScoredResponse["kind"];
     if (kind === "first_attempt") first_attempt_count += 1;
@@ -148,8 +154,8 @@ export async function buildScoreEstimate(supabase: DB, userId: string): Promise<
   const ability = estimateAbility(responses);
   const coverage = computeCoverage({
     responses,
-    unitWeights: unitWeightMap(unitsRes.data ?? []),
-    totalTopics: TOTAL_TOPICS,
+    unitWeights: unitWeightMap((unitsRes.data ?? []).filter((unit) => track === "BC" || unit.number <= 8)),
+    totalTopics: QN_UNITS.filter((unit) => track === "BC" || unit.number <= 8).reduce((sum, unit) => sum + unit.topics.length, 0),
   });
 
   const unique_question_count = keys.length;
