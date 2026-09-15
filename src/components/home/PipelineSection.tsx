@@ -13,6 +13,7 @@ export function PipelineSection({ subject }: { subject: SubjectConfig }) {
   const raw = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
   const signal = useSpring(raw, { stiffness: 60, damping: 20 });
 
+  const calculus = subject.id === "calc-bc";
   const stages = [
     {
       name: "Practice",
@@ -34,8 +35,8 @@ export function PipelineSection({ subject }: { subject: SubjectConfig }) {
       ),
     },
     {
-      name: "Diagnose",
-      caption: "Your mastery updates immediately.",
+      name: calculus ? "Measure" : "Diagnose",
+      caption: calculus ? "Every answer updates your unit mastery and topic-level performance." : "Your mastery updates immediately.",
       fragment: (
         <div>
           <div className="flex items-baseline justify-between gap-2 text-[11px]">
@@ -57,8 +58,8 @@ export function PipelineSection({ subject }: { subject: SubjectConfig }) {
       ),
     },
     {
-      name: "Understand",
-      caption: "The mistake behind the miss is named.",
+      name: calculus ? "Diagnose" : "Understand",
+      caption: calculus ? "Identify and tag the reasoning error behind a missed answer." : "The mistake behind the miss is named.",
       fragment: (
         <div className="rounded-lg border border-border px-2.5 py-2">
           <div className="micro-label">mistake</div>
@@ -72,8 +73,8 @@ export function PipelineSection({ subject }: { subject: SubjectConfig }) {
       ),
     },
     {
-      name: "Target",
-      caption: "A recommendation appears at the top of your plan.",
+      name: calculus ? "Learn" : "Target",
+      caption: calculus ? "Open the same topic in the Navigator for MCQ and FRQ guidance." : "A recommendation appears at the top of your plan.",
       fragment: (
         <div className="rounded-lg border border-primary/30 bg-accent/40 px-2.5 py-2">
           <div className="num text-[10px] text-primary">01</div>
@@ -85,8 +86,8 @@ export function PipelineSection({ subject }: { subject: SubjectConfig }) {
       ),
     },
     {
-      name: "Repeat",
-      caption: "The next question is chosen from your weakest points.",
+      name: calculus ? "Target" : "Repeat",
+      caption: calculus ? "Use your highest-ROI recommendations to choose where practice matters most." : "The next question is chosen from your weakest points.",
       fragment: (
         <div className="space-y-1.5">
           <div className="num text-[10px] text-subtle">next question</div>
@@ -98,13 +99,25 @@ export function PipelineSection({ subject }: { subject: SubjectConfig }) {
       ),
     },
   ];
+  if (calculus) {
+    stages.push({
+      name: "Repeat",
+      caption: "Return to Practice with a specific weakness to fix.",
+      fragment: (
+        <div className="space-y-1.5">
+          <div className="num text-[10px] text-subtle">next question</div>
+          <div className="rounded-lg border border-border px-2.5 py-2 text-[11px]">{loop.next.label}<span className="num mt-1 block text-[10px] text-muted-foreground">Practice → Measure → Diagnose → Learn → Target → Repeat</span></div>
+        </div>
+      ),
+    });
+  }
 
   return (
     <Section id="the-system">
       <SectionHeading
-        label="01 · the loop"
-        title="Every answer changes what comes next."
-        sub={`One continuous system for ${subject.navLabel}: practice feeds diagnosis, diagnosis feeds targeting, targeting decides the next question you see.`}
+        label={calculus ? "The APSTEMOS workflow · more than a question bank" : "01 · the loop"}
+        title={calculus ? "Don't just answer questions. Use them." : "Every answer changes what comes next."}
+        sub={calculus ? "Most practice ends when you check the answer. APSTEMOS starts there. Every question becomes part of a continuous workflow you can act on." : `One continuous system for ${subject.navLabel}: practice feeds diagnosis, diagnosis feeds targeting, targeting decides the next question you see.`}
       />
 
       <div ref={ref} className="relative mt-16">
@@ -120,7 +133,7 @@ export function PipelineSection({ subject }: { subject: SubjectConfig }) {
           />
         </div>
 
-        <ol className="grid gap-10 lg:grid-cols-5 lg:gap-5">
+        <ol className={`grid gap-10 lg:gap-5 ${calculus ? "lg:grid-cols-6" : "lg:grid-cols-5"}`}>
           {stages.map((s, i) => (
             <li key={s.name} className="relative pl-10 lg:pl-0 lg:pt-10">
               <span className="absolute left-0 top-1 grid h-[27px] w-[27px] place-items-center rounded-full border border-border bg-background lg:left-0 lg:top-0">

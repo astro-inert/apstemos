@@ -144,7 +144,7 @@ function CalcCommandCenter() {
               Prediction analytics
             </Link>
           )}
-          <TrackSwitcher track={data.profile?.track === "AB" ? "AB" : "BC"} />
+           <TrackSwitcher track={data.profile?.track === "AB" ? "AB" : "BC"} />
           <span className="num inline-flex items-center gap-1.5 rounded-md border border-border bg-card px-3 py-2 text-[12px] text-muted-foreground">
             <Calendar className="h-3.5 w-3.5" /> {daysToExam} days to exam
           </span>
@@ -325,7 +325,7 @@ function PerformanceDiagnostics({ units }: { units: UnitRow[] }) {
         <div className="micro-label inline-flex items-center gap-1.5">
           <Sparkles className="h-3.5 w-3.5 text-primary" /> Untouched units
         </div>
-        <h3 className="font-display font-semibold mt-1">Highest ROI to start</h3>
+            <h3 className="font-display font-semibold mt-1">Start with uncovered units</h3>
         {untouched.length === 0 ? (
           <div className="mt-4 text-sm text-muted-foreground">Every unit has logged attempts. Ranked mastery is in the table below.</div>
         ) : (
@@ -350,7 +350,7 @@ function PerformanceDiagnostics({ units }: { units: UnitRow[] }) {
             <div className="micro-label inline-flex items-center gap-1.5">
               <Activity className="h-3.5 w-3.5" /> Unit level breakdown
             </div>
-            <h3 className="font-display font-semibold mt-1">All 10 units · ranked by mastery</h3>
+          <h3 className="font-display font-semibold mt-1">All {units.length} units · ranked by mastery</h3>
           </div>
           <div className="text-[10px] text-muted-foreground hidden sm:block">Unit level breakdown unlocks after 10 attempts and one question in every topic.</div>
         </div>
@@ -467,7 +467,7 @@ function InsightsPanel({ data }: { data: Awaited<ReturnType<typeof getPerformanc
       <ul className="mt-4 space-y-3 text-sm">
         <li className="flex items-start gap-2">
           <span className="h-1.5 w-1.5 rounded-full bg-primary mt-1.5 shrink-0" />
-          <span>{untouched > 0 ? <><span className="font-semibold">{untouched} units</span> have no logged attempts. Start there — biggest score lift per minute.</> : "Every unit has data. Now focus on weakest performers."}</span>
+           <span>{untouched > 0 ? <><span className="font-semibold">{untouched} units</span> have no logged attempts. Start there to build coverage.</> : "Every unit has data. Now focus on weakest performers."}</span>
         </li>
         <li className="flex items-start gap-2">
           <span className="h-1.5 w-1.5 rounded-full bg-amber-400 mt-1.5 shrink-0" />
@@ -493,7 +493,7 @@ function TrackSwitcher({ track }: { track: "AB" | "BC" }) {
   });
   const active = mutation.isPending ? (mutation.variables as "AB" | "BC") : track;
   return (
-    <div className="inline-flex items-center rounded-md border border-border bg-card p-0.5" role="group" aria-label="Exam track">
+    <div className="inline-flex shrink-0 items-center rounded-md border border-border bg-card p-0.5" role="group" aria-label="Exam track">
       {(["AB", "BC"] as const).map((t) => (
         <button
           key={t}

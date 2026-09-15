@@ -8,9 +8,9 @@ export const Route = createFileRoute("/question-navigator/")({
   head: () => ({
     meta: [
       { title: "Question Type Navigator — AP STEM OS" },
-      { name: "description", content: "Browse AP Calculus BC by unit, topic, and exactly the question types College Board asks." },
+      { name: "description", content: "Browse AP Calculus by unit and topic, then learn how to recognize and approach important MCQ and FRQ structures." },
       { property: "og:title", content: "Question Type Navigator — AP STEM OS" },
-      { property: "og:description", content: "Unit → Topic → Question Type. How the exam is actually tested." },
+      { property: "og:description", content: "Unit → topic → practical MCQ and FRQ approach guidance." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -28,10 +28,10 @@ function Page() {
       eyebrow="question type navigator"
       title={
         <>
-          How the exam is <span className="text-primary">actually tested</span>.
+          Learn how each topic gets <span className="text-primary">tested</span>.
         </>
       }
-      description="Pick the unit you're studying. Drill into topics, then into the exact MCQ and FRQ patterns College Board uses — including typical wording and common mistakes."
+      description="Follow the same units and topics as Practice, then learn how to recognize important MCQ and FRQ structures, choose an approach, avoid traps, justify work, and communicate reasoning."
     >
       <div className="micro-label mb-6 flex items-center gap-2">
         <Compass className="h-3.5 w-3.5" />

@@ -72,13 +72,13 @@ export interface HomeDemo {
 const calcBC: HomeDemo = {
   predicted: 4,
   loop: {
-    practiceTopics: ["Interpretation", "Chain rule", "Accumulation"],
+    practiceTopics: ["Limits from Graphs and Tables", "Chain Rule", "Accumulation Functions"],
     diagnose: { topic: "Chain Rule", from: 68, to: 74 },
     mistake: { label: "Forgot the inner derivative", count: 3 },
-    target: { topic: "Composite functions", questions: 8 },
+    target: { topic: "Chain Rule", questions: 8 },
     next: { label: "MCQ · Unit 3 · Hard", note: "chosen from 2 weak topics" },
   },
-  questionCount: "1,700+",
+  questionCount: "2,000+",
   subtopics: [
     { name: "Integration by Parts", mastery: 86 },
     { name: "Related Rates", mastery: 81 },
@@ -117,13 +117,13 @@ const calcBC: HomeDemo = {
     tagged: 3,
   },
   navigator: {
-    unitLabel: "UNIT 6 · INTEGRATION & ACCUMULATION",
+    unitLabel: "UNIT 1 · LIMITS AND CONTINUITY",
     subtopics: [
-      "Accumulation Functions",
-      "Area & Net Change",
-      "Differential Equations",
-      "Definite Integrals",
-      "Fundamental Theorem of Calculus",
+      "Evaluating Limits Algebraically",
+      "Limits from Graphs and Tables",
+      "Squeeze Theorem",
+      "Continuity & Discontinuity Types",
+      "Intermediate Value Theorem",
     ],
     activeIndex: 0,
     mcq: [

@@ -9,14 +9,16 @@ import { SlopeField } from "@/components/SlopeField";
 
 import { QN_UNITS } from "@/lib/question-navigator-data";
 import { getDrillSet, submitDrillAttempt, type DrillQuestion } from "@/lib/drill.functions";
+import { getExamTrack, setExamTrack } from "@/lib/profile.functions";
 import { SubjectContentGate } from "@/components/SubjectContentGate";
 
-type Search = { unit?: string; topic?: string };
+type Search = { unit?: string; topic?: string; difficulty?: "easy" | "medium" | "hard" };
 
 export const Route = createFileRoute("/_authenticated/practice")({
   validateSearch: (search: Record<string, unknown>): Search => ({
     unit: typeof search.unit === "string" ? search.unit : undefined,
     topic: typeof search.topic === "string" ? search.topic : undefined,
+    difficulty: search.difficulty === "easy" || search.difficulty === "medium" || search.difficulty === "hard" ? search.difficulty : undefined,
   }),
   head: () => ({
     meta: [
@@ -48,6 +50,7 @@ function PracticePage() {
 
   const unitSlug = search.unit ?? "";
   const topicSlug = search.topic ?? "";
+  const difficulty = search.difficulty ?? "";
   const [seed, setSeed] = useState("set-1");
   const [index, setIndex] = useState(0);
   const [choice, setChoice] = useState("");
@@ -56,15 +59,36 @@ function PracticePage() {
 
   const fetchFn = useServerFn(getDrillSet);
   const submitFn = useServerFn(submitDrillAttempt);
+  const trackFn = useServerFn(getExamTrack);
+  const saveTrackFn = useServerFn(setExamTrack);
+  const trackQuery = useQuery({ queryKey: ["exam-track"], queryFn: () => trackFn() });
+  const track = trackQuery.data?.track ?? "BC";
+  const trackMutation = useMutation({
+    mutationFn: (next: "AB" | "BC") => saveTrackFn({ data: { track: next } }),
+    onMutate: (next) => {
+      qc.setQueryData(["exam-track"], { track: next });
+      setFilter({ unit: undefined, topic: undefined });
+    },
+    onError: () => {
+      qc.invalidateQueries({ queryKey: ["exam-track"] });
+    },
+    onSuccess: async (_result, next) => {
+      qc.setQueryData(["exam-track"], { track: next });
+      setFilter({ unit: undefined, topic: undefined });
+      await qc.invalidateQueries();
+    },
+  });
 
-  const unit = QN_UNITS.find((u) => u.slug === unitSlug);
+  const availableUnits = QN_UNITS.filter((candidate) => track === "BC" || candidate.number <= 8);
+  const unit = availableUnits.find((u) => u.slug === unitSlug);
+  const availableTopics = (unit?.topics ?? []).filter((topic) => track === "BC" || !topic.title.includes("(BC)"));
 
   useEffect(() => {
     setIndex(0);
     setChoice("");
     setFeedback(null);
     startedAt.current = Date.now();
-  }, [unitSlug, topicSlug, seed]);
+  }, [unitSlug, topicSlug, difficulty, seed, track]);
 
   // Response time is real evidence for the model, so it gets recorded per item.
   useEffect(() => {
@@ -72,7 +96,7 @@ function PracticePage() {
   }, [index]);
 
   const { data, isLoading } = useQuery({
-    queryKey: ["drill", unitSlug, topicSlug, seed],
+    queryKey: ["drill", track, unitSlug, topicSlug, difficulty, seed],
     queryFn: () =>
       fetchFn({
         data: {
@@ -80,6 +104,7 @@ function PracticePage() {
           seed,
           ...(unitSlug ? { unit_slug: unitSlug } : {}),
           ...(topicSlug ? { topic_slug: topicSlug } : {}),
+          ...(difficulty ? { difficulty } : {}),
         },
       }),
   });
@@ -117,14 +142,26 @@ function PracticePage() {
       title={unit ? `Unit ${unit.number} drill` : "Question bank"}
       description={`${data ? `${data.remaining.toLocaleString()} unseen questions left in this filter (AP Calculus ${data.track}). ` : ""}Questions you've already answered never come back. Every answer logs to your Score Command Center and updates unit mastery and topic accuracy.`}
     >
-      <div className="grid gap-2 sm:grid-cols-[1fr_1fr_auto]">
+      <div className="mb-4 flex items-center gap-1 border-b border-border" role="group" aria-label="AP Calculus exam track">
+        {(["AB", "BC"] as const).map((option) => (
+          <button
+            key={option}
+            onClick={() => option !== track && trackMutation.mutate(option)}
+            aria-pressed={option === track}
+            className={`-mb-px border-b-2 px-4 py-2 text-[13px] font-semibold ${option === track ? "border-primary text-primary" : "border-transparent text-muted-foreground"}`}
+          >
+            AP Calculus {option}
+          </button>
+        ))}
+      </div>
+      <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_0.75fr_auto]">
         <select
           value={unitSlug}
           onChange={(e) => setFilter({ unit: e.target.value || undefined, topic: undefined })}
           className="rounded-md border border-border bg-card px-4 py-2.5 text-[13px] outline-none transition-colors focus:border-primary/50"
         >
           <option value="">All units</option>
-          {QN_UNITS.map((u) => (
+          {availableUnits.map((u) => (
             <option key={u.slug} value={u.slug}>
               Unit {u.number} · {u.title}
             </option>
@@ -136,11 +173,21 @@ function PracticePage() {
           className="rounded-md border border-border bg-card px-4 py-2.5 text-[13px] outline-none transition-colors focus:border-primary/50"
         >
           <option value="">All topics</option>
-          {(unit?.topics ?? []).map((t) => (
+          {availableTopics.map((t) => (
             <option key={t.slug} value={t.slug}>
               {t.title}
             </option>
           ))}
+        </select>
+        <select
+          value={difficulty}
+          onChange={(e) => setFilter({ difficulty: (e.target.value || undefined) as Search["difficulty"] })}
+          className="rounded-md border border-border bg-card px-4 py-2.5 text-[13px] outline-none transition-colors focus:border-primary/50"
+        >
+          <option value="">All difficulties</option>
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="hard">Hard</option>
         </select>
         <button
           onClick={() => setSeed(`set-${Date.now()}`)}

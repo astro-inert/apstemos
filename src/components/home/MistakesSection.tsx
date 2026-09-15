@@ -7,26 +7,27 @@ import { ComingSoon, MicroLabel, Reveal, Section, SectionHeading } from "./primi
 export function MistakesSection({ subject }: { subject: SubjectConfig }) {
   const m = HOME_DEMO[subject.id].mistake;
   const live = isSubjectLive(subject.id);
+  const calculus = subject.id === "calc-bc";
   return (
     <Section className="border-t border-border">
       <SectionHeading
-        label="04 · mistake intelligence"
-        title="Your mistakes shouldn't disappear."
-        sub="Every wrong answer can be tagged to a mistake — so the same error stops being a surprise."
+        label={calculus ? "Answer log + common mistakes database" : "04 · mistake intelligence"}
+        title={calculus ? "Understand why you missed it." : "Your mistakes shouldn't disappear."}
+        sub={calculus ? "Your practice history stays accounted for. Return to missed questions, find the reasoning error behind each response, and tag it so isolated misses become patterns you can fix." : "Every wrong answer can be tagged to a mistake — so the same error stops being a surprise."}
       />
 
       <div className="mt-14 grid gap-4 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:gap-6">
         <Reveal className="border-t-2 border-foreground bg-card p-6 sm:p-9">
-          <MicroLabel>Common mistake</MicroLabel>
+           <MicroLabel>{calculus ? "Question missed → Find the mistake → Tag it" : "Common mistake"}</MicroLabel>
           <h3 className="mt-3 max-w-lg font-display text-xl font-semibold leading-tight sm:text-2xl">{m.title}</h3>
 
           <div className="mt-8 grid gap-8 sm:grid-cols-2">
             <div>
-              <MicroLabel>What happens</MicroLabel>
+               <MicroLabel>{calculus ? "Example and AP consequence" : "What happens"}</MicroLabel>
               <p className="mt-3 text-[14px] leading-relaxed text-secondary-foreground">{m.whatHappens}</p>
             </div>
             <div>
-              <MicroLabel>How to avoid it</MicroLabel>
+               <MicroLabel>How to avoid it</MicroLabel>
               <p className="mt-3 text-[14px] leading-relaxed text-secondary-foreground">
                 Before calculating, identify whether the question asks for:
               </p>
@@ -61,8 +62,8 @@ export function MistakesSection({ subject }: { subject: SubjectConfig }) {
         </Reveal>
 
         <Reveal delay={0.08} className="border-t-2 border-primary bg-elevated/50 p-6 sm:p-9">
-          <MicroLabel>Not in the database?</MicroLabel>
-          <h3 className="mt-3 font-display text-lg font-semibold leading-tight">Can't find your mistake?</h3>
+           <MicroLabel>{calculus ? "Can't find your mistake?" : "Not in the database?"}</MicroLabel>
+           <h3 className="mt-3 font-display text-lg font-semibold leading-tight">{calculus ? "Describe it to the built-in AI." : "Can't find your mistake?"}</h3>
           <p className="mt-3 text-[14px] leading-relaxed text-secondary-foreground">
             Describe what went wrong in plain language. It gets structured into an entry only you can see, taggable from
             your answer log.

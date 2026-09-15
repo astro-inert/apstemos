@@ -136,17 +136,24 @@ export const getAnswerLog = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => z.object({ limit: z.number().int().min(1).max(200).default(50) }).parse(input ?? {}))
   .handler(async ({ data, context }): Promise<AnswerLogRow[]> => {
+    const { getActiveTrack } = await import("./track.server");
+    const { questionKeyInTrack } = await import("./generated-bank");
+    const track = await getActiveTrack(context.supabase, context.userId);
     const { data: rows, error } = await context.supabase
       .from("attempts")
       .select(
-        "id, created_at, correct, points_earned, points_possible, selected_answer, topic_slug, unit_slug, mistake_codes, question_id",
+        "id, created_at, correct, points_earned, points_possible, selected_answer, topic_slug, unit_slug, mistake_codes, question_id, question_key",
       )
       .eq("user_id", context.userId)
       .order("created_at", { ascending: false })
-      .limit(data.limit);
+      .limit(Math.min(200, data.limit * 2));
     if (error) throw new Error(error.message);
 
-    const ids = Array.from(new Set((rows ?? []).map((r) => r.question_id).filter(Boolean)));
+    const trackRows = (rows ?? [])
+      .filter((row) => row.question_key ? questionKeyInTrack(row.question_key, track) : track === "BC")
+      .slice(0, data.limit);
+
+    const ids = Array.from(new Set(trackRows.map((r) => r.question_id).filter(Boolean)));
     const byId = new Map<string, { prompt: string; type: "MCQ" | "FRQ"; source: string | null }>();
     if (ids.length > 0) {
       const { data: qs } = await context.supabase
@@ -170,7 +177,7 @@ export const getAnswerLog = createServerFn({ method: "POST" })
       }
     }
 
-    return (rows ?? []).map((r) => {
+    return trackRows.map((r) => {
       const q = byId.get(r.question_id) ?? null;
       return {
         id: r.id,

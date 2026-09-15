@@ -10,13 +10,14 @@ export function NavigatorSection({ subject }: { subject: SubjectConfig }) {
   const nav = HOME_DEMO[subject.id].navigator;
   const [active, setActive] = useState(nav.activeIndex);
   const reduced = useReducedMotion();
+  const calculus = subject.id === "calc-bc";
 
   return (
     <Section className="border-t border-border">
       <SectionHeading
         label="05 · question type navigator"
-        title="Know how the AP asks."
-        sub="A field manual for the exam: unit, topic, and the exact approach for each question type."
+        title={calculus ? "From “I got it wrong” to “I know how to approach it.”" : "Know how the AP asks."}
+        sub={calculus ? "The Navigator follows the same unit-and-topic organization as Practice. Learn how to recognize and approach important MCQ and FRQ structures, avoid common traps, justify work, and communicate reasoning." : "A field manual for the exam: unit, topic, and the approach for each question type."}
       />
 
        <div className="mt-14 overflow-hidden border-y border-border bg-card">
@@ -60,7 +61,7 @@ export function NavigatorSection({ subject }: { subject: SubjectConfig }) {
           </ul>
 
           <div className="p-6 sm:p-8">
-            <MicroLabel>How to approach this question type</MicroLabel>
+            <MicroLabel>{calculus ? "How this topic appears on the AP exam" : "How to approach this question type"}</MicroLabel>
             <AnimatePresence mode="wait">
               <motion.div
                 key={active}
@@ -89,7 +90,7 @@ export function NavigatorSection({ subject }: { subject: SubjectConfig }) {
               </motion.div>
             </AnimatePresence>
             <Reveal delay={0.1}>
-              <p className="num mt-8 text-[10px] uppercase tracking-[0.16em] text-subtle">
+              <p className="num mt-8 text-[10px] text-subtle">
                 {nav.subtopics[active]}
               </p>
             </Reveal>

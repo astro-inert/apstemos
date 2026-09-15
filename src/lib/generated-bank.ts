@@ -387,6 +387,7 @@ export type BankFilter = {
   topic_slug?: string;
   track?: "AB" | "BC";
   calculator?: boolean;
+  difficulty?: Difficulty;
 };
 
 /** Index of every generated question key, optionally filtered. */
@@ -398,8 +399,16 @@ export function bankKeys(filter?: BankFilter): string[] {
     if (filter?.unit_slug && t.unit !== filter.unit_slug) return false;
     if (filter?.topic_slug && t.topic !== filter.topic_slug) return false;
     if (filter?.calculator !== undefined && (t.calculator ?? false) !== filter.calculator) return false;
+    if (filter?.difficulty && t.difficulty !== filter.difficulty) return false;
     return inTrack(t, filter?.track);
   });
+}
+
+/** Whether a generated question belongs in the selected exam track. */
+export function questionKeyInTrack(key: string, track: "AB" | "BC"): boolean {
+  const templateId = key.slice(0, key.lastIndexOf("::"));
+  const template = TEMPLATES.find((candidate) => candidate.id === templateId);
+  return template ? inTrack(template, track) : false;
 }
 
 export function bankCount(filter?: BankFilter): number {

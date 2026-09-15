@@ -72,13 +72,18 @@ export const getPerformanceSnapshot = createServerFn({ method: "GET" })
       supabase.from("units").select("id, number, name, ap_weight_pct, ap_points").eq("subject_id", "ap-calc-bc").order("number"),
       supabase
         .from("attempts")
-        .select("unit_id, unit_slug, topic_slug, correct, points_earned, points_possible, mistake_codes")
+        .select("question_key, unit_id, unit_slug, topic_slug, correct, points_earned, points_possible, mistake_codes")
         .eq("user_id", userId),
       supabase.from("common_mistakes").select("code, title, category"),
     ]);
 
-    const attempts = attemptsRes.data ?? [];
-    const units = unitsRes.data ?? [];
+    const track = profileRes.data?.track === "AB" ? "AB" : "BC";
+    const { questionKeyInTrack } = await import("./generated-bank");
+    // Legacy rows without a generated key cannot be proven AB-safe, so they stay in BC only.
+    const attempts = (attemptsRes.data ?? []).filter((attempt) =>
+      attempt.question_key ? questionKeyInTrack(attempt.question_key, track) : track === "BC",
+    );
+    const units = (unitsRes.data ?? []).filter((unit) => track === "BC" || unit.number <= 8);
     const mistakesCat = mistakesCatRes.data ?? [];
 
     const attempts_count = attempts.length;
@@ -89,12 +94,17 @@ export const getPerformanceSnapshot = createServerFn({ method: "GET" })
     // Unit mastery: % correct within unit; -1 if untouched
     const byUnit = new Map<string, { e: number; p: number; n: number }>();
     for (const a of attempts) {
-      if (!a.unit_id) continue;
-      const cur = byUnit.get(a.unit_id) ?? { e: 0, p: 0, n: 0 };
+      const matchedUnit = a.unit_id
+        ? units.find((unit) => unit.id === a.unit_id)
+        : QN_UNITS.find((unit) => unit.slug === a.unit_slug)
+          ? units.find((unit) => unit.number === QN_UNITS.find((entry) => entry.slug === a.unit_slug)?.number)
+          : undefined;
+      if (!matchedUnit) continue;
+      const cur = byUnit.get(matchedUnit.id) ?? { e: 0, p: 0, n: 0 };
       cur.e += Number(a.points_earned ?? 0);
       cur.p += Number(a.points_possible ?? 0);
       cur.n += 1;
-      byUnit.set(a.unit_id, cur);
+      byUnit.set(matchedUnit.id, cur);
     }
 
     // Which subtopics has the user actually touched? Mastery only unlocks with
@@ -148,11 +158,12 @@ export const getPerformanceSnapshot = createServerFn({ method: "GET" })
       cur.n += 1;
       byTopic.set(slug, cur);
     }
-    const subtopics = QN_UNITS.flatMap((u) =>
+    const subtopics = QN_UNITS.filter((u) => track === "BC" || u.number <= 8).flatMap((u) =>
       u.topics
         .filter((t) => byTopic.has(t.slug))
         .map((t) => {
-          const s = byTopic.get(t.slug)!;
+          const s = byTopic.get(t.slug);
+          if (!s) return null;
           return {
             unit_slug: u.slug,
             unit_number: u.number,
@@ -162,7 +173,8 @@ export const getPerformanceSnapshot = createServerFn({ method: "GET" })
             attempts: s.n,
             unlocked: s.n >= SUBTOPIC_THRESHOLD,
           };
-        }),
+        })
+        .filter((topic): topic is NonNullable<typeof topic> => topic !== null),
     );
 
     // Unit-weighted mastery on the 108-point map. Untouched units contribute 0 —
@@ -198,7 +210,7 @@ export const getPerformanceSnapshot = createServerFn({ method: "GET" })
       points_earned,
       points_possible,
       mastery_points,
-      mastery_points_possible: 108,
+      mastery_points_possible: units.reduce((sum, unit) => sum + unit.ap_points, 0),
       unit_mastery,
       subtopics,
       untouched_units,

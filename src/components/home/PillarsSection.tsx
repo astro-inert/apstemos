@@ -8,12 +8,13 @@ export function PillarsSection({ subject }: { subject: SubjectConfig }) {
   const demo = HOME_DEMO[subject.id];
   const reduced = useReducedMotion();
   const live = isSubjectLive(subject.id);
+  const calculus = subject.id === "calc-bc";
 
   const pillars = [
     {
       n: "01",
       title: "Practice",
-      copy: `${demo.questionCount} AP-style questions. Organized by unit, topic, and difficulty.`,
+      copy: calculus ? `${demo.questionCount} AP-style questions organized by AB or BC, unit, topic, and difficulty.` : `${demo.questionCount} AP-style questions. Organized by unit, topic, and difficulty.`,
       to: "/practice",
       preview: (
         <div className="space-y-1.5">
@@ -36,8 +37,8 @@ export function PillarsSection({ subject }: { subject: SubjectConfig }) {
     },
     {
       n: "02",
-      title: "Mistake intelligence",
-      copy: "Turn wrong answers into a searchable history of the mistakes you actually make.",
+      title: calculus ? "Your feedback loop" : "Mistake intelligence",
+      copy: calculus ? "Practice → Score Command Center → Answer Log → Common Mistakes → Question Type Navigator → Targeted Practice." : "Turn wrong answers into a searchable history of the mistakes you actually make.",
       to: "/common-mistakes",
       preview: (
         <div className="space-y-1.5">
@@ -58,8 +59,8 @@ export function PillarsSection({ subject }: { subject: SubjectConfig }) {
     },
     {
       n: "03",
-      title: "Score optimization",
-      copy: "See your mastery and know exactly what deserves your study time next.",
+      title: calculus ? "Your AP toolkit" : "Score optimization",
+      copy: calculus ? "FRQ Library → Topic Rundowns → Formula & Strategy Guide → Exam Strategy." : "See your mastery and know exactly what deserves your study time next.",
       to: "/command-center",
       preview: (
         <div className="flex items-end gap-1.5">
@@ -82,8 +83,8 @@ export function PillarsSection({ subject }: { subject: SubjectConfig }) {
   return (
     <Section className="border-t border-border">
       <SectionHeading
-        label="06 · three pillars"
-        title="Built around what actually moves your preparation forward."
+        label={calculus ? "Two sides of APSTEMOS" : "06 · three pillars"}
+        title={calculus ? "Learn from your performance. Prepare for the exam." : "Built around what actually moves your preparation forward."}
       />
       <div className="mt-14 grid gap-4 md:grid-cols-3 lg:gap-6">
         {pillars.map((p, i) => {

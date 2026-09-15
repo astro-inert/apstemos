@@ -12,30 +12,29 @@ export function DiagnosisSection({ subject }: { subject: SubjectConfig }) {
   const [picked, setPicked] = useState<number | null>(null);
   const reduced = useReducedMotion();
   const revealed = picked !== null;
+  const calculus = subject.id === "calc-bc";
 
   return (
     <Section className="border-t border-border">
       <SectionHeading
-        label="02 · the magic moment"
+        label={calculus ? "Practice · 2,000+ AP-style MCQs" : "02 · the magic moment"}
         title={
           <>
-            Don't just see that you're wrong.
-            <br />
-            Understand why.
+            {calculus ? <>Practice built around the<br />actual course.</> : <>Don't just see that you're wrong.<br />Understand why.</>}
           </>
         }
-        sub="Select an answer below. The diagnosis is the information already hidden inside your choice."
+        sub={calculus ? "Work through original AP-style questions by AB or BC, unit, topic, and difficulty. Every question includes a concise explanation—and every result feeds the rest of APSTEMOS." : "Select an answer below. The diagnosis is the information already hidden inside your choice."}
       />
 
       <div className="mt-14 grid gap-4 lg:grid-cols-2 lg:gap-6">
         {/* Question */}
-        <div className="border-t-2 border-foreground bg-card p-6 sm:p-8">
+        <div className="min-w-0 max-w-full border-t-2 border-foreground bg-card p-6 sm:p-8">
           <div className="flex items-center justify-between gap-3">
             <MicroLabel>{q.id}</MicroLabel>
             <span className="num text-[10px] text-subtle">{q.meta}</span>
           </div>
           <div className="mt-6 text-[15px] leading-relaxed">
-            <LaTeX>{q.prompt}</LaTeX>
+            <span className="block min-w-0 max-w-full overflow-x-auto"><LaTeX>{q.prompt}</LaTeX></span>
           </div>
           <div className="mt-7 space-y-2.5">
             {q.choices.map((c, i) => {
@@ -79,7 +78,7 @@ export function DiagnosisSection({ subject }: { subject: SubjectConfig }) {
         </div>
 
         {/* Diagnosis */}
-         <div className="relative min-h-[22rem] overflow-hidden border-t-2 border-primary bg-card p-6 sm:p-8">
+          <div className="relative min-w-0 max-w-full min-h-[22rem] overflow-hidden border-t-2 border-primary bg-card p-6 sm:p-8">
           <AnimatePresence mode="wait">
             {!revealed ? (
               <motion.div
