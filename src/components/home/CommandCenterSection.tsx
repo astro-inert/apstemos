@@ -19,14 +19,14 @@ export function CommandCenterSection({
       <SectionHeading
         label="03 · score command center"
         title="Know exactly where you stand."
-        sub={`The Score Command Center tracks your ${subject.navLabel} performance by unit and subtopic, showing your strengths, weaknesses, and overall unit mastery. Instead of relying on a single practice score, you can see exactly which parts of the course you've mastered and which need more work—then decide what to practice next.`}
+        sub={`The Score Command Center turns your ${subject.navLabel} answers into unit and subtopic mastery, so weak areas become specific rather than vague.`}
       />
 
       <div className="mt-14 grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-6">
         {/* Unit mastery */}
         <Reveal className="min-w-0 max-w-full border-t-2 border-foreground bg-card p-6 sm:p-8">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div>
+          <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
+            <div className="min-w-0">
               <MicroLabel>{subject.navLabel}</MicroLabel>
               <div className="mt-1 font-display text-sm font-semibold">Unit mastery</div>
             </div>
@@ -49,7 +49,7 @@ export function CommandCenterSection({
             ))}
           </ul>
            <p className="num mt-7 text-[11px] text-muted-foreground">
-            70% is AP STEM OS's operational mastery threshold
+             {data.completedQuestions} completed questions · 70% operational mastery threshold
           </p>
         </Reveal>
 
@@ -59,7 +59,7 @@ export function CommandCenterSection({
             <div className="relative">
               <MicroLabel>Highest-priority recommendations</MicroLabel>
                <p className="mt-3 max-w-sm text-[14px] leading-relaxed text-secondary-foreground">
-                  Use your performance by unit and subtopic to decide what to practice next.
+                  Recommendations prioritize the lowest-mastery areas with enough evidence.
               </p>
               <ol className="mt-7 space-y-3">
                 {data.moves.map((m, i) => (
@@ -82,7 +82,7 @@ export function CommandCenterSection({
                       <ArrowRight className="mt-1 h-4 w-4 shrink-0 text-subtle transition-all group-hover:translate-x-0.5 group-hover:text-primary" />
                     </Link>
                     ) : (
-                      <div className="flex items-start gap-4 rounded-2xl border border-border bg-background/70 px-4 py-4">
+                      <div className="flex items-start gap-4 border-t border-border bg-background/70 px-4 py-4">
                         <span className="num text-[13px] text-primary">{i + 1}.</span>
                         <span className="min-w-0 flex-1">
                           <span className="block font-display text-[15px] font-semibold leading-tight">{m.name}</span>

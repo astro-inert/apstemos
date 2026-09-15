@@ -12,6 +12,7 @@ export interface InstrumentData {
   live: boolean;
   /** null when the user has too little evidence for an honest MCQ-based estimate */
   predicted: number | null;
+  completedQuestions: number;
   subtopics: DemoSubtopic[];
   moves: DemoMove[];
   units: { label: string; name: string; mastery: number }[];
@@ -57,6 +58,7 @@ export function useHomeInstrument(subject: SubjectConfig): InstrumentData {
   const fallback: InstrumentData = {
     live: false,
     predicted: demo.predicted,
+    completedQuestions: demo.completedQuestions,
     subtopics: demo.subtopics,
     moves: demo.moves,
     units: subject.units.map((u, i) => ({
@@ -98,6 +100,7 @@ export function useHomeInstrument(subject: SubjectConfig): InstrumentData {
   return {
     live: true,
     predicted: estimate?.estimated_score ?? null,
+    completedQuestions: data.attempts_count,
     subtopics: subtopics.length ? subtopics : demo.subtopics,
     moves,
     units,

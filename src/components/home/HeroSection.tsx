@@ -29,7 +29,7 @@ export function HeroSection({ subject, data }: { subject: SubjectConfig; data: I
           </p>
           <div className="mt-9 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
             {isSubjectLive(subject.id) ? (
-              <MagneticLink to="/practice">
+              <MagneticLink to="/practice" className="min-h-12">
                 Start Practicing
                 <ArrowRight className="h-4 w-4" />
               </MagneticLink>
@@ -67,10 +67,12 @@ export function MagneticLink({
   to,
   children,
   variant = "primary",
+  className = "",
 }: {
   to: string;
   children: React.ReactNode;
   variant?: "primary" | "ghost";
+  className?: string;
 }) {
   const reduced = useReducedMotion();
   return (
@@ -84,8 +86,8 @@ export function MagneticLink({
         to={to}
         className={
           variant === "primary"
-            ? "inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
-            : "inline-flex items-center gap-2 rounded-md border border-border bg-card px-6 py-3 text-sm font-semibold transition-colors hover:border-primary/40"
+            ? `inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 ${className}`
+            : `inline-flex items-center gap-2 rounded-md border border-border bg-card px-6 py-3 text-sm font-semibold transition-colors hover:border-primary/40 ${className}`
         }
       >
         {children}
@@ -144,6 +146,9 @@ function Instrument({ subject, data }: { subject: SubjectConfig; data: Instrumen
           )}
           <p className="mt-6 text-xs leading-relaxed text-muted-foreground">
             Estimated from multiple-choice evidence only — free-response performance is not modeled.
+          </p>
+          <p className="num mt-3 text-[11px] text-muted-foreground">
+            {data.completedQuestions} completed questions
           </p>
         </div>
 

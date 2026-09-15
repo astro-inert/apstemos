@@ -13,11 +13,10 @@ export function PipelineSection({ subject }: { subject: SubjectConfig }) {
   const raw = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
   const signal = useSpring(raw, { stiffness: 60, damping: 20 });
 
-  const calculus = subject.id === "calc-bc";
   const stages = [
     {
       name: "Practice",
-      caption: `You answer an AP ${subject.navLabel.replace("AP ", "")}-style question.`,
+      caption: `Answer an ${subject.navLabel}-style question.`,
       fragment: (
         <div className="space-y-1.5">
           {loop.practiceTopics.map((c, i) => (
@@ -36,7 +35,7 @@ export function PipelineSection({ subject }: { subject: SubjectConfig }) {
     },
     {
        name: "Score Command Center",
-       caption: "Every answer updates your strengths, weaknesses, and unit mastery by subtopic.",
+       caption: "The result becomes evidence in your mastery profile.",
       fragment: (
         <div>
           <div className="flex items-baseline justify-between gap-2 text-[11px]">
@@ -59,7 +58,7 @@ export function PipelineSection({ subject }: { subject: SubjectConfig }) {
     },
     {
        name: "Common Mistakes",
-       caption: "Return to missed questions and identify the mistake behind each wrong answer.",
+       caption: "See the repeated error behind a wrong answer.",
       fragment: (
         <div className="rounded-lg border border-border px-2.5 py-2">
           <div className="micro-label">mistake</div>
@@ -67,27 +66,27 @@ export function PipelineSection({ subject }: { subject: SubjectConfig }) {
             <LaTeX>{loop.mistake.label}</LaTeX>
           </div>
           <div className="num mt-1 text-[10px] text-muted-foreground">
-            tagged · {loop.mistake.count}rd time
+            tagged · {loop.mistake.count} occurrences
           </div>
         </div>
       ),
     },
     {
        name: "Question Type Navigator",
-       caption: "Open the same subtopic for MCQ and FRQ guidance, methods, conditions, and common traps.",
+       caption: "Learn the methods, conditions, and traps for that question type.",
       fragment: (
         <div className="rounded-lg border border-primary/30 bg-accent/40 px-2.5 py-2">
           <div className="num text-[10px] text-primary">01</div>
           <div className="mt-0.5 text-[11px] font-medium">{loop.target.topic}</div>
           <div className="num text-[10px] text-muted-foreground">
-            targeted practice · {loop.target.questions} questions
+            MCQ + FRQ guidance · {loop.target.questions} checkpoints
           </div>
         </div>
       ),
     },
     {
        name: "Return to Practice",
-       caption: "Use what you learned to choose what to practice next.",
+       caption: "Apply the guidance in a targeted set.",
       fragment: (
         <div className="space-y-1.5">
           <div className="num text-[10px] text-subtle">next question</div>
@@ -99,25 +98,12 @@ export function PipelineSection({ subject }: { subject: SubjectConfig }) {
       ),
     },
   ];
-  if (calculus) {
-    stages.push({
-      name: "Repeat",
-       caption: "Keep building a clearer picture of what you know and what still needs work.",
-      fragment: (
-        <div className="space-y-1.5">
-          <div className="num text-[10px] text-subtle">next question</div>
-           <div className="rounded-lg border border-border px-2.5 py-2 text-[11px]">{loop.next.label}<span className="num mt-1 block text-[10px] text-muted-foreground">Practice → Score Command Center → Common Mistakes → Question Type Navigator</span></div>
-        </div>
-      ),
-    });
-  }
-
   return (
     <Section id="the-system">
       <SectionHeading
-         label="Practice → Score Command Center → Common Mistakes → Question Type Navigator"
-         title="Every answer gives you more than a score."
-         sub={`Each question you answer updates your Score Command Center, giving you a clearer picture of your strengths and weaknesses by unit and subtopic. When you miss a question, return to it in your Answer Log, identify what went wrong in the Common Mistakes Database, and use the Question Type Navigator to learn how to approach that subtopic on both MCQs and FRQs for ${subject.navLabel}.`}
+         label="One answer, used well"
+         title="Every answer becomes useful evidence."
+         sub="A result does more than mark right or wrong. It updates mastery, surfaces a pattern, and points to a focused next step."
       />
 
       <div ref={ref} className="relative mt-16">
@@ -133,7 +119,7 @@ export function PipelineSection({ subject }: { subject: SubjectConfig }) {
           />
         </div>
 
-        <ol className={`grid gap-10 lg:gap-5 ${calculus ? "lg:grid-cols-6" : "lg:grid-cols-5"}`}>
+        <ol className="grid gap-8 sm:gap-10 lg:grid-cols-5 lg:gap-5">
           {stages.map((s, i) => (
             <li key={s.name} className="relative pl-10 lg:pl-0 lg:pt-10">
               <span className="absolute left-0 top-1 grid h-[27px] w-[27px] place-items-center rounded-full border border-border bg-background lg:left-0 lg:top-0">

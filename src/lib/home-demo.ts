@@ -45,6 +45,7 @@ export interface DemoNavigator {
   activeIndex: number;
   mcq: string[];
   frq: string[];
+  guidanceBySubtopic?: Record<string, { mcq: string[]; frq: string[] }>;
 }
 
 export interface DemoLoop {
@@ -58,6 +59,7 @@ export interface DemoLoop {
 
 export interface HomeDemo {
   predicted: number;
+  completedQuestions: number;
   loop: DemoLoop;
   subtopics: DemoSubtopic[];
   moves: DemoMove[];
@@ -71,18 +73,19 @@ export interface HomeDemo {
 
 const calcBC: HomeDemo = {
   predicted: 4,
+  completedQuestions: 186,
   loop: {
     practiceTopics: ["Limits from Graphs and Tables", "Chain Rule", "Accumulation Functions"],
-    diagnose: { topic: "Chain Rule", from: 68, to: 74 },
+    diagnose: { topic: "Chain Rule", from: 72, to: 76 },
     mistake: { label: "Forgot the inner derivative", count: 3 },
     target: { topic: "Chain Rule", questions: 8 },
     next: { label: "MCQ · Unit 3 · Hard", note: "chosen from 2 weak topics" },
   },
   questionCount: "2,000+",
   subtopics: [
-    { name: "Integration by Parts", mastery: 86 },
-    { name: "Related Rates", mastery: 81 },
-    { name: "Taylor Series", mastery: 72 },
+    { name: "Limits from Graphs and Tables", mastery: 82 },
+    { name: "Chain Rule", mastery: 76 },
+    { name: "Differential Equations", mastery: 64 },
     { name: "Polar Area", mastery: 58 },
     { name: "Series Convergence", mastery: 43 },
   ],
@@ -91,7 +94,7 @@ const calcBC: HomeDemo = {
     { name: "Polar Area", mastery: 58, action: "Complete targeted practice", cta: "Review" },
     { name: "Differential Equations", mastery: 64, action: "Complete 5 more questions", cta: "Practice" },
   ],
-  unitMastery: [84, 91, 76, 68, 82, 59, 73, 61, 47, 52],
+  unitMastery: [82, 78, 76, 68, 69, 71, 64, 59, 58, 43],
   question: {
     id: "MCQ · 04127",
     meta: "Unit 3 · Composite functions · Medium",
@@ -110,10 +113,10 @@ const calcBC: HomeDemo = {
     next: "Targeted Practice",
   },
   mistake: {
-    title: "Using velocity when asked for displacement",
+    title: "Forgetting the inner derivative",
     whatHappens:
-      "You calculate instantaneous velocity instead of integrating velocity over the requested interval.",
-    howToAvoid: ["position", "velocity", "acceleration", "displacement", "distance"],
+      "You differentiate the outer function correctly but omit the derivative of its inner function, losing the chain-rule factor.",
+    howToAvoid: ["identify the outer function", "identify the inner function", "differentiate both", "multiply the factors"],
     tagged: 3,
   },
   navigator: {
@@ -127,27 +130,46 @@ const calcBC: HomeDemo = {
     ],
     activeIndex: 0,
     mcq: [
-      "Identify the quantity being accumulated.",
-      "Determine the interval.",
-      "Translate the wording into an integral.",
-      "Check units and sign.",
+      "Try direct substitution first.",
+      "Decide whether the result is determinate or indeterminate.",
+      "If needed, factor, rationalize, or combine fractions.",
+      "Substitute again and check one-sided behavior when relevant.",
     ],
     frq: [
-      "State the relevant relationship.",
-      "Set up the integral.",
-      "Evaluate or interpret.",
-      "Include units when appropriate.",
+      "Show the algebra used to remove the indeterminate form.",
+      "State when continuity permits direct substitution.",
+      "Evaluate the simplified expression at the limiting value.",
+      "Compare one-sided limits when the two-sided limit is in question.",
     ],
+    guidanceBySubtopic: {
+      "Limits from Graphs and Tables": {
+        mcq: ["Approach the input from the required side.", "Track the function's output, not the plotted point.", "Compare left- and right-hand behavior.", "Conclude a two-sided limit exists only when both sides agree."],
+        frq: ["Report each one-sided limit separately when needed.", "Distinguish the limit from the function value.", "Cite the table or graph behavior that supports the value.", "State that the limit does not exist when the sides disagree."],
+      },
+      "Squeeze Theorem": {
+        mcq: ["Identify lower and upper bounding functions.", "Evaluate both bounding limits.", "Confirm the bounds approach the same value.", "Conclude the trapped function has that limit."],
+        frq: ["Write the bounding inequality near the target input.", "Evaluate the outer limits.", "Name the Squeeze Theorem explicitly.", "State the resulting limit of the middle function."],
+      },
+      "Continuity & Discontinuity Types": {
+        mcq: ["Check that the function value is defined.", "Find the two-sided limit at the point.", "Compare the limit with the function value.", "Classify any removable, jump, or infinite discontinuity."],
+        frq: ["State the three conditions for continuity.", "Evaluate one-sided limits when a piece changes.", "Solve for any parameter that makes limit and value agree.", "Justify the discontinuity type from the failed condition."],
+      },
+      "Intermediate Value Theorem": {
+        mcq: ["Confirm continuity on the closed interval.", "Evaluate the function at both endpoints.", "Check that the target value lies between those outputs.", "Conclude existence, not uniqueness, of a solution."],
+        frq: ["State that the function is continuous on the interval.", "Show the endpoint values bracket the target.", "Invoke the Intermediate Value Theorem by name.", "Conclude at least one solution exists in the open interval."],
+      },
+    },
   },
 };
 
 const physics1: HomeDemo = {
   predicted: 3,
+  completedQuestions: 142,
   loop: {
     practiceTopics: ["Kinematics graphs", "Newton's second law", "Energy bar charts"],
     diagnose: { topic: "Newton's Second Law", from: 64, to: 71 },
     mistake: { label: "Missing force on the free-body diagram", count: 3 },
-    target: { topic: "Free-body diagrams", questions: 8 },
+    target: { topic: "Newton's Second Law", questions: 8 },
     next: { label: "MCQ · Unit 2 · Hard", note: "chosen from 2 weak topics" },
   },
   questionCount: "1,700+",
@@ -182,10 +204,10 @@ const physics1: HomeDemo = {
     next: "Targeted Practice",
   },
   mistake: {
-    title: "Using speed when asked for displacement",
+    title: "Omitting a force from the free-body diagram",
     whatHappens:
-      "You report total distance traveled instead of the change in position over the requested interval.",
-    howToAvoid: ["position", "velocity", "acceleration", "displacement", "distance"],
+      "You write the net-force equation from an incomplete free-body diagram, so the calculated acceleration does not represent the system.",
+    howToAvoid: ["isolate the object", "identify every interaction", "draw one vector per force", "choose axes", "sum by component"],
     tagged: 3,
   },
   navigator: {
@@ -215,11 +237,12 @@ const physics1: HomeDemo = {
 
 const physics2: HomeDemo = {
   predicted: 3,
+  completedQuestions: 128,
   loop: {
     practiceTopics: ["Fluid pressure", "Parallel circuits", "Thermal processes"],
     diagnose: { topic: "Parallel Circuits", from: 61, to: 70 },
     mistake: { label: "Added parallel resistances directly", count: 3 },
-    target: { topic: "Equivalent resistance", questions: 8 },
+    target: { topic: "Parallel Circuits", questions: 8 },
     next: { label: "MCQ · Circuits · Hard", note: "chosen from 2 weak topics" },
   },
   questionCount: "1,700+",
@@ -286,11 +309,12 @@ const physics2: HomeDemo = {
 
 const physicsCMech: HomeDemo = {
   predicted: 4,
+  completedQuestions: 154,
   loop: {
     practiceTopics: ["Rotational inertia", "Work by a variable force", "Oscillations"],
     diagnose: { topic: "Work by a Variable Force", from: 66, to: 74 },
     mistake: { label: "Skipped the work integral and used $Fd$", count: 3 },
-    target: { topic: "Work integrals", questions: 8 },
+    target: { topic: "Work by a Variable Force", questions: 8 },
     next: { label: "MCQ · Energy · Hard", note: "chosen from 2 weak topics" },
   },
   questionCount: "1,700+",
@@ -357,11 +381,12 @@ const physicsCMech: HomeDemo = {
 
 const physicsCEM: HomeDemo = {
   predicted: 3,
+  completedQuestions: 119,
   loop: {
     practiceTopics: ["Electric flux", "Gauss's law symmetry", "RC circuits"],
     diagnose: { topic: "Gauss's Law", from: 62, to: 69 },
     mistake: { label: "Used total charge instead of enclosed charge", count: 3 },
-    target: { topic: "Gaussian surface choice", questions: 8 },
+    target: { topic: "Gauss's Law", questions: 8 },
     next: { label: "MCQ · Unit 2 · Hard", note: "chosen from 2 weak topics" },
   },
   questionCount: "1,700+",
@@ -403,7 +428,7 @@ const physicsCEM: HomeDemo = {
     tagged: 3,
   },
   navigator: {
-    unitLabel: "UNIT 2 · GAUSS'S LAW",
+    unitLabel: "UNIT 1 · ELECTROSTATICS & GAUSS'S LAW",
     subtopics: [
       "Electric Flux",
       "Spherical Symmetry",
@@ -429,11 +454,12 @@ const physicsCEM: HomeDemo = {
 
 const stats: HomeDemo = {
   predicted: 4,
+  completedQuestions: 167,
   loop: {
     practiceTopics: ["Sampling methods", "Confidence intervals", "Chi-square tests"],
     diagnose: { topic: "Confidence Intervals", from: 66, to: 73 },
     mistake: { label: "Interpreted the interval as a probability", count: 3 },
-    target: { topic: "Interpreting intervals in context", questions: 8 },
+    target: { topic: "Confidence Intervals", questions: 8 },
     next: { label: "MCQ · Inference · Hard", note: "chosen from 2 weak topics" },
   },
   questionCount: "1,700+",
@@ -484,7 +510,7 @@ const stats: HomeDemo = {
       "Two-Sample Proportion Tests",
       "Errors & Power",
     ],
-    activeIndex: 1,
+    activeIndex: 0,
     mcq: [
       "Identify the parameter in context.",
       "Check the conditions for the procedure.",

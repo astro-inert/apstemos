@@ -6,13 +6,11 @@ import { ComingSoon, MicroLabel, Reveal, Section, SectionHeading } from "./primi
 export function PillarsSection({ subject }: { subject: SubjectConfig }) {
   const reduced = useReducedMotion();
   const live = isSubjectLive(subject.id);
-  const calculus = subject.id === "calc-bc";
-
   const pillars = [
     {
       n: "01",
-      title: "Practice",
-       copy: calculus ? "Practice gives you 2,000+ AP-style questions and builds your performance history." : `Practice builds your ${subject.navLabel} performance history from AP-style questions.`,
+      title: "Evidence from practice",
+       copy: `Each ${subject.navLabel}-style answer adds evidence to a unit and subtopic—not a streak or vanity score.`,
       to: "/practice",
       preview: (
         <div className="space-y-1.5">
@@ -35,8 +33,8 @@ export function PillarsSection({ subject }: { subject: SubjectConfig }) {
     },
     {
       n: "02",
-       title: "Understand your performance",
-       copy: "Score Command Center shows your strengths, weaknesses, and unit mastery. Answer Log keeps a record of what you've answered and what you've missed. Common Mistakes Database helps you identify, understand, and remember the mistakes behind your wrong answers.",
+       title: "Patterns you can inspect",
+       copy: "Mastery and recommendations stay traceable to completed questions, while the Answer Log preserves the exact work behind them.",
       to: "/common-mistakes",
       preview: (
         <div className="space-y-1.5">
@@ -57,9 +55,9 @@ export function PillarsSection({ subject }: { subject: SubjectConfig }) {
     },
     {
       n: "03",
-       title: "Learn how to improve",
-       copy: "Question Type Navigator teaches you how to approach MCQs and FRQs for the same subtopics you're practicing.",
-      to: "/command-center",
+       title: "Guidance you can apply",
+       copy: "Question Type Navigator guidance connects directly to the same subtopics used in Practice and the Score Command Center.",
+      to: "/question-navigator",
       preview: (
         <div className="flex items-end gap-1.5">
           {[44, 58, 66, 72, 81, 86].map((h, i) => (
@@ -81,8 +79,8 @@ export function PillarsSection({ subject }: { subject: SubjectConfig }) {
   return (
     <Section className="border-t border-border">
       <SectionHeading
-         label="One connected workflow"
-         title="Everything works together."
+         label="Built for deliberate practice"
+         title="The system stays accountable to your work."
       />
       <div className="mt-14 grid gap-4 md:grid-cols-3 lg:gap-6">
         {pillars.map((p, i) => {

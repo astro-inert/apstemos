@@ -15,13 +15,13 @@ export function FinalCTASection({ subject }: { subject: SubjectConfig }) {
             </h2>
             <p className="mt-6 max-w-lg text-[15px] leading-relaxed text-secondary-foreground">
               {isSubjectLive(subject.id)
-                  ? "See what you know. Find what needs work. Understand your mistakes. Learn how each topic can be tested. Then put it back into practice."
+                  ? "Choose a unit and subtopic, answer a question, and start building a clearer picture of what you know."
                 : `The ${subject.navLabel} question bank is being built now — the loop above is exactly how it will work.`}
             </p>
             <div className="mt-9">
               {isSubjectLive(subject.id) ? (
                 <MagneticLink to="/practice">
-                  Start practicing
+                  Start Practicing
                   <ArrowRight className="h-4 w-4" />
                 </MagneticLink>
               ) : (
@@ -29,7 +29,7 @@ export function FinalCTASection({ subject }: { subject: SubjectConfig }) {
               )}
             </div>
             <p className="num mt-7 text-[12px] text-muted-foreground">
-                {calculus ? "2,000+ AP-style questions waiting." : `${subject.navLabel} content coming soon.`}
+                {calculus ? "Choose a unit, subtopic, and difficulty to begin." : `${subject.navLabel} content coming soon.`}
             </p>
           </Reveal>
         </div>

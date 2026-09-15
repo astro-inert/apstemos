@@ -7,23 +7,22 @@ import { ComingSoon, MicroLabel, Reveal, Section, SectionHeading } from "./primi
 export function MistakesSection({ subject }: { subject: SubjectConfig }) {
   const m = HOME_DEMO[subject.id].mistake;
   const live = isSubjectLive(subject.id);
-  const calculus = subject.id === "calc-bc";
   return (
     <Section className="border-t border-border">
       <SectionHeading
         label="Answer Log + Common Mistakes Database"
         title="Don't just see what you got wrong. Understand why."
-        sub="Your Answer Log keeps track of the questions you've completed and makes it easy to return to the ones you missed. Find the mistake behind a wrong answer in the Common Mistakes Database and tag it for future reference. Each mistake includes an example, its consequence on the AP exam, and how to avoid it next time."
+        sub="The Answer Log preserves each result. For a missed question, the Common Mistakes Database helps you name the underlying error, see its consequence, and remember how to avoid it."
       />
 
       <div className="mt-14 grid gap-4 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:gap-6">
         <Reveal className="border-t-2 border-foreground bg-card p-6 sm:p-9">
-           <MicroLabel>{calculus ? "Question missed → Find the mistake → Tag it" : "Common mistake"}</MicroLabel>
+            <MicroLabel>Question missed → Find the mistake → Tag it</MicroLabel>
           <h3 className="mt-3 max-w-lg font-display text-xl font-semibold leading-tight sm:text-2xl">{m.title}</h3>
 
           <div className="mt-8 grid gap-8 sm:grid-cols-2">
             <div>
-               <MicroLabel>{calculus ? "Example and AP consequence" : "What happens"}</MicroLabel>
+                <MicroLabel>Example and AP consequence</MicroLabel>
               <p className="mt-3 text-[14px] leading-relaxed text-secondary-foreground">{m.whatHappens}</p>
             </div>
             <div>
@@ -62,10 +61,10 @@ export function MistakesSection({ subject }: { subject: SubjectConfig }) {
         </Reveal>
 
         <Reveal delay={0.08} className="border-t-2 border-primary bg-elevated/50 p-6 sm:p-9">
-           <MicroLabel>{calculus ? "Can't find your mistake?" : "Not in the database?"}</MicroLabel>
-           <h3 className="mt-3 font-display text-lg font-semibold leading-tight">{calculus ? "Describe it to the built-in AI." : "Can't find your mistake?"}</h3>
+            <MicroLabel>Can't find your mistake?</MicroLabel>
+            <h3 className="mt-3 font-display text-lg font-semibold leading-tight">Describe it to the built-in AI.</h3>
           <p className="mt-3 text-[14px] leading-relaxed text-secondary-foreground">
-            Can't find your mistake? Describe what went wrong to the built-in AI and add it yourself.
+            Describe what went wrong and add a reviewed draft to your own mistake history.
           </p>
           {live ? (
             <Link

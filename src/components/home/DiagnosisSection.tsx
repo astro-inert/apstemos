@@ -17,19 +17,19 @@ export function DiagnosisSection({ subject }: { subject: SubjectConfig }) {
   return (
     <Section className="border-t border-border">
       <SectionHeading
-        label={calculus ? "Practice · 2,000+ AP-style questions" : `Practice · ${subject.navLabel}`}
+        label={`Practice · ${subject.navLabel}`}
         title={
           <>
-             {calculus ? <>2,000+ AP-style questions.<br />Built for real practice.</> : <>AP-style questions.<br />Built for real practice.</>}
+             {calculus ? <>Choose exactly what<br />you need to practice.</> : <>See how practice<br />will work.</>}
           </>
         }
-        sub={`Practice with questions modeled after ${subject.navLabel} MCQs, organized by unit and subtopic and tagged Easy, Medium, or Hard. Every question includes a concise explanation of the correct answer, and every answer automatically updates your performance data.`}
+        sub={calculus ? `Filter 2,000+ original ${subject.navLabel}-style questions by unit, subtopic, and difficulty. Each answer includes a concise explanation and updates your performance data.` : `Preview an original ${subject.navLabel}-style question with an immediate explanation. The complete practice bank is coming soon.`}
       />
 
       <div className="mt-14 grid gap-4 lg:grid-cols-2 lg:gap-6">
         {/* Question */}
         <div className="min-w-0 max-w-full border-t-2 border-foreground bg-card p-6 sm:p-8">
-          <div className="flex items-center justify-between gap-3">
+          <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
             <MicroLabel>{q.id}</MicroLabel>
             <span className="num text-[10px] text-subtle">{q.meta}</span>
           </div>
@@ -78,7 +78,7 @@ export function DiagnosisSection({ subject }: { subject: SubjectConfig }) {
         </div>
 
         {/* Diagnosis */}
-          <div className="relative min-w-0 max-w-full min-h-[22rem] overflow-hidden border-t-2 border-primary bg-card p-6 sm:p-8">
+          <div className="relative min-w-0 max-w-full overflow-hidden border-t-2 border-primary bg-card p-6 sm:min-h-[22rem] sm:p-8">
           <AnimatePresence mode="wait">
             {!revealed ? (
               <motion.div
@@ -86,7 +86,7 @@ export function DiagnosisSection({ subject }: { subject: SubjectConfig }) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="relative grid h-full min-h-[18rem] place-items-center"
+                className="relative grid h-full min-h-[11rem] place-items-center sm:min-h-[18rem]"
               >
                 <p className="num max-w-[16rem] text-center text-[11px] uppercase leading-relaxed tracking-[0.16em] text-subtle">
                   Diagnosis appears here the instant you answer
