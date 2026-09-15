@@ -36,8 +36,6 @@ export type ScoreEstimate = {
   next_step: string;
 };
 
-const TOTAL_TOPICS = QN_UNITS.reduce((s, u) => s + u.topics.length, 0);
-
 function unitWeightMap(unitRows: Array<{ number: number; ap_weight_pct: number | string }>) {
   const byNumber = new Map(unitRows.map((u) => [u.number, Number(u.ap_weight_pct)]));
   const map: Record<string, number> = {};

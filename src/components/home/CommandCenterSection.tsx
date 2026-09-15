@@ -33,11 +33,11 @@ export function CommandCenterSection({
             </div>
             <ExampleBadge live={data.live} />
           </div>
-          <ul className="mt-7 space-y-4">
+          <ul className="mt-7 min-w-0 space-y-4">
             {data.units.map((u, i) => (
               <li key={u.label}>
-                <div className="flex items-baseline justify-between gap-4">
-                  <span className="num text-[12px] text-muted-foreground">{u.label}</span>
+                <div className="grid min-w-0 grid-cols-[auto_minmax(0,1fr)_auto] items-baseline gap-2 sm:gap-4">
+                  <span className="num shrink-0 text-[12px] text-muted-foreground">{u.label}</span>
                   <span className="min-w-0 flex-1 truncate text-[12px] text-subtle">{u.name}</span>
                   <span className={`num text-[12px] ${u.mastery >= 70 ? "text-foreground" : "text-primary"}`}>
                     <CountUp to={u.mastery} suffix="%" />
@@ -72,7 +72,7 @@ export function CommandCenterSection({
                     {live ? (
                     <Link
                       to="/practice"
-                       className="group flex items-start gap-4 border-t border-border bg-background/70 px-4 py-4 transition-colors hover:bg-elevated/60"
+                       className="group flex min-w-0 items-start gap-3 border-t border-border bg-background/70 px-3 py-4 transition-colors hover:bg-elevated/60 sm:gap-4 sm:px-4"
                     >
                       <span className="num text-[13px] text-primary">{i + 1}.</span>
                       <span className="min-w-0 flex-1">

@@ -162,7 +162,8 @@ export const getPerformanceSnapshot = createServerFn({ method: "GET" })
       u.topics
         .filter((t) => byTopic.has(t.slug))
         .map((t) => {
-          const s = byTopic.get(t.slug)!;
+          const s = byTopic.get(t.slug);
+          if (!s) return null;
           return {
             unit_slug: u.slug,
             unit_number: u.number,
@@ -172,7 +173,8 @@ export const getPerformanceSnapshot = createServerFn({ method: "GET" })
             attempts: s.n,
             unlocked: s.n >= SUBTOPIC_THRESHOLD,
           };
-        }),
+        })
+        .filter((topic): topic is NonNullable<typeof topic> => topic !== null),
     );
 
     // Unit-weighted mastery on the 108-point map. Untouched units contribute 0 —
