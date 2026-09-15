@@ -21,7 +21,7 @@ export function FinalCTASection({ subject }: { subject: SubjectConfig }) {
             <div className="mt-9">
               {isSubjectLive(subject.id) ? (
                 <MagneticLink to="/practice">
-                  Start practicing
+                  Start Practicing
                   <ArrowRight className="h-4 w-4" />
                 </MagneticLink>
               ) : (
@@ -29,7 +29,7 @@ export function FinalCTASection({ subject }: { subject: SubjectConfig }) {
               )}
             </div>
             <p className="num mt-7 text-[12px] text-muted-foreground">
-                {calculus ? "2,000+ AP-style questions waiting." : `${subject.navLabel} content coming soon.`}
+                {calculus ? "Choose a unit, subtopic, and difficulty to begin." : `${subject.navLabel} content coming soon.`}
             </p>
           </Reveal>
         </div>

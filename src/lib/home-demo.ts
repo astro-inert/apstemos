@@ -58,6 +58,7 @@ export interface DemoLoop {
 
 export interface HomeDemo {
   predicted: number;
+  completedQuestions: number;
   loop: DemoLoop;
   subtopics: DemoSubtopic[];
   moves: DemoMove[];
@@ -71,18 +72,19 @@ export interface HomeDemo {
 
 const calcBC: HomeDemo = {
   predicted: 4,
+  completedQuestions: 186,
   loop: {
     practiceTopics: ["Limits from Graphs and Tables", "Chain Rule", "Accumulation Functions"],
-    diagnose: { topic: "Chain Rule", from: 68, to: 74 },
+    diagnose: { topic: "Chain Rule", from: 72, to: 76 },
     mistake: { label: "Forgot the inner derivative", count: 3 },
     target: { topic: "Chain Rule", questions: 8 },
     next: { label: "MCQ · Unit 3 · Hard", note: "chosen from 2 weak topics" },
   },
   questionCount: "2,000+",
   subtopics: [
-    { name: "Integration by Parts", mastery: 86 },
-    { name: "Related Rates", mastery: 81 },
-    { name: "Taylor Series", mastery: 72 },
+    { name: "Limits from Graphs and Tables", mastery: 82 },
+    { name: "Chain Rule", mastery: 76 },
+    { name: "Differential Equations", mastery: 64 },
     { name: "Polar Area", mastery: 58 },
     { name: "Series Convergence", mastery: 43 },
   ],
@@ -91,7 +93,7 @@ const calcBC: HomeDemo = {
     { name: "Polar Area", mastery: 58, action: "Complete targeted practice", cta: "Review" },
     { name: "Differential Equations", mastery: 64, action: "Complete 5 more questions", cta: "Practice" },
   ],
-  unitMastery: [84, 91, 76, 68, 82, 59, 73, 61, 47, 52],
+  unitMastery: [82, 78, 76, 68, 69, 71, 64, 59, 58, 43],
   question: {
     id: "MCQ · 04127",
     meta: "Unit 3 · Composite functions · Medium",
@@ -127,22 +129,23 @@ const calcBC: HomeDemo = {
     ],
     activeIndex: 0,
     mcq: [
-      "Identify the quantity being accumulated.",
-      "Determine the interval.",
-      "Translate the wording into an integral.",
-      "Check units and sign.",
+      "Try direct substitution first.",
+      "Decide whether the result is determinate or indeterminate.",
+      "If needed, factor, rationalize, or combine fractions.",
+      "Substitute again and check one-sided behavior when relevant.",
     ],
     frq: [
-      "State the relevant relationship.",
-      "Set up the integral.",
-      "Evaluate or interpret.",
-      "Include units when appropriate.",
+      "Show the algebra used to remove the indeterminate form.",
+      "State when continuity permits direct substitution.",
+      "Evaluate the simplified expression at the limiting value.",
+      "Compare one-sided limits when the two-sided limit is in question.",
     ],
   },
 };
 
 const physics1: HomeDemo = {
   predicted: 3,
+  completedQuestions: 142,
   loop: {
     practiceTopics: ["Kinematics graphs", "Newton's second law", "Energy bar charts"],
     diagnose: { topic: "Newton's Second Law", from: 64, to: 71 },
@@ -215,6 +218,7 @@ const physics1: HomeDemo = {
 
 const physics2: HomeDemo = {
   predicted: 3,
+  completedQuestions: 128,
   loop: {
     practiceTopics: ["Fluid pressure", "Parallel circuits", "Thermal processes"],
     diagnose: { topic: "Parallel Circuits", from: 61, to: 70 },
@@ -286,6 +290,7 @@ const physics2: HomeDemo = {
 
 const physicsCMech: HomeDemo = {
   predicted: 4,
+  completedQuestions: 154,
   loop: {
     practiceTopics: ["Rotational inertia", "Work by a variable force", "Oscillations"],
     diagnose: { topic: "Work by a Variable Force", from: 66, to: 74 },
@@ -357,6 +362,7 @@ const physicsCMech: HomeDemo = {
 
 const physicsCEM: HomeDemo = {
   predicted: 3,
+  completedQuestions: 119,
   loop: {
     practiceTopics: ["Electric flux", "Gauss's law symmetry", "RC circuits"],
     diagnose: { topic: "Gauss's Law", from: 62, to: 69 },
@@ -429,6 +435,7 @@ const physicsCEM: HomeDemo = {
 
 const stats: HomeDemo = {
   predicted: 4,
+  completedQuestions: 167,
   loop: {
     practiceTopics: ["Sampling methods", "Confidence intervals", "Chi-square tests"],
     diagnose: { topic: "Confidence Intervals", from: 66, to: 73 },

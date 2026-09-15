@@ -15,19 +15,19 @@ export function NavigatorSection({ subject }: { subject: SubjectConfig }) {
       <SectionHeading
         label="05 · question type navigator"
         title="Know how every topic can be tested."
-        sub={`The Question Type Navigator follows the exact same unit and subtopic structure as Practice. For each subtopic, learn how to recognize and approach its MCQs and FRQs, which methods and conditions matter, what mistakes to watch for, and what the ${subject.navLabel} exam expects from your work. When the Score Command Center reveals a weak subtopic, open that same subtopic in the Navigator and learn how to handle the questions you're likely to encounter.`}
+        sub={`For each ${subject.navLabel} subtopic, learn how to recognize and approach its MCQs and FRQs, which methods and conditions matter, and what the exam expects from your work.`}
       />
 
        <div className="mt-14 overflow-hidden border-y border-border bg-card">
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-6 py-5">
-          <div>
+        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-b border-border px-5 py-5 sm:px-6">
+          <div className="min-w-0">
             <MicroLabel>{subject.navLabel}</MicroLabel>
             <div className="num mt-1.5 text-[12px] tracking-[0.08em]">{nav.unitLabel}</div>
           </div>
           {isSubjectLive(subject.id) ? (
             <Link
               to="/question-navigator"
-              className="group inline-flex items-center gap-1.5 text-sm font-medium transition-colors hover:text-primary"
+              className="group inline-flex max-w-[9rem] items-center justify-end gap-1.5 text-right text-sm font-medium leading-tight transition-colors hover:text-primary sm:max-w-none"
             >
               Explore the Question Type Navigator
               <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
@@ -45,7 +45,7 @@ export function NavigatorSection({ subject }: { subject: SubjectConfig }) {
                   onMouseEnter={() => setActive(i)}
                   onFocus={() => setActive(i)}
                   onClick={() => setActive(i)}
-                  className={`flex w-full items-center justify-between gap-3 border-b border-border px-6 py-4 text-left text-[14px] transition-colors last:border-b-0 ${
+                  className={`flex min-h-12 w-full items-center justify-between gap-3 border-b border-border px-5 py-3.5 text-left text-[14px] transition-colors last:border-b-0 sm:px-6 ${
                     active === i ? "bg-accent/50 text-primary" : "hover:bg-elevated/60"
                   }`}
                 >
