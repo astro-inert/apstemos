@@ -11,13 +11,11 @@ export function FinalCTASection({ subject }: { subject: SubjectConfig }) {
         <div className="relative">
           <Reveal>
             <h2 className="max-w-2xl font-display text-4xl font-semibold leading-[0.98] sm:text-6xl">
-               {calculus ? <>Don't let practice end at<br /><span className="text-primary">“correct” or “incorrect.”</span></> : <>Stop studying.<br />Start <span className="text-primary">optimizing</span>.</>}
+               Stop studying.<br />Start <span className="text-primary">optimizing.</span>
             </h2>
             <p className="mt-6 max-w-lg text-[15px] leading-relaxed text-secondary-foreground">
               {isSubjectLive(subject.id)
-                 ? calculus
-                   ? "Make every question useful. Practice. See where you stand. Understand what went wrong. Learn how the question type works. Fix the weakness. Do it again."
-                   : "Answer your first question and let AP STEM OS start building your study plan."
+                  ? "See what you know. Find what needs work. Understand your mistakes. Learn how each topic can be tested. Then put it back into practice."
                 : `The ${subject.navLabel} question bank is being built now — the loop above is exactly how it will work.`}
             </p>
             <div className="mt-9">
@@ -31,7 +29,7 @@ export function FinalCTASection({ subject }: { subject: SubjectConfig }) {
               )}
             </div>
             <p className="num mt-7 text-[12px] text-muted-foreground">
-               {calculus ? "2,000+ AP-style questions waiting." : "Free forever · No credit card · Built for the AP exam"}
+                {calculus ? "2,000+ AP-style questions waiting." : `${subject.navLabel} content coming soon.`}
             </p>
           </Reveal>
         </div>

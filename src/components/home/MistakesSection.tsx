@@ -11,9 +11,9 @@ export function MistakesSection({ subject }: { subject: SubjectConfig }) {
   return (
     <Section className="border-t border-border">
       <SectionHeading
-        label={calculus ? "Answer log + common mistakes database" : "04 · mistake intelligence"}
-        title={calculus ? "Understand why you missed it." : "Your mistakes shouldn't disappear."}
-        sub={calculus ? "Your practice history stays accounted for. Return to missed questions, find the reasoning error behind each response, and tag it so isolated misses become patterns you can fix." : "Every wrong answer can be tagged to a mistake — so the same error stops being a surprise."}
+        label="Answer Log + Common Mistakes Database"
+        title="Don't just see what you got wrong. Understand why."
+        sub="Your Answer Log keeps track of the questions you've completed and makes it easy to return to the ones you missed. Find the mistake behind a wrong answer in the Common Mistakes Database and tag it for future reference. Each mistake includes an example, its consequence on the AP exam, and how to avoid it next time."
       />
 
       <div className="mt-14 grid gap-4 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:gap-6">
@@ -65,15 +65,14 @@ export function MistakesSection({ subject }: { subject: SubjectConfig }) {
            <MicroLabel>{calculus ? "Can't find your mistake?" : "Not in the database?"}</MicroLabel>
            <h3 className="mt-3 font-display text-lg font-semibold leading-tight">{calculus ? "Describe it to the built-in AI." : "Can't find your mistake?"}</h3>
           <p className="mt-3 text-[14px] leading-relaxed text-secondary-foreground">
-            Describe what went wrong in plain language. It gets structured into an entry only you can see, taggable from
-            your answer log.
+            Can't find your mistake? Describe what went wrong to the built-in AI and add it yourself.
           </p>
           {live ? (
             <Link
               to="/common-mistakes"
               className="mt-6 inline-flex items-center gap-2 rounded-md border border-border bg-card px-5 py-2.5 text-sm font-semibold transition-colors hover:border-primary/40"
             >
-              Describe it
+              Explore Common Mistakes
               <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           ) : (

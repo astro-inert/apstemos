@@ -8,6 +8,7 @@ import { ComingSoon, CountUp, ExampleBadge, MasteryBar, MicroLabel } from "./pri
 export function HeroSection({ subject, data }: { subject: SubjectConfig; data: InstrumentData }) {
   const reduced = useReducedMotion();
   const calculus = subject.id === "calc-bc";
+  const course = subject.navLabel.replace("AP ", "");
   return (
     <section className="relative px-5 pt-16 sm:px-8 sm:pt-24">
       <div className="mx-auto max-w-6xl">
@@ -17,20 +18,19 @@ export function HeroSection({ subject, data }: { subject: SubjectConfig; data: I
           transition={{ type: "spring", stiffness: 110, damping: 20 }}
           className="max-w-3xl"
         >
-          <MicroLabel className="mb-6">{calculus ? "AP Calculus AB & BC" : `${subject.navLabel} · score optimization`}</MicroLabel>
+          <MicroLabel className="mb-6">{calculus ? "AP Calculus AB & BC" : subject.navLabel}</MicroLabel>
           <h1 className="font-display text-[2.6rem] font-semibold leading-[0.98] sm:text-[4.6rem]">
-            {calculus ? <>Practice. Find the gaps.<br /><span className="text-primary">Fix them.</span></> : <>Know exactly what<br />to study to get a <span className="text-primary">5</span>.</>}
+            Stop studying.<br />Start <span className="text-primary">optimizing.</span>
           </h1>
           <p className="mt-7 max-w-xl text-[16px] leading-7 text-secondary-foreground sm:text-[17px]">
             {calculus
-              ? "2,000+ AP-style MCQs connected to topic-level mastery, mistake tracking, and step-by-step question-type guidance for both MCQs and FRQs."
-              : "AP STEM OS turns every question you answer into a personalized study plan — showing you what you know, what you're missing, and what to work on next."}
+              ? "2,000+ AP-style questions connected to subtopic-level performance tracking, mistake analysis, and MCQ and FRQ guidance for every AP Calculus topic."
+              : `AP-style ${course} questions connected to subtopic-level performance tracking, mistake analysis, and MCQ and FRQ guidance for every topic.`}
           </p>
-          {calculus ? <p className="mt-4 max-w-xl text-[15px] leading-7 text-secondary-foreground">Every question you answer helps you figure out what you're missing, why you're missing it, and how to get it right next time.</p> : null}
           <div className="mt-9 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
             {isSubjectLive(subject.id) ? (
               <MagneticLink to="/practice">
-                {calculus ? "Start Practicing" : "Start optimizing my score"}
+                Start Practicing
                 <ArrowRight className="h-4 w-4" />
               </MagneticLink>
             ) : (
@@ -46,12 +46,12 @@ export function HeroSection({ subject, data }: { subject: SubjectConfig; data: I
               href="#the-system"
               className="group inline-flex items-center gap-1.5 text-sm font-medium text-foreground/80 transition-colors hover:text-primary"
             >
-              {calculus ? "Explore APSTEMOS" : "Explore the system"}
+              Explore AP STEM OS
               <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
             </a>
           </div>
           <p className="num mt-7 text-[12px] text-muted-foreground">
-            {calculus ? "2,000+ Questions · AB & BC · MCQ + FRQ Guidance · Free to Start" : "Free forever · No credit card · Built for the AP exam"}
+            {calculus ? "2,000+ questions · AB & BC · MCQ + FRQ guidance" : `${subject.navLabel} content coming soon`}
           </p>
         </motion.div>
       </div>

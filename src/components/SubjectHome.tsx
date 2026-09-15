@@ -41,7 +41,7 @@ export function SubjectHome({ subject }: { subject: SubjectConfig }) {
       <NavigatorSection subject={subject} />
       <PillarsSection subject={subject} />
       <ResourcesSection subject={subject} />
-      <ManifestoSection />
+      <ManifestoSection subject={subject} />
       <FinalCTASection subject={subject} />
       <SiteFooter />
     </div>

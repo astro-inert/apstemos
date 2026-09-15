@@ -5,35 +5,25 @@ import { ComingSoon, Reveal, Section, SectionHeading, MicroLabel } from "./primi
 
 const FORMULA_GUIDE = "/latex-master-sheet";
 
-const RESOURCES = [
-  { n: "01", title: "FRQ Library", copy: "26 years of released AP Calculus FRQs organized by the topics tested, with links to the originals.", to: "/frqs-by-type" },
-  { n: "02", title: "Topic Rundowns", copy: "Concise, AP-focused review for when you need the concept—not another textbook chapter.", to: "/topic-rundown" },
-  {
-    n: "03",
-    title: "Formula & Strategy Guide",
-    copy: "A 10-page, printable reference for formulas, when to use them, and what the exam expects.",
-    to: FORMULA_GUIDE,
-  },
-  {
-    n: "04",
-    title: "Exam Strategy",
-    copy: "Calculator strategy, timing decisions, and efficient approaches to AP exam questions.",
-    to: "/exam-strategy",
-  },
-];
-
 export function ResourcesSection({ subject }: { subject: SubjectConfig }) {
   const live = isSubjectLive(subject.id);
+  const course = subject.navLabel.replace("AP ", "");
+  const resources = [
+    { n: "01", title: "FRQ Library", copy: live ? "26 years of released AP Calculus FRQs organized by the topics they test, so you can quickly find real exam questions for what you're studying." : `Released ${subject.navLabel} FRQs organized by the topics they test.`, to: "/frqs-by-type" },
+    { n: "02", title: "Topic Rundowns", copy: "Concise, exam-focused guides covering the essential concepts from every unit.", to: "/topic-rundown" },
+    { n: "03", title: "Formula & Strategy Guide", copy: live ? "A printable, 10-page reference covering the formulas you need and the strategies for using them correctly." : `A focused reference for the formulas and strategies used in ${course}.`, to: FORMULA_GUIDE },
+    { n: "04", title: "Exam Strategy", copy: `Detailed guidance on calculator use, timing, and approaching ${subject.navLabel} questions efficiently.`, to: "/exam-strategy" },
+  ];
 
   return (
     <Section className="border-t border-border">
       <SectionHeading
-        label={live ? "Beyond the workflow · your AP Calculus toolkit" : "07 · resources"}
-        title={live ? "Everything else you need for the exam." : "Everything else you need for exam day."}
+        label={`Your ${subject.navLabel} toolkit`}
+        title="Everything else you need for the exam."
         sub={live ? undefined : `${subject.navLabel} resources are being written now.`}
       />
        <div className="mt-14 grid gap-px overflow-hidden border-y border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
-        {RESOURCES.map((r, i) => {
+         {resources.map((r, i) => {
           const body = (
             <>
               <div className="flex items-start justify-between">

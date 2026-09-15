@@ -1,11 +1,9 @@
 import { Link } from "@tanstack/react-router";
 import { motion, useReducedMotion } from "motion/react";
-import { HOME_DEMO } from "@/lib/home-demo";
 import { isSubjectLive, type SubjectConfig } from "@/lib/subjects";
 import { ComingSoon, MicroLabel, Reveal, Section, SectionHeading } from "./primitives";
 
 export function PillarsSection({ subject }: { subject: SubjectConfig }) {
-  const demo = HOME_DEMO[subject.id];
   const reduced = useReducedMotion();
   const live = isSubjectLive(subject.id);
   const calculus = subject.id === "calc-bc";
@@ -14,7 +12,7 @@ export function PillarsSection({ subject }: { subject: SubjectConfig }) {
     {
       n: "01",
       title: "Practice",
-      copy: calculus ? `${demo.questionCount} AP-style questions organized by AB or BC, unit, topic, and difficulty.` : `${demo.questionCount} AP-style questions. Organized by unit, topic, and difficulty.`,
+       copy: calculus ? "Practice gives you 2,000+ AP-style questions and builds your performance history." : `Practice builds your ${subject.navLabel} performance history from AP-style questions.`,
       to: "/practice",
       preview: (
         <div className="space-y-1.5">
@@ -37,8 +35,8 @@ export function PillarsSection({ subject }: { subject: SubjectConfig }) {
     },
     {
       n: "02",
-      title: calculus ? "Your feedback loop" : "Mistake intelligence",
-      copy: calculus ? "Practice → Score Command Center → Answer Log → Common Mistakes → Question Type Navigator → Targeted Practice." : "Turn wrong answers into a searchable history of the mistakes you actually make.",
+       title: "Understand your performance",
+       copy: "Score Command Center shows your strengths, weaknesses, and unit mastery. Answer Log keeps a record of what you've answered and what you've missed. Common Mistakes Database helps you identify, understand, and remember the mistakes behind your wrong answers.",
       to: "/common-mistakes",
       preview: (
         <div className="space-y-1.5">
@@ -59,8 +57,8 @@ export function PillarsSection({ subject }: { subject: SubjectConfig }) {
     },
     {
       n: "03",
-      title: calculus ? "Your AP toolkit" : "Score optimization",
-      copy: calculus ? "FRQ Library → Topic Rundowns → Formula & Strategy Guide → Exam Strategy." : "See your mastery and know exactly what deserves your study time next.",
+       title: "Learn how to improve",
+       copy: "Question Type Navigator teaches you how to approach MCQs and FRQs for the same subtopics you're practicing.",
       to: "/command-center",
       preview: (
         <div className="flex items-end gap-1.5">
@@ -83,8 +81,8 @@ export function PillarsSection({ subject }: { subject: SubjectConfig }) {
   return (
     <Section className="border-t border-border">
       <SectionHeading
-        label={calculus ? "Two sides of APSTEMOS" : "06 · three pillars"}
-        title={calculus ? "Learn from your performance. Prepare for the exam." : "Built around what actually moves your preparation forward."}
+         label="One connected workflow"
+         title="Everything works together."
       />
       <div className="mt-14 grid gap-4 md:grid-cols-3 lg:gap-6">
         {pillars.map((p, i) => {
