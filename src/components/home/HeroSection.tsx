@@ -10,7 +10,7 @@ export function HeroSection({ subject, data }: { subject: SubjectConfig; data: I
   const calculus = subject.id === "calc-bc";
   const course = subject.navLabel.replace("AP ", "");
   return (
-    <section className="relative px-5 pt-14 sm:px-8 sm:pt-20">
+    <section className="relative px-5 pt-10 sm:px-8 sm:pt-16">
       <div className="mx-auto max-w-6xl">
         <motion.div
           initial={reduced ? { opacity: 1 } : { opacity: 0, y: 16 }}
@@ -18,16 +18,16 @@ export function HeroSection({ subject, data }: { subject: SubjectConfig; data: I
           transition={{ type: "spring", stiffness: 110, damping: 20 }}
           className="mx-auto max-w-4xl text-center"
         >
-          <MicroLabel className="mb-6">{calculus ? "AP Calculus AB & BC" : subject.navLabel}</MicroLabel>
+          <MicroLabel className="mb-5">{calculus ? "AP Calculus AB & BC" : subject.navLabel}</MicroLabel>
           <h1 className="font-display text-[2.6rem] font-semibold leading-[0.98] sm:text-[4.6rem]">
             Stop studying.<br />Start <span className="text-primary">optimizing.</span>
           </h1>
-          <p className="mx-auto mt-7 max-w-2xl text-[16px] leading-7 text-secondary-foreground sm:text-[17px]">
+          <p className="mx-auto mt-5 max-w-2xl text-[16px] leading-7 text-secondary-foreground sm:text-[17px]">
             {calculus
               ? "2,000+ AP-style questions connected to subtopic-level performance tracking, mistake analysis, and MCQ and FRQ guidance for every AP Calculus topic."
               : `AP-style ${course} questions connected to subtopic-level performance tracking, mistake analysis, and MCQ and FRQ guidance for every topic.`}
           </p>
-          <div className="mt-9 flex flex-col items-center justify-center gap-4 sm:flex-row">
+          <div className="mt-7 flex flex-col items-center justify-center gap-4 sm:flex-row">
             {isSubjectLive(subject.id) ? (
               <MagneticLink to="/practice" className="min-h-12">
                 Start Practicing
@@ -50,13 +50,13 @@ export function HeroSection({ subject, data }: { subject: SubjectConfig; data: I
               <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
             </a>
           </div>
-          <p className="num mt-7 text-[12px] text-muted-foreground">
+          <p className="num mt-5 text-[12px] text-muted-foreground">
             {calculus ? "2,000+ questions · AB & BC · MCQ + FRQ guidance" : `${subject.navLabel} content coming soon`}
           </p>
         </motion.div>
       </div>
 
-       <div className="mx-auto mt-16 max-w-6xl sm:mt-20">
+       <div className="mx-auto mt-12 max-w-6xl sm:mt-16">
         <Instrument subject={subject} data={data} />
       </div>
     </section>

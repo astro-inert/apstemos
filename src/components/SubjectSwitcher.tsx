@@ -62,7 +62,7 @@ export function SubjectSwitcher({ current }: Props) {
   const ActiveIcon = active.icon;
 
   return (
-    <div className="relative shrink-0" ref={ref}>
+    <div className="relative min-w-0 w-full lg:w-auto lg:shrink-0" ref={ref}>
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
