@@ -30,8 +30,8 @@ function GuideTable({ columns, rows }: { columns: string[]; rows: string[][] }) 
                 <td
                   key={j}
                   className={cn(
-                    "border-b border-border px-3 py-2.5 leading-relaxed",
-                    j === 0 ? "font-medium" : "text-muted-foreground",
+                    "border-b border-border px-3 py-3 leading-relaxed",
+                    j === 0 ? "font-medium text-foreground" : "text-secondary-foreground",
                   )}
                 >
                   <LaTeX>{cell}</LaTeX>
@@ -57,7 +57,7 @@ function Callout({ block }: { block: Extract<GuideBlock, { kind: "callout" }> })
   const tone = block.tone ?? "info";
   const Icon = tone === "warn" ? AlertTriangle : tone === "rule" ? Sparkles : ScrollText;
   return (
-    <div className={cn("rounded-2xl border px-4 py-4 sm:px-5", TONES[tone])}>
+    <aside className={cn("border-l-[3px] px-4 py-4 sm:px-5", TONES[tone])}>
       <div
         className={cn(
           "flex items-center gap-2 font-display text-[13px] font-semibold",
@@ -68,21 +68,21 @@ function Callout({ block }: { block: Extract<GuideBlock, { kind: "callout" }> })
         <LaTeX>{block.title}</LaTeX>
       </div>
       {block.body ? (
-        <div className="mt-2.5 text-[13.5px] leading-relaxed text-muted-foreground">
+        <div className="mt-2.5 text-[14px] leading-6 text-secondary-foreground">
           <LaTeX>{block.body}</LaTeX>
         </div>
       ) : null}
       {block.items?.length ? (
         <ul className="mt-2.5 space-y-2">
           {block.items.map((item, i) => (
-            <li key={i} className="flex gap-2.5 text-[13.5px] leading-relaxed text-muted-foreground">
+            <li key={i} className="flex gap-2.5 text-[14px] leading-6 text-secondary-foreground">
               <span aria-hidden className="mt-[0.55rem] h-1 w-1 shrink-0 rounded-full bg-current opacity-50" />
               <LaTeX>{item}</LaTeX>
             </li>
           ))}
         </ul>
       ) : null}
-    </div>
+    </aside>
   );
 }
 
@@ -91,7 +91,7 @@ function Callout({ block }: { block: Extract<GuideBlock, { kind: "callout" }> })
 function Checklist({ block }: { block: Extract<GuideBlock, { kind: "checklist" }> }) {
   const [done, setDone] = useState<Record<number, boolean>>({});
   return (
-    <div className="rounded-2xl border border-border bg-elevated/30 px-4 py-4 sm:px-5">
+    <div className="border-y border-border bg-elevated/30 px-4 py-4 sm:px-5">
       {block.title ? (
         <div className="font-display text-[13px] font-semibold">
           <LaTeX>{block.title}</LaTeX>
@@ -104,7 +104,7 @@ function Checklist({ block }: { block: Extract<GuideBlock, { kind: "checklist" }
               type="button"
               aria-pressed={!!done[i]}
               onClick={() => setDone((d) => ({ ...d, [i]: !d[i] }))}
-              className="group flex w-full items-start gap-2.5 rounded-xl px-2 py-2 text-left transition-colors hover:bg-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+              className="group flex w-full items-start gap-2.5 rounded-sm px-2 py-2 text-left transition-colors hover:bg-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
             >
               <span
                 className={cn(
@@ -117,7 +117,7 @@ function Checklist({ block }: { block: Extract<GuideBlock, { kind: "checklist" }
               <span
                 className={cn(
                   "text-[13px] leading-relaxed transition-colors",
-                  done[i] ? "text-subtle line-through" : "text-muted-foreground",
+                  done[i] ? "text-subtle line-through" : "text-secondary-foreground",
                 )}
               >
                 <LaTeX>{item}</LaTeX>
@@ -152,12 +152,12 @@ function DecisionTree({ block }: { block: Extract<GuideBlock, { kind: "tree" }> 
   const current = currentId ? byId.get(currentId) : undefined;
 
   return (
-    <div className="rounded-2xl border border-border bg-card p-4 shadow-card sm:p-5">
-      <ol className="space-y-3">
+    <div className="border-l-2 border-primary bg-card py-2 pl-5 sm:pl-7">
+      <ol className="space-y-0">
         {path.map((step, i) => {
           const opt = step.node.options[step.chosen];
           return (
-            <li key={`${step.node.id}-${i}`} className="rounded-xl border border-border/70 bg-elevated/30 px-3.5 py-3">
+            <li key={`${step.node.id}-${i}`} className="relative border-b border-border bg-elevated/30 px-3.5 py-4 before:absolute before:-left-[1.7rem] before:top-1/2 before:h-px before:w-5 before:bg-primary sm:before:-left-[2.2rem] sm:before:w-7">
               <div className="text-[13px] leading-relaxed">
                 <LaTeX>{step.node.prompt}</LaTeX>
               </div>
@@ -170,7 +170,7 @@ function DecisionTree({ block }: { block: Extract<GuideBlock, { kind: "tree" }> 
         })}
 
         {current ? (
-          <li className="rounded-xl border border-primary/30 bg-primary/[0.05] px-3.5 py-3">
+          <li className="border-b border-primary/30 bg-primary/[0.05] px-3.5 py-4">
             <div className="text-[13.5px] font-medium leading-relaxed">
               <LaTeX>{current.prompt}</LaTeX>
             </div>
@@ -180,7 +180,7 @@ function DecisionTree({ block }: { block: Extract<GuideBlock, { kind: "tree" }> 
                   key={i}
                   type="button"
                   onClick={() => setPath((p) => [...p, { node: current, chosen: i }])}
-                  className="rounded-full border border-border bg-card px-3.5 py-1.5 text-[12.5px] font-medium transition-colors hover:border-primary/40 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+                  className="rounded-sm border border-border bg-card px-3.5 py-2 text-[12.5px] font-medium transition-colors hover:border-primary/40 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
                 >
                   <LaTeX>{o.label}</LaTeX>
                 </button>
@@ -190,7 +190,7 @@ function DecisionTree({ block }: { block: Extract<GuideBlock, { kind: "tree" }> 
         ) : null}
 
         {outcome ? (
-          <li className="rounded-xl border border-primary/40 bg-primary/[0.08] px-3.5 py-3">
+          <li className="border border-primary/40 bg-primary/[0.08] px-3.5 py-4">
             <div className="micro-label text-primary">result</div>
             <div className="mt-1.5 text-[13.5px] leading-relaxed">
               <LaTeX>{outcome}</LaTeX>
@@ -219,7 +219,7 @@ function Block({ block }: { block: GuideBlock }) {
   switch (block.kind) {
     case "prose":
       return (
-        <p className="text-[14px] leading-relaxed text-muted-foreground">
+        <p className="text-[15px] leading-7 text-secondary-foreground">
           <LaTeX>{block.text}</LaTeX>
         </p>
       );
@@ -227,12 +227,12 @@ function Block({ block }: { block: GuideBlock }) {
       return <Callout block={block} />;
     case "formula":
       return (
-        <div className="rounded-2xl border border-border bg-elevated/40 px-4 py-4 text-center sm:px-5">
+        <figure className="border-y border-border bg-elevated/40 px-4 py-5 text-center sm:px-5">
           {block.label ? <div className="micro-label mb-2">{block.label}</div> : null}
           <div className="overflow-x-auto text-[14px]">
             <LaTeX>{`$$${block.tex}$$`}</LaTeX>
           </div>
-        </div>
+        </figure>
       );
     case "table":
       return <GuideTable columns={block.columns} rows={block.rows} />;
@@ -247,7 +247,7 @@ function Block({ block }: { block: GuideBlock }) {
           {block.ordered ? (
             <ol className="space-y-2.5">
               {block.items.map((item, i) => (
-                <li key={i} className="flex gap-3 text-[13.5px] leading-relaxed text-muted-foreground">
+                <li key={i} className="flex gap-3 text-[14px] leading-6 text-secondary-foreground">
                   <span className="num shrink-0 text-[11px] text-subtle">{i + 1}.</span>
                   <LaTeX>{item}</LaTeX>
                 </li>
@@ -256,7 +256,7 @@ function Block({ block }: { block: GuideBlock }) {
           ) : (
             <ul className="space-y-2.5">
               {block.items.map((item, i) => (
-                <li key={i} className="flex gap-2.5 text-[13.5px] leading-relaxed text-muted-foreground">
+                <li key={i} className="flex gap-2.5 text-[14px] leading-6 text-secondary-foreground">
                   <span aria-hidden className="mt-[0.55rem] h-1 w-1 shrink-0 rounded-full bg-current opacity-50" />
                   <LaTeX>{item}</LaTeX>
                 </li>
@@ -267,8 +267,8 @@ function Block({ block }: { block: GuideBlock }) {
       );
     case "example":
       return (
-        <div className="rounded-2xl border border-border bg-card p-4 shadow-card sm:p-5">
-          <div className="font-display text-[13.5px] font-semibold">
+        <div className="border-l-[3px] border-primary bg-card py-1 pl-5 sm:pl-6">
+          <div className="font-display text-[15px] font-semibold">
             <LaTeX>{block.title}</LaTeX>
           </div>
           <div className="mt-2 overflow-x-auto text-[13.5px] leading-relaxed">
@@ -285,7 +285,7 @@ function Block({ block }: { block: GuideBlock }) {
                     <LaTeX>{s.label}</LaTeX>
                   </div>
                   {s.body ? (
-                    <div className="mt-1 overflow-x-auto text-[13px] leading-relaxed text-muted-foreground">
+                    <div className="mt-1 overflow-x-auto text-[13px] leading-relaxed text-secondary-foreground">
                       <LaTeX>{s.body}</LaTeX>
                     </div>
                   ) : null}
@@ -294,7 +294,7 @@ function Block({ block }: { block: GuideBlock }) {
             ))}
           </ol>
           {block.conclusion ? (
-            <div className="mt-4 rounded-xl border border-primary/30 bg-primary/[0.06] px-3.5 py-3 text-[13px] leading-relaxed">
+            <div className="mt-4 border-y border-primary/30 bg-primary/[0.06] px-3.5 py-3 text-[13px] leading-relaxed">
               <LaTeX>{block.conclusion}</LaTeX>
             </div>
           ) : null}
@@ -317,14 +317,14 @@ function Block({ block }: { block: GuideBlock }) {
 function SectionCard({ section, index }: { section: GuideSection; index: number }) {
   return (
     <Reveal className="min-w-0" delay={Math.min(index, 6) * 0.04}>
-      <section id={section.id} className="min-w-0 scroll-mt-24 rounded-3xl border border-border bg-card p-5 shadow-card sm:p-7">
-        <div className="flex items-baseline gap-3">
-          <span className="num text-[11px] text-subtle">{String(index + 1).padStart(2, "0")}</span>
-          <h2 className="font-display text-[17px] font-semibold leading-tight tracking-[-0.02em] sm:text-[19px]">
+      <section id={section.id} className="min-w-0 scroll-mt-24 border-t border-border py-8 first:border-t-0 first:pt-0 sm:py-11">
+        <div className="grid gap-2 sm:grid-cols-[4rem_minmax(0,1fr)] sm:gap-5">
+          <span className="num text-[13px] font-semibold text-primary">{String(index + 1).padStart(2, "0")}</span>
+          <h2 className="font-display text-xl font-semibold leading-tight sm:text-2xl">
             <LaTeX>{section.title}</LaTeX>
           </h2>
         </div>
-        <div className="mt-5 space-y-5">
+        <div className="mt-6 space-y-6 sm:ml-[5.25rem]">
           {section.blocks.map((b, i) => (
             <Block key={i} block={b} />
           ))}
@@ -336,19 +336,20 @@ function SectionCard({ section, index }: { section: GuideSection; index: number 
 
 export function GuideRenderer({ guide }: { guide: TopicGuide }) {
   return (
-    <div>
-      <nav aria-label="Sections" className="mb-8 flex flex-wrap gap-2">
+    <div className="grid min-w-0 gap-10 lg:grid-cols-[14rem_minmax(0,1fr)] lg:items-start">
+      <nav aria-label="Sections" className="border-y border-border py-4 lg:sticky lg:top-24 lg:border-y-0 lg:border-r lg:py-0 lg:pr-6">
+        <div className="micro-label mb-3 text-primary">On this page</div>
         {guide.sections.map((s) => (
           <a
             key={s.id}
             href={`#${s.id}`}
-            className="rounded-full border border-border bg-card px-3 py-1.5 text-[12px] font-medium text-muted-foreground transition-colors hover:border-primary/40 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+            className="block border-t border-border py-2.5 text-[12px] font-medium leading-snug text-secondary-foreground transition-colors first:border-t-0 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
           >
             <LaTeX>{s.title}</LaTeX>
           </a>
         ))}
       </nav>
-      <div className="grid min-w-0 gap-4">
+      <div className="grid min-w-0">
         {guide.sections.map((s, i) => (
           <SectionCard key={s.id} section={s} index={i} />
         ))}

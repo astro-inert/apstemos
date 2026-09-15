@@ -38,27 +38,27 @@ function Page() {
         <span>unit → topic → question type</span>
       </div>
 
-      <ol className="overflow-hidden rounded-3xl border border-border bg-card shadow-card">
+      <ol className="border-y border-border bg-card">
         {QN_UNITS.map((u) => (
           <li key={u.slug}>
             <Link
               to="/question-navigator/$unitId"
               params={{ unitId: u.slug }}
-              className="group grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-4 border-b border-border px-5 py-4 transition-colors last:border-b-0 hover:bg-elevated/60 sm:px-6 sm:py-5"
+               className="group grid grid-cols-[3rem_minmax(0,1fr)_auto] items-center gap-4 border-b border-border px-2 py-5 transition-colors last:border-b-0 hover:bg-elevated/60 sm:grid-cols-[4.5rem_minmax(0,1fr)_auto] sm:px-4 sm:py-6"
             >
-              <div className="num grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary/10 text-[13px] font-semibold text-primary ring-1 ring-primary/20">
-                {u.number}
+              <div className="num text-2xl font-semibold text-primary sm:text-3xl">
+                {String(u.number).padStart(2, "0")}
               </div>
               <div className="min-w-0">
                 <div className="flex min-w-0 items-center gap-3">
                   <div className="truncate font-display text-[15px] font-semibold leading-tight">
                     Unit {u.number}: {u.title}
                   </div>
-                  <span className="num hidden shrink-0 rounded-full border border-border px-2 py-0.5 text-[11px] text-muted-foreground sm:inline-block">
+                   <span className="num hidden shrink-0 border-l border-border pl-3 text-[11px] text-muted-foreground sm:inline-block">
                     {u.weight}
                   </span>
                 </div>
-                <div className="mt-1 truncate text-[13px] text-muted-foreground">{u.blurb}</div>
+                <div className="mt-1 truncate text-[13px] text-secondary-foreground">{u.blurb}</div>
               </div>
               <div className="flex shrink-0 items-center gap-3">
                 <span className="num hidden text-[11px] text-subtle md:inline">{u.topics.length} topics</span>

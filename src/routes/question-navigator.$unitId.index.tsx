@@ -2,7 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { PageShell } from "@/components/PageShell";
 import { Reveal } from "@/components/home/primitives";
 import { findUnit, type UnitEntry } from "@/lib/question-navigator-data";
-import { ArrowLeft, ChevronRight, FileText } from "lucide-react";
+import { ArrowLeft, ChevronRight } from "lucide-react";
 import { SubjectContentGate } from "@/components/SubjectContentGate";
 
 export const Route = createFileRoute("/question-navigator/$unitId/")({
@@ -56,22 +56,20 @@ function Page() {
 
       <div className="micro-label mb-5">topics · click for question-type breakdown</div>
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="border-y border-border">
         {unit.topics.map((t, i) => (
           <Reveal key={t.slug} delay={Math.min(i, 6) * 0.04}>
             <Link
               to="/question-navigator/$unitId/$topicId"
               params={{ unitId: unit.slug, topicId: t.slug }}
-              className="group flex h-full flex-col rounded-3xl border border-border bg-card p-6 shadow-card transition-all hover:border-primary/35 hover:shadow-elevated"
+              className="group grid h-full grid-cols-[3rem_minmax(0,1fr)_auto] gap-4 border-b border-border bg-card px-2 py-6 transition-colors hover:bg-elevated/60 sm:grid-cols-[4rem_minmax(0,1fr)_auto] sm:px-4"
             >
-              <div className="flex items-start justify-between">
-                <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary ring-1 ring-primary/20">
-                  <FileText className="h-4.5 w-4.5" />
-                </div>
-                <ChevronRight className="h-4 w-4 text-subtle transition-all group-hover:translate-x-0.5 group-hover:text-primary" />
+              <div className="num text-lg font-semibold text-primary">{String(i + 1).padStart(2, "0")}</div>
+              <div>
+                <div className="font-display text-[16px] font-semibold leading-tight">{t.title}</div>
+                <div className="mt-2 text-[14px] leading-relaxed text-secondary-foreground">{t.blurb}</div>
               </div>
-              <div className="mt-5 font-display text-[15px] font-semibold leading-tight">{t.title}</div>
-              <div className="mt-2 text-[13px] leading-relaxed text-muted-foreground">{t.blurb}</div>
+              <ChevronRight className="mt-1 h-4 w-4 text-subtle transition-all group-hover:translate-x-0.5 group-hover:text-primary" />
             </Link>
           </Reveal>
         ))}
