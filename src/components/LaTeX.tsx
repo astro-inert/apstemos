@@ -103,6 +103,8 @@ export function LaTeX({ children, className }: { children: string; className?: s
           minWidth: "42rem",
           maxWidth: "none",
           whiteSpace: "nowrap",
+          boxSizing: "content-box",
+          paddingRight: "max(2rem, calc(100vw - 6rem))",
           paddingBottom: "0.35rem",
         }}
         dangerouslySetInnerHTML={{ __html: html }}
