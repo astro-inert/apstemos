@@ -62,13 +62,13 @@ export function SubjectSwitcher({ current }: Props) {
   const ActiveIcon = active.icon;
 
   return (
-    <div className="relative min-w-0 w-full lg:w-auto lg:shrink-0" ref={ref}>
+    <div className="relative w-full min-w-0 max-w-full lg:w-auto lg:shrink-0" ref={ref}>
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         aria-haspopup="menu"
-        className="flex min-w-0 w-full items-center gap-1.5 rounded-lg px-1.5 py-1.5 font-display text-[15px] font-bold tracking-tight hover:bg-elevated transition-colors sm:gap-2 sm:px-2 sm:text-base"
+        className="grid min-h-10 w-full min-w-0 max-w-full grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-1 rounded-lg px-1 py-1 font-display text-[13px] font-bold hover:bg-elevated transition-colors min-[380px]:gap-1.5 min-[380px]:px-1.5 min-[380px]:text-[14px] sm:gap-2 sm:px-2 sm:text-base"
       >
         <span className="grid shrink-0 place-items-center h-6 w-6 rounded-md bg-primary text-primary-foreground transition-colors sm:h-7 sm:w-7">
           <ActiveIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" strokeWidth={2.5} />
@@ -80,7 +80,7 @@ export function SubjectSwitcher({ current }: Props) {
       {open && (
         <div
           role="menu"
-          className="absolute left-0 top-full z-50 mt-2 w-[min(78vw,20rem)] origin-top-left rounded-xl p-1.5 shadow-elevated glass animate-bounce-in sm:w-[min(70vw,20rem)]"
+          className="fixed inset-x-3 top-[3.75rem] z-50 max-h-[calc(100dvh-4.5rem)] min-w-0 overflow-y-auto rounded-xl p-1.5 shadow-elevated glass animate-bounce-in sm:absolute sm:inset-x-auto sm:left-0 sm:top-full sm:mt-2 sm:w-[min(70vw,20rem)] sm:origin-top-left"
         >
           {SUBJECT_MENU.map((group) => {
             const GroupIcon = group.icon;

@@ -58,14 +58,14 @@ export function SiteNav({ subject = "calc-bc" }: { subject?: SubjectId }) {
         scrolled ? "glass border-b border-border" : "border-b border-transparent bg-transparent"
       }`}
     >
-      <nav className="mx-auto flex max-w-6xl items-center gap-2 px-4 py-2.5 sm:gap-3 sm:px-8 sm:py-3 md:gap-4">
-        <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3 lg:flex-initial lg:gap-4">
+      <nav className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-2 px-3 py-2.5 min-[380px]:px-4 sm:gap-3 sm:px-8 sm:py-3 md:flex md:gap-4">
+        <div className="grid min-w-0 grid-cols-[auto_minmax(0,1fr)] items-center gap-1.5 min-[380px]:gap-2 sm:gap-3 lg:flex lg:flex-initial lg:gap-4">
           <Link
             to={SUBJECTS[subject].path}
             aria-label="AP STEM OS home"
             className="inline-flex shrink-0 items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
           >
-            <img src={logoAsset.url} alt="AP STEM OS" className="h-7 w-auto object-contain sm:h-9" />
+            <img src={logoAsset.url} alt="AP STEM OS" className="h-7 w-auto max-w-[5.5rem] object-contain min-[380px]:max-w-[6.5rem] sm:h-9 sm:max-w-none" />
           </Link>
           <span className="hidden h-4 w-px shrink-0 bg-border min-[420px]:block" />
           <div className="min-w-0 flex-1 lg:flex-initial">
@@ -117,7 +117,9 @@ export function SiteNav({ subject = "calc-bc" }: { subject?: SubjectId }) {
           <button
             onClick={() => setOpen((v) => !v)}
             aria-label="Menu"
-            className="grid h-10 w-10 place-items-center rounded-full border border-border bg-card md:hidden"
+            aria-expanded={open}
+            aria-controls="mobile-navigation"
+            className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-border bg-card md:hidden"
           >
             {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
           </button>
@@ -125,7 +127,7 @@ export function SiteNav({ subject = "calc-bc" }: { subject?: SubjectId }) {
       </nav>
 
       {open ? (
-        <div className="border-t border-border bg-background px-5 pb-6 pt-4 md:hidden">
+        <div id="mobile-navigation" className="max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-border bg-background px-5 pb-6 pt-4 md:hidden">
           <div className="flex flex-col gap-1">
             <MobileLink to="/practice" onClick={() => setOpen(false)}>
               Practice
