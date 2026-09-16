@@ -67,7 +67,7 @@ export function SiteNav({ subject = "calc-bc" }: { subject?: SubjectId }) {
           >
             <img src={logoAsset.url} alt="AP STEM OS" className="h-7 w-auto max-w-[5.5rem] object-contain min-[380px]:max-w-[6.5rem] sm:h-9 sm:max-w-none" />
           </Link>
-          <span className="hidden h-4 w-px shrink-0 bg-border min-[420px]:block" />
+          <span className="hidden h-4 w-px shrink-0 bg-border lg:block" />
           <div className="min-w-0 flex-1 lg:flex-initial">
             <SubjectSwitcher current={subject} />
           </div>
