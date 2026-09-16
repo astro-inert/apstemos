@@ -61,7 +61,7 @@ function renderTable(lines: string[]): string {
   const head = hasHeader ? rows[0] : null;
   const body = hasHeader ? rows.slice(1) : rows;
   const cell = (c: string, tag: "th" | "td") => `<${tag} class="border border-border px-2.5 py-1.5 text-center ${tag === "th" ? "bg-elevated/60 font-medium" : ""}">${renderInline(c)}</${tag}>`;
-  return `<span class="latex-table-wrap"><table class="latex-table">${head ? `<thead><tr>${head.map((c) => cell(c, "th")).join("")}</tr></thead>` : ""}<tbody>${body.map((r) => `<tr>${r.map((c) => cell(c, "td")).join("")}</tr>`).join("")}</tbody></table></span>`;
+  return `<div class="latex-table-wrap"><table class="latex-table">${head ? `<thead><tr>${head.map((c) => cell(c, "th")).join("")}</tr></thead>` : ""}<tbody>${body.map((r) => `<tr>${r.map((c) => cell(c, "td")).join("")}</tr>`).join("")}</tbody></table></div>`;
 }
 
 export function LaTeX({ children, className }: { children: string; className?: string }) {
@@ -80,34 +80,5 @@ export function LaTeX({ children, className }: { children: string; className?: s
     return out.join("");
   }, [children]);
 
-  return (
-    <span
-      className={`latex-swipe-viewport ${className ?? ""}`}
-      style={{
-        display: "block",
-        width: "100%",
-        maxWidth: "100%",
-        minWidth: 0,
-        overflowX: "auto",
-        overflowY: "visible",
-        WebkitOverflowScrolling: "touch",
-        touchAction: "pan-x pan-y",
-        overscrollBehaviorX: "contain",
-      }}
-    >
-      <span
-        className="latex-content"
-        style={{
-          display: "inline-block",
-          width: "max-content",
-          minWidth: "100%",
-          maxWidth: "none",
-          whiteSpace: "nowrap",
-          paddingRight: "1.25rem",
-          paddingBottom: "0.35rem",
-        }}
-        dangerouslySetInnerHTML={{ __html: html }}
-      />
-    </span>
-  );
+  return <div className={`latex-content ${className ?? ""}`} dangerouslySetInnerHTML={{ __html: html }} />;
 }
