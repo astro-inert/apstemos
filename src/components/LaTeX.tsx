@@ -89,7 +89,7 @@ export function LaTeX({ children, className }: { children: string; className?: s
         maxWidth: "100%",
         minWidth: 0,
         overflowX: "auto",
-        overflowY: "hidden",
+        overflowY: "visible",
         WebkitOverflowScrolling: "touch",
         touchAction: "pan-x pan-y",
         overscrollBehaviorX: "contain",
@@ -98,13 +98,12 @@ export function LaTeX({ children, className }: { children: string; className?: s
       <span
         className="latex-content"
         style={{
-          display: "block",
+          display: "inline-block",
           width: "max-content",
-          minWidth: "42rem",
+          minWidth: "100%",
           maxWidth: "none",
           whiteSpace: "nowrap",
-          boxSizing: "content-box",
-          paddingRight: "max(2rem, calc(100vw - 6rem))",
+          paddingRight: "1.25rem",
           paddingBottom: "0.35rem",
         }}
         dangerouslySetInnerHTML={{ __html: html }}
