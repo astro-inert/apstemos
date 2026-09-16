@@ -10,6 +10,7 @@ import {
 } from "@tanstack/react-router";
 import { Toaster } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { installFormulaGuideEnhancer } from "@/lib/formula-guide-enhancer";
 
 import appCss from "../styles.css?url";
 
@@ -115,6 +116,7 @@ const queryClient = new QueryClient();
 function RootComponent() {
   React.useEffect(() => {
     supabase.auth.getSession();
+    return installFormulaGuideEnhancer();
   }, []);
 
   return (
