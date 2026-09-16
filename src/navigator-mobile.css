@@ -1,0 +1,101 @@
+/* Mobile layout for the Question Type Navigator. Keep the desktop information architecture intact. */
+@media (max-width: 767px) {
+  /* The topic guide should never create page-level horizontal overflow. */
+  nav[aria-label="Sections"] + div,
+  nav[aria-label="Sections"] + div section,
+  nav[aria-label="Sections"] + div section > div,
+  nav[aria-label="Sections"] + div .latex-content {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  /* Turn the long "On this page" stack into a compact horizontal section rail. */
+  nav[aria-label="Sections"] {
+    width: calc(100vw - 2rem);
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    display: flex;
+    align-items: center;
+    gap: .45rem;
+    padding: .65rem 0 .8rem;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+  }
+  nav[aria-label="Sections"]::-webkit-scrollbar { display: none; }
+  nav[aria-label="Sections"] > .micro-label {
+    flex: 0 0 auto;
+    margin: 0 .25rem 0 0;
+    white-space: nowrap;
+  }
+  nav[aria-label="Sections"] > a {
+    flex: 0 0 auto;
+    width: auto;
+    max-width: 15rem;
+    border: 1px solid var(--border) !important;
+    border-radius: .75rem;
+    padding: .55rem .75rem !important;
+    background: var(--card);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Use the phone width instead of preserving desktop indentation. */
+  nav[aria-label="Sections"] + div section {
+    padding-top: 1.65rem;
+    padding-bottom: 1.65rem;
+  }
+  nav[aria-label="Sections"] + div section > div:first-child {
+    gap: .35rem;
+  }
+  nav[aria-label="Sections"] + div section > div:first-child h2 {
+    font-size: 1.2rem;
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+  }
+  nav[aria-label="Sections"] + div section > div:nth-child(2) {
+    margin-top: 1rem;
+    margin-left: 0 !important;
+    gap: 1rem;
+  }
+
+  /* Cards/callouts need smaller gutters on narrow screens. */
+  nav[aria-label="Sections"] + div aside,
+  nav[aria-label="Sections"] + div figure,
+  nav[aria-label="Sections"] + div [role="region"] {
+    max-width: 100%;
+  }
+
+  /* Tables are the one place where horizontal scrolling is intentional. */
+  nav[aria-label="Sections"] + div table {
+    width: max-content;
+    min-width: 32rem;
+  }
+
+  /* KaTeX can be wider than a phone, but it must scroll locally, never widen the page. */
+  nav[aria-label="Sections"] + div .katex-display {
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Flowchart branches should become a vertical decision stack on phones. */
+  nav[aria-label="Sections"] + div [role="region"] .grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  nav[aria-label="Sections"] + div [role="region"] button {
+    width: 100%;
+    max-width: 100%;
+    white-space: normal;
+  }
+
+  /* Lists/examples should wrap naturally rather than behaving like desktop rows. */
+  nav[aria-label="Sections"] + div li > .latex-content,
+  nav[aria-label="Sections"] + div button .latex-content {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+}
