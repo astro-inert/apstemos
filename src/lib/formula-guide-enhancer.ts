@@ -3,7 +3,7 @@ const GUIDE_PATH = "/latex-master-sheet";
 function enhanceFormulaGuide() {
   if (typeof window === "undefined" || window.location.pathname !== GUIDE_PATH) return;
   const sections = Array.from(document.querySelectorAll<HTMLElement>("main section[id]"));
-  const main = document.querySelector<HTMLElement>("main:has(section#limits)");
+  const main = document.querySelector<HTMLElement>("main[data-formula-guide-main]");
   const nav = document.querySelector<HTMLElement>('nav[aria-label="Guide sections"]');
   if (!main || !nav || sections.length === 0 || main.dataset.enhanced === "true") return;
   main.dataset.enhanced = "true";

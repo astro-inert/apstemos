@@ -87,8 +87,8 @@ export const Route = createFileRoute("/latex-master-sheet")({
 function FormulaGuide() {
   return (
     <PageShell eyebrow="cram" title="Formula and Strategy Guide" description="The complete AP Calculus BC Master Guide, rendered natively for the web and organized for fast navigation. The printable LaTeX version is still available.">
-      <div className="grid gap-8 lg:grid-cols-[220px_minmax(0,1fr)]">
-        <aside className="lg:sticky lg:top-24 lg:self-start">
+      <div className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-8 lg:grid-cols-[220px_minmax(0,1fr)]">
+        <aside className="min-w-0 lg:sticky lg:top-24 lg:self-start">
           <div className="rounded-2xl border border-border bg-card p-4 shadow-card">
             <div className="micro-label mb-3">contents</div>
             <nav aria-label="Guide sections" className="space-y-1">
@@ -98,12 +98,12 @@ function FormulaGuide() {
           </div>
         </aside>
 
-        <main className="min-w-0 space-y-10">
+        <main data-formula-guide-main className="min-w-0 max-w-full space-y-10 overflow-hidden">
           {sections.map((section, sectionIndex) => (
             <section key={section.id} id={section.id} className="scroll-mt-24">
               <div className="mb-5 flex items-baseline gap-3 border-b border-border pb-3"><span className="num text-[11px] text-primary">{String(sectionIndex + 1).padStart(2, "0")}</span><h2 className="font-display text-2xl font-semibold tracking-tight">{section.title}</h2></div>
               <div className="space-y-4">
-                {section.items.map((item) => <article key={item.title} className="min-w-0 overflow-hidden rounded-2xl border border-border bg-card p-5 shadow-card sm:p-7"><h3 className="font-display text-[17px] font-semibold">{item.title}</h3><div className="mt-4 whitespace-pre-line text-[14px] leading-7 text-secondary-foreground [&_.katex-display]:my-5 [&_.katex-display]:overflow-x-auto [&_.katex-display]:overflow-y-hidden"><LaTeX>{item.body}</LaTeX></div></article>)}
+                {section.items.map((item) => <article key={item.title} className="min-w-0 max-w-full overflow-hidden rounded-2xl border border-border bg-card p-5 shadow-card sm:p-7"><h3 className="font-display text-[17px] font-semibold">{item.title}</h3><div className="formula-guide-card-body mt-4 min-w-0 max-w-full whitespace-pre-line text-[14px] leading-7 text-secondary-foreground"><LaTeX>{item.body}</LaTeX></div></article>)}
               </div>
             </section>
           ))}
