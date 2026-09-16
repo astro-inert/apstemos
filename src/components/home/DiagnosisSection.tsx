@@ -26,14 +26,14 @@ export function DiagnosisSection({ subject }: { subject: SubjectConfig }) {
         sub={calculus ? `Filter 450+ original ${subject.navLabel}-style MCQs by unit, subtopic, and difficulty. Each answer includes a concise explanation and updates your performance data.` : `Preview an original ${subject.navLabel}-style question with an immediate explanation. The complete practice bank is coming soon.`}
       />
 
-      <div className="mt-14 grid overflow-hidden rounded-2xl border border-border bg-card shadow-card lg:grid-cols-2">
+      <div className="mt-14 grid min-w-0 max-w-full grid-cols-[minmax(0,1fr)] overflow-hidden rounded-2xl border border-border bg-card shadow-card lg:grid-cols-2">
         <div className="min-w-0 max-w-full p-6 sm:p-8 lg:border-r lg:border-border">
           <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
             <MicroLabel>{q.id}</MicroLabel>
             <span className="num text-[10px] text-subtle">{q.meta}</span>
           </div>
           <div className="mt-6 text-[15px] leading-relaxed">
-            <span className="block min-w-0 max-w-full overflow-x-auto"><LaTeX>{q.prompt}</LaTeX></span>
+            <span className="block min-w-0 max-w-full overflow-x-auto [&_.latex-content]:min-w-0 [&_.latex-content]:max-w-full"><LaTeX>{q.prompt}</LaTeX></span>
           </div>
           <div className="mt-7 space-y-2.5">
             {q.choices.map((c, i) => {
