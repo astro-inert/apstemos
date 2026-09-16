@@ -8,6 +8,7 @@ import { getTopicGuide } from "@/lib/navigator-guides";
 import { getUnit2TopicGuide } from "@/lib/navigator-guides-unit2";
 import { getUnit2Topic5Guide } from "@/lib/navigator-guide-unit2-topic5";
 import { GuideRenderer } from "@/components/navigator/GuideRenderer";
+import "@/navigator-mobile.css";
 
 export const Route = createFileRoute("/question-navigator/$unitId/$topicId")({
   loader: ({ params }): { unit: UnitEntry; topic: TopicEntry } => {
@@ -27,16 +28,10 @@ export const Route = createFileRoute("/question-navigator/$unitId/$topicId")({
   }),
   notFoundComponent: () => (
     <PageShell eyebrow="not found" title="Unknown topic" description="That topic isn't in the navigator yet.">
-      <Link to="/question-navigator" className="text-[14px] text-primary hover:underline">
-        ← Back to all units
-      </Link>
+      <Link to="/question-navigator" className="text-[14px] text-primary hover:underline">← Back to all units</Link>
     </PageShell>
   ),
-  component: () => (
-    <SubjectContentGate>
-      <Page />
-    </SubjectContentGate>
-  ),
+  component: () => <SubjectContentGate><Page /></SubjectContentGate>,
 });
 
 const sections = [
@@ -52,23 +47,12 @@ function Page() {
   const guide = getTopicGuide(topic.slug) ?? getUnit2TopicGuide(topic.slug) ?? getUnit2Topic5Guide(topic.slug);
 
   return (
-    <PageShell
-      eyebrow={`unit ${unit.number} · ${unit.title.toLowerCase()}`}
-      title={topic.title}
-      description={guide ? undefined : topic.blurb}
-    >
-      <div className="mb-8 flex flex-wrap items-center gap-5">
-        <Link
-          to="/question-navigator/$unitId"
-          params={{ unitId: unit.slug }}
-          className="micro-label inline-flex items-center gap-1.5 transition-colors hover:text-foreground"
-        >
-          <ArrowLeft className="h-3.5 w-3.5" />
-          Unit {unit.number} topics
+    <PageShell eyebrow={`unit ${unit.number} · ${unit.title.toLowerCase()}`} title={topic.title} description={guide ? undefined : topic.blurb}>
+      <div className="mb-6 flex min-w-0 flex-wrap items-center gap-x-5 gap-y-3 sm:mb-8">
+        <Link to="/question-navigator/$unitId" params={{ unitId: unit.slug }} className="micro-label inline-flex items-center gap-1.5 transition-colors hover:text-foreground">
+          <ArrowLeft className="h-3.5 w-3.5" /> Unit {unit.number} topics
         </Link>
-        <Link to="/question-navigator" className="micro-label transition-colors hover:text-foreground">
-          All units
-        </Link>
+        <Link to="/question-navigator" className="micro-label transition-colors hover:text-foreground">All units</Link>
       </div>
 
       {guide ? <GuideRenderer guide={guide} /> : (
@@ -77,17 +61,13 @@ function Page() {
             const Icon = s.icon;
             return (
               <Reveal key={s.title} delay={Math.min(i, 6) * 0.04}>
-                <section className="border-t-2 border-border bg-card p-6 sm:p-7">
-                  <div className="flex items-start gap-4">
-                    <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary ring-1 ring-primary/20">
-                      <Icon className="h-4 w-4" />
-                    </div>
+                <section className="border-t-2 border-border bg-card p-4 sm:p-7">
+                  <div className="flex items-start gap-3 sm:gap-4">
+                    <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary ring-1 ring-primary/20 sm:h-10 sm:w-10"><Icon className="h-4 w-4" /></div>
                     <div className="min-w-0">
                       <div className="font-display text-[15px] font-semibold leading-tight">{s.title}</div>
                       <div className="mt-2 text-[13px] leading-relaxed text-secondary-foreground">{s.desc}</div>
-                      <div className="mt-5 border-l-2 border-dashed border-border bg-elevated/40 px-4 py-5 text-[13px] text-muted-foreground">
-                        Content coming soon.
-                      </div>
+                      <div className="mt-4 border-l-2 border-dashed border-border bg-elevated/40 px-3 py-4 text-[13px] text-muted-foreground sm:mt-5 sm:px-4 sm:py-5">Content coming soon.</div>
                     </div>
                   </div>
                 </section>
