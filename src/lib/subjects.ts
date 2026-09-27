@@ -121,7 +121,7 @@ export const SUBJECTS: Record<SubjectId, SubjectConfig> = {
     toolsHeading: "Every tool, one system",
     tools: [
       sharedTool(Activity, "Score Command Center", "Your predicted AP score, point gap, and ranked next moves.", "primary", "/command-center"),
-      sharedTool(MapIcon, "Topic Rundowns", "Concise, exam-focused rundown of every core concept, unit by unit.", "sky", "/topic-rundown"),
+      sharedTool(MapIcon, "Unit Rundowns", "Concise, exam-focused rundown of every core concept, unit by unit.", "sky", "/topic-rundown"),
       sharedTool(ListChecks, "FRQ Library", "Every FRQ from the past 26 years, categorized by question number and topic.", "emerald", "/frqs-by-type"),
       sharedTool(Gauge, "Exam Strategy", "Calculator tips, timing plans, and efficient approaches to each question type.", "amber", "/exam-strategy"),
       sharedTool(Compass, "Question Type Navigator", "Unit → topic → the exact MCQ & FRQ patterns College Board asks.", "blue", "/question-navigator"),
