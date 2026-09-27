@@ -61,7 +61,7 @@ function renderTable(lines: string[]): string {
   const head = hasHeader ? rows[0] : null;
   const body = hasHeader ? rows.slice(1) : rows;
   const cell = (c: string, tag: "th" | "td") => `<${tag} class="border border-border px-2.5 py-1.5 text-center ${tag === "th" ? "bg-elevated/60 font-medium" : ""}">${renderInline(c)}</${tag}>`;
-  return `<div class="latex-table-wrap"><table class="latex-table">${head ? `<thead><tr>${head.map((c) => cell(c, "th")).join("")}</tr></thead>` : ""}<tbody>${body.map((r) => `<tr>${r.map((c) => cell(c, "td")).join("")}</tr>`).join("")}</tbody></table></div>`;
+  return `<div class="latex-table-wrap w-full max-w-full overflow-x-auto overscroll-x-contain"><table class="latex-table min-w-max">${head ? `<thead><tr>${head.map((c) => cell(c, "th")).join("")}</tr></thead>` : ""}<tbody>${body.map((r) => `<tr>${r.map((c) => cell(c, "td")).join("")}</tr>`).join("")}</tbody></table></div>`;
 }
 
 export function LaTeX({ children, className }: { children: string; className?: string }) {
@@ -80,5 +80,5 @@ export function LaTeX({ children, className }: { children: string; className?: s
     return out.join("");
   }, [children]);
 
-  return <div className={`latex-content ${className ?? ""}`} dangerouslySetInnerHTML={{ __html: html }} />;
+  return <div className={`latex-content min-w-0 max-w-full break-words [&_.katex-display]:max-w-full [&_.katex-display]:overflow-x-auto [&_.katex-display]:overflow-y-hidden [&_.katex-display]:overscroll-x-contain [&_.latex-display]:block [&_.latex-display]:max-w-full [&_.latex-display]:overflow-x-auto [&_.latex-display]:overflow-y-hidden ${className ?? ""}`} dangerouslySetInnerHTML={{ __html: html }} />;
 }
