@@ -11,7 +11,7 @@ export function ManifestoSection({ subject }: { subject: SubjectConfig }) {
             Practice again—with a better target.
           </h2>
           <p className="mx-auto mt-6 max-w-xl text-[15px] leading-relaxed text-secondary-foreground">
-            Your {subject.navLabel} units and subtopics stay consistent from the first answer through mastery data, mistake analysis, and question-type guidance.
+            Your {subject.navLabel} units and topics stay consistent from the first answer through mastery data, mistake analysis, and question-type guidance.
           </p>
         </Reveal>
         <Reveal delay={0.08}>
