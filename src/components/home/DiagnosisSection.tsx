@@ -23,7 +23,7 @@ export function DiagnosisSection({ subject }: { subject: SubjectConfig }) {
              {calculus ? <>Choose exactly what<br />you need to practice.</> : <>See how practice<br />will work.</>}
           </>
         }
-        sub={calculus ? `Filter 450+ original ${subject.navLabel}-style MCQs by unit, subtopic, and difficulty. Each answer includes a concise explanation and updates your performance data.` : `Preview an original ${subject.navLabel}-style question with an immediate explanation. The complete practice bank is coming soon.`}
+        sub={calculus ? `Filter 450+ original ${subject.navLabel}-style MCQs by unit, topic, and difficulty. Each answer includes a concise explanation and updates your performance data.` : `Preview an original ${subject.navLabel}-style question with an immediate explanation. The complete practice bank is coming soon.`}
       />
 
       <div className="mt-14 grid min-w-0 max-w-full grid-cols-[minmax(0,1fr)] overflow-hidden rounded-2xl border border-border bg-card shadow-card lg:grid-cols-2">
