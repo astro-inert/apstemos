@@ -13,8 +13,8 @@ export const Route = createFileRoute("/topic-rundown/$unitId")({
   },
   head: ({ loaderData }) => {
     const title = loaderData?.unit
-      ? `Unit ${loaderData.unit.number}: ${loaderData.unit.title} — Topic Rundown`
-      : "Topic Rundown — AP STEM OS";
+      ? `Unit ${loaderData.unit.number}: ${loaderData.unit.title} — Unit Rundown`
+      : "Unit Rundown — AP STEM OS";
     const description = loaderData?.unit
       ? `Exam-focused rundown of every core concept in ${loaderData.unit.title}.`
       : "Exam-focused unit rundowns for AP Calculus.";
@@ -40,7 +40,7 @@ function Page() {
   const { unit } = Route.useLoaderData() as { unit: UnitEntry };
 
   return (
-    <PageShell eyebrow={`topic rundown · unit ${unit.number}`} title={unit.title} description={unit.blurb}>
+    <PageShell eyebrow={`unit rundown · unit ${unit.number}`} title={unit.title} description={unit.blurb}>
       <div className="mb-8">
         <Link
           to="/topic-rundown"
