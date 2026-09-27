@@ -74,9 +74,9 @@ export function CountUp({
 export function MasteryBar({ value, delay = 0 }: { value: number; delay?: number }) {
   const reduced = useReducedMotion();
   return (
-    <div className="h-1.5 w-full overflow-hidden rounded-full bg-elevated">
+    <div className="h-1.5 w-full overflow-hidden bg-elevated">
       <motion.div
-        className="h-full rounded-full bg-primary-grad"
+        className="h-full bg-primary-grad"
         style={{ opacity: value >= 70 ? 1 : 0.72 }}
         initial={reduced ? { width: `${value}%` } : { width: 0 }}
         whileInView={{ width: `${value}%` }}
@@ -104,8 +104,8 @@ export function SectionHeading({
 }) {
   return (
     <Reveal className={align === "center" ? "text-center" : ""}>
-      {label ? <MicroLabel className="mb-5">{label}</MicroLabel> : null}
-      <h2 className="max-w-3xl font-display text-3xl font-semibold leading-[1.08] sm:text-5xl">
+      {label ? <MicroLabel className="mb-4">{label}</MicroLabel> : null}
+      <h2 className="max-w-3xl font-display text-3xl font-semibold tracking-[-0.025em] leading-[1.04] sm:text-5xl">
         {title}
       </h2>
       {sub ? (
