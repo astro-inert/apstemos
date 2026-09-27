@@ -17,7 +17,7 @@ export const Route = createFileRoute("/ab-track")({
       description="A first-semester college calculus course. Eight units covering limits, derivatives, integrals, differential equations, and their applications."
     >
       <div className="rounded-3xl border border-border bg-card p-6 shadow-card sm:p-8">
-        <p className="text-[14px] leading-relaxed text-muted-foreground">Pair the AB track with the Topic Rundowns and the Question Type Navigator to build a complete preparation path.</p>
+        <p className="text-[14px] leading-relaxed text-muted-foreground">Pair the AB track with the Unit Rundowns and the Question Type Navigator to build a complete preparation path.</p>
       </div>
     </PageShell>
   ),
