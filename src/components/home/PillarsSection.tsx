@@ -17,9 +17,9 @@ export function PillarsSection({ subject }: { subject: SubjectConfig }) {
           {["Easy", "Medium", "Hard"].map((d, i) => (
             <div key={d} className="flex items-center gap-2">
               <span className="num w-14 text-[10px] text-subtle">{d}</span>
-              <div className="h-1 flex-1 overflow-hidden rounded-full bg-elevated">
+              <div className="h-1 flex-1 overflow-hidden bg-elevated">
                 <motion.div
-                  className="h-full rounded-full bg-primary"
+                  className="h-full bg-primary"
                   initial={reduced ? { width: "100%" } : { width: 0 }}
                   whileInView={{ width: ["82%", "58%", "40%"][i] }}
                   viewport={{ once: true }}
@@ -45,7 +45,7 @@ export function PillarsSection({ subject }: { subject: SubjectConfig }) {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ type: "spring", stiffness: 200, damping: 24, delay: 0.07 * i }}
-              className="truncate rounded-lg border border-border px-2.5 py-1.5 text-[11px] text-muted-foreground"
+              className="truncate border-l-2 border-primary/35 bg-elevated/45 px-2.5 py-1.5 text-[11px] text-muted-foreground"
             >
               {t}
             </motion.div>
@@ -90,15 +90,15 @@ export function PillarsSection({ subject }: { subject: SubjectConfig }) {
           <Reveal key={p.title} delay={i * 0.07}>
             <Card
               {...(clickable ? ({ to: p.to } as never) : {})}
-             className={`group flex h-full flex-col rounded-2xl border border-border bg-card p-6 shadow-card sm:p-8 ${
-                 clickable ? "transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-elevated" : "opacity-80"
+             className={`group flex h-full flex-col border-t-2 border-primary/25 bg-card/55 p-6 sm:p-8 ${
+                 clickable ? "transition-all hover:-translate-y-0.5 hover:border-primary/70 hover:bg-card" : "opacity-80"
               }`}
             >
               <MicroLabel>{p.n}</MicroLabel>
               <h3 className="mt-4 font-display text-xl font-semibold leading-tight">{p.title}</h3>
                <p className="mt-3 text-[14px] leading-relaxed text-secondary-foreground">{p.copy}</p>
               {clickable ? null : <ComingSoon className="mt-4 self-start" />}
-               <div className="mt-8 flex min-h-[6.5rem] items-end rounded-xl border border-border bg-background p-4">
+               <div className="mt-8 flex min-h-[6.5rem] items-end bg-elevated/55 p-4">
                 <div className="w-full">{p.preview}</div>
               </div>
             </Card>
