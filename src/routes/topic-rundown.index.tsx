@@ -7,12 +7,12 @@ import { SubjectContentGate } from "@/components/SubjectContentGate";
 export const Route = createFileRoute("/topic-rundown/")({
   head: () => ({
     meta: [
-      { title: "Topic Rundowns — AP STEM OS" },
+      { title: "Unit Rundowns — AP STEM OS" },
       {
         name: "description",
         content: "A concise, exam-focused rundown of every core concept in each unit of AP Calculus AB and BC.",
       },
-      { property: "og:title", content: "Topic Rundowns — AP STEM OS" },
+      { property: "og:title", content: "Unit Rundowns — AP STEM OS" },
       { property: "og:description", content: "Unit-by-unit, exam-focused rundowns of every core AP Calculus concept." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -28,7 +28,7 @@ export const Route = createFileRoute("/topic-rundown/")({
 function Page() {
   return (
     <PageShell
-      eyebrow="topic rundowns"
+      eyebrow="unit rundowns"
       title={
         <>
           Every unit, <span className="text-primary">condensed</span>.
