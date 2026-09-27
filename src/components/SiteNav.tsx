@@ -63,9 +63,9 @@ export function SiteNav({ subject = "calc-bc" }: { subject?: SubjectId }) {
           <Link
             to={SUBJECTS[subject].path}
             aria-label="AP STEM OS home"
-            className="inline-flex shrink-0 items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+            className="logo-lockup inline-flex shrink-0 items-center rounded-md px-2 py-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
           >
-            <img src={logoAsset.url} alt="AP STEM OS" className="h-7 w-auto max-w-[5.5rem] object-contain min-[380px]:max-w-[6.5rem] sm:h-9 sm:max-w-none" />
+            <img src={logoAsset.url} alt="AP STEM OS" className="h-6 w-auto max-w-[5.5rem] object-contain min-[380px]:max-w-[6.5rem] sm:h-7 sm:max-w-none" />
           </Link>
           <span className="hidden h-4 w-px shrink-0 bg-border lg:block" />
           <div className="min-w-0 flex-1 lg:flex-initial">
@@ -78,7 +78,7 @@ export function SiteNav({ subject = "calc-bc" }: { subject?: SubjectId }) {
           <NavLink to="/predict">Diagnostic</NavLink>
           <NavLink to="/command-center">Score Command Center</NavLink>
           <div className="group relative">
-            <button className="inline-flex min-h-10 items-center gap-1 rounded-full px-3.5 py-1.5 text-[13px] font-medium text-secondary-foreground transition-colors hover:bg-elevated hover:text-foreground">
+            <button className="inline-flex min-h-10 items-center gap-1 rounded-md px-3.5 py-1.5 text-[13px] font-medium text-secondary-foreground transition-colors hover:bg-elevated hover:text-foreground">
               Resources
               <ChevronDown className="h-3.5 w-3.5 transition-transform group-hover:rotate-180" />
             </button>
@@ -101,7 +101,7 @@ export function SiteNav({ subject = "calc-bc" }: { subject?: SubjectId }) {
           {signedIn ? (
             <button
               onClick={signOut}
-              className="hidden min-h-10 items-center gap-1.5 rounded-full border border-border px-4 py-2 text-[13px] font-medium text-secondary-foreground transition-colors hover:border-primary/40 hover:text-foreground md:inline-flex"
+              className="hidden min-h-10 items-center gap-1.5 rounded-md border border-border px-4 py-2 text-[13px] font-medium text-secondary-foreground transition-colors hover:border-primary/40 hover:text-foreground md:inline-flex"
             >
               <LogOut className="h-3.5 w-3.5" />
               Sign out
@@ -109,7 +109,7 @@ export function SiteNav({ subject = "calc-bc" }: { subject?: SubjectId }) {
           ) : (
             <Link
               to="/practice"
-              className="hidden min-h-10 items-center gap-1.5 rounded-full bg-primary px-5 py-2 text-[13px] font-semibold text-primary-foreground shadow-card transition-colors hover:bg-primary/90 md:inline-flex"
+              className="hidden min-h-10 items-center gap-1.5 rounded-md bg-primary px-5 py-2 text-[13px] font-semibold text-primary-foreground shadow-card transition-colors hover:bg-primary/90 md:inline-flex"
             >
               Start practicing →
             </Link>
@@ -119,7 +119,7 @@ export function SiteNav({ subject = "calc-bc" }: { subject?: SubjectId }) {
             aria-label="Menu"
             aria-expanded={open}
             aria-controls="mobile-navigation"
-            className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-border bg-card md:hidden"
+            className="grid h-10 w-10 shrink-0 place-items-center rounded-md border border-border bg-card md:hidden"
           >
             {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
           </button>
@@ -172,8 +172,8 @@ function NavLink({ to, children }: { to: string; children: React.ReactNode }) {
   return (
     <Link
       to={to}
-      className="rounded-full px-3.5 py-2 text-[13px] font-medium text-secondary-foreground transition-colors hover:bg-elevated hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
-      activeProps={{ className: "rounded-full bg-elevated px-3.5 py-2 text-[13px] font-semibold text-foreground" }}
+      className="rounded-md px-3.5 py-2 text-[13px] font-medium text-secondary-foreground transition-colors hover:bg-elevated hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+      activeProps={{ className: "rounded-md bg-elevated px-3.5 py-2 text-[13px] font-semibold text-foreground" }}
     >
       {children}
     </Link>
