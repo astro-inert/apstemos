@@ -11,13 +11,13 @@ import type { GuideBlock, GuideSection, GuideTreeNode, TopicGuide } from "@/lib/
 function GuideTable({ columns, rows }: { columns: string[]; rows: string[][] }) {
   return (
     <div className="-mx-1 w-full min-w-0 max-w-full overflow-x-auto px-1">
-      <table className="w-full min-w-[34rem] border-collapse text-left text-[13px]">
+      <table className="w-full table-auto border-collapse text-left text-[12px] sm:min-w-[34rem] sm:text-[13px]">
         <thead>
           <tr>
             {columns.map((c) => (
               <th
                 key={c}
-                className="border-b border-border bg-elevated/50 px-3 py-2.5 align-bottom font-display text-[12px] font-semibold"
+                className="min-w-0 break-words border-b border-border bg-elevated/50 px-2 py-2.5 align-bottom font-display text-[11px] font-semibold sm:px-3 sm:text-[12px]"
               >
                 <LaTeX>{c}</LaTeX>
               </th>
@@ -31,7 +31,7 @@ function GuideTable({ columns, rows }: { columns: string[]; rows: string[][] }) 
                 <td
                   key={j}
                   className={cn(
-                    "border-b border-border px-3 py-3 leading-relaxed",
+                    "min-w-0 break-words border-b border-border px-2 py-3 leading-relaxed sm:px-3",
                     j === 0 ? "font-medium text-foreground" : "text-secondary-foreground",
                   )}
                 >
@@ -245,7 +245,7 @@ function Block({ block }: { block: GuideBlock }) {
   switch (block.kind) {
     case "prose":
       return (
-        <p className="text-[15px] leading-7 text-secondary-foreground">
+        <p className="min-w-0 break-words text-[15px] leading-7 text-secondary-foreground">
           <LaTeX>{block.text}</LaTeX>
         </p>
       );
@@ -293,7 +293,7 @@ function Block({ block }: { block: GuideBlock }) {
       );
     case "example":
       return (
-        <div className="border-l-[3px] border-primary bg-card py-1 pl-5 sm:pl-6">
+        <div className="min-w-0 max-w-full border-l-[3px] border-primary bg-card py-1 pl-4 sm:pl-6">
           <div className="font-display text-[15px] font-semibold">
             <LaTeX>{block.title}</LaTeX>
           </div>
