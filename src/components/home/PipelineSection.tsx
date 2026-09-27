@@ -16,7 +16,7 @@ export function PipelineSection({ subject }: { subject: SubjectConfig }) {
   const stages = [
     {
       name: "Practice",
-      caption: `Choose a unit and subtopic, then answer an ${subject.navLabel}-style question.`,
+      caption: `Choose a unit and topic, then answer an ${subject.navLabel}-style question.`,
       fragment: (
         <div className="space-y-1.5">
           {loop.practiceTopics.map((c, i) => (
@@ -30,7 +30,7 @@ export function PipelineSection({ subject }: { subject: SubjectConfig }) {
     },
     {
       name: "Score Command Center",
-      caption: "Your result updates unit and subtopic mastery, making strengths and weaknesses visible.",
+      caption: "Your result updates unit and topic mastery, making strengths and weaknesses visible.",
       fragment: (
         <div>
           <div className="flex items-baseline justify-between gap-2 text-[11px]">
@@ -56,7 +56,7 @@ export function PipelineSection({ subject }: { subject: SubjectConfig }) {
     },
     {
       name: "Question Type Navigator",
-      caption: "Use your weak subtopics to choose what to review, then learn the methods, conditions, and traps for that topic.",
+      caption: "Use your weak topics to choose what to review, then learn the methods, conditions, and traps for that topic.",
       fragment: (
         <div className="rounded-lg border border-primary/30 bg-accent/40 px-2.5 py-2">
           <div className="num text-[10px] text-primary">01</div>
@@ -67,7 +67,7 @@ export function PipelineSection({ subject }: { subject: SubjectConfig }) {
     },
     {
       name: "Return to Practice",
-      caption: "Choose that subtopic in Practice and apply the guidance on another question.",
+      caption: "Choose that topic in Practice and apply the guidance on another question.",
       fragment: (
         <div className="space-y-1.5">
           <div className="num text-[10px] text-subtle">next question</div>
