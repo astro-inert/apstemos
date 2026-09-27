@@ -10,7 +10,7 @@ export function ResourcesSection({ subject }: { subject: SubjectConfig }) {
   const course = subject.navLabel.replace("AP ", "");
   const resources = [
     { n: "01", title: "FRQ Library", copy: live ? "26 years of released AP Calculus FRQs organized by the topics they test, so you can quickly find real exam questions for what you're studying." : `Released ${subject.navLabel} FRQs organized by the topics they test.`, to: "/frqs-by-type" },
-    { n: "02", title: "Topic Rundowns", copy: "Concise, exam-focused guides covering the essential concepts from every unit.", to: "/topic-rundown" },
+    { n: "02", title: "Unit Rundowns", copy: "Concise, exam-focused guides covering the essential concepts from every unit.", to: "/topic-rundown" },
     { n: "03", title: "Formula & Strategy Guide", copy: live ? "A printable, 10-page reference covering the formulas you need and the strategies for using them correctly." : `A focused reference for the formulas and strategies used in ${course}.`, to: FORMULA_GUIDE },
     { n: "04", title: "Exam Strategy", copy: `Detailed guidance on calculator use, timing, and approaching ${subject.navLabel} questions efficiently.`, to: "/exam-strategy" },
   ];
