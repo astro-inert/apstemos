@@ -10,7 +10,7 @@ import logoAsset from "@/assets/ap-stem-os-logo.png.asset.json";
 
 const resources = [
   { to: "/frqs-by-type", label: "FRQ Library" },
-  { to: "/topic-rundown", label: "Topic Rundowns" },
+  { to: "/topic-rundown", label: "Unit Rundowns" },
   { to: "/question-navigator", label: "Question Type Navigator" },
   { to: "/common-mistakes", label: "Common Mistakes" },
   { to: "/latex-master-sheet", label: "Formula & Strategy Guide" },
