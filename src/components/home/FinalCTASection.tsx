@@ -15,7 +15,7 @@ export function FinalCTASection({ subject }: { subject: SubjectConfig }) {
             </h2>
             <p className="mx-auto mt-6 max-w-lg text-[15px] leading-relaxed text-secondary-foreground">
               {isSubjectLive(subject.id)
-                  ? "Choose a unit and subtopic, answer a question, and start building a clearer picture of what you know."
+                  ? "Choose a unit and topic, answer a question, and start building a clearer picture of what you know."
                 : `The ${subject.navLabel} question bank is being built now — the loop above is exactly how it will work.`}
             </p>
             <div className="mt-9">
@@ -29,7 +29,7 @@ export function FinalCTASection({ subject }: { subject: SubjectConfig }) {
               )}
             </div>
             <p className="num mt-7 text-[12px] text-muted-foreground">
-                {calculus ? "Choose a unit, subtopic, and difficulty to begin." : `${subject.navLabel} content coming soon.`}
+                {calculus ? "Choose a unit, topic, and difficulty to begin." : `${subject.navLabel} content coming soon.`}
             </p>
           </Reveal>
         </div>
