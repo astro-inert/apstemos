@@ -6,7 +6,7 @@ import type { SubjectId } from "./subjects";
  * as an example preview.
  */
 
-export interface DemoSubtopic {
+export interface DemoTopic {
   name: string;
   mastery: number;
 }
@@ -41,11 +41,11 @@ export interface DemoMistake {
 
 export interface DemoNavigator {
   unitLabel: string;
-  subtopics: string[];
+  topics: string[];
   activeIndex: number;
   mcq: string[];
   frq: string[];
-  guidanceBySubtopic?: Record<string, { mcq: string[]; frq: string[] }>;
+  guidanceByTopic?: Record<string, { mcq: string[]; frq: string[] }>;
 }
 
 export interface DemoLoop {
@@ -61,7 +61,7 @@ export interface HomeDemo {
   predicted: number;
   completedQuestions: number;
   loop: DemoLoop;
-  subtopics: DemoSubtopic[];
+  topics: DemoTopic[];
   moves: DemoMove[];
   /** mastery % per unit, aligned with the subject's unit list order */
   unitMastery: number[];
@@ -82,7 +82,7 @@ const calcBC: HomeDemo = {
     next: { label: "MCQ · Unit 3 · Hard", note: "chosen from 2 weak topics" },
   },
   questionCount: "2,000+",
-  subtopics: [
+  topics: [
     { name: "Limits from Graphs and Tables", mastery: 82 },
     { name: "Chain Rule", mastery: 76 },
     { name: "Differential Equations", mastery: 64 },
@@ -121,7 +121,7 @@ const calcBC: HomeDemo = {
   },
   navigator: {
     unitLabel: "UNIT 1 · LIMITS AND CONTINUITY",
-    subtopics: [
+    topics: [
       "Evaluating Limits Algebraically",
       "Limits from Graphs and Tables",
       "Squeeze Theorem",
@@ -141,7 +141,7 @@ const calcBC: HomeDemo = {
       "Evaluate the simplified expression at the limiting value.",
       "Compare one-sided limits when the two-sided limit is in question.",
     ],
-    guidanceBySubtopic: {
+    guidanceByTopic: {
       "Limits from Graphs and Tables": {
         mcq: ["Approach the input from the required side.", "Track the function's output, not the plotted point.", "Compare left- and right-hand behavior.", "Conclude a two-sided limit exists only when both sides agree."],
         frq: ["Report each one-sided limit separately when needed.", "Distinguish the limit from the function value.", "Cite the table or graph behavior that supports the value.", "State that the limit does not exist when the sides disagree."],
@@ -173,7 +173,7 @@ const physics1: HomeDemo = {
     next: { label: "MCQ · Unit 2 · Hard", note: "chosen from 2 weak topics" },
   },
   questionCount: "1,700+",
-  subtopics: [
+  topics: [
     { name: "Kinematics Graphs", mastery: 88 },
     { name: "Newton's Second Law", mastery: 79 },
     { name: "Energy Conservation", mastery: 71 },
@@ -212,7 +212,7 @@ const physics1: HomeDemo = {
   },
   navigator: {
     unitLabel: "UNIT 4 · ENERGY",
-    subtopics: [
+    topics: [
       "Work & Work-Energy Theorem",
       "Kinetic Energy",
       "Potential Energy",
@@ -246,7 +246,7 @@ const physics2: HomeDemo = {
     next: { label: "MCQ · Circuits · Hard", note: "chosen from 2 weak topics" },
   },
   questionCount: "1,700+",
-  subtopics: [
+  topics: [
     { name: "Fluid Statics", mastery: 87 },
     { name: "Electrostatics", mastery: 78 },
     { name: "Circuits", mastery: 70 },
@@ -284,7 +284,7 @@ const physics2: HomeDemo = {
   },
   navigator: {
     unitLabel: "UNIT 4 · ELECTRIC CIRCUITS",
-    subtopics: [
+    topics: [
       "Current & Resistance",
       "Series Circuits",
       "Parallel Circuits",
@@ -318,7 +318,7 @@ const physicsCMech: HomeDemo = {
     next: { label: "MCQ · Energy · Hard", note: "chosen from 2 weak topics" },
   },
   questionCount: "1,700+",
-  subtopics: [
+  topics: [
     { name: "Kinematics with Calculus", mastery: 85 },
     { name: "Work & Energy", mastery: 80 },
     { name: "Momentum", mastery: 72 },
@@ -356,7 +356,7 @@ const physicsCMech: HomeDemo = {
   },
   navigator: {
     unitLabel: "UNIT 3 · WORK, ENERGY & POWER",
-    subtopics: [
+    topics: [
       "Work by a Variable Force",
       "Work-Energy Theorem",
       "Conservative Forces",
@@ -390,7 +390,7 @@ const physicsCEM: HomeDemo = {
     next: { label: "MCQ · Unit 2 · Hard", note: "chosen from 2 weak topics" },
   },
   questionCount: "1,700+",
-  subtopics: [
+  topics: [
     { name: "Coulomb's Law", mastery: 84 },
     { name: "Electric Fields", mastery: 77 },
     { name: "Gauss's Law", mastery: 69 },
@@ -429,7 +429,7 @@ const physicsCEM: HomeDemo = {
   },
   navigator: {
     unitLabel: "UNIT 1 · ELECTROSTATICS & GAUSS'S LAW",
-    subtopics: [
+    topics: [
       "Electric Flux",
       "Spherical Symmetry",
       "Cylindrical Symmetry",
@@ -463,7 +463,7 @@ const stats: HomeDemo = {
     next: { label: "MCQ · Inference · Hard", note: "chosen from 2 weak topics" },
   },
   questionCount: "1,700+",
-  subtopics: [
+  topics: [
     { name: "Describing Distributions", mastery: 89 },
     { name: "Sampling Methods", mastery: 80 },
     { name: "Confidence Intervals", mastery: 73 },
@@ -503,7 +503,7 @@ const stats: HomeDemo = {
   },
   navigator: {
     unitLabel: "UNIT 6 · INFERENCE FOR PROPORTIONS",
-    subtopics: [
+    topics: [
       "One-Sample Proportion Intervals",
       "One-Sample Proportion Tests",
       "Two-Sample Proportion Intervals",
