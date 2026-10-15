@@ -48,7 +48,7 @@ main article:has(.latex-swipe-viewport)>div:has(.latex-swipe-viewport) .latex-co
 @theme inline{--bg-gradient-hero:linear-gradient(180deg,var(--background),oklch(from var(--background) calc(l - .05) c h));--bg-gradient-subtle:linear-gradient(135deg,var(--background),var(--secondary));--bg-gradient-elevated:linear-gradient(to bottom,var(--card),oklch(from var(--card) calc(l - .02) c h));--bg-gradient-primary:linear-gradient(135deg,var(--primary),oklch(from var(--primary) calc(l + .05) c h))} @utility bg-hero{background:var(--bg-gradient-hero)} @utility bg-subtle{background:var(--bg-gradient-subtle)} @utility bg-elevated{background:var(--bg-gradient-elevated)} @utility bg-primary-grad{background:var(--subject-gradient)}
 /* Study-journal surfaces. Decorative elements never cover study content. */
 .instrument-surface { background: var(--card); box-shadow: 0 8px 0 #eee5f3, 0 22px 60px -35px #9c77b0; border-radius: 1.75rem; }
-.logo-lockup { background: var(--accent); border: 1px solid var(--border); border-radius: 1rem; }
+.logo-lockup { background: transparent; border: 0; border-radius: 0.375rem; }
 .study-home > section:nth-of-type(3n) { background: #f4effb; }
 .study-home > section:nth-of-type(3n + 1):not(.study-hero) { background: #fff3ed; }
 .study-home > section:nth-of-type(3n + 2) { background: #f0f7f1; }
