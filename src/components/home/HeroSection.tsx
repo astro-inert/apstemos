@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, Sparkles, Pencil, Compass, Flower2 } from "lucide-react";
+import { ArrowRight, Flower2 } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 import { isSubjectLive, type SubjectConfig } from "@/lib/subjects";
 import type { InstrumentData } from "@/lib/use-home-instrument";
@@ -13,22 +13,16 @@ export function HeroSection({ subject, data }: { subject: SubjectConfig; data: I
     <section className="study-hero relative min-w-0 max-w-full overflow-hidden border-b border-border/60 px-5 pb-16 pt-12 sm:px-8 sm:pb-24 sm:pt-20">
       <div className="mx-auto min-w-0 max-w-6xl">
         <motion.div initial={reduced ? { opacity: 1 } : { opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ type: "spring", stiffness: 110, damping: 20 }} className="mx-auto max-w-4xl text-center">
-          <div className="study-stickers" aria-hidden="true"><span className="study-sticker">∫</span><span className="study-sticker"><Flower2 size={32} /></span><span className="study-sticker">π</span></div>
-          <div className="study-eyebrow mb-5"><Sparkles size={15} />{calculus ? "Your AP Calculus AB & BC study space" : `Your ${subject.navLabel} study space`}</div>
-          <h1 className="study-title font-display text-[3rem] font-extrabold tracking-[-0.035em] leading-[1.06] sm:text-[5.5rem]">Big goals.<br /><em>Little study steps.</em></h1>
+          <div className="study-stickers" aria-hidden="true"><span className="study-sticker">∫</span><span className="study-sticker"><Flower2 size={32} /></span><span className="study-sticker">π</span></div><MicroLabel className="study-eyebrow mb-5">{calculus ? "AP Calculus AB & BC" : subject.navLabel}</MicroLabel>
+          <h1 className="study-title font-display text-[2.8rem] font-extrabold tracking-[-0.035em] leading-[1.06] sm:text-[5rem]">Stop studying.<br />Start <span className="text-primary">optimizing.</span></h1>
           <p className="mx-auto mt-5 max-w-2xl text-[16px] leading-7 text-secondary-foreground sm:text-[17px]">
-            {calculus ? "A softer place to tackle the hard stuff. Practice AP-style questions, untangle tricky topics, and see your progress—one little win at a time." : `AP-style ${course} questions connected to topic-level performance tracking, mistake analysis, and MCQ and FRQ guidance for every topic.`}
+            {calculus ? "Practice with 450+ original AP-style MCQs, see your strengths and weaknesses by unit and topic, track the mistakes you make, and use the Question Type Navigator for focused MCQ and FRQ guidance." : `AP-style ${course} questions connected to topic-level performance tracking, mistake analysis, and MCQ and FRQ guidance for every topic.`}
           </p>
           <div className="mt-7 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            {isSubjectLive(subject.id) ? <MagneticLink to="/practice" className="min-h-12">Let’s practice<ArrowRight className="h-4 w-4" /></MagneticLink> : <div className="flex flex-col items-center gap-3"><span className="inline-flex cursor-not-allowed items-center gap-2 rounded-full border border-dashed border-border bg-card px-6 py-3 text-sm font-semibold text-muted-foreground">{subject.navLabel} question bank<ArrowRight className="h-4 w-4" /></span><ComingSoon /></div>}
-            <a href="#the-system" className="group inline-flex items-center gap-1.5 text-sm font-medium text-foreground/80 transition-colors hover:text-primary">Take a look around<ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" /></a>
+            {isSubjectLive(subject.id) ? <MagneticLink to="/practice" className="min-h-12">Start Practicing<ArrowRight className="h-4 w-4" /></MagneticLink> : <div className="flex flex-col items-center gap-3"><span className="inline-flex cursor-not-allowed items-center gap-2 rounded-full border border-dashed border-border bg-card px-6 py-3 text-sm font-semibold text-muted-foreground">{subject.navLabel} question bank<ArrowRight className="h-4 w-4" /></span><ComingSoon /></div>}
+            <a href="#the-system" className="group inline-flex items-center gap-1.5 text-sm font-medium text-foreground/80 transition-colors hover:text-primary">Explore AP STEM OS<ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" /></a>
           </div>
           <p className="num mt-5 text-[12px] text-muted-foreground">{calculus ? "450+ questions · AB & BC · topic analytics · MCQ + FRQ guidance" : `${subject.navLabel} content coming soon`}</p>
-          {isSubjectLive(subject.id) && <div className="study-desk">
-            <Link to="/practice" className="study-desk-card"><Pencil size={24} aria-hidden="true" /><strong>A little practice</strong><span>Pick a topic. Try a question. Build your confidence.</span><ArrowRight size={18} aria-hidden="true" /></Link>
-            <Link to="/question-navigator" className="study-desk-card"><Compass size={24} aria-hidden="true" /><strong>A little guidance</strong><span>Get unstuck with methods, examples, and common traps.</span><ArrowRight size={18} aria-hidden="true" /></Link>
-            <Link to="/command-center" className="study-desk-card"><Flower2 size={24} aria-hidden="true" /><strong>See yourself grow</strong><span>Explore your strengths and the topics that need a little love.</span><ArrowRight size={18} aria-hidden="true" /></Link>
-          </div>}
         </motion.div>
       </div>
       <div className="mx-auto mt-12 max-w-6xl sm:mt-16"><Instrument subject={subject} data={data} /></div>

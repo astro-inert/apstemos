@@ -61,18 +61,11 @@ main article:has(.latex-swipe-viewport)>div:has(.latex-swipe-viewport) .latex-co
 .study-sticker { display: grid; place-items: center; width: 3.5rem; height: 3.5rem; border: 3px solid white; border-radius: 1.15rem; box-shadow: 0 3px 0 #ddd2e4; font-family: var(--font-display); font-size: 1.8rem; font-weight: 800; color: #65517b; background: #e8def9; transform: rotate(-10deg); }
 .study-sticker:nth-child(2) { width: 4.1rem; height: 4.1rem; background: #ffe4e8; color: #9b506c; transform: rotate(7deg); }
 .study-sticker:nth-child(3) { background: #e4f0df; color: #52704d; transform: rotate(-5deg); }
-.study-desk { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin-top: 2rem; text-align: left; }
-.study-desk-card { display: flex; flex-direction: column; gap: .7rem; padding: 1.3rem; border-radius: 1.4rem; background: #eee3fa; border: 1px solid #ddcdeb; box-shadow: 0 4px 0 #ddcdeb; transition: transform .2s; }
-.study-desk-card:nth-child(2) { background: #ffe9e9; border-color: #f0d4da; box-shadow: 0 4px 0 #f0d4da; }
-.study-desk-card:nth-child(3) { background: #e8f3e4; border-color: #d2e4cb; box-shadow: 0 4px 0 #d2e4cb; }
-.study-desk-card:hover { transform: translateY(-3px); }
-.study-desk-card strong { font-family: var(--font-display); font-size: 1.1rem; }
-.study-desk-card span { font-size: .85rem; color: #554961; line-height: 1.5; }
 .study-page-heading { border: 1px solid var(--border); border-radius: 1.75rem; background: var(--subject-surface); padding: clamp(1.3rem, 4vw, 2.7rem); box-shadow: 0 5px 0 #eee5f3; }
 .subject-theme > header { background: #fffbf6ed; backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
 .subject-theme > footer { background: #f4edf8; }
 a:focus-visible, button:focus-visible { outline: 3px solid var(--ring); outline-offset: 4px; }
 ::selection { background: #ddc8ee; color: #392f49; }
-@media (max-width: 640px) { .study-desk { grid-template-columns: 1fr; gap: .8rem; } .study-desk-card { padding: 1.15rem; } }
+
 
 .subject-theme { --subject-gradient: linear-gradient(125deg, var(--primary), color-mix(in srgb, var(--primary) 88%, #bf78a1)); --subject-surface: linear-gradient(140deg, #ffffff, var(--accent)); --ring: var(--primary); }

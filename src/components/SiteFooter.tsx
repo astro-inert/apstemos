@@ -14,7 +14,7 @@ const columns: { label: string; links: { to: string; label: string }[] }[] = [
     label: "resources",
     links: [
       { to: "/frqs-by-type", label: "FRQ Library" },
-      { to: "/topic-rundown", label: "Unit Rundowns" },
+      { to: "/topic-rundown", label: "Topic Rundowns" },
       { to: "/latex-master-sheet", label: "Formula & Strategy Guide" },
       { to: "/exam-strategy", label: "Exam Strategy" },
     ],
