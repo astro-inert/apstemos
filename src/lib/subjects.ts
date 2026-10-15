@@ -1,10 +1,8 @@
 import {
   Activity,
   Atom,
-  BarChart3,
   Calculator,
   Compass,
-  FlaskConical,
   Gauge,
   ListChecks,
   Magnet,
@@ -427,7 +425,7 @@ export const SUBJECTS: Record<SubjectId, SubjectConfig> = {
     navLabel: "AP Statistics",
     brand: "APStats",
     path: "/statistics",
-    icon: BarChart3,
+    icon: ChartNoAxesCombined,
     examDate: "2027-05-06T12:00:00",
     examLabel: "2027 AP Statistics exam",
     heroTitle: ["Everything you need", "for a 5 in AP Statistics"],
@@ -515,7 +513,7 @@ export const SUBJECT_MENU: SubjectMenuGroup[] = [
     ],
   },
   { id: "calc-bc", label: "AP Calculus BC", icon: Sigma, subjectId: "calc-bc" },
-  { id: "stats", label: "AP Statistics", icon: BarChart3, subjectId: "stats" },
+  { id: "stats", label: "AP Statistics", icon: ChartNoAxesCombined, subjectId: "stats" },
 ];
 
 export const PHYSICS_STORAGE_KEY = "ap-os:last-physics-course";
