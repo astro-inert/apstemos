@@ -1,20 +1,28 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, Flower2 } from "lucide-react";
+import { ArrowRight, Flower2, Atom, Orbit, Waves, Gauge, Zap, Magnet, CircuitBoard, ChartNoAxesCombined, ChartScatter, Percent, MoveRight, Cog, CircleDot, Lightbulb, Thermometer, type LucideIcon } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 import { isSubjectLive, type SubjectConfig } from "@/lib/subjects";
 import type { InstrumentData } from "@/lib/use-home-instrument";
 import { ComingSoon, CountUp, ExampleBadge, MasteryBar, MicroLabel } from "./primitives";
 
+const subjectStickerIcons: Record<string, [LucideIcon, LucideIcon, LucideIcon]> = {
+  "physics-1": [MoveRight, Gauge, Orbit],
+  "physics-2": [Waves, Thermometer, Lightbulb],
+  "physics-c-mech": [Orbit, Cog, CircleDot],
+  "physics-c-em": [Zap, Magnet, CircuitBoard],
+  stats: [ChartNoAxesCombined, ChartScatter, Percent],
+};
+
 export function HeroSection({ subject, data }: { subject: SubjectConfig; data: InstrumentData }) {
   const reduced = useReducedMotion();
   const calculus = subject.id === "calc-bc";
   const course = subject.navLabel.replace("AP ", "");
-  const SubjectIcon = subject.icon;
+  const StickerIcons = subjectStickerIcons[subject.id] ?? [Atom, Orbit, Waves];
   return (
     <section className="study-hero relative min-w-0 max-w-full overflow-hidden border-b border-border/60 px-5 pb-16 pt-12 sm:px-8 sm:pb-24 sm:pt-20">
       <div className="mx-auto min-w-0 max-w-6xl">
         <motion.div initial={reduced ? { opacity: 1 } : { opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ type: "spring", stiffness: 110, damping: 20 }} className="mx-auto max-w-4xl text-center">
-          <div className="study-stickers" aria-hidden="true">{calculus ? <><span className="study-sticker">∫</span><span className="study-sticker"><Flower2 size={32} /></span><span className="study-sticker">π</span></> : <><span className="study-sticker"><SubjectIcon size={30} strokeWidth={2.1} /></span><span className="study-sticker"><Flower2 size={30} /></span><span className="study-sticker"><SubjectIcon size={26} strokeWidth={1.8} /></span></>}</div><MicroLabel className="study-eyebrow mb-5">{calculus ? "AP Calculus AB & BC" : subject.navLabel}</MicroLabel>
+          <div className="study-stickers" aria-hidden="true">{calculus ? <><span className="study-sticker">∫</span><span className="study-sticker"><Flower2 size={32} /></span><span className="study-sticker">π</span></> : <>{StickerIcons.map((Icon, index) => <span className="study-sticker" key={index}><Icon size={30} strokeWidth={2} /></span>)}</>}</div><MicroLabel className="study-eyebrow mb-5">{calculus ? "AP Calculus AB & BC" : subject.navLabel}</MicroLabel>
           <h1 className="study-title font-display text-[2.8rem] font-extrabold tracking-[-0.035em] leading-[1.06] sm:text-[5rem]">Stop studying.<br />Start <span className="text-primary">optimizing.</span></h1>
           <p className="mx-auto mt-5 max-w-2xl text-[16px] leading-7 text-secondary-foreground sm:text-[17px]">
             {calculus ? "Practice with 450+ original AP-style MCQs, see your strengths and weaknesses by unit and topic, track the mistakes you make, and use the Question Type Navigator for focused MCQ and FRQ guidance." : `AP-style ${course} questions connected to topic-level performance tracking, mistake analysis, and MCQ and FRQ guidance for every topic.`}
