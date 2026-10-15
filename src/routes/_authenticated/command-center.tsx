@@ -1,3 +1,4 @@
+import type { ErrorComponentProps } from "@tanstack/react-router";
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { useSuspenseQuery, useQuery, queryOptions, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -50,7 +51,7 @@ export const Route = createFileRoute("/_authenticated/command-center")({
   ),
 });
 
-function ErrorView({ error }: { error: Error }) {
+function ErrorView({ error }: ErrorComponentProps) {
   const router = useRouter();
   return (
     <AppShell>
