@@ -74,9 +74,19 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--ring); outline-
 .subject-theme[data-subject="calc-bc"] .study-title em, .subject-theme[data-subject="calc-bc"] .gradient-text { background: var(--subject-gradient); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 .subject-theme[data-subject="calc-bc"] .study-sticker:first-child { background: #ffe0e8; color: #b74569; }
 .subject-theme[data-subject="calc-bc"] .study-sticker:nth-child(2) { background: #efddfa; color: #8154a6; }
-/* Per-course pastel hero stickers */
-.subject-theme:not([data-subject="calc-bc"]) .study-sticker:first-child { background: var(--accent); color: var(--accent-foreground); }
-.subject-theme:not([data-subject="calc-bc"]) .study-sticker:nth-child(2) { background: color-mix(in srgb, var(--accent) 55%, white); color: var(--primary); }
-
-/* Non-calculus courses use one coherent subject color, including all hero stickers and progress bars. */
-.subject-theme:not([data-subject="calc-bc"]) .study-sticker:nth-child(3) { background: var(--accent); color: var(--accent-foreground); }
+/* Distinct curated pastel sticker trios for each non-calculus course. */
+.subject-theme[data-subject="stats"] .study-sticker:first-child { background: #fff0c9; color: #77501f; }
+.subject-theme[data-subject="stats"] .study-sticker:nth-child(2) { background: #e9e0fb; color: #684f92; }
+.subject-theme[data-subject="stats"] .study-sticker:nth-child(3) { background: #dff3e9; color: #326e57; }
+.subject-theme[data-subject="physics-1"] .study-sticker:first-child { background: #dfeff9; color: #305b79; }
+.subject-theme[data-subject="physics-1"] .study-sticker:nth-child(2) { background: #ffe7db; color: #a45a42; }
+.subject-theme[data-subject="physics-1"] .study-sticker:nth-child(3) { background: #f0e2fb; color: #75519b; }
+.subject-theme[data-subject="physics-2"] .study-sticker:first-child { background: #dcf3ef; color: #2e6462; }
+.subject-theme[data-subject="physics-2"] .study-sticker:nth-child(2) { background: #fce6db; color: #a65b49; }
+.subject-theme[data-subject="physics-2"] .study-sticker:nth-child(3) { background: #e7e5fb; color: #595fa2; }
+.subject-theme[data-subject="physics-c-mech"] .study-sticker:first-child { background: #e2eafb; color: #405778; }
+.subject-theme[data-subject="physics-c-mech"] .study-sticker:nth-child(2) { background: #ffeadb; color: #a76343; }
+.subject-theme[data-subject="physics-c-mech"] .study-sticker:nth-child(3) { background: #e3f2de; color: #4e7952; }
+.subject-theme[data-subject="physics-c-em"] .study-sticker:first-child { background: #f2e3f3; color: #754e79; }
+.subject-theme[data-subject="physics-c-em"] .study-sticker:nth-child(2) { background: #dceff7; color: #386b83; }
+.subject-theme[data-subject="physics-c-em"] .study-sticker:nth-child(3) { background: #fff0d4; color: #947038; }
