@@ -137,10 +137,9 @@ export function SubjectSwitcher({ current }: Props) {
                               onClick={() => go(child.subjectId)}
                               className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-elevated transition-colors"
                             >
-                              <span className="w-4 shrink-0">
-                                {current === child.subjectId && <Check className="h-3.5 w-3.5 text-primary" />}
-                              </span>
+                              <sub.icon className="h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
                               <span className="flex-1 text-left">{sub.label.replace(/^Physics C: /, "Physics C: ")}</span>
+                              {current === child.subjectId && <Check className="h-3.5 w-3.5 shrink-0 text-primary" />}
                             </button>
                           </div>
                         );
