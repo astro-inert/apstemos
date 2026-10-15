@@ -13,7 +13,7 @@ export function PageShell({ eyebrow, title, description, children }: PageHeroPro
   return (
     <AppShell>
       <div className="mx-auto max-w-6xl px-5 pb-24 pt-10 sm:px-8 sm:pt-14">
-        <Reveal className="study-page-heading mb-12 sm:mb-14">
+        <Reveal className="mb-10 sm:mb-12">
           <div className="micro-label text-primary">{eyebrow}</div>
           <h1 className="mt-4 max-w-4xl font-display text-4xl font-semibold leading-[1.04] sm:text-6xl">
             {title}
