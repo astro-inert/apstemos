@@ -6,7 +6,6 @@ import { ChevronDown, LogOut, Menu, X } from "lucide-react";
 import { SubjectSwitcher } from "./SubjectSwitcher";
 import { supabase } from "@/integrations/supabase/client";
 import { SUBJECTS, type SubjectId } from "@/lib/subjects";
-import logoAsset from "@/assets/ap-stem-os-logo.png.asset.json";
 
 const resources = [
   { to: "/frqs-by-type", label: "FRQ Library" },
@@ -63,9 +62,13 @@ export function SiteNav({ subject = "calc-bc" }: { subject?: SubjectId }) {
           <Link
             to={SUBJECTS[subject].path}
             aria-label="AP STEM OS home"
-            className="logo-lockup inline-flex shrink-0 items-center rounded-md px-2 py-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+            className="logo-lockup inline-flex shrink-0 items-center gap-1.5 rounded-md py-1.5 pr-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 sm:gap-2"
           >
-            <img src={logoAsset.url} alt="AP STEM OS" className="h-6 w-auto max-w-[5.5rem] object-contain min-[380px]:max-w-[6.5rem] sm:h-7 sm:max-w-none mix-blend-multiply" />
+            <svg className="h-7 w-7 shrink-0" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+              <path d="M23.5 9.1C21.1 5.8 16.3 5.1 12.2 6.7C8.4 8.2 7.7 11.2 9.8 13.3C12.6 16.1 21.5 14.9 22.3 20.2C22.8 23.8 18.8 26.1 14.5 25.4C11.7 25 9.5 23.6 8 21.5" stroke="#D95568" strokeWidth="3.25" strokeLinecap="round" />
+              <circle cx="24.8" cy="7.2" r="2.1" fill="#A48BCB" />
+            </svg>
+            <span className="whitespace-nowrap font-display text-[13px] font-bold tracking-[-0.055em] text-foreground sm:text-[15px]">AP STEM <span className="font-medium">OS</span></span>
           </Link>
           <span className="hidden h-4 w-px shrink-0 bg-border lg:block" />
           <div className="min-w-0 flex-1 lg:flex-initial">
