@@ -57,7 +57,7 @@ function ErrorView({ error }: ErrorComponentProps) {
     <AppShell>
       <div className="mx-auto max-w-md px-5 py-20 sm:px-8">
         <h2 className="font-display text-xl font-semibold">Couldn't load your data</h2>
-        <p className="mt-2 text-[14px] text-muted-foreground">{error.message}</p>
+        <p className="mt-2 text-[14px] text-muted-foreground">{(error as Error).message}</p>
         <button
           onClick={() => router.invalidate()}
           className="mt-6 rounded-md bg-primary px-5 py-2.5 text-[14px] font-semibold text-primary-foreground"
