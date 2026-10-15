@@ -10,8 +10,8 @@ export function FinalCTASection({ subject }: { subject: SubjectConfig }) {
       <div className="relative overflow-hidden rounded-2xl border border-border bg-card px-6 py-16 text-center shadow-card sm:px-12 sm:py-24">
         <div className="relative mx-auto max-w-3xl">
           <Reveal>
-            <h2 className="mx-auto max-w-2xl font-display text-4xl font-semibold leading-[0.98] sm:text-6xl">
-               Stop studying.<br />Start <span className="text-primary">optimizing.</span>
+            <h2 className="mx-auto max-w-2xl font-display text-4xl font-semibold leading-[1.08] sm:text-6xl">
+               Your next little win<br /><span className="text-primary">starts here.</span>
             </h2>
             <p className="mx-auto mt-6 max-w-lg text-[15px] leading-relaxed text-secondary-foreground">
               {isSubjectLive(subject.id)

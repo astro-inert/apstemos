@@ -65,7 +65,7 @@ export function SiteNav({ subject = "calc-bc" }: { subject?: SubjectId }) {
             aria-label="AP STEM OS home"
             className="logo-lockup inline-flex shrink-0 items-center rounded-md px-2 py-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
           >
-            <img src={logoAsset.url} alt="AP STEM OS" className="h-6 w-auto max-w-[5.5rem] object-contain min-[380px]:max-w-[6.5rem] sm:h-7 sm:max-w-none" />
+            <img src={logoAsset.url} alt="AP STEM OS" className="h-6 w-auto max-w-[5.5rem] object-contain min-[380px]:max-w-[6.5rem] sm:h-7 sm:max-w-none mix-blend-multiply" />
           </Link>
           <span className="hidden h-4 w-px shrink-0 bg-border lg:block" />
           <div className="min-w-0 flex-1 lg:flex-initial">
@@ -82,7 +82,7 @@ export function SiteNav({ subject = "calc-bc" }: { subject?: SubjectId }) {
               Resources
               <ChevronDown className="h-3.5 w-3.5 transition-transform group-hover:rotate-180" />
             </button>
-            <div className="invisible absolute right-0 top-full mt-1 w-64 rounded-md border border-border bg-popover p-1.5 opacity-0 shadow-elevated transition-all group-hover:visible group-hover:opacity-100">
+            <div className="invisible absolute right-0 top-full mt-1 w-64 rounded-md border border-border bg-popover p-1.5 opacity-0 shadow-elevated transition-all group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
               {resources.map((r) => (
                 <Link
                   key={r.to}
