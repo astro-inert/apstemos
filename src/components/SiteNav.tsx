@@ -64,10 +64,21 @@ export function SiteNav({ subject = "calc-bc" }: { subject?: SubjectId }) {
             aria-label="AP STEM OS home"
             className="logo-lockup inline-flex shrink-0 items-center rounded-md py-2 pr-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
           >
-            <span className="inline-flex items-baseline whitespace-nowrap font-display text-[15px] font-bold leading-none tracking-[-0.065em] sm:text-[17px]" aria-hidden="true">
-              <span className="text-[#D95568]">AP</span>
-              <span className="ml-[0.27em] text-foreground">STEM</span>
-              <span className="ml-[0.27em] font-semibold text-[#9474B8]">OS</span>
+            <span className="relative inline-flex w-[124px] flex-col justify-center overflow-hidden sm:w-[143px]" aria-hidden="true">
+              <span className="pointer-events-none absolute left-[43%] top-[-13px] select-none font-display text-[69px] font-extrabold leading-none tracking-tighter text-[#88608d]/[0.13] sm:left-[44%] sm:top-[-15px] sm:text-[77px]">
+                5
+              </span>
+              <span className="relative whitespace-nowrap font-display text-[14px] font-bold leading-[1.15] tracking-[-0.055em] text-foreground sm:text-[16px]">
+                AP STEM OS
+              </span>
+              <span className="relative mt-[4px] grid h-[3px] grid-cols-6 gap-[2px] rounded-full" >
+                <span className="rounded-full bg-[#BF4869]" />
+                <span className="rounded-full bg-[#386E91]" />
+                <span className="rounded-full bg-[#347876]" />
+                <span className="rounded-full bg-[#4D678F]" />
+                <span className="rounded-full bg-[#88608D]" />
+                <span className="rounded-full bg-[#986329]" />
+              </span>
             </span>
           </Link>
           <span className="hidden h-4 w-px shrink-0 bg-border lg:block" />
