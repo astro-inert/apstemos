@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Flower2 } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 import { isSubjectLive, type SubjectConfig } from "@/lib/subjects";
 import type { InstrumentData } from "@/lib/use-home-instrument";
@@ -10,11 +10,11 @@ export function HeroSection({ subject, data }: { subject: SubjectConfig; data: I
   const calculus = subject.id === "calc-bc";
   const course = subject.navLabel.replace("AP ", "");
   return (
-    <section className="atmosphere relative min-w-0 max-w-full overflow-hidden border-b border-border/60 px-5 pb-16 pt-12 sm:px-8 sm:pb-24 sm:pt-20">
+    <section className="study-hero relative min-w-0 max-w-full overflow-hidden border-b border-border/60 px-5 pb-16 pt-12 sm:px-8 sm:pb-24 sm:pt-20">
       <div className="mx-auto min-w-0 max-w-6xl">
         <motion.div initial={reduced ? { opacity: 1 } : { opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ type: "spring", stiffness: 110, damping: 20 }} className="mx-auto max-w-4xl text-center">
-          <MicroLabel className="mb-5">{calculus ? "AP Calculus AB & BC" : subject.navLabel}</MicroLabel>
-          <h1 className="font-display text-[2.8rem] font-semibold tracking-[-0.045em] leading-[0.94] sm:text-[5rem]">Stop studying.<br />Start <span className="text-primary">optimizing.</span></h1>
+          <div className="study-stickers" aria-hidden="true"><span className="study-sticker">∫</span><span className="study-sticker"><Flower2 size={32} /></span><span className="study-sticker">π</span></div><MicroLabel className="study-eyebrow mb-5">{calculus ? "AP Calculus AB & BC" : subject.navLabel}</MicroLabel>
+          <h1 className="study-title font-display text-[2.8rem] font-extrabold tracking-[-0.035em] leading-[1.06] sm:text-[5rem]">Stop studying.<br />Start <span className="text-primary">optimizing.</span></h1>
           <p className="mx-auto mt-5 max-w-2xl text-[16px] leading-7 text-secondary-foreground sm:text-[17px]">
             {calculus ? "Practice with 450+ original AP-style MCQs, see your strengths and weaknesses by unit and topic, track the mistakes you make, and use the Question Type Navigator for focused MCQ and FRQ guidance." : `AP-style ${course} questions connected to topic-level performance tracking, mistake analysis, and MCQ and FRQ guidance for every topic.`}
           </p>
@@ -32,7 +32,7 @@ export function HeroSection({ subject, data }: { subject: SubjectConfig; data: I
 
 export function MagneticLink({ to, children, variant = "primary", className = "" }: { to: string; children: React.ReactNode; variant?: "primary" | "ghost"; className?: string }) {
   const reduced = useReducedMotion();
-  return <motion.div whileHover={reduced ? undefined : { y: -2 }} whileTap={reduced ? undefined : { y: 0, scale: 0.99 }} transition={{ type: "spring", stiffness: 320, damping: 22 }} className="inline-flex"><Link to={to} className={variant === "primary" ? `inline-flex items-center gap-2 rounded-md bg-primary-grad px-6 py-3 text-sm font-semibold text-primary-foreground shadow-card transition-colors hover:bg-primary-grad/90 ${className}` : `inline-flex items-center gap-2 rounded-md border border-border bg-card px-6 py-3 text-sm font-semibold transition-colors hover:border-primary/40 ${className}`}>{children}</Link></motion.div>;
+  return <motion.div whileHover={reduced ? undefined : { y: -2 }} whileTap={reduced ? undefined : { y: 0, scale: 0.99 }} transition={{ type: "spring", stiffness: 320, damping: 22 }} className="inline-flex"><Link to={to} className={variant === "primary" ? `inline-flex items-center gap-2 rounded-full bg-primary-grad px-6 py-3 text-sm font-semibold text-primary-foreground shadow-card transition-colors hover:bg-primary-grad/90 ${className}` : `inline-flex items-center gap-2 rounded-full border border-border bg-card px-6 py-3 text-sm font-semibold transition-colors hover:border-primary/40 ${className}`}>{children}</Link></motion.div>;
 }
 
 function Instrument({ subject, data }: { subject: SubjectConfig; data: InstrumentData }) {

@@ -25,7 +25,7 @@ export function SubjectHome({ subject }: { subject: SubjectConfig }) {
   return (
     <div
       data-subject={subject.id}
-      className="subject-theme relative min-h-screen overflow-x-hidden bg-background text-foreground"
+      className="study-home subject-theme relative min-h-screen overflow-x-hidden bg-background text-foreground"
     >
       <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[46rem]">
         <div className="absolute inset-0 atmosphere opacity-80" />

@@ -74,9 +74,9 @@ export function CountUp({
 export function MasteryBar({ value, delay = 0 }: { value: number; delay?: number }) {
   const reduced = useReducedMotion();
   return (
-    <div className="h-1.5 w-full overflow-hidden bg-elevated">
+    <div className="h-2.5 w-full rounded-full overflow-hidden bg-elevated">
       <motion.div
-        className="h-full bg-primary-grad"
+        className="h-full rounded-full bg-primary-grad"
         style={{ opacity: value >= 70 ? 1 : 0.72 }}
         initial={reduced ? { width: `${value}%` } : { width: 0 }}
         whileInView={{ width: `${value}%` }}
@@ -139,7 +139,7 @@ export function Section({
 
 export function ExampleBadge({ live }: { live: boolean }) {
   return (
-    <span className="num border-l-2 border-primary bg-elevated/60 px-2 py-1 text-[11px] text-muted-foreground">
+    <span className="rounded-full border border-border bg-accent/60 px-2 py-1 text-[11px] text-muted-foreground">
       {live ? "your data" : "example preview"}
     </span>
   );
@@ -149,7 +149,7 @@ export function ExampleBadge({ live }: { live: boolean }) {
 export function ComingSoon({ className = "" }: { className?: string }) {
   return (
     <span
-      className={`num inline-flex items-center border border-dashed border-border bg-elevated/50 px-2.5 py-1 text-[11px] text-muted-foreground ${className}`}
+      className={`rounded-full inline-flex items-center border border-dashed border-border bg-elevated/50 px-2.5 py-1 text-[11px] text-muted-foreground ${className}`}
     >
       content coming soon
     </span>
