@@ -70,12 +70,12 @@ export function useHomeInstrument(subject: SubjectConfig): InstrumentData {
 
   if (!data || data.attempts_count === 0) return fallback;
 
-  const ranked = [...data.topics].sort((a, b) => b.accuracy - a.accuracy);
+  const ranked = [...data.subtopics].sort((a, b) => b.accuracy - a.accuracy);
   const topics: DemoTopic[] = ranked
     .slice(0, 5)
     .map((s) => ({ name: s.topic_title, mastery: Math.round(s.accuracy) }));
 
-  const weakest = [...data.topics].sort((a, b) => a.accuracy - b.accuracy).slice(0, 3);
+  const weakest = [...data.subtopics].sort((a, b) => a.accuracy - b.accuracy).slice(0, 3);
   const moves: DemoMove[] = weakest.length
     ? weakest.map((s, i) => ({
         name: s.topic_title,
