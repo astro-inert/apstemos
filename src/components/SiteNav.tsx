@@ -62,13 +62,13 @@ export function SiteNav({ subject = "calc-bc" }: { subject?: SubjectId }) {
           <Link
             to={SUBJECTS[subject].path}
             aria-label="AP STEM OS home"
-            className="logo-lockup inline-flex shrink-0 items-center gap-1.5 rounded-md py-1.5 pr-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 sm:gap-2"
+            className="logo-lockup inline-flex shrink-0 items-center rounded-md py-2 pr-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
           >
-            <svg className="h-7 w-7 shrink-0" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-              <path d="M23.5 9.1C21.1 5.8 16.3 5.1 12.2 6.7C8.4 8.2 7.7 11.2 9.8 13.3C12.6 16.1 21.5 14.9 22.3 20.2C22.8 23.8 18.8 26.1 14.5 25.4C11.7 25 9.5 23.6 8 21.5" stroke="#D95568" strokeWidth="3.25" strokeLinecap="round" />
-              <circle cx="24.8" cy="7.2" r="2.1" fill="#A48BCB" />
-            </svg>
-            <span className="whitespace-nowrap font-display text-[13px] font-bold tracking-[-0.055em] text-foreground sm:text-[15px]">AP STEM <span className="font-medium">OS</span></span>
+            <span className="inline-flex items-baseline whitespace-nowrap font-display text-[15px] font-bold leading-none tracking-[-0.065em] sm:text-[17px]" aria-hidden="true">
+              <span className="text-[#D95568]">AP</span>
+              <span className="ml-[0.27em] text-foreground">STEM</span>
+              <span className="ml-[0.27em] font-semibold text-[#9474B8]">OS</span>
+            </span>
           </Link>
           <span className="hidden h-4 w-px shrink-0 bg-border lg:block" />
           <div className="min-w-0 flex-1 lg:flex-initial">
