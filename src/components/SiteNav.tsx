@@ -65,7 +65,7 @@ export function SiteNav({ subject = "calc-bc" }: { subject?: SubjectId }) {
             className="logo-lockup inline-flex shrink-0 items-center rounded-md py-2 pr-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
           >
             <span className="relative inline-flex w-[124px] flex-col justify-center overflow-visible sm:w-[143px]" aria-hidden="true">
-              <span className="pointer-events-none absolute left-[43%] top-[-13px] select-none font-display text-[69px] font-extrabold leading-none tracking-tighter text-[#88608d]/[0.13] sm:left-[44%] sm:top-[-15px] sm:text-[77px]">
+              <span className="pointer-events-none absolute left-[43%] top-[-22px] select-none font-display text-[69px] font-extrabold leading-none tracking-tighter text-[#88608d]/[0.13] sm:left-[44%] sm:top-[-25px] sm:text-[77px]">
                 5
               </span>
               <span className="relative whitespace-nowrap font-display text-[14px] font-bold leading-[1.15] tracking-[-0.055em] text-foreground sm:text-[16px]">
