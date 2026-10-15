@@ -10,6 +10,7 @@ import { getUnit2Topic5Guide } from "@/lib/navigator-guide-unit2-topic5";
 import { GuideRenderer } from "@/components/navigator/GuideRenderer";
 import { chainRuleGuide } from "@/lib/navigator-guide-unit3-chain";
 import { implicitDifferentiationGuide } from "@/lib/navigator-guide-unit3-implicit";
+import { inverseFunctionsGuide } from "@/lib/navigator-guide-unit3-inverse";
 import "@/navigator-mobile.css";
 
 export const Route = createFileRoute("/question-navigator/$unitId/$topicId")({
@@ -46,7 +47,7 @@ const sections = [
 
 function Page() {
   const { unit, topic } = Route.useLoaderData() as { unit: UnitEntry; topic: TopicEntry };
-  const guide = getTopicGuide(topic.slug) ?? getUnit2TopicGuide(topic.slug) ?? getUnit2Topic5Guide(topic.slug) ?? (topic.slug === "chain-rule" ? chainRuleGuide : topic.slug === "implicit-differentiation" ? implicitDifferentiationGuide : undefined);
+  const guide = getTopicGuide(topic.slug) ?? getUnit2TopicGuide(topic.slug) ?? getUnit2Topic5Guide(topic.slug) ?? (topic.slug === "chain-rule" ? chainRuleGuide : topic.slug === "implicit-differentiation" ? implicitDifferentiationGuide : topic.slug === "derivatives-of-inverse-functions" ? inverseFunctionsGuide : undefined);
 
   return (
     <PageShell eyebrow={`unit ${unit.number} · ${unit.title.toLowerCase()}`} title={topic.title} description={guide ? undefined : topic.blurb}>
