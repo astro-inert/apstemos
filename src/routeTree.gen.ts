@@ -9,104 +9,38 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as StatisticsRouteImport } from './routes/statistics'
-import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
-import { Route as PhysicsCMechanicsRouteImport } from './routes/physics-c-mechanics'
-import { Route as PhysicsCElectricityMagnetismRouteImport } from './routes/physics-c-electricity-magnetism'
-import { Route as Physics2RouteImport } from './routes/physics-2'
-import { Route as Physics1RouteImport } from './routes/physics-1'
-import { Route as McpRouteImport } from './routes/mcp'
-import { Route as LatexMasterSheetRouteImport } from './routes/latex-master-sheet'
-import { Route as FrqsByTypeRouteImport } from './routes/frqs-by-type'
-import { Route as ExamStrategyRouteImport } from './routes/exam-strategy'
-import { Route as CommonMistakesRouteImport } from './routes/common-mistakes'
-import { Route as BcTrackRouteImport } from './routes/bc-track'
-import { Route as AuthRouteImport } from './routes/auth'
-import { Route as AbTrackRouteImport } from './routes/ab-track'
+import { Route as IndexRouteImport } from './routes/index'
 import { Route as R108PointsBreakdownRouteImport } from './routes/108-points-breakdown'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as TopicRundownIndexRouteImport } from './routes/topic-rundown.index'
-import { Route as QuestionNavigatorIndexRouteImport } from './routes/question-navigator.index'
-import { Route as TopicRundownUnitIdRouteImport } from './routes/topic-rundown.$unitId'
-import { Route as AuthenticatedPredictRouteImport } from './routes/_authenticated/predict'
-import { Route as AuthenticatedPracticeRouteImport } from './routes/_authenticated/practice'
-import { Route as AuthenticatedCommandCenterRouteImport } from './routes/_authenticated/command-center'
+import { Route as AbTrackRouteImport } from './routes/ab-track'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as BcTrackRouteImport } from './routes/bc-track'
+import { Route as CommonMistakesRouteImport } from './routes/common-mistakes'
+import { Route as ExamStrategyRouteImport } from './routes/exam-strategy'
+import { Route as FrqsByTypeRouteImport } from './routes/frqs-by-type'
+import { Route as LatexMasterSheetRouteImport } from './routes/latex-master-sheet'
+import { Route as McpRouteImport } from './routes/mcp'
+import { Route as Physics1RouteImport } from './routes/physics-1'
+import { Route as Physics2RouteImport } from './routes/physics-2'
+import { Route as PhysicsCElectricityMagnetismRouteImport } from './routes/physics-c-electricity-magnetism'
+import { Route as PhysicsCMechanicsRouteImport } from './routes/physics-c-mechanics'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as StatisticsRouteImport } from './routes/statistics'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
+import { Route as AuthenticatedCommandCenterRouteImport } from './routes/_authenticated/command-center'
+import { Route as AuthenticatedPracticeRouteImport } from './routes/_authenticated/practice'
+import { Route as AuthenticatedPredictRouteImport } from './routes/_authenticated/predict'
+import { Route as QuestionNavigatorIndexRouteImport } from './routes/question-navigator.index'
+import { Route as TopicRundownIndexRouteImport } from './routes/topic-rundown.index'
+import { Route as TopicRundownUnitIdRouteImport } from './routes/topic-rundown.$unitId'
+import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
+import { Route as AuthenticatedAdminPredictionsRouteImport } from './routes/_authenticated/admin/predictions'
 import { Route as QuestionNavigatorUnitIdIndexRouteImport } from './routes/question-navigator.$unitId.index'
 import { Route as QuestionNavigatorUnitIdTopicIdRouteImport } from './routes/question-navigator.$unitId.$topicId'
-import { Route as AuthenticatedAdminPredictionsRouteImport } from './routes/_authenticated/admin/predictions'
-import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 
-const StatisticsRoute = StatisticsRouteImport.update({
-  id: '/statistics',
-  path: '/statistics',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
-  id: '/sitemap.xml',
-  path: '/sitemap.xml',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PhysicsCMechanicsRoute = PhysicsCMechanicsRouteImport.update({
-  id: '/physics-c-mechanics',
-  path: '/physics-c-mechanics',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PhysicsCElectricityMagnetismRoute =
-  PhysicsCElectricityMagnetismRouteImport.update({
-    id: '/physics-c-electricity-magnetism',
-    path: '/physics-c-electricity-magnetism',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const Physics2Route = Physics2RouteImport.update({
-  id: '/physics-2',
-  path: '/physics-2',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const Physics1Route = Physics1RouteImport.update({
-  id: '/physics-1',
-  path: '/physics-1',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const McpRoute = McpRouteImport.update({
-  id: '/mcp',
-  path: '/mcp',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LatexMasterSheetRoute = LatexMasterSheetRouteImport.update({
-  id: '/latex-master-sheet',
-  path: '/latex-master-sheet',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FrqsByTypeRoute = FrqsByTypeRouteImport.update({
-  id: '/frqs-by-type',
-  path: '/frqs-by-type',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ExamStrategyRoute = ExamStrategyRouteImport.update({
-  id: '/exam-strategy',
-  path: '/exam-strategy',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CommonMistakesRoute = CommonMistakesRouteImport.update({
-  id: '/common-mistakes',
-  path: '/common-mistakes',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BcTrackRoute = BcTrackRouteImport.update({
-  id: '/bc-track',
-  path: '/bc-track',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthRoute = AuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AbTrackRoute = AbTrackRouteImport.update({
-  id: '/ab-track',
-  path: '/ab-track',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const R108PointsBreakdownRoute = R108PointsBreakdownRouteImport.update({
@@ -118,9 +52,102 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const AbTrackRoute = AbTrackRouteImport.update({
+  id: '/ab-track',
+  path: '/ab-track',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BcTrackRoute = BcTrackRouteImport.update({
+  id: '/bc-track',
+  path: '/bc-track',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CommonMistakesRoute = CommonMistakesRouteImport.update({
+  id: '/common-mistakes',
+  path: '/common-mistakes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExamStrategyRoute = ExamStrategyRouteImport.update({
+  id: '/exam-strategy',
+  path: '/exam-strategy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FrqsByTypeRoute = FrqsByTypeRouteImport.update({
+  id: '/frqs-by-type',
+  path: '/frqs-by-type',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LatexMasterSheetRoute = LatexMasterSheetRouteImport.update({
+  id: '/latex-master-sheet',
+  path: '/latex-master-sheet',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const McpRoute = McpRouteImport.update({
+  id: '/mcp',
+  path: '/mcp',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Physics1Route = Physics1RouteImport.update({
+  id: '/physics-1',
+  path: '/physics-1',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Physics2Route = Physics2RouteImport.update({
+  id: '/physics-2',
+  path: '/physics-2',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PhysicsCElectricityMagnetismRoute =
+  PhysicsCElectricityMagnetismRouteImport.update({
+    id: '/physics-c-electricity-magnetism',
+    path: '/physics-c-electricity-magnetism',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const PhysicsCMechanicsRoute = PhysicsCMechanicsRouteImport.update({
+  id: '/physics-c-mechanics',
+  path: '/physics-c-mechanics',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StatisticsRoute = StatisticsRouteImport.update({
+  id: '/statistics',
+  path: '/statistics',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Char91DotwellKnownChar93OauthProtectedResourceRoute =
+  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
+    id: '/.well-known/oauth-protected-resource',
+    path: '/.well-known/oauth-protected-resource',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AuthenticatedCommandCenterRoute =
+  AuthenticatedCommandCenterRouteImport.update({
+    id: '/command-center',
+    path: '/command-center',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedPracticeRoute = AuthenticatedPracticeRouteImport.update({
+  id: '/practice',
+  path: '/practice',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedPredictRoute = AuthenticatedPredictRouteImport.update({
+  id: '/predict',
+  path: '/predict',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const QuestionNavigatorIndexRoute = QuestionNavigatorIndexRouteImport.update({
+  id: '/question-navigator/',
+  path: '/question-navigator/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TopicRundownIndexRoute = TopicRundownIndexRouteImport.update({
@@ -128,37 +155,21 @@ const TopicRundownIndexRoute = TopicRundownIndexRouteImport.update({
   path: '/topic-rundown/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const QuestionNavigatorIndexRoute = QuestionNavigatorIndexRouteImport.update({
-  id: '/question-navigator/',
-  path: '/question-navigator/',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const TopicRundownUnitIdRoute = TopicRundownUnitIdRouteImport.update({
   id: '/topic-rundown/$unitId',
   path: '/topic-rundown/$unitId',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedPredictRoute = AuthenticatedPredictRouteImport.update({
-  id: '/predict',
-  path: '/predict',
-  getParentRoute: () => AuthenticatedRouteRoute,
+const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
+  id: '/.lovable/oauth/consent',
+  path: '/.lovable/oauth/consent',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedPracticeRoute = AuthenticatedPracticeRouteImport.update({
-  id: '/practice',
-  path: '/practice',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedCommandCenterRoute =
-  AuthenticatedCommandCenterRouteImport.update({
-    id: '/command-center',
-    path: '/command-center',
+const AuthenticatedAdminPredictionsRoute =
+  AuthenticatedAdminPredictionsRouteImport.update({
+    id: '/admin/predictions',
+    path: '/admin/predictions',
     getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
-const Char91DotwellKnownChar93OauthProtectedResourceRoute =
-  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
-    id: '/.well-known/oauth-protected-resource',
-    path: '/.well-known/oauth-protected-resource',
-    getParentRoute: () => rootRouteImport,
   } as any)
 const QuestionNavigatorUnitIdIndexRoute =
   QuestionNavigatorUnitIdIndexRouteImport.update({
@@ -172,17 +183,6 @@ const QuestionNavigatorUnitIdTopicIdRoute =
     path: '/question-navigator/$unitId/$topicId',
     getParentRoute: () => rootRouteImport,
   } as any)
-const AuthenticatedAdminPredictionsRoute =
-  AuthenticatedAdminPredictionsRouteImport.update({
-    id: '/admin/predictions',
-    path: '/admin/predictions',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
-const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
-  id: '/.lovable/oauth/consent',
-  path: '/.lovable/oauth/consent',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -393,102 +393,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/statistics': {
-      id: '/statistics'
-      path: '/statistics'
-      fullPath: '/statistics'
-      preLoaderRoute: typeof StatisticsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sitemap.xml': {
-      id: '/sitemap.xml'
-      path: '/sitemap.xml'
-      fullPath: '/sitemap.xml'
-      preLoaderRoute: typeof SitemapDotxmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/physics-c-mechanics': {
-      id: '/physics-c-mechanics'
-      path: '/physics-c-mechanics'
-      fullPath: '/physics-c-mechanics'
-      preLoaderRoute: typeof PhysicsCMechanicsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/physics-c-electricity-magnetism': {
-      id: '/physics-c-electricity-magnetism'
-      path: '/physics-c-electricity-magnetism'
-      fullPath: '/physics-c-electricity-magnetism'
-      preLoaderRoute: typeof PhysicsCElectricityMagnetismRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/physics-2': {
-      id: '/physics-2'
-      path: '/physics-2'
-      fullPath: '/physics-2'
-      preLoaderRoute: typeof Physics2RouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/physics-1': {
-      id: '/physics-1'
-      path: '/physics-1'
-      fullPath: '/physics-1'
-      preLoaderRoute: typeof Physics1RouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/mcp': {
-      id: '/mcp'
-      path: '/mcp'
-      fullPath: '/mcp'
-      preLoaderRoute: typeof McpRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/latex-master-sheet': {
-      id: '/latex-master-sheet'
-      path: '/latex-master-sheet'
-      fullPath: '/latex-master-sheet'
-      preLoaderRoute: typeof LatexMasterSheetRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/frqs-by-type': {
-      id: '/frqs-by-type'
-      path: '/frqs-by-type'
-      fullPath: '/frqs-by-type'
-      preLoaderRoute: typeof FrqsByTypeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/exam-strategy': {
-      id: '/exam-strategy'
-      path: '/exam-strategy'
-      fullPath: '/exam-strategy'
-      preLoaderRoute: typeof ExamStrategyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/common-mistakes': {
-      id: '/common-mistakes'
-      path: '/common-mistakes'
-      fullPath: '/common-mistakes'
-      preLoaderRoute: typeof CommonMistakesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/bc-track': {
-      id: '/bc-track'
-      path: '/bc-track'
-      fullPath: '/bc-track'
-      preLoaderRoute: typeof BcTrackRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/ab-track': {
-      id: '/ab-track'
-      path: '/ab-track'
-      fullPath: '/ab-track'
-      preLoaderRoute: typeof AbTrackRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/108-points-breakdown': {
@@ -505,39 +414,116 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/ab-track': {
+      id: '/ab-track'
+      path: '/ab-track'
+      fullPath: '/ab-track'
+      preLoaderRoute: typeof AbTrackRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/topic-rundown/': {
-      id: '/topic-rundown/'
-      path: '/topic-rundown'
-      fullPath: '/topic-rundown/'
-      preLoaderRoute: typeof TopicRundownIndexRouteImport
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/question-navigator/': {
-      id: '/question-navigator/'
-      path: '/question-navigator'
-      fullPath: '/question-navigator/'
-      preLoaderRoute: typeof QuestionNavigatorIndexRouteImport
+    '/bc-track': {
+      id: '/bc-track'
+      path: '/bc-track'
+      fullPath: '/bc-track'
+      preLoaderRoute: typeof BcTrackRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/topic-rundown/$unitId': {
-      id: '/topic-rundown/$unitId'
-      path: '/topic-rundown/$unitId'
-      fullPath: '/topic-rundown/$unitId'
-      preLoaderRoute: typeof TopicRundownUnitIdRouteImport
+    '/common-mistakes': {
+      id: '/common-mistakes'
+      path: '/common-mistakes'
+      fullPath: '/common-mistakes'
+      preLoaderRoute: typeof CommonMistakesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/predict': {
-      id: '/_authenticated/predict'
-      path: '/predict'
-      fullPath: '/predict'
-      preLoaderRoute: typeof AuthenticatedPredictRouteImport
+    '/exam-strategy': {
+      id: '/exam-strategy'
+      path: '/exam-strategy'
+      fullPath: '/exam-strategy'
+      preLoaderRoute: typeof ExamStrategyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/frqs-by-type': {
+      id: '/frqs-by-type'
+      path: '/frqs-by-type'
+      fullPath: '/frqs-by-type'
+      preLoaderRoute: typeof FrqsByTypeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/latex-master-sheet': {
+      id: '/latex-master-sheet'
+      path: '/latex-master-sheet'
+      fullPath: '/latex-master-sheet'
+      preLoaderRoute: typeof LatexMasterSheetRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mcp': {
+      id: '/mcp'
+      path: '/mcp'
+      fullPath: '/mcp'
+      preLoaderRoute: typeof McpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/physics-1': {
+      id: '/physics-1'
+      path: '/physics-1'
+      fullPath: '/physics-1'
+      preLoaderRoute: typeof Physics1RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/physics-2': {
+      id: '/physics-2'
+      path: '/physics-2'
+      fullPath: '/physics-2'
+      preLoaderRoute: typeof Physics2RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/physics-c-electricity-magnetism': {
+      id: '/physics-c-electricity-magnetism'
+      path: '/physics-c-electricity-magnetism'
+      fullPath: '/physics-c-electricity-magnetism'
+      preLoaderRoute: typeof PhysicsCElectricityMagnetismRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/physics-c-mechanics': {
+      id: '/physics-c-mechanics'
+      path: '/physics-c-mechanics'
+      fullPath: '/physics-c-mechanics'
+      preLoaderRoute: typeof PhysicsCMechanicsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/statistics': {
+      id: '/statistics'
+      path: '/statistics'
+      fullPath: '/statistics'
+      preLoaderRoute: typeof StatisticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.well-known/oauth-protected-resource': {
+      id: '/.well-known/oauth-protected-resource'
+      path: '/.well-known/oauth-protected-resource'
+      fullPath: '/.well-known/oauth-protected-resource'
+      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/command-center': {
+      id: '/_authenticated/command-center'
+      path: '/command-center'
+      fullPath: '/command-center'
+      preLoaderRoute: typeof AuthenticatedCommandCenterRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/practice': {
@@ -547,19 +533,47 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPracticeRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/command-center': {
-      id: '/_authenticated/command-center'
-      path: '/command-center'
-      fullPath: '/command-center'
-      preLoaderRoute: typeof AuthenticatedCommandCenterRouteImport
+    '/_authenticated/predict': {
+      id: '/_authenticated/predict'
+      path: '/predict'
+      fullPath: '/predict'
+      preLoaderRoute: typeof AuthenticatedPredictRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/.well-known/oauth-protected-resource': {
-      id: '/.well-known/oauth-protected-resource'
-      path: '/.well-known/oauth-protected-resource'
-      fullPath: '/.well-known/oauth-protected-resource'
-      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
+    '/question-navigator/': {
+      id: '/question-navigator/'
+      path: '/question-navigator'
+      fullPath: '/question-navigator/'
+      preLoaderRoute: typeof QuestionNavigatorIndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/topic-rundown/': {
+      id: '/topic-rundown/'
+      path: '/topic-rundown'
+      fullPath: '/topic-rundown/'
+      preLoaderRoute: typeof TopicRundownIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/topic-rundown/$unitId': {
+      id: '/topic-rundown/$unitId'
+      path: '/topic-rundown/$unitId'
+      fullPath: '/topic-rundown/$unitId'
+      preLoaderRoute: typeof TopicRundownUnitIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.lovable/oauth/consent': {
+      id: '/.lovable/oauth/consent'
+      path: '/.lovable/oauth/consent'
+      fullPath: '/.lovable/oauth/consent'
+      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/admin/predictions': {
+      id: '/_authenticated/admin/predictions'
+      path: '/admin/predictions'
+      fullPath: '/admin/predictions'
+      preLoaderRoute: typeof AuthenticatedAdminPredictionsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/question-navigator/$unitId/': {
       id: '/question-navigator/$unitId/'
@@ -573,20 +587,6 @@ declare module '@tanstack/react-router' {
       path: '/question-navigator/$unitId/$topicId'
       fullPath: '/question-navigator/$unitId/$topicId'
       preLoaderRoute: typeof QuestionNavigatorUnitIdTopicIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_authenticated/admin/predictions': {
-      id: '/_authenticated/admin/predictions'
-      path: '/admin/predictions'
-      fullPath: '/admin/predictions'
-      preLoaderRoute: typeof AuthenticatedAdminPredictionsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/.lovable/oauth/consent': {
-      id: '/.lovable/oauth/consent'
-      path: '/.lovable/oauth/consent'
-      fullPath: '/.lovable/oauth/consent'
-      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
       parentRoute: typeof rootRouteImport
     }
   }

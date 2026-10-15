@@ -4,7 +4,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { getPerformanceSnapshot } from "@/lib/performance.functions";
 import { getScoreEstimate } from "@/lib/prediction.functions";
-import { HOME_DEMO, type DemoMove, type DemoSubtopic } from "@/lib/home-demo";
+import { HOME_DEMO, type DemoMove, type DemoTopic } from "@/lib/home-demo";
 import type { SubjectConfig } from "@/lib/subjects";
 
 export interface InstrumentData {
@@ -13,7 +13,7 @@ export interface InstrumentData {
   /** null when the user has too little evidence for an honest MCQ-based estimate */
   predicted: number | null;
   completedQuestions: number;
-  subtopics: DemoSubtopic[];
+  topics: DemoTopic[];
   moves: DemoMove[];
   units: { label: string; name: string; mastery: number }[];
 }
@@ -59,7 +59,7 @@ export function useHomeInstrument(subject: SubjectConfig): InstrumentData {
     live: false,
     predicted: demo.predicted,
     completedQuestions: demo.completedQuestions,
-    subtopics: demo.subtopics,
+    topics: demo.topics,
     moves: demo.moves,
     units: subject.units.map((u, i) => ({
       label: `Unit ${u.number}`,
@@ -71,7 +71,7 @@ export function useHomeInstrument(subject: SubjectConfig): InstrumentData {
   if (!data || data.attempts_count === 0) return fallback;
 
   const ranked = [...data.subtopics].sort((a, b) => b.accuracy - a.accuracy);
-  const subtopics: DemoSubtopic[] = ranked
+  const topics: DemoTopic[] = ranked
     .slice(0, 5)
     .map((s) => ({ name: s.topic_title, mastery: Math.round(s.accuracy) }));
 
@@ -101,7 +101,7 @@ export function useHomeInstrument(subject: SubjectConfig): InstrumentData {
     live: true,
     predicted: estimate?.estimated_score ?? null,
     completedQuestions: data.attempts_count,
-    subtopics: subtopics.length ? subtopics : demo.subtopics,
+    topics: topics.length ? topics : demo.topics,
     moves,
     units,
   };
