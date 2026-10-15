@@ -89,8 +89,8 @@ const sharedTool = (
 export const SUBJECTS: Record<SubjectId, SubjectConfig> = {
   "calc-bc": {
     id: "calc-bc",
-    label: "AP Calculus BC",
-    navLabel: "AP Calculus BC",
+    label: "AP Calculus",
+    navLabel: "AP Calculus",
     brand: "APCalc",
     path: "/",
     icon: Sigma,
@@ -512,7 +512,7 @@ export const SUBJECT_MENU: SubjectMenuGroup[] = [
       { subjectId: "physics-c-em" },
     ],
   },
-  { id: "calc-bc", label: "AP Calculus BC", icon: Sigma, subjectId: "calc-bc" },
+  { id: "calc-bc", label: "AP Calculus", icon: Sigma, subjectId: "calc-bc" },
   { id: "stats", label: "AP Statistics", icon: ChartNoAxesCombined, subjectId: "stats" },
 ];
 
