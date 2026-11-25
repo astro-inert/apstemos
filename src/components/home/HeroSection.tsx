@@ -23,7 +23,7 @@ export function HeroSection({ subject, data }: { subject: SubjectConfig; data: I
     <section className="study-hero relative min-w-0 max-w-full overflow-hidden border-b border-border/60 px-5 pb-16 pt-12 sm:px-8 sm:pb-24 sm:pt-20">
       <CalcLines variant="curve" className="-right-10 top-10 hidden w-[22rem] md:block lg:right-[4%]" /><CalcLines variant="field" className="-left-16 top-24 hidden w-[16rem] opacity-20 lg:block" />
       <div className="relative mx-auto min-w-0 max-w-6xl">
-        <motion.div initial={reduced ? { opacity: 1 } : { opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ type: "spring", stiffness: 110, damping: 20 }} className="mx-auto max-w-4xl text-center">
+        <motion.div initial={reduced ? { opacity: 1 } : { opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ type: "spring", stiffness: 110, damping: 20 }} className="study-hero-copy mx-auto max-w-4xl text-center">
           <div className="study-stickers" aria-hidden="true">{calculus ? <><span className="study-sticker">∫</span><span className="study-sticker"><Flower2 size={32} /></span><span className="study-sticker">π</span></> : <>{StickerIcons.map((Icon, index) => <span className="study-sticker" key={index}><Icon size={30} strokeWidth={2} /></span>)}</>}</div><MicroLabel className="study-eyebrow mb-5">{calculus ? "AP Calculus AB & BC" : subject.navLabel}</MicroLabel>
           <h1 className="study-title font-display text-[2.8rem] font-extrabold tracking-[-0.035em] leading-[1.06] sm:text-[5rem]">Stop studying.<br />Start <span className="text-primary">optimizing.</span></h1>
           <p className="mx-auto mt-5 max-w-2xl text-[16px] leading-7 text-secondary-foreground sm:text-[17px]">
@@ -36,7 +36,7 @@ export function HeroSection({ subject, data }: { subject: SubjectConfig; data: I
           <p className="num mt-5 text-[12px] text-muted-foreground">{calculus ? "450+ questions · AB & BC · topic analytics · MCQ + FRQ guidance" : `${subject.navLabel} content coming soon`}</p>
         </motion.div>
       </div>
-      <div className="mx-auto mt-12 max-w-6xl sm:mt-16"><Instrument subject={subject} data={data} /></div>
+      <div className="study-instrument mx-auto mt-12 max-w-6xl sm:mt-16"><Instrument subject={subject} data={data} /></div>
     </section>
   );
 }
