@@ -16,6 +16,7 @@ import {
   type QuestionTemplate,
   type Track,
 } from "./question-templates";
+import { UNIT3_STATIC_BANK, UNIT3_STATIC_BY_KEY } from "./unit3-static-bank";
 import { UNIT2_STATIC_BANK, UNIT2_STATIC_BY_KEY } from "./unit2-static-bank";
 
 /** Canonical Practice bank: 242 Unit 1 items + 210 audited Unit 2 items. */
@@ -105,20 +106,21 @@ function representationFromLabel(label: string): Representation {
 }
 
 function buildStaticUnit2(key: string): GeneratedQuestion | null {
-  const q = UNIT2_STATIC_BY_KEY.get(key);
+  const q = UNIT2_STATIC_BY_KEY.get(key) ?? UNIT3_STATIC_BY_KEY.get(key);
   if (!q) return null;
   const representation = representationFromLabel(q.representation);
-  const manifestation = `unit2-static:${q.key}`;
+  const isUnit3 = UNIT3_STATIC_BY_KEY.has(key);
+  const manifestation = `unit${isUnit3 ? 3 : 2}-static:${q.key}`;
   const choices = q.choices.map((c) => ({ label: c.label, text: asMath(c.text) }));
   const answer = choices.find((c) => c.label === q.answer_label);
   if (!answer || choices.length !== 4 || new Set(choices.map((c) => c.text)).size !== 4) return null;
   return {
     key:q.key,
     id:uuidFromKey(`static::${q.key}`),
-    template_id:"unit2-audited-static",
+    template_id:isUnit3?"unit3-review-static":"unit2-audited-static",
     variant:0,
     type:"MCQ",
-    unit_slug:UNIT2,
+    unit_slug:isUnit3?"unit-3-differentiation-composite-implicit-inverse":UNIT2,
     topic_slug:q.topic_slug,
     ced_topic:q.ced_topic,
     manifestation,
@@ -187,7 +189,7 @@ function unit1Keys(): string[] {
   UNIT1_KEY_CACHE=keys; return keys;
 }
 
-function allKeys(): string[] { return [...unit1Keys(), ...UNIT2_STATIC_BANK.map((q)=>q.key)]; }
+function allKeys(): string[] { return [...unit1Keys(), ...UNIT2_STATIC_BANK.map((q)=>q.key), ...UNIT3_STATIC_BANK.map((q)=>q.key)]; }
 
 export type BankFilter={unit_slug?:string;topic_slug?:string;track?:"AB"|"BC";calculator?:boolean;difficulty?:Difficulty};
 export function bankKeys(filter?:BankFilter):string[]{
