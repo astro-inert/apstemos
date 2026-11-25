@@ -17,6 +17,17 @@ const resources = [
   { to: "/108-points-breakdown", label: "108-Point Map" },
 ] as const;
 
+// One dash per course, in the order shown under the wordmark. The active
+// course's dash lights up in its own colour; the rest stay dimmed.
+const PALETTE: { id: SubjectId; color: string }[] = [
+  { id: "calc-bc", color: "#BF4869" },
+  { id: "physics-1", color: "#386E91" },
+  { id: "physics-2", color: "#347876" },
+  { id: "physics-c-mech", color: "#4D678F" },
+  { id: "physics-c-em", color: "#88608D" },
+  { id: "stats", color: "#986329" },
+];
+
 export function SiteNav({ subject = "calc-bc" }: { subject?: SubjectId }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -71,13 +82,25 @@ export function SiteNav({ subject = "calc-bc" }: { subject?: SubjectId }) {
               <span className="relative whitespace-nowrap font-display text-[14px] font-bold leading-[1.15] tracking-[-0.055em] text-foreground sm:text-[16px]">
                 AP STEM OS
               </span>
-              <span className="relative mt-[4px] grid h-[3px] grid-cols-6 gap-[2px] rounded-full" >
-                <span className="rounded-full bg-[#BF4869]" />
-                <span className="rounded-full bg-[#386E91]" />
-                <span className="rounded-full bg-[#347876]" />
-                <span className="rounded-full bg-[#4D678F]" />
-                <span className="rounded-full bg-[#88608D]" />
-                <span className="rounded-full bg-[#986329]" />
+              <span className="relative mt-[4px] grid h-[3px] grid-cols-6 gap-[2px] rounded-full">
+                {PALETTE.map((p) => {
+                  const on = p.id === subject;
+                  return (
+                    <span
+                      key={p.id}
+                      className="rounded-full transition-all duration-300"
+                      style={
+                        on
+                          ? {
+                              background: `color-mix(in srgb, ${p.color} 72%, #ffffff)`,
+                              boxShadow: `0 0 3px ${p.color}, 0 0 9px ${p.color}, 0 0 18px color-mix(in srgb, ${p.color} 55%, transparent)`,
+                              transform: "scaleY(1.9)",
+                            }
+                          : { background: p.color, opacity: 0.28 }
+                      }
+                    />
+                  );
+                })}
               </span>
             </span>
           </Link>

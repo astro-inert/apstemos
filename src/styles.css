@@ -177,6 +177,6 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--ring); outline-
 
 /* Navigation */
 .subject-theme>header nav,.study-home>header nav{max-width:calc(var(--w-wide) + 2*var(--gutter))}
-.subject-theme>header nav a[data-status="active"],.subject-theme>header nav a.active{color:var(--primary);box-shadow:inset 0 -2px 0 var(--primary)}
+.subject-theme>header nav a[data-status="active"]:not(.logo-lockup),.subject-theme>header nav a.active:not(.logo-lockup){color:var(--primary);box-shadow:inset 0 -2px 0 var(--primary)}
 #mobile-navigation{border-top:1px solid var(--border);background:var(--background)}
 #mobile-navigation a{min-height:2.875rem;display:flex;align-items:center;border-bottom:1px solid color-mix(in srgb,var(--border) 70%,transparent);border-radius:0!important}
