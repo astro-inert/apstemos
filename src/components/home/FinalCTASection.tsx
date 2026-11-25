@@ -1,6 +1,7 @@
 import { ArrowRight } from "lucide-react";
 import { isSubjectLive, type SubjectConfig } from "@/lib/subjects";
 import { MagneticLink } from "./HeroSection";
+import { CalcLines } from "./CalcLines";
 import { ComingSoon, Reveal, Section } from "./primitives";
 
 export function FinalCTASection({ subject }: { subject: SubjectConfig }) {
@@ -8,6 +9,7 @@ export function FinalCTASection({ subject }: { subject: SubjectConfig }) {
   return (
     <Section className="border-t border-border">
       <div className="relative overflow-hidden rounded-2xl border border-border bg-card px-6 py-16 text-center shadow-card sm:px-12 sm:py-24">
+        <CalcLines variant="riemann" className="-bottom-6 -left-6 w-[18rem] opacity-25 sm:w-[24rem]" />
         <div className="relative mx-auto max-w-3xl">
           <Reveal>
             <h2 className="mx-auto max-w-2xl font-display text-4xl font-semibold leading-[0.98] sm:text-6xl">
