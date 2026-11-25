@@ -12,6 +12,7 @@ import { chainRuleGuide } from "@/lib/navigator-guide-unit3-chain";
 import { implicitDifferentiationGuide } from "@/lib/navigator-guide-unit3-implicit";
 import { inverseFunctionsGuide } from "@/lib/navigator-guide-unit3-inverse";
 import { inverseTrigGuide } from "@/lib/navigator-guide-unit3-inverse-trig";
+import { higherOrderGuide } from "@/lib/navigator-guide-unit3-higher-order";
 import "@/navigator-mobile.css";
 
 export const Route = createFileRoute("/question-navigator/$unitId/$topicId")({
@@ -48,7 +49,7 @@ const sections = [
 
 function Page() {
   const { unit, topic } = Route.useLoaderData() as { unit: UnitEntry; topic: TopicEntry };
-  const guide = getTopicGuide(topic.slug) ?? getUnit2TopicGuide(topic.slug) ?? getUnit2Topic5Guide(topic.slug) ?? (topic.slug === "chain-rule" ? chainRuleGuide : topic.slug === "implicit-differentiation" ? implicitDifferentiationGuide : topic.slug === "derivatives-of-inverse-functions" ? inverseFunctionsGuide : topic.slug === "inverse-trig-derivatives" ? inverseTrigGuide : undefined);
+  const guide = getTopicGuide(topic.slug) ?? getUnit2TopicGuide(topic.slug) ?? getUnit2Topic5Guide(topic.slug) ?? (topic.slug === "chain-rule" ? chainRuleGuide : topic.slug === "implicit-differentiation" ? implicitDifferentiationGuide : topic.slug === "derivatives-of-inverse-functions" ? inverseFunctionsGuide : topic.slug === "inverse-trig-derivatives" ? inverseTrigGuide : topic.slug === "higher-order-derivatives" ? higherOrderGuide : undefined);
 
   return (
     <PageShell eyebrow={`unit ${unit.number} · ${unit.title.toLowerCase()}`} title={topic.title} description={guide ? undefined : topic.blurb}>
