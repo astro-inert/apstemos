@@ -90,29 +90,3 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--ring); outline-
 .subject-theme[data-subject="physics-c-em"] .study-sticker:first-child { background: #f2e3f3; color: #754e79; }
 .subject-theme[data-subject="physics-c-em"] .study-sticker:nth-child(2) { background: #dceff7; color: #386b83; }
 .subject-theme[data-subject="physics-c-em"] .study-sticker:nth-child(3) { background: #fff0d4; color: #947038; }
-
-/* ── Academic Field Manual layer (homepage) ───────────────────────────
-   One paper canvas, hairline rules, squared geometry, color only where it
-   carries meaning. Scoped to .study-home so app surfaces are untouched. */
-.study-home { background: oklch(0.985 0.004 85); }
-.study-home > section,
-.study-home > section:nth-of-type(n),
-.study-home .study-hero { background: transparent !important; border-bottom: 1px solid var(--border); }
-.study-home .study-stickers { display: none; }
-.study-home .study-hero > * { position: relative; }
-.study-home .study-hero::before,
-.study-home .study-hero::after { display: none !important; }
-.study-home .study-title { font-weight: 700; letter-spacing: -0.03em; }
-.study-home .study-title .text-primary { color: var(--primary); background: none; -webkit-text-fill-color: currentColor; }
-/* Squared, ruled geometry instead of soft capsules */
-.study-home .rounded-2xl, .study-home .rounded-3xl, .study-home .rounded-xl { border-radius: 4px !important; }
-.study-home .rounded-full:not(.h-1):not(.h-1\.5):not(.h-2\.5):not(.h-full):not([class*="h-[27px]"]) { border-radius: 3px !important; }
-.study-home .shadow-card, .study-home .instrument-surface { box-shadow: none !important; }
-.study-home .instrument-surface { border: 1px solid var(--border); border-radius: 4px; }
-/* Flat, single-color data bars */
-.study-home .bg-primary-grad { background: var(--primary) !important; }
-.study-home .rounded-full.h-2\.5, .study-home .rounded-full.h-1\.5, .study-home .rounded-full.h-full { border-radius: 1px !important; }
-/* Labels read as manual section marks, not tags */
-.study-home .bg-accent\/60 { background: transparent !important; }
-.study-home .rounded-lg, .study-home .rounded-md, .study-home [class*="rounded-["] { border-radius: 3px !important; }
-.study-home .study-eyebrow { border-radius: 0 !important; border: 0 !important; border-bottom: 1px solid var(--primary) !important; background: transparent !important; padding: 0 0 .25rem !important; }
