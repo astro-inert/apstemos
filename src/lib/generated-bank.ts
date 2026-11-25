@@ -67,7 +67,7 @@ export const VARIANTS_PER_TEMPLATE = 24;
 export type GeneratedChoice = { label: string; text: string };
 export type GeneratedQuestion = {
   key: string; id: string; template_id: string; variant: number; type: "MCQ";
-  unit_slug: string; topic_slug: string; ced_topic: string; manifestation: string;
+  unit_slug: string; topic_slug: string; ced_topic: string; secondary_ced_topics?: string[]; manifestation: string;
   representation: Representation; reasoning: ReasoningType; algebra: AlgebraicStructure;
   structural_signature: string; difficulty: Difficulty; track: Track; calculator: boolean;
   ap_value: number; prompt: string; figure?: Figure; choices: GeneratedChoice[];
@@ -122,6 +122,7 @@ function buildStaticUnit2(key: string): GeneratedQuestion | null {
     unit_slug:q.unit_slug,
     topic_slug:q.topic_slug,
     ced_topic:q.ced_topic,
+    secondary_ced_topics:q.secondary_ced_topics,
     manifestation,
     representation,
     reasoning:"computation",

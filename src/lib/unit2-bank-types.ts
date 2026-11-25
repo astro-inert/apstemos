@@ -9,6 +9,7 @@ export type StaticUnit2Question = {
   unit_slug:string;
   topic_slug:string;
   ced_topic:string;
+  secondary_ced_topics?:string[];
   difficulty:Difficulty;
   calculator:boolean;
   prompt:string;
