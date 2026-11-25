@@ -92,7 +92,7 @@ export function SiteNav({ subject = "calc-bc" }: { subject?: SubjectId }) {
           <NavLink to="/predict">Diagnostic</NavLink>
           <NavLink to="/command-center">Score Command Center</NavLink>
           <div className="group relative">
-            <button className="site-nav-link inline-flex min-h-10 items-center gap-1 rounded-md px-3.5 py-1.5 text-[13px] font-medium text-secondary-foreground transition-colors hover:bg-elevated hover:text-foreground">
+            <button className="inline-flex min-h-10 items-center gap-1 rounded-md px-3.5 py-1.5 text-[13px] font-medium text-secondary-foreground transition-colors hover:bg-elevated hover:text-foreground">
               Resources
               <ChevronDown className="h-3.5 w-3.5 transition-transform group-hover:rotate-180" />
             </button>
@@ -186,8 +186,8 @@ function NavLink({ to, children }: { to: string; children: React.ReactNode }) {
   return (
     <Link
       to={to}
-      className="site-nav-link rounded-md px-3.5 py-2 text-[13px] font-medium text-secondary-foreground transition-colors hover:bg-elevated hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
-      activeProps={{ className: "site-nav-link rounded-md bg-elevated px-3.5 py-2 text-[13px] font-semibold text-foreground" }}
+      className="rounded-md px-3.5 py-2 text-[13px] font-medium text-secondary-foreground transition-colors hover:bg-elevated hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+      activeProps={{ className: "rounded-md bg-elevated px-3.5 py-2 text-[13px] font-semibold text-foreground" }}
     >
       {children}
     </Link>
