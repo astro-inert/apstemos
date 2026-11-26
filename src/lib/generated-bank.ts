@@ -19,8 +19,10 @@ import {
 import { UNIT2_STATIC_BANK, UNIT2_STATIC_BY_KEY } from "./unit2-static-bank";
 import { UNIT3_STATIC_BANK, UNIT3_STATIC_BY_KEY } from "./unit3-static-bank-v6";
 
+import { LINEARIZATION_BANK } from "./unit4-linearization-bank";
 import { RELATED_RATES_BANK } from "./unit4-related-rates-bank";
 
+const linearizationByKey = new Map(LINEARIZATION_BANK.map(q => [q.key, q]));
 const relatedRatesByKey = new Map(RELATED_RATES_BANK.map(q => [q.key, q]));
 const UNIT1 = "unit-1-limits-and-continuity";
 const UNIT1_SIZE = 242;
@@ -108,7 +110,7 @@ function representationFromLabel(label: string): Representation {
 }
 
 function buildStaticQuestion(key: string): GeneratedQuestion | null {
-  const q = UNIT2_STATIC_BY_KEY.get(key) ?? UNIT3_STATIC_BY_KEY.get(key) ?? relatedRatesByKey.get(key);
+  const q = UNIT2_STATIC_BY_KEY.get(key) ?? UNIT3_STATIC_BY_KEY.get(key) ?? relatedRatesByKey.get(key) ?? linearizationByKey.get(key);
   if (!q) return null;
   const representation = representationFromLabel(q.representation);
   const unit = q.unit_slug.split("-")[1];
@@ -192,7 +194,7 @@ function unit1Keys(): string[] {
   UNIT1_KEY_CACHE=keys; return keys;
 }
 
-function allKeys(): string[] { return [...unit1Keys(), ...UNIT2_STATIC_BANK.map((q)=>q.key), ...UNIT3_STATIC_BANK.map((q)=>q.key), ...relatedRatesByKey.keys()]; }
+function allKeys(): string[] { return [...unit1Keys(), ...UNIT2_STATIC_BANK.map((q)=>q.key), ...UNIT3_STATIC_BANK.map((q)=>q.key), ...relatedRatesByKey.keys(), ...linearizationByKey.keys()]; }
 
 export type BankFilter={unit_slug?:string;topic_slug?:string;track?:"AB"|"BC";calculator?:boolean;difficulty?:Difficulty};
 export function bankKeys(filter?:BankFilter):string[]{
