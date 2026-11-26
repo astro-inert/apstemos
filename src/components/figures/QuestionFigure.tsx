@@ -13,6 +13,8 @@ import { LaTeX } from "@/components/LaTeX";
 /** Dispatches a question figure to the right renderer. */
 export function QuestionFigure({ figure, size = 280 }: { figure: Figure; size?: number }) {
   switch (figure.kind) {
+    case "illustration":
+      return <img src={figure.src} alt={figure.alt} width={size} className="my-3 h-auto max-w-full rounded bg-white" />;
     case "table":
       return <DataTable figure={figure} />;
     case "graph":

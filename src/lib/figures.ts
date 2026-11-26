@@ -106,6 +106,7 @@ export type RiemannFigure = {
 };
 
 export type Figure =
+  | { kind: "illustration"; src: string; alt: string }
   | SlopeFieldFigure
   | PiecewiseGraphFigure
   | GraphFigure

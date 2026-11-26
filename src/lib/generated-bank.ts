@@ -19,7 +19,9 @@ import {
 import { UNIT2_STATIC_BANK, UNIT2_STATIC_BY_KEY } from "./unit2-static-bank";
 import { UNIT3_STATIC_BANK, UNIT3_STATIC_BY_KEY } from "./unit3-static-bank-v6";
 
-/** Canonical Practice bank: 242 Unit 1 items + 210 audited Unit 2 items. */
+import { RELATED_RATES_BANK } from "./unit4-related-rates-bank";
+
+const relatedRatesByKey = new Map(RELATED_RATES_BANK.map(q => [q.key, q]));
 const UNIT1 = "unit-1-limits-and-continuity";
 const UNIT1_SIZE = 242;
 const UNIT2 = "unit-2-differentiation-definition-and-properties";
@@ -105,18 +107,19 @@ function representationFromLabel(label: string): Representation {
   return "symbolic";
 }
 
-function buildStaticUnit2(key: string): GeneratedQuestion | null {
-  const q = UNIT2_STATIC_BY_KEY.get(key) ?? UNIT3_STATIC_BY_KEY.get(key);
+function buildStaticQuestion(key: string): GeneratedQuestion | null {
+  const q = UNIT2_STATIC_BY_KEY.get(key) ?? UNIT3_STATIC_BY_KEY.get(key) ?? relatedRatesByKey.get(key);
   if (!q) return null;
   const representation = representationFromLabel(q.representation);
-  const manifestation = `${q.unit_slug === UNIT2 ? "unit2" : "unit3"}-static:${q.key}`;
+  const unit = q.unit_slug.split("-")[1];
+  const manifestation = `unit${unit}-static:${q.key}`;
   const choices = q.choices.map((c) => ({ label: c.label, text: asMath(c.text) }));
   const answer = choices.find((c) => c.label === q.answer_label);
   if (!answer || choices.length !== 4 || new Set(choices.map((c) => c.text)).size !== 4) return null;
   return {
     key:q.key,
     id:uuidFromKey(`static::${q.key}`),
-    template_id:q.unit_slug === UNIT2 ? "unit2-audited-static" : "unit3-reviewed-static",
+    template_id:q.unit_slug === UNIT2 ? "unit2-audited-static" : `unit${unit}-reviewed-static`,
     variant:0,
     type:"MCQ",
     unit_slug:q.unit_slug,
@@ -162,7 +165,7 @@ function buildUnit1(key: string): GeneratedQuestion | null {
 }
 
 export function buildQuestion(key: string): GeneratedQuestion | null {
-  return buildStaticUnit2(key) ?? buildUnit1(key);
+  return buildStaticQuestion(key) ?? buildUnit1(key);
 }
 
 const VARIANT_SCAN = 240;
@@ -189,7 +192,7 @@ function unit1Keys(): string[] {
   UNIT1_KEY_CACHE=keys; return keys;
 }
 
-function allKeys(): string[] { return [...unit1Keys(), ...UNIT2_STATIC_BANK.map((q)=>q.key), ...UNIT3_STATIC_BANK.map((q)=>q.key)]; }
+function allKeys(): string[] { return [...unit1Keys(), ...UNIT2_STATIC_BANK.map((q)=>q.key), ...UNIT3_STATIC_BANK.map((q)=>q.key), ...relatedRatesByKey.keys()]; }
 
 export type BankFilter={unit_slug?:string;topic_slug?:string;track?:"AB"|"BC";calculator?:boolean;difficulty?:Difficulty};
 export function bankKeys(filter?:BankFilter):string[]{
