@@ -2,13 +2,9 @@ import type { TopicGuide } from "@/lib/navigator-guides";
 export const linearizationGuide: TopicGuide = {
   "sections": [
     {
-      "id": "core",
-      "title": "Core Idea: Replace the Curve Locally",
+      "id": "core-idea",
+      "title": "The Core Idea: Approximate with the Tangent Line",
       "blocks": [
-        {
-          "kind": "prose",
-          "text": "CED Topic 4.6, CHA-3.F, CHA-3.F.1–2, suggested skill 1.F (College Board course framework, p. 87). The following families are original APSTEMOS classifications."
-        },
         {
           "kind": "prose",
           "text": "A differentiable function behaves like its tangent line to first order near the point of tangency. Knowing a value and instantaneous rate lets you estimate a nearby value without knowing the whole function."
@@ -28,6 +24,30 @@ export const linearizationGuide: TopicGuide = {
           "tone": "rule",
           "title": "Anchor versus target",
           "body": "Evaluate the derivative at the known anchor a, not at the unknown target x. The approximation is exact at a; elsewhere it may or may not be exact."
+        },
+        {
+          "kind": "prose",
+          "text": "On an interval containing both anchor and target, a differentiable concave-up function lies on or above its tangent; a concave-down function lies on or below its tangent. Strict inequalities require stronger information, such as strictly positive or negative second derivative across the interval."
+        },
+        {
+          "kind": "formula",
+          "label": "Concave up",
+          "tex": "f''>0\\ \\Longrightarrow\\ L(x)<f(x)\\quad(x\\ne a)"
+        },
+        {
+          "kind": "formula",
+          "label": "Concave down",
+          "tex": "f''<0\\ \\Longrightarrow\\ L(x)>f(x)\\quad(x\\ne a)"
+        },
+        {
+          "kind": "callout",
+          "tone": "rule",
+          "title": "Both sides of the anchor",
+          "body": "The direction of the inequality does not reverse merely because x is to the left of a. A positive derivative tells you the function increases, not whether the tangent overestimates."
+        },
+        {
+          "kind": "prose",
+          "text": "The sign of $f''$ at a single point does not establish the error direction at an arbitrary target. Check the interval between the anchor and target."
         }
       ]
     },
@@ -88,7 +108,7 @@ export const linearizationGuide: TopicGuide = {
       ]
     },
     {
-      "id": "tree",
+      "id": "strategy",
       "title": "Strategy Flowchart",
       "blocks": [
         {
@@ -140,8 +160,8 @@ export const linearizationGuide: TopicGuide = {
       ]
     },
     {
-      "id": "families",
-      "title": "Question Families & Types",
+      "id": "question-families",
+      "title": "Question Families You Must Recognize",
       "blocks": [
         {
           "kind": "list",
@@ -205,36 +225,46 @@ export const linearizationGuide: TopicGuide = {
             "G2: Reject overestimate claims based solely on increasing/decreasing behavior.",
             "G3: Select a valid setup and interpret calculator output."
           ]
-        }
-      ]
-    },
-    {
-      "id": "error-direction",
-      "title": "Why Concavity Controls Error",
-      "blocks": [
-        {
-          "kind": "prose",
-          "text": "On an interval containing both anchor and target, a differentiable concave-up function lies on or above its tangent; a concave-down function lies on or below its tangent. Strict inequalities require stronger information, such as strictly positive or negative second derivative across the interval."
         },
         {
-          "kind": "formula",
-          "label": "Concave up",
-          "tex": "f''>0\\ \\Longrightarrow\\ L(x)<f(x)\\quad(x\\ne a)"
-        },
-        {
-          "kind": "formula",
-          "label": "Concave down",
-          "tex": "f''<0\\ \\Longrightarrow\\ L(x)>f(x)\\quad(x\\ne a)"
-        },
-        {
-          "kind": "callout",
-          "tone": "rule",
-          "title": "Both sides of the anchor",
-          "body": "The direction of the inequality does not reverse merely because x is to the left of a. A positive derivative tells you the function increases, not whether the tangent overestimates."
-        },
-        {
-          "kind": "prose",
-          "text": "The sign of f'' at a single point is not enough to justify a claim at an arbitrary target. Check the intervening interval. Taylor remainder bounds are not needed for this AB/BC topic."
+          "kind": "table",
+          "columns": [
+            "Given",
+            "Extract",
+            "Avoid"
+          ],
+          "rows": [
+            [
+              "Formula",
+              "Anchor value and derivative",
+              "Evaluating derivative at target"
+            ],
+            [
+              "f and f' table",
+              "Matched row",
+              "Mixing rows"
+            ],
+            [
+              "f-only table",
+              "Secant approximation to slope if requested",
+              "Calling the secant exact"
+            ],
+            [
+              "Graph of f",
+              "Tangent point and slope",
+              "Reading slope as height"
+            ],
+            [
+              "Graph of f'",
+              "Slope of f from height of f'; concavity from monotonicity",
+              "Using height of f' as f(a)"
+            ],
+            [
+              "Context",
+              "Current value, rate, signed change",
+              "Ignoring units"
+            ]
+          ]
         }
       ]
     },
@@ -446,53 +476,7 @@ export const linearizationGuide: TopicGuide = {
       ]
     },
     {
-      "id": "representation",
-      "title": "Representation Switching",
-      "blocks": [
-        {
-          "kind": "table",
-          "columns": [
-            "Given",
-            "Extract",
-            "Avoid"
-          ],
-          "rows": [
-            [
-              "Formula",
-              "Anchor value and derivative",
-              "Evaluating derivative at target"
-            ],
-            [
-              "f and f' table",
-              "Matched row",
-              "Mixing rows"
-            ],
-            [
-              "f-only table",
-              "Secant approximation to slope if requested",
-              "Calling the secant exact"
-            ],
-            [
-              "Graph of f",
-              "Tangent point and slope",
-              "Reading slope as height"
-            ],
-            [
-              "Graph of f'",
-              "Slope of f from height of f'; concavity from monotonicity",
-              "Using height of f' as f(a)"
-            ],
-            [
-              "Context",
-              "Current value, rate, signed change",
-              "Ignoring units"
-            ]
-          ]
-        }
-      ]
-    },
-    {
-      "id": "exam",
+      "id": "mcq-frq",
       "title": "MCQ & FRQ Strategy",
       "blocks": [
         {
@@ -536,7 +520,7 @@ export const linearizationGuide: TopicGuide = {
     },
     {
       "id": "errors",
-      "title": "Common Mistakes",
+      "title": "Common Mistakes — Detect & Prevent",
       "blocks": [
         {
           "kind": "table",
@@ -578,28 +562,19 @@ export const linearizationGuide: TopicGuide = {
       ]
     },
     {
-      "id": "summary",
-      "title": "Connections & Exam-Day Checklist",
+      "id": "quick-reference",
+      "title": "Exam-Day Quick Reference",
       "blocks": [
         {
           "kind": "list",
-          "title": "Cross-topic connections",
+          "ordered": true,
+          "title": "Recognize → Think → Do → Check",
           "items": [
-            "Unit 2 tangent slope and derivative definition supply local linearity.",
-            "Unit 3 differentiation rules and procedure selection help find the anchor slope.",
-            "Unit 4 contextual rates supply units and meaning.",
-            "Unit 5 concavity supplies error-direction reasoning.",
-            "Unit 10 Taylor polynomials extend this idea; higher-order terms and remainder bounds are outside core Topic 4.6."
-          ]
-        },
-        {
-          "kind": "list",
-          "title": "Difficulty progression",
-          "items": [
-            "Introductory: supplied anchor value and slope.",
-            "Standard: choose anchor and differentiate.",
-            "Challenging: infer concavity from another representation or reverse the approximation.",
-            "Stretch: distinguish insufficient data from valid error comparisons."
+            "Recognize whether you need a nearby value, a change, or an error comparison.",
+            "Choose the anchor and identify its function value and derivative.",
+            "Use $L(x)=f(a)+f\\prime(a)(x-a)$, keeping the input change signed.",
+            "For an error comparison, check concavity across the interval.",
+            "Check the anchor, units, rounding, and whether the conclusion is justified."
           ]
         },
         {
@@ -614,10 +589,6 @@ export const linearizationGuide: TopicGuide = {
             "Recover a missing slope or parameter.",
             "Communicate a contextual FRQ answer."
           ]
-        },
-        {
-          "kind": "prose",
-          "text": "Source: College Board AP Calculus AB and BC Course and Exam Description, Topic 4.6, course framework p. 87. https://apcentral.collegeboard.org/media/pdf/ap-calculus-ab-and-bc-course-and-exam-description.pdf"
         }
       ]
     }

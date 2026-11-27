@@ -2,16 +2,12 @@ import type { TopicGuide } from "@/lib/navigator-guides";
 export const relatedRatesGuide: TopicGuide = {
   "sections": [
     {
-      "id": "core",
-      "title": "The Core Idea",
+      "id": "core-idea",
+      "title": "The Core Idea: Connect Changing Quantities",
       "blocks": [
         {
           "kind": "prose",
           "text": "Related rates connect instantaneous changes in quantities linked by an equation. You are not finding a missing measurement alone: you are finding how quickly it changes at a particular instant."
-        },
-        {
-          "kind": "prose",
-          "text": "CED alignment (2026–27, course framework pp. 85–86): Topic 4.4 — CHA-3.D, CHA-3.D.1–2, skill 1.E; Topic 4.5 — CHA-3.E, CHA-3.E.1, skill 3.F. The families below are APSTEMOS classifications, not official College Board categories."
         },
         {
           "kind": "formula",
@@ -32,6 +28,62 @@ export const relatedRatesGuide: TopicGuide = {
           "kind": "callout",
           "title": "Differentiate before freezing values",
           "body": "An instantaneous measurement is not a constant. Substitute a fixed numerical dimension early only if it remains constant throughout the motion.",
+          "tone": "rule"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "Relationship",
+            "Equation",
+            "Time derivative"
+          ],
+          "rows": [
+            [
+              "Circle area",
+              "$A=\\pi r^2$",
+              "$A'=2\\pi rr'$"
+            ],
+            [
+              "Sphere volume",
+              "$V=\\frac43\\pi r^3$",
+              "$V'=4\\pi r^2r'$"
+            ],
+            [
+              "Sphere surface area",
+              "$S=4\\pi r^2$",
+              "$S'=8\\pi rr'$"
+            ],
+            [
+              "Rectangle",
+              "$A=lw$",
+              "$A'=l'w+lw'$"
+            ],
+            [
+              "Cylinder",
+              "$V=\\pi r^2h$",
+              "$V'=\\pi(2rr'h+r^2h')$"
+            ],
+            [
+              "Cone",
+              "$V=\\frac13\\pi r^2h$",
+              "$V'=\\frac{\\pi}{3}(2rr'h+r^2h')$"
+            ],
+            [
+              "Right triangle",
+              "$z^2=x^2+y^2$",
+              "$zz'=xx'+yy'$"
+            ],
+            [
+              "Angle",
+              "$\\tan\\theta=y/x$",
+              "$\\sec^2\\theta\\,\\theta'=(xy'-yx')/x^2$"
+            ]
+          ]
+        },
+        {
+          "kind": "callout",
+          "title": "Check assumptions",
+          "body": "These equations assume the named shapes and differentiable dimensions. For the angular formula, x must be nonzero and the angle must be measured in radians.",
           "tone": "rule"
         }
       ]
@@ -93,8 +145,8 @@ export const relatedRatesGuide: TopicGuide = {
       ]
     },
     {
-      "id": "decision",
-      "title": "Decision Tree",
+      "id": "strategy",
+      "title": "Strategy Flowchart",
       "blocks": [
         {
           "kind": "tree",
@@ -159,8 +211,8 @@ export const relatedRatesGuide: TopicGuide = {
       ]
     },
     {
-      "id": "families",
-      "title": "Question Families & Types",
+      "id": "question-families",
+      "title": "Question Families You Must Recognize",
       "blocks": [
         {
           "kind": "list",
@@ -233,68 +285,50 @@ export const relatedRatesGuide: TopicGuide = {
             "H2: Select between algebraic elimination and implicit differentiation.",
             "H3: Check assumptions, units, signs and whether enough information is available."
           ]
-        }
-      ]
-    },
-    {
-      "id": "formulas",
-      "title": "Relationship Toolkit",
-      "blocks": [
+        },
         {
           "kind": "table",
           "columns": [
-            "Relationship",
-            "Equation",
-            "Time derivative"
+            "Given",
+            "Read or derive",
+            "Do not confuse"
           ],
           "rows": [
             [
-              "Circle area",
-              "$A=\\pi r^2$",
-              "$A'=2\\pi rr'$"
+              "Equation",
+              "Differentiate every varying quantity",
+              "Value with rate"
             ],
             [
-              "Sphere volume",
-              "$V=\\frac43\\pi r^3$",
-              "$V'=4\\pi r^2r'$"
+              "Table of measurements",
+              "Estimate a derivative using nearby secant slopes if needed",
+              "Estimate with exact tangent slope"
             ],
             [
-              "Sphere surface area",
-              "$S=4\\pi r^2$",
-              "$S'=8\\pi rr'$"
+              "Table of derivatives",
+              "Use supplied rate directly",
+              "Rate with measurement"
             ],
             [
-              "Rectangle",
-              "$A=lw$",
-              "$A'=l'w+lw'$"
+              "Graph",
+              "Read height for value and tangent slope for rate",
+              "Slope of a secant with exact derivative"
             ],
             [
-              "Cylinder",
-              "$V=\\pi r^2h$",
-              "$V'=\\pi(2rr'h+r^2h')$"
+              "Diagram",
+              "Label changing dimensions and constants",
+              "A drawing's apparent proportions with stated measurements"
             ],
             [
-              "Cone",
-              "$V=\\frac13\\pi r^2h$",
-              "$V'=\\frac{\\pi}{3}(2rr'h+r^2h')$"
-            ],
-            [
-              "Right triangle",
-              "$z^2=x^2+y^2$",
-              "$zz'=xx'+yy'$"
-            ],
-            [
-              "Angle",
-              "$\\tan\\theta=y/x$",
-              "$\\sec^2\\theta\\,\\theta'=(xy'-yx')/x^2$"
+              "Verbal context",
+              "Convert increasing/decreasing to signed rates",
+              "Speed or magnitude with signed derivative"
             ]
           ]
         },
         {
-          "kind": "callout",
-          "title": "Check assumptions",
-          "body": "These equations assume the named shapes and differentiable dimensions. For the angular formula, x must be nonzero and the angle must be measured in radians.",
-          "tone": "rule"
+          "kind": "prose",
+          "text": "If a table only gives r(3)=5 and r(5)=9, the centered estimate of r'(4) is 2; an exact instantaneous derivative does not follow from those two values."
         }
       ]
     },
@@ -507,57 +541,7 @@ export const relatedRatesGuide: TopicGuide = {
       ]
     },
     {
-      "id": "representations",
-      "title": "Representation Switching",
-      "blocks": [
-        {
-          "kind": "table",
-          "columns": [
-            "Given",
-            "Read or derive",
-            "Do not confuse"
-          ],
-          "rows": [
-            [
-              "Equation",
-              "Differentiate every varying quantity",
-              "Value with rate"
-            ],
-            [
-              "Table of measurements",
-              "Estimate a derivative using nearby secant slopes if needed",
-              "Estimate with exact tangent slope"
-            ],
-            [
-              "Table of derivatives",
-              "Use supplied rate directly",
-              "Rate with measurement"
-            ],
-            [
-              "Graph",
-              "Read height for value and tangent slope for rate",
-              "Slope of a secant with exact derivative"
-            ],
-            [
-              "Diagram",
-              "Label changing dimensions and constants",
-              "A drawing's apparent proportions with stated measurements"
-            ],
-            [
-              "Verbal context",
-              "Convert increasing/decreasing to signed rates",
-              "Speed or magnitude with signed derivative"
-            ]
-          ]
-        },
-        {
-          "kind": "prose",
-          "text": "If a table only gives r(3)=5 and r(5)=9, the centered estimate of r'(4) is 2; an exact instantaneous derivative does not follow from those two values."
-        }
-      ]
-    },
-    {
-      "id": "exam",
+      "id": "mcq-frq",
       "title": "MCQ & FRQ Strategy",
       "blocks": [
         {
@@ -634,7 +618,7 @@ export const relatedRatesGuide: TopicGuide = {
     },
     {
       "id": "errors",
-      "title": "Common Mistakes",
+      "title": "Common Mistakes — Detect & Prevent",
       "blocks": [
         {
           "kind": "table",
@@ -689,34 +673,7 @@ export const relatedRatesGuide: TopicGuide = {
       ]
     },
     {
-      "id": "connections",
-      "title": "Hidden Applications & Difficulty",
-      "blocks": [
-        {
-          "kind": "list",
-          "title": "Cross-topic connections",
-          "items": [
-            "Unit 2: power, product, quotient and trig rules supply the derivative machinery.",
-            "Unit 3: chain and implicit rules; CED 3.5 supports method selection.",
-            "Unit 4.5 (APSTEMOS): contextual derivative interpretation is a supporting skill, not a replacement for the related-rates model.",
-            "Unit 5 optimization: finding an extremum is different from finding a time rate.",
-            "Unit 6 accumulation: obtaining total change from a rate requires integration, not related-rate differentiation."
-          ]
-        },
-        {
-          "kind": "list",
-          "title": "Difficulty",
-          "items": [
-            "Introductory: one supplied relation and one varying measurement.",
-            "Standard: model a geometric constraint and calculate a signed rate.",
-            "Challenging: eliminate variables, combine multiple changing quantities or switch representations.",
-            "Stretch: determine whether the data suffice, compare valid methods or reason about a zero coefficient."
-          ]
-        }
-      ]
-    },
-    {
-      "id": "summary",
+      "id": "quick-reference",
       "title": "Exam-Day Quick Reference",
       "blocks": [
         {
@@ -743,10 +700,6 @@ export const relatedRatesGuide: TopicGuide = {
             "Use graphs and tables without confusing slopes and values.",
             "Explain results in context and diagnose invalid solutions."
           ]
-        },
-        {
-          "kind": "prose",
-          "text": "Curriculum source: College Board AP Calculus AB and BC Course and Exam Description, current 2026–27 version, Unit 4 topics 4.4–4.5 (AP Central). All examples and classifications in this guide are original APSTEMOS instructional material."
         }
       ]
     }
